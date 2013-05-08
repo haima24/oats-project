@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a id="logo" class="brand" href="#">OATS</a>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav">
+                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
+                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
+                    <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
+                    <li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li>
+                        <div class="navbar-search pull-left">
+                            <input type="text" class="search-query span2" placeholder="Search Tests">
+                        </div>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header">Name</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.nav-collapse -->
+        </div>
+    </div>
+    <!-- /navbar-inner -->
+</div>
+<div id="container" class="container wrapper">
+    <div id="test-header">
+        <div contenteditable="true" id="test-title">Enter Test Title</div>
+        <div id="eventDateFrom" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeFrom" class="test-date-time" contenteditable="true" >4:00 pm</div>
+        <div class="spacer">_</div>
+        <div id="eventDateTo" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeTo" class="test-date-time" contenteditable="true" >6:00 pm</div>
+    </div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+    <div>abc</div>
+</div>
