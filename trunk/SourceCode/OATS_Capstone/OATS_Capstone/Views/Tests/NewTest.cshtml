@@ -4,6 +4,44 @@
 <script type="text/javascript">
     $(function () {
         $("#sidebar").accordion();
+        $(".nt-conted-ph-cont").hover(function (ev) {
+            var ea = $(ev.currentTarget).find('[contenteditable=true]')[0];
+            $(ea).addClass("nt-contedhover");
+        }, function (ev) {
+            var er = $(ev.currentTarget).find('[contenteditable=true]')[0];
+            $(er).removeClass("nt-contedhover");
+        });
+        $(':not(.nt-qitem)').click(function () {
+            var all = $(".nt-qitem");
+            all.removeClass('nt-qitem-edit-act');
+            all.removeClass('nt-qitem-edit-inact');
+            all.addClass('nt-qitem-edit-inact');
+            all.find('.nt-qctrls').hide();
+            all.find('.nt-qtagcont').show();
+            all.find('.nt-tag-adder').show();
+            all.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle').hide();
+        });
+        $(".nt-qitem").live('click', function (ev) {
+            var all = $(".nt-qitem");
+            all.removeClass('nt-qitem-edit-act');
+            all.removeClass('nt-qitem-edit-inact');
+            $(this).addClass('nt-qitem-edit-act').siblings().addClass('nt-qitem-edit-inact');
+            var current = ev.target;
+            var pr = $(current).closest('.nt-qitem');
+            if (current.parentNode && $(current.parentNode).hasClass('nt-tag-adder')) {
+                var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
+                $(pr.find('.nt-qctrls')[0]).hide();
+                $(pr.find('.nt-qtagcont')[0]).show();
+                $(btn).show();
+            } else {
+                var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
+                $(pr.find('.nt-qctrls')[0]).show();
+                $(pr.find('.nt-tag-adder')[0]).hide();
+                $(btn).show();
+                var btnAdd = pr.find('button.nt-btn-text.nt-qansadd')[0];
+                $(btnAdd).show();
+            }
+        });
     });
 </script>
 <div class="navbar navbar-static-top">
@@ -68,400 +106,485 @@
             </div>
         </div>
         <div id="eventTab">
-           <div id="sidebar" class="ui-accordion ui-widget ui-helper-reset" role="tablist">
-  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons ui-state-hover" role="tab" id="ui-accordion-sidebar-header-0" aria-controls="qtypes" aria-selected="true" tabindex="0"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>New Question<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
-  <div class="nt-acc-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" id="qtypes" style="display: block;" aria-labelledby="ui-accordion-sidebar-header-0" role="tabpanel" aria-expanded="true" aria-hidden="false"><div class="nt-qtype nt-hover nt-guide nt-qtype-radio ui-draggable" id="c46"><i class="nt-icon type-radio"></i><span>Multiple choice</span>
-</div><div class="nt-qtype nt-hover nt-guide nt-qtype-checkbox ui-draggable" id="c47"><i class="nt-icon type-checkbox"></i><span>Checkbox</span>
-</div><div class="nt-qtype nt-hover nt-guide nt-qtype-essay ui-draggable" id="c48"><i class="nt-icon type-essay"></i><span>Essay</span>
-</div><div class="nt-qtype nt-hover nt-guide nt-qtype-oneliner ui-draggable" id="c49"><i class="nt-icon type-oneliner"></i><span>Short answer</span>
-</div><div class="nt-qtype nt-hover nt-guide nt-qtype-text ui-draggable" id="c50"><i class="nt-icon type-text"></i><span>Text</span>
-</div><div class="nt-qtype nt-hover nt-guide nt-qtype-img ui-draggable" id="c51"><i class="nt-icon type-img"></i><span>Image</span>
-</div></div>
-
-  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-1" aria-controls="itemsearch" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Reuse Questions<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
-  <div class="nt-acc-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="itemsearch" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-1" role="tabpanel" aria-expanded="false" aria-hidden="true"><div class="nt-ctrl-search ui-droppable nt-guide"><div class="nt-search-box">
-  <input type="text" placeholder="Search or pick a template" class="nt-search-input ">
-  <i class="nt-icon search"></i>
-
-
-  <button class="nt-btn-icon nt-btn-clear ">
-    <i class="icon-remove-sign"></i>
-  </button>
-</div>
-<div class="nt-ctrl-search-tags nt-taglist"></div>
-</div>
-<div class="nt-ctrl-list" style="height: 30px; min-height: 30px; overflow-y: auto;"></div>
-</div>
-
-  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
-  <div class="nt-acc-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="qpaste" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-2" role="tabpanel" aria-expanded="false" aria-hidden="true"><div class="nt-loader-large"></div>
-<textarea class="nt-guide" placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 30px; min-height: 30px; overflow-y: auto;"></textarea>
-</div>
-
-  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-3" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
-  <div class="nt-acc-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="tags" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-3" role="tabpanel" aria-expanded="false" aria-hidden="true"><div class="nt-ctrl-search nt-guide"><div class="nt-search-box">
-  <input type="text" placeholder="Search" class="nt-search-input add">
-  <i class="nt-icon search"></i>
-
-  <button class="nt-btn-circle nt-btn-add" data-original-title="">
-    <i class="icon-plus"></i>
-  </button>
-
-  <button class="nt-btn-icon nt-btn-clear add">
-    <i class="icon-remove-sign"></i>
-  </button>
-</div>
-</div>
-<div class="nt-ctrl-list nt-taglist nt-guide" style="max-height: 0px; min-height: 30px; overflow-y: auto;"><div class="nt-tag nt-guide ui-draggable" id="21476e54ac0d42d294bb68bb8d6e0f0d"><span>Amendments</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="9fc8a2777697402bb2644fb730e7307f"><span>Class of 2015</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="c57a091facc44f61ba140e188289f254"><span>Class of 2016</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="2113657a3d794fbcacf179f1b734aa82"><span>Math</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="9209f3345dbb49a2acea4fe092e78e6d"><span>SAMPLE</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="a35ec8fbe7a443768d15861743ec750b"><span>Statue</span>
-<i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="a331abcb085149ceb2abe369196a99cc"><span>Template</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="4352aa3f363649e190f8e7689385d403"><span>Welcome</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="c29fa4bb061e4d649f1e4d1b873d9116"><span>history</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="3dcf77afc7a9492d8851e4551da1f43e"><span>independence</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="1bef3c1a1a4b487eab938c15a297f713"><span>presidents</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div><div class="nt-tag nt-guide ui-draggable" id="4d9168633b2e4bcb8919d3b012c3bb25"><span>wars</span>
-<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
-</div></div>
-</div>
-</div>
-            <div id="checklist" class="nt-sortable ui-sortable" style="height: 115px; overflow-y: auto;"><div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact ui-droppable" id="d5ce89fb057c4cec9c22c668f4a7170d"><div class="nt-qnum ">1.</div>
-<a class="nt-qanchor" name="Q1"></a>
-<!-- NOT isImg START -->
-
-
-<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div><div class="redactor_box"><textarea name="text_d5ce89fb057c4cec9c22c668f4a7170d" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_d5ce89fb057c4cec9c22c668f4a7170d" contenteditable="true" data-guide="content_q_phrase" dir="ltr"><p><br></p>
-</div></div></div>
-
-<!-- NOT isImg END -->
-
-<!-- isImg START -->
-<!-- isImg END -->
-
-<div class="nt-qhctrls">
-
-  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
-
-
-</div>
-
-<div class="nt-qanscont nt-sortable"><div class="nt-qans nt-qans-edit nt-qans-hover" id="c97">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c97" name="ans_c96" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c97" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c97" contenteditable="true" data-guide="content_q_answer" dir="ltr"><p><br></p></div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div><div class="nt-qans nt-qans-edit nt-qans-hover" id="c98">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c98" name="ans_c96" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c98" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c98" contenteditable="true" data-guide="content_q_answer" dir="ltr"><p><br></p></div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div></div>
-
-
-<div class="nt-qfoot">
-
-  <div class="nt-qctrls" style="display: none">
-
-    <button class="nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none" data-original-title="">
-      Add New Answer
-    </button>
-
-
-    <select class="nt-qtype-sel-predef nt-guide" data-guide="content_q_qtype">
-
-      <option value="radio" selected="">Multiple choice</option>
-      <option value="checkbox">Checkbox</option>
-      <option value="essay">Essay</option>
-      <option value="oneliner">Short answer</option>
-      <option value="text">Text</option>
-      <option value="img">Image</option>
-
-    </select>
-    <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
-
-    <button class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
-      Points
-    </button>
-  </div>
-  <div class="nt-qtagcont">
-    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
-</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
-  </div>
-
-
-  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none">
-    <i class="nt-icon tags"></i>
-  </button>
-</div>
-
-</div><div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact ui-droppable" id="1880689c81654cdc833d24e83146e2d1"><div class="nt-qnum ">2.</div>
-<a class="nt-qanchor" name="Q2"></a>
-<!-- NOT isImg START -->
-
-
-<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px; display: none;">Enter Question</div><div class="redactor_box"><textarea name="text_1880689c81654cdc833d24e83146e2d1" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_1880689c81654cdc833d24e83146e2d1" contenteditable="true" data-guide="content_q_phrase" dir="ltr">Likert Scale?
-</div></div></div>
-
-<!-- NOT isImg END -->
-
-<!-- isImg START -->
-<!-- isImg END -->
-
-<div class="nt-qhctrls">
-
-  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
-
-
-</div>
-
-<div class="nt-qanscont nt-sortable"><div class="nt-qans nt-qans-edit nt-qans-hover" id="c100">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c100" name="ans_c99" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px; display: none;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c100" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c100" contenteditable="true" data-guide="content_q_answer" dir="ltr">Neutral
-</div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div><div class="nt-qans nt-qans-edit nt-qans-hover" id="c101">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c101" name="ans_c99" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px; display: none;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c101" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c101" contenteditable="true" data-guide="content_q_answer" dir="ltr">Disagree
-</div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div><div class="nt-qans nt-qans-edit nt-qans-hover" id="c102">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c102" name="ans_c99" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px; display: none;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c102" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c102" contenteditable="true" data-guide="content_q_answer" dir="ltr">Strongly Disagree
-</div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div></div>
-
-
-<div class="nt-qfoot">
-
-  <div class="nt-qctrls" style="display: none">
-
-    <button class="nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none" data-original-title="">
-      Add New Answer
-    </button>
-
-
-    <select class="nt-qtype-sel-predef nt-guide" data-guide="content_q_qtype">
-
-      <option value="radio" selected="">Multiple choice</option>
-      <option value="checkbox">Checkbox</option>
-      <option value="essay">Essay</option>
-      <option value="oneliner">Short answer</option>
-      <option value="text">Text</option>
-      <option value="img">Image</option>
-
-    </select>
-    <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
-
-    <button class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
-      Points
-    </button>
-  </div>
-  <div class="nt-qtagcont">
-    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
-</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
-  </div>
-
-
-  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none">
-    <i class="nt-icon tags"></i>
-  </button>
-</div>
-
-</div><div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact ui-droppable" id="56e34732c2a9498eb47451fc5a27fbed"><div class="nt-qnum ">3.</div>
-<a class="nt-qanchor" name="Q3"></a>
-<!-- NOT isImg START -->
-
-
-<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px; display: none;">Enter Question</div><div class="redactor_box"><textarea name="text_56e34732c2a9498eb47451fc5a27fbed" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_56e34732c2a9498eb47451fc5a27fbed" contenteditable="true" data-guide="content_q_phrase" dir="ltr">Likert Scale?
-</div></div></div>
-
-<!-- NOT isImg END -->
-
-<!-- isImg START -->
-<!-- isImg END -->
-
-<div class="nt-qhctrls">
-
-  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
-
-
-</div>
-
-<div class="nt-qanscont nt-sortable"><div class="nt-qans nt-qans-edit nt-qans-hover" id="c104">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c104" name="ans_c103" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px; display: none;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c104" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c104" contenteditable="true" data-guide="content_q_answer" dir="ltr">Neutral
-</div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div><div class="nt-qans nt-qans-edit nt-qans-hover" id="c105">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c105" name="ans_c103" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px; display: none;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c105" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c105" contenteditable="true" data-guide="content_q_answer" dir="ltr">Disagree
-</div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div><div class="nt-qans nt-qans-edit nt-qans-hover" id="c106">
-<div class="nt-qanselem">
-  <input type="radio" id="ans_c106" name="ans_c103" class="nt-guide" data-guide="content_q_radiobtn">
-</div>
-<div class="nt-conted-ph-cont" style="position: relative; overflow: visible;"><div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px; display: none;">Enter Answer</div><div class="redactor_box"><textarea name="desc_c106" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c106" contenteditable="true" data-guide="content_q_answer" dir="ltr">Strongly Disagree
-</div></div></div>
-<div class="nt-qansscore">
-  <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-  <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
-  <!-- NOTE: bonus button disabled -->
-  <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
-</div>
-<div class="nt-qansctrls">
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer">
-    <i class="nt-icon remove"></i>
-  </button>
-</div>
-
-</div></div>
-
-
-<div class="nt-qfoot">
-
-  <div class="nt-qctrls" style="display: none">
-
-    <button class="nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none" data-original-title="">
-      Add New Answer
-    </button>
-
-
-    <select class="nt-qtype-sel-predef nt-guide" data-guide="content_q_qtype">
-
-      <option value="radio" selected="">Multiple choice</option>
-      <option value="checkbox">Checkbox</option>
-      <option value="essay">Essay</option>
-      <option value="oneliner">Short answer</option>
-      <option value="text">Text</option>
-      <option value="img">Image</option>
-
-    </select>
-    <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
-
-    <button class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
-      Points
-    </button>
-  </div>
-  <div class="nt-qtagcont">
-    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
-</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
-  </div>
-
-
-  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none">
-    <i class="nt-icon tags"></i>
-  </button>
-</div>
-
-</div></div>
+            <div id="sidebar" class="ui-accordion ui-widget ui-helper-reset" role="tablist">
+                <div class="t-accord-header">New Question<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-content">
+                    <div class="t-question-type t-question-type-radio ui-draggable" id="c46">
+                        <i class="t-icon i-radio"></i><span>Radio choice</span>
+                    </div>
+                    <div class="t-question-type t-question-type-multiple ui-draggable" id="c47">
+                        <i class="t-icon i-multiple"></i><span>Multiple choice</span>
+                    </div>
+                    <div class="t-question-type t-question-type-essay ui-draggable" id="c48">
+                        <i class="t-icon i-essay"></i><span>Essay</span>
+                    </div>
+                    <div class="t-question-type t-question-type-short ui-draggable" id="c49">
+                        <i class="t-icon i-short"></i><span>Short answer</span>
+                    </div>
+                    <div class="t-question-type t-question-type-text ui-draggable" id="c50">
+                        <i class="t-icon i-text"></i><span>Text</span>
+                    </div>
+                    <div class="t-question-type t-question-type-img ui-draggable" id="c51">
+                        <i class="t-icon i-img"></i><span>Image</span>
+                    </div>
+                </div>
+
+                <div class="t-accord-header">Reuse Questions<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-content">
+                    <div class="nt-ctrl-search ui-droppable nt-guide">
+                        <div class="nt-search-box">
+                            <input type="text" placeholder="Search or pick a template" class="nt-search-input ">
+                            <i class="nt-icon search"></i>
+
+
+                            <button class="nt-btn-icon nt-btn-clear ">
+                                <i class="icon-remove-sign"></i>
+                            </button>
+                        </div>
+                        <div class="nt-ctrl-search-tags nt-taglist"></div>
+                    </div>
+                    <div class="nt-ctrl-list" style="height: 30px; min-height: 30px; overflow-y: auto;"></div>
+                </div>
+
+                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="qpaste" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-2" role="tabpanel" aria-expanded="false" aria-hidden="true">
+                    <div class="nt-loader-large"></div>
+                    <textarea class="nt-guide" placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 30px; min-height: 30px; overflow-y: auto;"></textarea>
+                </div>
+
+                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-3" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="tags" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-3" role="tabpanel" aria-expanded="false" aria-hidden="true">
+                    <div class="nt-ctrl-search nt-guide">
+                        <div class="nt-search-box">
+                            <input type="text" placeholder="Search" class="nt-search-input add">
+                            <i class="nt-icon search"></i>
+
+                            <button class="nt-btn-circle nt-btn-add" data-original-title="">
+                                <i class="icon-plus"></i>
+                            </button>
+
+                            <button class="nt-btn-icon nt-btn-clear add">
+                                <i class="icon-remove-sign"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="nt-ctrl-list nt-taglist nt-guide" style="max-height: 0px; min-height: 30px; overflow-y: auto;">
+                        <div class="nt-tag nt-guide ui-draggable" id="21476e54ac0d42d294bb68bb8d6e0f0d">
+                            <span>Amendments</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="9fc8a2777697402bb2644fb730e7307f">
+                            <span>Class of 2015</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="c57a091facc44f61ba140e188289f254">
+                            <span>Class of 2016</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="2113657a3d794fbcacf179f1b734aa82">
+                            <span>Math</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="9209f3345dbb49a2acea4fe092e78e6d">
+                            <span>SAMPLE</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="a35ec8fbe7a443768d15861743ec750b">
+                            <span>Statue</span>
+                            <i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="a331abcb085149ceb2abe369196a99cc">
+                            <span>Template</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="4352aa3f363649e190f8e7689385d403">
+                            <span>Welcome</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="c29fa4bb061e4d649f1e4d1b873d9116">
+                            <span>history</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="3dcf77afc7a9492d8851e4551da1f43e">
+                            <span>independence</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="1bef3c1a1a4b487eab938c15a297f713">
+                            <span>presidents</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide ui-draggable" id="4d9168633b2e4bcb8919d3b012c3bb25">
+                            <span>wars</span>
+                            <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="checklist" class="nt-sortable ui-sortable" style="height: 380px; overflow-y: auto;">
+                <div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact ui-droppable" id="0091cc21484a4ad9baf12e9714bb9ed2">
+                    <div class="nt-qnum ">1.</div>
+                    <a class="nt-qanchor" name="Q1"></a>
+                    <!-- NOT isImg START -->
+
+
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div>
+                        <div class="redactor_box">
+                            <textarea name="text_0091cc21484a4ad9baf12e9714bb9ed2" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_0091cc21484a4ad9baf12e9714bb9ed2" contenteditable="true" data-guide="content_q_phrase" dir="ltr">
+                                <p>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NOT isImg END -->
+
+                    <!-- isImg START -->
+                    <!-- isImg END -->
+
+                    <div class="nt-qhctrls">
+
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
+
+
+                    </div>
+
+                    <div class="nt-qanscont nt-sortable">
+                        <div class="nt-qans nt-qans-edit nt-qans-hover" id="c112">
+                            <div class="nt-qanselem">
+                                <input type="radio" id="ans_c112" name="ans_c111" class="nt-guide" data-guide="content_q_radiobtn">
+                            </div>
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px;">Enter Answer</div>
+                                <div class="redactor_box">
+                                    <textarea name="desc_c112" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c112" contenteditable="true" data-guide="content_q_answer" dir="ltr">
+                                        <p>
+                                            <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nt-qansscore">
+                                <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
+                                <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <!-- NOTE: bonus button disabled -->
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                            </div>
+                            <div class="nt-qansctrls">
+                                <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                    <i class="nt-icon remove"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="nt-qans nt-qans-edit nt-qans-hover" id="c113">
+                            <div class="nt-qanselem">
+                                <input type="radio" id="ans_c113" name="ans_c111" class="nt-guide" data-guide="content_q_radiobtn">
+                            </div>
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px;">Enter Answer</div>
+                                <div class="redactor_box">
+                                    <textarea name="desc_c113" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c113" contenteditable="true" data-guide="content_q_answer" dir="ltr">
+                                        <p>
+                                            <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nt-qansscore">
+                                <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
+                                <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <!-- NOTE: bonus button disabled -->
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                            </div>
+                            <div class="nt-qansctrls">
+                                <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                    <i class="nt-icon remove"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="nt-qfoot">
+
+                        <div class="nt-qctrls" style="display: none">
+
+                            <button class="btn nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none" data-original-title="">
+                                Add New Answer
+                            </button>
+
+
+                            <select class="nt-qtype-sel-predef nt-guide" data-guide="content_q_qtype">
+
+                                <option value="radio" selected="">Multiple choice</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="essay">Essay</option>
+                                <option value="oneliner">Short answer</option>
+                                <option value="text">Text</option>
+                                <option value="img">Image</option>
+
+                            </select>
+                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
+
+                            <button class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                                Points
+                            </button>
+                        </div>
+                        <div class="nt-qtagcont">
+                            <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;">
+                                <div class="listcontainer" style="width: 100%; height: 24px;">
+                                    <div class="nt-tags list" style="width: 104px;">
+                                        <div class="nt-tag-adder item">
+                                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button class="btn nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none">
+                            <i class="t-icon i-setting"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c121">
+                    <div class="nt-qnum ">2.</div>
+                    <a class="nt-qanchor" name="Q2"></a>
+                    <!-- NOT isImg START -->
+
+
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div>
+                        <div class="redactor_box">
+                            <textarea name="text_c121" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c121" contenteditable="true" data-guide="content_q_phrase" dir="ltr">
+                                <p>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NOT isImg END -->
+
+                    <!-- isImg START -->
+                    <!-- isImg END -->
+
+                    <div class="nt-qhctrls">
+
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
+
+
+                    </div>
+
+                    <div class="nt-qanscont nt-sortable">
+                        <div class="nt-qans nt-qans-edit nt-qans-hover" id="c122">
+                            <div class="nt-qanselem">
+                                <input type="checkbox" id="ans_c122" name="ans_c121" class="nt-guide" data-guide="content_q_chkbox">
+                            </div>
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px;">Enter Answer</div>
+                                <div class="redactor_box">
+                                    <textarea name="desc_c122" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c122" contenteditable="true" data-guide="content_q_answer" dir="ltr">
+                                        <p>
+                                            <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nt-qansscore">
+                                <span class="nt-qscorelabel">On:</span>
+                                <input type="text" class="nt-on-score nt-chk-score nt-guide" data-guide="content_q_pntval" placeholder="Pts" value="0" data-original-title="Point Value">
+                                <span class="nt-qscorelabel">Off:</span>
+                                <input type="text" class="nt-off-score nt-chk-score nt-guide" data-guide="content_q_pntval_off" placeholder="Pts" value="0" data-original-title="Point Value">
+                                <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <!-- NOTE: bonus button disabled -->
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                            </div>
+                            <div class="nt-qansctrls">
+                                <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                    <i class="nt-icon remove"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="nt-qans nt-qans-edit nt-qans-hover" id="c123">
+                            <div class="nt-qanselem">
+                                <input type="checkbox" id="ans_c123" name="ans_c121" class="nt-guide" data-guide="content_q_chkbox">
+                            </div>
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="nt-ph" style="position: absolute; cursor: text; top: 5px; left: 10px; font-size: 14px; line-height: 18px;">Enter Answer</div>
+                                <div class="redactor_box">
+                                    <textarea name="desc_c123" style="height: 18px; display: none;"></textarea><div class="nt-qansdesc nt-qedit nt-guide nt-delayedblur redactor_editor" id="desc_c123" contenteditable="true" data-guide="content_q_answer" dir="ltr">
+                                        <p>
+                                            <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nt-qansscore">
+                                <span class="nt-qscorelabel">On:</span>
+                                <input type="text" class="nt-on-score nt-chk-score nt-guide" data-guide="content_q_pntval" placeholder="Pts" value="0" data-original-title="Point Value">
+                                <span class="nt-qscorelabel">Off:</span>
+                                <input type="text" class="nt-off-score nt-chk-score nt-guide" data-guide="content_q_pntval_off" placeholder="Pts" value="0" data-original-title="Point Value">
+                                <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <!-- NOTE: bonus button disabled -->
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                            </div>
+                            <div class="nt-qansctrls">
+                                <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                    <i class="nt-icon remove"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="nt-qfoot">
+
+                        <div class="nt-qctrls" style="display: none;">
+
+                            <button class="btn nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none;" data-original-title="">
+                                Add New Answer
+                            </button>
+
+
+                            <select class="nt-qtype-sel-predef nt-guide" data-guide="content_q_qtype">
+
+                                <option value="radio">Multiple choice</option>
+                                <option value="checkbox" selected="">Checkbox</option>
+                                <option value="essay">Essay</option>
+                                <option value="oneliner">Short answer</option>
+                                <option value="text">Text</option>
+                                <option value="img">Image</option>
+
+                            </select>
+                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
+
+                            <button class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                                Points
+                            </button>
+                        </div>
+                        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+                            <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;">
+                                <div class="listcontainer" style="width: 100%; height: 24px;">
+                                    <div class="nt-tags list" style="width: 104px;">
+                                        <div class="nt-tag-adder item">
+                                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button class="btn nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+                            <i class="t-icon i-setting"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c130">
+                    <div class="nt-qnum ">3.</div>
+                    <a class="nt-qanchor" name="Q3"></a>
+                    <!-- NOT isImg START -->
+
+
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div>
+                        <div class="redactor_box">
+                            <textarea name="text_c130" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c130" contenteditable="true" data-guide="content_q_phrase" dir="ltr">
+                                <p>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NOT isImg END -->
+
+                    <!-- isImg START -->
+                    <!-- isImg END -->
+
+                    <div class="nt-qhctrls">
+
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
+
+
+                    </div>
+
+                    <div class="nt-qanscont nt-sortable"></div>
+
+                    <div class="nt-qmiddle">
+
+
+                        <div class="ui-wrapper" style="overflow: hidden; position: relative; width: 710px; height: 102px; top: auto; left: auto; margin: 0px 0px 16px; padding-bottom: 16px;">
+                            <textarea class="nt-qrespinput nt-guide ui-resizable" data-guide="content_q_essay_box" data-original-title="Enter the words all required in a perfect answer. Use quotes for terms with spaces." style="width: 696px; overflow-x: hidden; overflow-y: auto; height: 92px; margin: 0px; resize: none; position: static; zoom: 1; display: block;"></textarea><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 1000;"></div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="nt-qfoot">
+
+                        <div class="nt-qctrls" style="">
+
+
+                            <div class="nt-qoepts">
+                                <span>Max. Points:</span>
+                                <input type="text" class="nt-guide" data-guide="content_q_essay_mxpts">
+                            </div>
+
+                            <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+
+                                <option value="radio">Multiple choice</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="essay" selected="">Essay</option>
+                                <option value="oneliner">Short answer</option>
+                                <option value="text">Text</option>
+                                <option value="img">Image</option>
+
+                            </select>
+                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
+
+                            <button style="visibility: hidden" class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                                Points
+                            </button>
+                        </div>
+                        <div class="nt-qtagcont" style="border-top-width: 0px; display: none;">
+                            <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;">
+                                <div class="listcontainer" style="width: 100%; height: 24px;">
+                                    <div class="nt-tags list" style="width: 104px;">
+                                        <div class="nt-tag-adder item">
+                                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button class="btn nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="">
+                            <i class="t-icon i-setting"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

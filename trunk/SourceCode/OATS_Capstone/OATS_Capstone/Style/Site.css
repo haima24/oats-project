@@ -95,6 +95,28 @@ i.t-icon.i-tests {
     background: url(./img/tests.png) no-repeat;
 }
 
+i.t-icon.i-radio {
+    background: url(./img/radio.png) no-repeat;
+}
+i.t-icon.i-multiple {
+    background: url(./img/multiple.png) no-repeat;
+}
+
+i.t-icon.i-essay {
+    background: url(./img/essay.png) no-repeat;
+}
+i.t-icon.i-short {
+    background: url(./img/short_answer.png) no-repeat;
+}
+i.t-icon.i-text {
+    background: url(./img/text.png) no-repeat;
+}
+i.t-icon.i-img {
+    background: url(./img/img.png) no-repeat;
+}
+i.t-icon.i-setting {
+    background: url(./img/setting.png) no-repeat;
+}
 i.t-icon {
     display: inline-block;
     width: 20px;
@@ -142,7 +164,7 @@ i, cite, em, var, address, dfn {
 #container {
     width: 960px;
     height: auto;
-    margin-top: 60px;
+    margin-top: 20px;
     margin-bottom: 20px;
     overflow: hidden;
 }
@@ -229,10 +251,25 @@ i, cite, em, var, address, dfn {
         box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
-[contenteditable=true]:hover {
+[contenteditable=true]:hover,[contenteditable=true].nt-contedhover {
     outline: 1px dashed #c69c6d;
 }
-
+    [contenteditable=true].nt-contedhover p {
+        position:relative;
+    }
+[contenteditable=true]:focus {
+outline: 0;
+color: #444444;
+background-color: #ffecbb;
+ -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+        border-radius: 5px;
+}
+[contenteditable=true] p {
+margin: 0;
+}
 .test-larger-custom {
     -webkit-border-radius: 11px;
     -moz-border-radius: 11px;
@@ -294,7 +331,7 @@ i, cite, em, var, address, dfn {
     }
 
 #sidebar {
-    width: 210px;
+    width: 200px;
     margin-right: 18px;
 }
 
@@ -314,11 +351,305 @@ i, cite, em, var, address, dfn {
     text-transform: uppercase;
     font-weight: bold;
     margin: 0;
-    padding: 15px 0;
+    padding: 10px 0;
     outline-style: none;
     cursor: pointer;
     border-bottom: 1px solid #c7c7c7;
     -webkit-box-shadow: 0 1px white;
     -moz-box-shadow: 0 1px white;
     box-shadow: 0 1px white;
+}
+
+.t-accord-content {
+    border-bottom: 1px solid #c7c7c7;
+    -webkit-box-shadow: 0 1px white;
+    -moz-box-shadow: 0 1px white;
+    box-shadow: 0 1px white;
+}
+.t-question-type {
+    padding: 4px 4px 4px 5px;
+    margin: 0 0 10px -5px;
+    cursor: pointer;
+}
+.t-question-type span {
+    margin-left:3px;
+}
+#checklist {
+width: 740px;
+position: relative;
+overflow-x: hidden;
+overflow-y: auto;
+}
+#checklist .nt-qitem:first-child {
+border-top: 1px solid #c7c7c7;
+-moz-border-radius-topleft: 5px;
+-webkit-border-top-left-radius: 5px;
+border-top-left-radius: 5px;
+-moz-border-radius-topright: 5px;
+-webkit-border-top-right-radius: 5px;
+border-top-right-radius: 5px;
+}
+#checklist .nt-qitem {
+width: 720px;
+position: relative;
+overflow: hidden;
+background-color: white;
+border: 1px solid #c7c7c7;
+border-top: 1px solid #ececec;
+border-bottom: 0;
+}
+#checklist .nt-qitem .nt-qnum {
+position: absolute;
+font-size: 16px;
+line-height: 22px;
+width: 29px;
+top: 10px;
+left: 1px;
+text-align: right;
+padding-top: 5px;
+}
+.nt-ph {
+font-style: italic;
+color: grey;
+}
+#checklist .nt-qitem .nt-qtext {
+font-size: 16px;
+line-height: 22px;
+margin: 10px 0 7px 35px;
+width: 605px;
+min-height: 22px;
+padding: 5px;
+}
+.redactor_editor {
+overflow: hidden;
+}
+#checklist .nt-qitem.nt-qitem-edit .nt-qhctrls {
+display: none;
+}
+#checklist .nt-qitem .nt-qhctrls {
+position: absolute;
+right: 10px;
+top: 10px;
+}
+#checklist .nt-qitem .nt-qhctrls button {
+margin-left: 5px;
+}
+.nt-btn-circle {
+padding: 0;
+display: inline-block;
+border-style: none;
+background-color: white;
+width: 24px;
+height: 24px;
+background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
+background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: linear-gradient(top, #ffffff, #f2f2f2);
+-webkit-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+-moz-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+-ms-border-radius: 3px;
+-o-border-radius: 3px;
+border-radius: 3px;
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+-ms-border-radius: 12px;
+-o-border-radius: 12px;
+border-radius: 12px;
+}
+element.style {
+}
+#checklist .nt-qitem .nt-qans {
+position: relative;
+overflow: hidden;
+padding: 6px 10px 5px 17px;
+font-size: 14px;
+min-height: 28px;
+border-bottom: 1px solid white;
+}
+.nt-qans-edit > div {
+float: left;
+}
+#checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
+margin: 7px 0 0 0;
+padding: 0;
+}
+.nt-ph {
+font-style: italic;
+color: grey;
+}
+.redactor_box textarea {
+font-family: Menlo, Monaco, monospace, sans-serif;
+font-size: 13px;
+overflow: auto;
+resize: none;
+margin: 0;
+padding: 0;
+display: block;
+position: relative;
+z-index: 1004;
+outline: none;
+border: none;
+width: 100%;
+}
+#checklist .nt-qitem .nt-qans .nt-qansdesc {
+min-height: 18px;
+margin-left: 5px;
+padding: 5px;
+width: 633px;
+}
+#checklist .nt-qitem .nt-qans .nt-qansctrls {
+display: none;
+position: absolute;
+top: 8px;
+right: 10px;
+}
+#checklist .nt-qitem .nt-qfoot {
+position: relative;
+padding: 8px 44px 8px 10px;
+height: 24px;
+}
+
+#checklist .nt-qitem .nt-qfoot .nt-qctrls {
+width: 100%;
+text-align: right;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qctrls .nt-qansadd {
+float: left;
+margin-left: 0;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qctrls button {
+margin-left: 5px;
+}
+nt-btn-text {
+font-size: 10px;
+font-weight: bold;
+color: #999999;
+padding: 0 10px;
+text-transform: uppercase;
+display: inline-block;
+border-style: none;
+background-color: white;
+width: auto;
+height: 24px;
+background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
+background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: linear-gradient(top, #ffffff, #f2f2f2);
+-webkit-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+-moz-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+-ms-border-radius: 3px;
+-o-border-radius: 3px;
+border-radius: 3px;
+}
+#checklist .nt-qitem .nt-qans .nt-qansscore {
+position: absolute;
+right: 50px;
+top: 0;
+display: none;
+height: 100%;
+padding: 5px 10px 0 10px;
+background: #e1cd9b;
+background: rgba(225, 205, 155, 0.92);
+}
+.nt-btn-sqr {
+padding: 0;
+display: inline-block;
+border-style: none;
+background-color: white;
+width: 24px;
+height: 24px;
+background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
+background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+background-image: linear-gradient(top, #ffffff, #f2f2f2);
+-webkit-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+-moz-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+-ms-border-radius: 3px;
+-o-border-radius: 3px;
+border-radius: 3px;
+}
+#checklist .nt-qitem.nt-qitem-edit-inact:hover .nt-qans.nt-qans-hover:hover, #checklist .nt-qitem.nt-qitem-edit-act .nt-qans.nt-qans-hover:hover {
+background-color: #f8f2e4;
+border-bottom: 1px solid gainsboro;
+}
+#checklist .nt-qitem.nt-qitem-edit-inact:hover .nt-qans, #checklist .nt-qitem.nt-qitem-edit-act .nt-qans {
+border-bottom: 1px solid #fffbf1;
+}
+#checklist .nt-qitem.nt-qitem-edit-inact:hover, #checklist .nt-qitem.nt-qitem-edit-act {
+background-color: #fffbf1;
+}
+#checklist .nt-qitem.nt-qitem-edit-act .nt-qfoot {
+background-color: #ebe6db;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qctrls-qtags-toggle {
+position: absolute;
+top: 8px;
+right: 10px;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qctrls select {
+height: 24px;
+width: 130px;
+background-color: white;
+margin-bottom: 0;
+padding: 0;
+border: 0;
+}
+select {
+width: 220px;
+border: 1px solid #bbb;
+background-color: #ffffff;
+}
+select, input[type="file"] {
+height: 30px;
+line-height: 30px;
+}
+div.hoverscroll {
+position: relative;
+}
+div.hoverscroll div.listcontainer {
+overflow: hidden;
+}
+#checklist .nt-qitem .nt-qfoot .nt-tag-adder {
+visibility: hidden;
+}
+#checklist .nt-qitem.nt-qitem-edit-inact:hover .nt-qfoot .nt-tag-adder, #checklist .nt-qitem.nt-qitem-edit-act .nt-qfoot .nt-tag-adder {
+visibility: visible;
+}
+.nt-tags div {
+float: left;
+margin: 2px 2px 0 0;
+}
+.nt-tags .nt-tag-adder input {
+width: 90px;
+font-size: 11px;
+padding: 0 5px;
+height: 20px;
+background: white;
+border: 1px solid #c7c7c7;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+-webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+-moz-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 }
