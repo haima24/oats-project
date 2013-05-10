@@ -1,49 +1,7 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-<script type="text/javascript">
-    $(function () {
-        $("#sidebar").accordion();
-        $(".nt-conted-ph-cont").hover(function (ev) {
-            var ea = $(ev.currentTarget).find('[contenteditable=true]')[0];
-            $(ea).addClass("nt-contedhover");
-        }, function (ev) {
-            var er = $(ev.currentTarget).find('[contenteditable=true]')[0];
-            $(er).removeClass("nt-contedhover");
-        });
-        $(':not(.nt-qitem)').click(function () {
-            var all = $(".nt-qitem");
-            all.removeClass('nt-qitem-edit-act');
-            all.removeClass('nt-qitem-edit-inact');
-            all.addClass('nt-qitem-edit-inact');
-            all.find('.nt-qctrls').hide();
-            all.find('.nt-qtagcont').show();
-            all.find('.nt-tag-adder').show();
-            all.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle').hide();
-        });
-        $(".nt-qitem").live('click', function (ev) {
-            var all = $(".nt-qitem");
-            all.removeClass('nt-qitem-edit-act');
-            all.removeClass('nt-qitem-edit-inact');
-            $(this).addClass('nt-qitem-edit-act').siblings().addClass('nt-qitem-edit-inact');
-            var current = ev.target;
-            var pr = $(current).closest('.nt-qitem');
-            if (current.parentNode && $(current.parentNode).hasClass('nt-tag-adder')) {
-                var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
-                $(pr.find('.nt-qctrls')[0]).hide();
-                $(pr.find('.nt-qtagcont')[0]).show();
-                $(btn).show();
-            } else {
-                var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
-                $(pr.find('.nt-qctrls')[0]).show();
-                $(pr.find('.nt-tag-adder')[0]).hide();
-                $(btn).show();
-                var btnAdd = pr.find('button.nt-btn-text.nt-qansadd')[0];
-                $(btnAdd).show();
-            }
-        });
-    });
-</script>
+<script src="~/Resource/Scripts/Tests_Layout.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div class="container">
@@ -107,7 +65,7 @@
         </div>
         <div id="eventTab">
             <div id="sidebar" class="ui-accordion ui-widget ui-helper-reset" role="tablist">
-                <div class="t-accord-header">New Question<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-header">New Question<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content">
                     <div class="t-question-type t-question-type-radio ui-draggable" id="c46">
                         <i class="t-icon i-radio"></i><span>Radio choice</span>
@@ -129,12 +87,12 @@
                     </div>
                 </div>
 
-                <div class="t-accord-header">Reuse Questions<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-header">Reuse Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content">
                     <div class="nt-ctrl-search ui-droppable nt-guide">
                         <div class="nt-search-box">
                             <input type="text" placeholder="Search or pick a template" class="nt-search-input ">
-                            <i class="nt-icon search"></i>
+                            <i class="t-icon search"></i>
 
 
                             <button class="nt-btn-icon nt-btn-clear ">
@@ -146,18 +104,18 @@
                     <div class="nt-ctrl-list" style="height: 30px; min-height: 30px; overflow-y: auto;"></div>
                 </div>
 
-                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="qpaste" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-2" role="tabpanel" aria-expanded="false" aria-hidden="true">
                     <div class="nt-loader-large"></div>
                     <textarea class="nt-guide" placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 30px; min-height: 30px; overflow-y: auto;"></textarea>
                 </div>
 
-                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-3" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-3" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="tags" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-3" role="tabpanel" aria-expanded="false" aria-hidden="true">
                     <div class="nt-ctrl-search nt-guide">
                         <div class="nt-search-box">
                             <input type="text" placeholder="Search" class="nt-search-input add">
-                            <i class="nt-icon search"></i>
+                            <i class="t-icon search"></i>
 
                             <button class="nt-btn-circle nt-btn-add" data-original-title="">
                                 <i class="icon-plus"></i>
@@ -245,8 +203,8 @@
 
                     <div class="nt-qhctrls">
 
-                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
-                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
 
 
                     </div>
@@ -270,11 +228,11 @@
                                 <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
                                 <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
-                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
                                 <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
-                                    <i class="nt-icon remove"></i>
+                                    <i class="t-icon remove"></i>
                                 </button>
                             </div>
 
@@ -297,11 +255,11 @@
                                 <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
                                 <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
-                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
                                 <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
-                                    <i class="nt-icon remove"></i>
+                                    <i class="t-icon remove"></i>
                                 </button>
                             </div>
 
@@ -328,7 +286,7 @@
                                 <option value="img">Image</option>
 
                             </select>
-                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
+                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
                             <button class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
                                 Points
@@ -379,8 +337,8 @@
 
                     <div class="nt-qhctrls">
 
-                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
-                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
 
 
                     </div>
@@ -407,11 +365,11 @@
                                 <input type="text" class="nt-off-score nt-chk-score nt-guide" data-guide="content_q_pntval_off" placeholder="Pts" value="0" data-original-title="Point Value">
                                 <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
-                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
                                 <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
-                                    <i class="nt-icon remove"></i>
+                                    <i class="t-icon remove"></i>
                                 </button>
                             </div>
 
@@ -437,11 +395,11 @@
                                 <input type="text" class="nt-off-score nt-chk-score nt-guide" data-guide="content_q_pntval_off" placeholder="Pts" value="0" data-original-title="Point Value">
                                 <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
-                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="nt-icon gift"></i></button>
+                                <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
                                 <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
-                                    <i class="nt-icon remove"></i>
+                                    <i class="t-icon remove"></i>
                                 </button>
                             </div>
 
@@ -468,7 +426,7 @@
                                 <option value="img">Image</option>
 
                             </select>
-                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
+                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
                             <button class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
                                 Points
@@ -519,8 +477,8 @@
 
                     <div class="nt-qhctrls">
 
-                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="nt-icon copy"></i></button>
-                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="nt-icon remove"></i></button>
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
 
 
                     </div>
@@ -539,7 +497,7 @@
 
                     <div class="nt-qfoot">
 
-                        <div class="nt-qctrls" style="">
+                        <div class="nt-qctrls" style="display:none;">
 
 
                             <div class="nt-qoepts">
@@ -557,7 +515,7 @@
                                 <option value="img">Image</option>
 
                             </select>
-                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="nt-icon asterisk"></i></button>
+                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
                             <button style="visibility: hidden" class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
                                 Points
@@ -584,6 +542,204 @@
                     </div>
 
                 </div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c255">
+	<div class="nt-qnum ">1.</div>
+<a class="nt-qanchor" name="Q1"></a>
+<!-- NOT isImg START -->
+
+
+<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div><div class="redactor_box"><textarea name="text_c255" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c255" contenteditable="true" data-guide="content_q_phrase" dir="ltr"><p><br></p></div></div></div>
+
+<!-- NOT isImg END -->
+
+<!-- isImg START -->
+<!-- isImg END -->
+
+<div class="nt-qhctrls">
+
+  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
+
+
+</div>
+
+<div class="nt-qanscont nt-sortable"></div>
+
+<div class="nt-qmiddle" style="">
+
+
+
+  <div class="ui-wrapper" style="overflow: hidden; position: relative; width: 710px; height: 28px; top: auto; left: auto; margin: 0px 0px 16px; padding-right: 7px;"><input type="text" data-original-title="Enter each word you accept as correct answer. Use quotes for answers with spaces." data-guide="content_q_oneliner_box" class="nt-qrespinput nt-guide ui-resizable" value="" maxlength="140" style="width: 696px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"><div class="ui-resizable-handle ui-resizable-e" style="z-index: 1000;"></div></div>
+
+</div>
+
+<div class="nt-qfoot">
+
+  <div class="nt-qctrls" style="display: none;">
+
+
+    <div class="nt-qoepts">
+      <span>Max. Points:</span>
+      <input type="text" class="nt-guide" data-guide="content_q_oneliner_mxpts">
+    </div>
+
+    <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+
+      <option value="radio">Multiple choice</option>
+      <option value="checkbox">Checkbox</option>
+      <option value="essay">Essay</option>
+      <option value="oneliner" selected="">Short answer</option>
+      <option value="text">Text</option>
+      <option value="img">Image</option>
+
+    </select>
+    <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+
+    <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+      Points
+    </button>
+  </div>
+  <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
+  </div>
+
+
+  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+    <i class="t-icon i-tag"></i>
+  </button>
+</div>
+
+</div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c261"><div class="nt-qnum nt-qnum-letter">A.</div>
+<a class="nt-qanchor" name="QA"></a>
+<!-- NOT isImg START -->
+
+
+<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Text</div><div class="redactor_box"><textarea name="text_c261" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c261" contenteditable="true" data-guide="content_q_phrase" dir="ltr"><p><br></p></div></div></div>
+
+<!-- NOT isImg END -->
+
+<!-- isImg START -->
+<!-- isImg END -->
+
+<div class="nt-qhctrls">
+
+  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
+
+
+</div>
+
+<div class="nt-qanscont nt-sortable"></div>
+
+
+<div class="nt-qfoot">
+
+  <div class="nt-qctrls" style="display: none;">
+
+
+
+    <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+
+      <option value="radio">Multiple choice</option>
+      <option value="checkbox">Checkbox</option>
+      <option value="essay">Essay</option>
+      <option value="oneliner">Short answer</option>
+      <option value="text" selected="">Text</option>
+      <option value="img">Image</option>
+
+    </select>
+    <button style="visibility: hidden" class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+
+    <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+      Points
+    </button>
+  </div>
+  <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
+  </div>
+
+
+  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+    <i class="t-icon i-tag"></i>
+  </button>
+</div>
+
+</div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c265"><div class="nt-qnum nt-qnum-letter">B.</div>
+<a class="nt-qanchor" name="QB"></a>
+<!-- NOT isImg START -->
+<!-- NOT isImg END -->
+
+<!-- isImg START -->
+
+<div class="nt-qimg-ph nt-clickable nt-hover">
+  <i class="t-icon type-img"></i><span>Drag an image here or click here to select</span>
+</div>
+
+<input style="display: none" type="file" class="nt-qfile" name="f">
+
+<div class="nt-qimg-upload">Uploading Image...</div>
+
+<p align="center" class="nt-qimg-cont">
+  <img src="" style="width: ; height: ">
+
+  <button class="nt-btn-circle nt-qimg-close" data-original-title="Delete Image">
+    <i class="t-icon remove"></i>
+  </button>
+</p>
+
+<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; text-align: center; top: 15px; left: 15px; font-size: 12px; line-height: 16px; width: 700px;">Enter Description</div><div class="redactor_box"><textarea name="imgdesc_c265" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qimg-desc nt-qedit nt-delayedblur redactor_editor" id="imgdesc_c265" style="display: none;" contenteditable="true" dir="ltr"></div></div></div>
+
+<!-- isImg END -->
+
+<div class="nt-qhctrls">
+
+  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
+
+
+</div>
+
+<div class="nt-qanscont nt-sortable"></div>
+
+
+<div class="nt-qfoot">
+
+  <div class="nt-qctrls" style="display: none;">
+
+
+
+    <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+
+      <option value="radio">Multiple choice</option>
+      <option value="checkbox">Checkbox</option>
+      <option value="essay">Essay</option>
+      <option value="oneliner">Short answer</option>
+      <option value="text">Text</option>
+      <option value="img" selected="">Image</option>
+
+    </select>
+    <button style="visibility: hidden" class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+
+    <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+      Points
+    </button>
+  </div>
+  <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
+  </div>
+
+
+  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+    <i class="t-icon i-tag"></i>
+  </button>
+</div>
+
+</div>
             </div>
         </div>
     </div>
