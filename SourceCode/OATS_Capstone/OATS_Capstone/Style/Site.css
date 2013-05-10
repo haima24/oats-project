@@ -117,6 +117,9 @@ i.t-icon.i-img {
 i.t-icon.i-setting {
     background: url(./img/setting.png) no-repeat;
 }
+i.t-icon.i-tag {
+    background: url(./img/tag.png) no-repeat;
+}
 i.t-icon {
     display: inline-block;
     width: 20px;
@@ -389,6 +392,15 @@ border-top-left-radius: 5px;
 -webkit-border-top-right-radius: 5px;
 border-top-right-radius: 5px;
 }
+    #checklist .nt-qitem:last-child {
+        border-bottom: 1px solid #c7c7c7;
+        -moz-border-radius-bottomleft: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
 #checklist .nt-qitem {
 width: 720px;
 position: relative;
@@ -407,6 +419,47 @@ top: 10px;
 left: 1px;
 text-align: right;
 padding-top: 5px;
+}
+#checklist .nt-qitem .nt-qnum-letter {
+display: none;
+}
+#checklist .nt-qitem .nt-qimg-ph {
+width: 595px;
+margin: 10px 10px 10px 35px;
+padding: 10px;
+border: 1px dashed gainsboro;
+text-align: center;
+font-size: 14px;
+font-style: italic;
+color: #999999;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+}
+.nt-clickable {
+cursor: pointer;
+}
+#checklist .nt-qitem .nt-qimg-upload {
+display: none;
+background: url(../img/loader-bar-dark.gif?v=174) left no-repeat;
+background-position: 255px 10px;
+height: 42px;
+margin: 10px;
+line-height: 42px;
+font-size: 14px;
+text-align: center;
+}
+#checklist .nt-qitem .nt-qimg-cont {
+position: relative;
+display: none;
+margin: 40px 10px 0 10px;
+}
+#checklist .nt-qitem .nt-qimg-cont .nt-qimg-close {
+display: none;
+position: absolute;
+top: 10px;
 }
 .nt-ph {
 font-style: italic;
@@ -599,6 +652,7 @@ background-color: #fffbf1;
 #checklist .nt-qitem.nt-qitem-edit-act .nt-qfoot {
 background-color: #ebe6db;
 }
+
 #checklist .nt-qitem .nt-qfoot .nt-qctrls-qtags-toggle {
 position: absolute;
 top: 8px;
@@ -611,6 +665,9 @@ background-color: white;
 margin-bottom: 0;
 padding: 0;
 border: 0;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qoepts {
+float: left;
 }
 select {
 width: 220px;
