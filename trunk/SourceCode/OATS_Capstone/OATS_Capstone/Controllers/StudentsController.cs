@@ -16,5 +16,9 @@ namespace OATS_Capstone.Controllers
             return View();
         }
 
+        public ActionResult NewStudent()
+        {
+            return View();
+        }
     }
 }

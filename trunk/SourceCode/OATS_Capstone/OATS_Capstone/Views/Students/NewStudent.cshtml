@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "NewStudent";
+}
+<script src="~/Resource/Scripts/Tests_Layout.js"></script>
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a id="logo" class="brand" href="#">OATS</a>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav">
+                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
+                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
+                    <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
+                    <li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li>
+                        <div class="navbar-search pull-left">
+                            <input type="text" class="search-query span2" placeholder="Search Tests">
+                        </div>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header">Name</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.nav-collapse -->
+        </div>
+    </div>
+    <!-- /navbar-inner -->
+</div>
+<div id="container" class="container wrapper" style="height: auto;">
+    <div class="nt-msg" style="display: none;">
+        <div class="nt-dnd-instr">
+            <p>Search for any existing educator's basic data and performance records using the Search box in the header - enter a few letters of their name or a tag that they have to filter the list.</p>
+            <p>To create new educator logins, just drag and drop their names and email address right here or click on the NEW button in the header.</p>
+            <p>You can drop here any text where each line has one or more pairs of educator name and  email address. All of these lines would work fine:</p>
+            <div class="nt-dnd-example-text">
+                <pre>A SampleUser a@terascore.com<br>B SampleUser b@terascore.com; C SampleUser &lt;c@terascore.com&gt;<br>"D SampleUser, Jr." d@terascore.com, E SampleUser &lt;e@terascore.com&gt;</pre>
+            </div>
+        </div>
+    </div>
+    <div class="nt-user-details hide" style="display: block;">
+        <div class="nt-user-header">
+            <div id="c258">
+                <div id="userHeader" class="white">
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 11px; left: 11px; font-size: 16px; line-height: 18px; display: none;">Enter Educator Name</div>
+                        <div contenteditable="true" id="headerUserName" class="nt-guide" data-guide="edus_name">null</div>
+                    </div>
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 11px; left: 5px; font-size: 13px; line-height: 18px;">Enter REQUIRED Email Address</div>
+                        <div id="headerUserEmail" contenteditable="true" class="nt-email nt-guide" data-guide="edus_email"></div>
+                    </div>
+                    <button id="userDel" class="nt-btn-circle nt-guide" data-guide="edus_delete" data-original-title=""><i class="nt-icon remove"></i></button>
+                </div>
+
+                <div id="headerUserTags">
+                    <div class="nt-etagcont">
+                        <div class="nt-tags">
+                            <div>
+                                <div class="nt-tag-adder">
+                                    <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nt-asms-unrelated">
+            <div class="nt-asms-unrelated-label">Add:</div>
+            <div class="nt-asms-search">
+                <div class="nt-rolldown-search">
+                    <div class="nt-search ui-droppable">
+                        <div class="nt-search-box">
+                            <input type="text" placeholder="Select a Test to Assign to." class="nt-search-input ">
+                            <i class="nt-icon search"></i>
+
+
+                            <button class="nt-btn-icon nt-btn-clear ">
+                                <i class="icon-remove-sign"></i>
+                            </button>
+                        </div>
+                        <div class="nt-ctrl-search-tags nt-taglist"></div>
+                    </div>
+                    <div class="nt-search-results" style="">
+                        <div class="nt-taglist"></div>
+                        <div class="nt-hitlist nt-guide">
+                            <div class="nt-cover" style="margin-top: 10px;">You must set the EMAIL ADDRESS of this user before any test assignments.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="asmsList" style="height: 186px; overflow-y: auto;" class="nt-flex-acc">
+            <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">
+                <div class="nt-asms-list nt-guide">
+                    <a>
+                        <div class="nt-list-head">
+
+                            <div class="nt-name">
+                                Running And Upcoming Tests
+                            </div>
+                            <div class="nt-date">Start</div>
+                            <div class="nt-date">End</div>
+
+                            <i class="nt-icon arrow-up"></i>
+                            <div>&nbsp;</div>
+                        </div>
+                    </a>
+
+                    <div class="nt-list-cont" style="height: 50px;">
+                        <div class="nt-empty-list-ph">
+                            <p>No running or upcoming tests available.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
+               <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
+                <div class="nt-asms-list nt-guide
+                    ">
+                    <a>
+                        <div class="nt-list-head">
+
+                            <div class="nt-name">
+                                Tests
+                            </div>
+                            <div class="nt-date">Start</div>
+                            <div class="nt-date">End</div>
+
+
+                            <div class="nt-rate">Resp. Rate</div>
+
+                            <div class="nt-perc">Avg.</div>
+                            <div class="nt-perc">St.Dev.</div>
+                            <i class="nt-icon arrow-up"></i>
+                            <div>&nbsp;</div>
+                        </div>
+                    </a>
+
+                    <div class="nt-list-cont" style="height: 50px;">
+                        <div class="nt-empty-list-ph">
+                            <p>No past tests available.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
