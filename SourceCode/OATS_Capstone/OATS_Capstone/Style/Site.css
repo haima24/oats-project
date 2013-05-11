@@ -185,6 +185,23 @@ i, cite, em, var, address, dfn {
         -o-border-radius: 10px;
         border-radius: 10px;
     }
+     mini {
+         width: 500px;
+         height:300px;
+        position: relative;
+        /*background: rgba(255, 255, 255, 0.3);*/
+        background-color:black;
+        padding: 20px 20px 1px 20px;
+        -webkit-box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
+        -moz-box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
+        box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        border-radius: 10px;
+    }
+    
 
 #test-header {
     background-color: rgb(130, 155, 205);
@@ -709,4 +726,657 @@ border-radius: 5px;
 -webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 -moz-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+#eventHeader.white, #userHeader.white {
+color: #FFF;
+}
+#userHeader {
+background-color: #36C;
+}
+#eventHeader, #userHeader {
+overflow: hidden;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+-webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+-moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+}
+#eventHeader > div, #userHeader > div {
+float: left;
+}
+#userHeader .nt-ph {
+color: #D3D3D3;
+}
+.nt-ph {
+font-style: italic;
+color: grey;
+}
+#eventTitle, #headerUserName {
+width: 538px;
+padding: 5px;
+margin: 6px;
+font-size: 16px;
+}
+#eventHeader .nt-email, #userHeader .nt-email {
+margin-top: 6px;
+width: 200px;
+max-width: 200px;
+padding: 5px;
+}
+#eventHeader button, #userHeader button {
+margin: 8px 0 0 5px;
+}
+#eventTags .nt-tags, #headerUserTags .nt-tags {
+height: 24px;
+text-align: right;
+}
+#eventTags, #headerUserTags {
+margin: 5px 0;
+}
+#eventTags .nt-tags > div, #headerUserTags .nt-tags > div {
+float: none;
+text-align: left;
+display: inline-block;
+vertical-align: top;
+}
+.nt-tags div {
+float: left;
+margin: 2px 2px 0 0;
+}
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+background-color: #FFF;
+border: 1px solid #CCC;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+-moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+-o-transition: border linear 0.2s, box-shadow linear 0.2s;
+transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+display: inline-block;
+height: 20px;
+padding: 4px 6px;
+margin-bottom: 10px;
+font-size: 14px;
+line-height: 20px;
+color: #555;
+vertical-align: middle;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+
+input, textarea, .uneditable-input {
+margin-left: 0;
+}
+
+input, textarea, .uneditable-input {
+width: 206px;
+}
+
+input, button, select, textarea {
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+label, input, button, select, textarea {
+font-size: 14px;
+font-weight: normal;
+line-height: 20px;
+}
+
+button, input {
+line-height: normal;
+}
+
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+
+#asmsList .accordion-group:first-child {
+border-bottom: 0;
+-webkit-border-radius: 4px 4px 0 0;
+-moz-border-radius: 4px 4px 0 0;
+-ms-border-radius: 4px 4px 0 0;
+-o-border-radius: 4px 4px 0 0;
+border-radius: 4px 4px 0 0;
+}
+
+#asmsList .accordion-group {
+background-color: #FFF;
+margin: 0;
+border: 1px solid #C7C7C7;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+}
+
+.accordion-group {
+margin-bottom: 2px;
+border: 1px solid #E5E5E5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+
+.nt-user-details .nt-asms-list-cont.upandrunning .nt-list-head, .nt-user-details .nt-asms-list-cont.upandrunning .nt-asms-list {
+-moz-border-radius-topleft: 4px;
+-webkit-border-top-left-radius: 4px;
+border-top-left-radius: 4px;
+-moz-border-radius-topright: 4px;
+-webkit-border-top-right-radius: 4px;
+border-top-right-radius: 4px;
+}
+.nt-user-details .nt-asms-list-cont .nt-asms-list {
+overflow: hidden;
+background-color: #FFF;
+}
+
+a, a:hover {
+text-decoration: none;
+cursor: pointer;
+}
+a {
+color: #08C;
+text-decoration: none;
+}
+
+.nt-user-details .nt-asms-list-cont.upandrunning .nt-list-head, .nt-user-details .nt-asms-list-cont.upandrunning .nt-asms-list {
+-moz-border-radius-topleft: 4px;
+-webkit-border-top-left-radius: 4px;
+border-top-left-radius: 4px;
+-moz-border-radius-topright: 4px;
+-webkit-border-top-right-radius: 4px;
+border-top-right-radius: 4px;
+}
+.nt-user-details .nt-list-head {
+background-color: #F8F8F8;
+}
+.nt-asms-list .nt-list-head {
+position: relative;
+border-bottom: 1px solid #ECECEC;
+}
+.nt-title, .nt-clb-header, .nt-asms-list .nt-list-head, .nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title, .nt-scores-cont .nt-scores-footer .notreptags .nt-tag-ph {
+text-transform: uppercase;
+color: #8E5E19;
+font-weight: bold;
+font-size: 11px;
+}
+
+a, a:hover {
+cursor: pointer;
+}
+a {
+color: #08C;
+}
+
+.nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
+position: relative;
+padding-left: 15px;
+padding-right: 25px;
+text-align: left;
+width: 31%;
+}
+.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
+display: inline-block;
+padding: 10px 2px;
+text-align: center;
+vertical-align: top;
+overflow: hidden;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+.nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
+width: 13%;
+}
+.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
+display: inline-block;
+padding: 10px 2px;
+text-align: center;
+vertical-align: top;
+overflow: hidden;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+.nt-date, .nt-time {
+overflow: hidden;
+white-space: nowrap;
+}
+
+.nt-asms-list .nt-list-head > i {
+position: absolute;
+top: 10px;
+right: 5px;
+}
+i.nt-icon.arrow-up {
+background-position: 0 -100px;
+}
+i.nt-icon {
+display: inline-block;
+width: 20px;
+height: 20px;
+vertical-align: middle;
+background: url(../img/sprites.png?v=174) no-repeat;
+}
+
+.nt-user-details .nt-list-cont {
+overflow: auto;
+}
+
+.nt-asms-list .nt-empty-list-ph {
+padding: 10px 15px;
+font-style: italic;
+}
+
+p {
+margin: 0 0 9px;
+}
+
+#asmsList .accordion-group:last-child {
+border-top: 0;
+-webkit-border-radius: 0 0 4px 4px;
+-moz-border-radius: 0 0 4px 4px;
+-ms-border-radius: 0 0 4px 4px;
+-o-border-radius: 0 0 4px 4px;
+border-radius: 0 0 4px 4px;
+}
+
+.nt-user-details .nt-asms-list-cont.recent .nt-asms-list {
+-moz-border-radius-bottomleft: 4px;
+-webkit-border-bottom-left-radius: 4px;
+border-bottom-left-radius: 4px;
+-moz-border-radius-bottomright: 4px;
+-webkit-border-bottom-right-radius: 4px;
+border-bottom-right-radius: 4px;
+}
+.nt-user-details .nt-asms-list-cont .nt-asms-list {
+overflow: hidden;
+background-color: #FFF;
+}
+
+.nt-user-details .nt-asms-list-cont.recent .nt-list-head {
+border-top: 1px solid #C7C7C7;
+}
+.nt-user-details .nt-list-head {
+background-color: #F8F8F8;
+}
+.nt-asms-list .nt-list-head {
+position: relative;
+border-bottom: 1px solid #ECECEC;
+}
+.nt-title, .nt-clb-header, .nt-asms-list .nt-list-head, .nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title, .nt-scores-cont .nt-scores-footer .notreptags .nt-tag-ph {
+text-transform: uppercase;
+color: #8E5E19;
+font-weight: bold;
+font-size: 11px;
+}
+
+.nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
+position: relative;
+padding-left: 15px;
+padding-right: 25px;
+text-align: left;
+width: 31%;
+}
+
+
+.nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
+width: 13%;
+}
+.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
+display: inline-block;
+padding: 10px 2px;
+text-align: center;
+vertical-align: top;
+overflow: hidden;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+.nt-date, .nt-time {
+overflow: hidden;
+white-space: nowrap;
+}
+
+a:hover, a:active {
+outline: 0;
+}
+a, a:hover {
+text-decoration: none;
+cursor: pointer;
+}
+a {
+color: #08C;
+text-decoration: none;
+}
+
+.nt-asms-list .nt-list-head > div.nt-perc, .nt-asms-list .nt-list-row > div.nt-perc {
+width: 7%;
+}
+
+.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
+display: inline-block;
+padding: 10px 2px;
+text-align: center;
+vertical-align: top;
+overflow: hidden;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+.nt-user-details .nt-asms-unrelated {
+z-index: 1;
+position: absolute;
+width: 360px;
+right: 0px;
+margin: 0px 60px 0px 0px;
+}
+
+.nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label {
+float: left;
+width: 40px;
+height: 18px;
+padding: 11px 0px 10px 0px;
+}
+
+
+.nt-title, .nt-clb-header, .nt-asms-list .nt-list-head, .nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title, .nt-scores-cont .nt-scores-footer .notreptags .nt-tag-ph {
+text-transform: uppercase;
+color: #8E5E19;
+font-weight: bold;
+font-size: 11px;
+}
+
+.nt-user-details .nt-asms-unrelated .nt-rolldown-search {
+padding-top: 5px;
+}
+.nt-rolldown-search {
+position: relative;
+min-width: 232px;
+}
+
+.nt-user-details .nt-asms-unrelated .nt-search-box {
+float: left;
+width: 310px;
+}
+.nt-search-box {
+position: relative;
+}
+.nt-user-details .nt-asms-unrelated .nt-search-box .nt-search-input {
+background-color: #FFF;
+border: 1px solid #C7C7C7;
+width: 270px;
+}
+.nt-rolldown-search .nt-search-input {
+background-color: #969696;
+border: 1px solid #000;
+width: 180px;
+}
+.nt-search-box .nt-search-input {
+background-color: #FFF;
+height: 18px;
+border: solid 1px #C7C7C7;
+padding: 5px 20px 4px 30px;
+margin: 0;
+-webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+-moz-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+-webkit-border-radius: 15px;
+-moz-border-radius: 15px;
+-ms-border-radius: 15px;
+-o-border-radius: 15px;
+border-radius: 15px;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+background-color: #FFF;
+border: 1px solid #CCC;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border linear .2s, box-shadow linear .2s;
+-moz-transition: border linear .2s, box-shadow linear .2s;
+-o-transition: border linear .2s, box-shadow linear .2s;
+transition: border linear .2s, box-shadow linear .2s;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+display: inline-block;
+height: 18px;
+padding: 4px 6px;
+margin-bottom: 9px;
+font-size: 13px;
+line-height: 18px;
+color: #555;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
+input, textarea {
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, textarea, .uneditable-input {
+margin-left: 0;
+}
+input, textarea {
+width: 210px;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+.nt-search-box .nt-icon.search {
+position: absolute;
+top: 5px;
+left: 5px;
+}
+i.nt-icon.search {
+background-position: -40px -600px;
+}
+i.nt-icon {
+display: inline-block;
+width: 20px;
+height: 20px;
+vertical-align: middle;
+background: url(../img/sprites.png) no-repeat;
+}
+user agent stylesheeti, cite, em, var, address, dfn {
+font-style: italic;
+}
+Inherited from body
+body {
+font-family: "Open Sans", sans-serif;
+color: #444;
+}
+body {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+font-size: 13px;
+line-height: 18px;
+color: #333;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+user agent stylesheetinput:not([type]), input[type="color"], input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="url"], input[type="text"] {
+padding: 1px 0px;
+}
+user agent stylesheetinput, input[type="password"], input[type="search"], isindex {
+-webkit-appearance: textfield;
+padding: 1px;
+background-color: #FFF;
+border: 2px inset;
+border-image: initial;
+-webkit-rtl-ordering: logical;
+-webkit-user-select: text;
+cursor: auto;
+}
+user agent stylesheetinput, textarea, keygen, select, button, isindex {
+margin: 0em;
+font: -webkit-small-control;
+color: initial;
+letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+text-shadow: none;
+display: inline-block;
+text-align: start;
+}
+user agent stylesheetinput, textarea, keygen, select, button, isindex, meter, progress {
+-webkit-writing-mode: horizontal-tb;
+}
+
+.nt-user-details .nt-asms-unrelated .nt-search-box .nt-btn-clear {
+right: 4px;
+}
+.nt-search-box .nt-btn-clear {
+display: none;
+position: absolute;
+top: 6px;
+right: 8px;
+}
+.nt-btn-icon {
+padding: 0;
+border: 0;
+background: rgba(0, 0, 0, 0);
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+cursor: pointer;
+-webkit-appearance: button;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+user agent stylesheetinput[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button {
+padding: 1px 6px;
+}
+user agent stylesheetinput[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button {
+-webkit-box-align: center;
+text-align: center;
+cursor: default;
+color: buttontext;
+padding: 2px 6px 3px;
+border: 2px outset buttonface;
+border-image: initial;
+background-color: buttonface;
+box-sizing: border-box;
+}
+user agent stylesheetinput, textarea, keygen, select, button, isindex {
+margin: 0em;
+font: -webkit-small-control;
+color: initial;
+letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+text-shadow: none;
+display: inline-block;
+text-align: start;
+}
+user agent stylesheetinput, textarea, keygen, select, button, isindex, meter, progress {
+-webkit-writing-mode: horizontal-tb;
+}
+user agent stylesheetbutton {
+-webkit-appearance: button;
+}
+
+.nt-btn-icon i {
+font-size: 14px;
+}
+button i {
+font-family: 'FontAwesome';
+font-size: 11px;
+color: #999;
+}
+user agent stylesheeti, cite, em, var, address, dfn {
+font-style: italic;
+}
+Pseudo ::before element
+.icon-remove-sign:before {
+content: "\f057";
+}
+[class^="icon-"]:before, [class*=" icon-"]:before {
+font-family: FontAwesome;
+font-weight: normal;
+font-style: normal;
+display: inline-block;
+text-decoration: inherit;
+}
+Inherited from button.nt-btn-icon.nt-btn-clear
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+cursor: pointer;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+font-size: 100%;
+}
+user agent stylesheetinput[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button {
+text-align: center;
+cursor: default;
+color: buttontext;
+padding: 2px 6px 3px;
+border: 2px outset buttonface;
+}
+user agent stylesheetinput, textarea, keygen, select, button, isindex {
+margin: 0em;
+font: -webkit-small-control;
+color: initial;
+letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+text-shadow: none;
+text-align: start;
 }
