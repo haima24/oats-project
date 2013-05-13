@@ -1,0 +1,896 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Resource/Scripts/Tests_Layout.js"></script>
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a id="logo" class="brand" href="#">OATS</a>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav">
+                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
+                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
+                    <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
+                    <li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li>
+                        <div class="navbar-search pull-left">
+                            <input type="text" class="search-query span2" placeholder="Search Tests">
+                        </div>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header">Name</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.nav-collapse -->
+        </div>
+    </div>
+    <!-- /navbar-inner -->
+</div>
+<div id="container" class="container wrapper">
+    <div id="test-header">
+        <div contenteditable="true" id="test-title">Enter Test Title</div>
+        <div id="eventDateFrom" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeFrom" class="test-date-time" contenteditable="true">4:00 pm</div>
+        <div class="spacer">_</div>
+        <div id="eventDateTo" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeTo" class="test-date-time" contenteditable="true">6:00 pm</div>
+    </div>
+    <div class="test-outer-tags">
+        <div class="test-tags">
+            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+        </div>
+    </div>
+    <div class="tabs-wrapper">
+        <div class="navbar">
+            <div class="navbar-inner test-larger-custom">
+                <ul class="nav">
+                    <li class="active"><a href="#">Content</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Response</a></li>
+                    <li><a href="#">Score</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="eventTab">
+            <div id="sidebar" class="ui-accordion ui-widget ui-helper-reset" role="tablist">
+  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top" role="tab" id="ui-accordion-sidebar-header-0" aria-controls="learners" aria-selected="true" tabindex="0"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
+    <span>All Students</span>
+    <span id="learnersCnt" class="nt-cnt">(26)</span>
+  <i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+  <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" id="learners" style="display: block;" aria-labelledby="ui-accordion-sidebar-header-0" role="tabpanel" aria-expanded="true" aria-hidden="false"><div class="nt-ctrl-search ui-droppable nt-guide"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input add">
+  <i class="nt-icon search"></i>
+
+  <button class="nt-btn-circle nt-btn-add nt-guide" data-original-title="">
+    <i class="icon-plus"></i>
+  </button>
+
+  <button class="nt-btn-icon nt-btn-clear add" style="display: none;">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist"></div>
+</div>
+<div class="nt-ctrl-list nt-guide" style="max-height: 171px; min-height: 30px; overflow-y: auto;"><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="02c1656d104747bf8afddd2d9f4c2dba"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="a@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{A}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="6644cf27ce5745f6ba24db9a58eed574"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="b@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{B}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="bf1f0d644b5f48d9920f614138c2711e"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="c@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{C}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="4adfebf422f1475fb326c7503e9b7efe"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="d@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{D}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="10f24a58f74545489d4bfa1764464116"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="e@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{E}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="a785f278ed0144dd9ac6fe418026b6e0"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="f@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{F}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="e8a21ef4e35c45e8a3ce65dc2e328050"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="g@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{G}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="f5372f1227394a3689347ecff1b620d7"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="h@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{H}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="9abc2001624848549f917f3c3d204d5e"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="i@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{I}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="e39b53a400624aeda3ba0f67021c544e"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="j@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{J}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="c983c87194204f11b3144651ca2b9873"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="k@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{K}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="a6db8de71efa479d91283ec907bf1ed1"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="l@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{L}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="6ae8f0cbcab14fb18bf4b77a83ff87e2"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="m@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{M}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="4bab46735f134ae5a626ac77d2ae43a9"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="n@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{N}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="a93eb2ccf1a344fa8d10957f36b834b7"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="o@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{O}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="84e3adfc76ec468e9a12a66229de8df9"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="p@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{P}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="df0a7445de7b436286ffe19609f48236"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="q@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{Q}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="d6f7ec277c014f0692f467e232e4a8ea"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="r@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{R}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="42b19bb046b94469a33f8f598f8ab742"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="s@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{S}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="68bf17b5cf5e40c9bb2c5051747aeb2d"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="t@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{T}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="2a161cdcffbe45b2beab53c043cd6f29"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="u@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{U}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="83160bfcf7a943b2a1f2b3ceee73dca3"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="v@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{V}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="7846e19af63545918fc1e2c040f0558c"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="w@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{W}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="4258151942b9459b9e09355c3fd7d4e6"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="x@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{X}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="d4f782fb75a94f27b0952c0f24f69c5a"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="y@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{Y}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-learn ui-draggable ui-droppable" id="a4188a04edf1446f850f0912114f5883"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="z@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{Z}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:learner:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div></div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-ctrl-foot">
+  <button class="selAll nt-btn-sqr  nt-guide" data-guide="delivery_usr_selall" data-original-title="Select All">
+    <i class="nt-icon tick"></i>
+    
+  </button>
+  <button class="editSel nt-btn-sqr  nt-guide" data-guide="delivery_usr_editsel" data-original-title="Edit Selected">
+    <i class="nt-icon pencil"></i>
+    
+  </button>
+  <button class="assignSel nt-btn-submit static icon-right nt-btn-sqr text nt-guide" data-guide="delivery_usr_asgnsel" data-original-title="">
+    <i class="nt-icon assign pushable white"></i>
+    Assign Selected
+  </button>
+</div>
+</div>
+
+  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all" role="tab" id="ui-accordion-sidebar-header-1" aria-controls="educators" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+    <span>All Educators</span>
+    <span id="educatorsCnt" class="nt-cnt">(5)</span>
+  <i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+  <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="educators" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-1" role="tabpanel" aria-expanded="false" aria-hidden="true"><div class="nt-ctrl-search ui-droppable nt-guide"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input add">
+  <i class="nt-icon search"></i>
+
+  <button class="nt-btn-circle nt-btn-add nt-guide" data-original-title="">
+    <i class="icon-plus"></i>
+  </button>
+
+  <button class="nt-btn-icon nt-btn-clear add" style="display: none;">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist"></div>
+</div>
+<div class="nt-ctrl-list nt-guide" style="max-height: 171px; min-height: 30px; overflow-y: auto;"><div class="nt-clb-item nt-clb-educ ui-draggable ui-droppable" id="89cc22f4ad9a4a829f815b108a7ed27e"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="admin@nomail.terascore.com">
+  <div class="nt-clb-item-label">Admin <span class="nt-hl-sort">User</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:educator:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-educ ui-draggable ui-droppable" id="331502891db344e38301b75bc3d3e62f"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="t1@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{1}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:educator:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-educ ui-draggable ui-droppable" id="b06494571dd94175ab9d7665bd4fac04"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="t2@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{2}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:educator:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-educ ui-draggable ui-droppable" id="160bc8a258074ca1ae654058014e6a88"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="t3@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{3}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:educator:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item nt-clb-educ ui-draggable ui-droppable" id="cbd18682d2f6458eab73e7f815a9c12f"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="support@terascore.com">
+  <div class="nt-clb-item-label">Terascore <span class="nt-hl-sort">{Support}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-assign nt-guide" data-guide="delivery_usr_asgn" data-action="" data-event-name="event:educator:assign" data-original-title="Assign">
+    <i class="nt-icon assign"></i>
+  </button>
+</div>
+</div></div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-ctrl-foot">
+  <button class="selAll nt-btn-sqr  nt-guide" data-guide="delivery_usr_selall" data-original-title="Select All">
+    <i class="nt-icon tick"></i>
+    
+  </button>
+  <button class="editSel nt-btn-sqr  nt-guide" data-guide="delivery_usr_editsel" data-original-title="Edit Selected">
+    <i class="nt-icon pencil"></i>
+    
+  </button>
+  <button class="assignSel nt-btn-submit static icon-right nt-btn-sqr text nt-guide" data-guide="delivery_usr_asgnsel" data-original-title="">
+    <i class="nt-icon assign pushable white"></i>
+    Assign Selected
+  </button>
+</div>
+</div>
+
+  <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="nt-icon arrow-up"></i><i class="nt-icon arrow-down"></i></div>
+  <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="tags" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-2" role="tabpanel" aria-expanded="false" aria-hidden="true"><div class="nt-ctrl-search nt-guide"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input add">
+  <i class="nt-icon search"></i>
+
+  <button class="nt-btn-circle nt-btn-add" data-original-title="">
+    <i class="icon-plus"></i>
+  </button>
+
+  <button class="nt-btn-icon nt-btn-clear add">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+</div>
+<div class="nt-ctrl-list nt-taglist nt-guide" style="max-height: 171px; min-height: 30px; overflow-y: auto;"><div class="nt-tag nt-guide ui-draggable" id="fbf1fe7e58804d8080379c3fa0012ce6"><span>Amendments</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="1bf308d04b9a447caee91fdfa8189aed"><span>Class of 2015</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="3d2f415013c2413bacfe9c5bb13857f3"><span>Class of 2016</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="acbf8836401149999a6620a3f6d38571"><span>Math</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="7f4ce8f484c1487c97e850826af90cd2"><span>SAMPLE</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="c243f5251c4a47e4bb422505c2b5fd8d"><span>Statue</span>
+<i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="bfd3ad19ac3141988b90019b7e6aba62"><span>Template</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="29d1cc11e3f44ee6b9ceec78ddac5b55"><span>Welcome</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="65509b7442de4d10bb28fbde61edd3f3"><span>history</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="d2e2ce5fec94459789cb74ee65ff3067"><span>independence</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="8fe317f9481841bfbe656286e0c7e4a8"><span>presidents</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div><div class="nt-tag nt-guide ui-draggable" id="63d43753df104a968ae319df1e7000d7"><span>wars</span>
+<i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
+</div></div>
+</div>
+</div>
+<div id="settings" style="height: 388px; overflow-y: auto;">
+  <div class="nt-panel">
+    <div class="nt-section nt-first">
+      <div class="nt-header">Email Invitations</div>
+      <div>Send emails to invited students and educators allowing them to access this test with a single click from their email.</div>
+      <button class="nt-send-asm-inv nt-btn-submit nt-guide" data-guide="delivery_email_inv_btn">Email Assigned Users</button>
+      <div class="nt-asm-inv-emails nt-guide" data-guide="delivery_email_inv_list"><div class="nt-title"><p>No invitation emails were sent yet.</p></div></div>
+    </div>
+    <div class="nt-section">
+      <div class="nt-header">Response Collection</div>
+      <ul>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_rndq">
+            <input id="asm_randomize" type="checkbox">Randomize the order of questions
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_1qpp">
+            <input id="asm_single_question_view" type="checkbox">One question per page
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_accescode">
+            <input id="asm_access_code_only" type="checkbox">Require test access code
+          </label>
+          <div id="asm_access_code" class="nt-access-code hide"></div>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_nocheat">
+            <input id="asm_nocheat" type="checkbox">NoCheat access ONLY
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_1submit">
+            <input id="asm_ans_final" type="checkbox">One Submission Only - Time Limit:
+            <input id="asm_time_limit" type="text" class="nt-guide" data-guide="delivery_opt_timelimit" disabled="disabled">mins
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_showpts">
+            <input id="asm_show_max_scores" type="checkbox" checked="checked">Show question point value
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_selfreg">
+            <input id="asm_selfreg" type="checkbox">Student self-registration allowed
+          </label>
+          <div id="asm_selfreg_url" class="nt-url hide nt-guide" data-guide="delivery_opt_selfreg_link"></div>
+        </li>
+      </ul>
+    </div>
+    <div class="nt-section">
+      <div class="nt-header">Reporting</div>
+      <ul>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_selfassess">
+            <input id="asm_selfasm" type="checkbox">Immediate self-assessment
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_scoreaccess">
+            <input id="asm_learn_acc_own_rep" type="checkbox">Students can access their own score reports
+          </label>
+        </li>
+        <li>
+          <label class="checkbox checkbox-indent nt-guide" data-guide="delivery_opt_finalreponly">
+            <input id="asm_final_reports_only" type="checkbox">Only once all essay and short answer scores are approved
+          </label>
+        </li>
+        <li>
+          <label class="checkbox  nt-guide" data-guide="delivery_opt_grades">
+            <input id="asm_show_grades" type="checkbox">Grades in Score Report
+            <button id="btnAdjustGrading" class="nt-btn-text">Adjust Grading...</button>
+          </label>
+        </li>
+      </ul>
+    </div>
+    <div class="nt-section nt-last">
+      <div class="nt-header">Email Score Reports</div>
+      <div>Send emails to students who participated allowing them to access their score reports in this test.</div>
+      <button class="nt-send-scores nt-btn-submit nt-guide" data-guide="delivery_email_scores_btn">Send Scores</button>
+      <div class="nt-asm-score-emails nt-guide" data-guide="delivery_email_scores_list"><div class="nt-title"><p>No score emails were sent yet.</p></div></div>
+    </div>
+    <div class="nt-border"></div>
+  </div>
+</div>
+<div id="assignments" style="height: 388px; overflow-y: hidden;">
+  <div class="nt-acc-header">
+    <span>Assigned Students</span>
+    <span id="eventLearnersCnt" class="nt-cnt">(2)</span>
+  </div>
+  <div class="nt-acc-content" id="eventLearners"><div class="nt-ctrl-search ui-droppable nt-guide"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear " style="display: none;">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist"></div>
+</div>
+<div class="nt-ctrl-list nt-guide ui-droppable" style="height: 44px; min-height: 30px; overflow-y: auto;"><div class="nt-clb-item ui-droppable" id="02c1656d104747bf8afddd2d9f4c2dba"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="a@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{A}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-unassign nt-guide" data-guide="delivery_usr_unasgn" data-action="remove" data-event-name="" data-original-title="Unassign">
+    <i class="nt-icon unassign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item ui-droppable" id="6644cf27ce5745f6ba24db9a58eed574"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="b@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{B}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="learner:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-unassign nt-guide" data-guide="delivery_usr_unasgn" data-action="remove" data-event-name="" data-original-title="Unassign">
+    <i class="nt-icon unassign"></i>
+  </button>
+</div>
+</div></div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-ctrl-foot">
+  <button class="selAll nt-btn-sqr  nt-guide" data-guide="delivery_usr_selall" data-original-title="Select All">
+    <i class="nt-icon tick"></i>
+    
+  </button>
+  <button class="editSel nt-btn-sqr  nt-guide" data-guide="delivery_usr_editsel" data-original-title="Edit Selected">
+    <i class="nt-icon pencil"></i>
+    
+  </button>
+  <button class="removeSel nt-btn-dark static nt-btn-sqr text nt-guide" data-guide="delivery_usr_unasgnsel" data-original-title="">
+    <i class="nt-icon unassign pushable white"></i>
+    Unassign Selected
+  </button>
+</div>
+</div>
+
+  <div class="nt-acc-header">
+    <span>Assigned Educators</span>
+    <span id="eventEducatorsCnt" class="nt-cnt">(2)</span>
+  </div>
+  <div class="nt-acc-content" id="eventEducators"><div class="nt-ctrl-search ui-droppable nt-guide"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear " style="display: none;">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist"></div>
+</div>
+<div class="nt-ctrl-list nt-guide ui-droppable" style="height: 44px; min-height: 30px; overflow-y: auto;"><div class="nt-clb-item ui-droppable" id="89cc22f4ad9a4a829f815b108a7ed27e"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="admin@nomail.terascore.com">
+  <div class="nt-clb-item-label">Admin <span class="nt-hl-sort">User</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-unassign nt-guide" data-guide="delivery_usr_unasgn" data-action="remove" data-event-name="" data-original-title="Unassign">
+    <i class="nt-icon unassign"></i>
+  </button>
+</div>
+</div><div class="nt-clb-item ui-droppable" id="331502891db344e38301b75bc3d3e62f"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="" data-original-title="t1@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{1}</span></div>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-pencil nt-guide" data-guide="delivery_usr_pencil" data-action="" data-event-name="educator:edit" data-original-title="Edit">
+    <i class="nt-icon pencil"></i>
+  </button>
+</div>
+<div class="nt-clb-item-btns">
+  <button class="btn-unassign nt-guide" data-guide="delivery_usr_unasgn" data-action="remove" data-event-name="" data-original-title="Unassign">
+    <i class="nt-icon unassign"></i>
+  </button>
+</div>
+</div></div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-ctrl-foot">
+  <button class="selAll nt-btn-sqr  nt-guide" data-guide="delivery_usr_selall" data-original-title="Select All">
+    <i class="nt-icon tick"></i>
+    
+  </button>
+  <button class="editSel nt-btn-sqr  nt-guide" data-guide="delivery_usr_editsel" data-original-title="Edit Selected">
+    <i class="nt-icon pencil"></i>
+    
+  </button>
+  <button class="removeSel nt-btn-dark static nt-btn-sqr text nt-guide" data-guide="delivery_usr_unasgnsel" data-original-title="">
+    <i class="nt-icon unassign pushable white"></i>
+    Unassign Selected
+  </button>
+</div>
+</div>
+</div>
+</div>
+    </div>
+</div>
