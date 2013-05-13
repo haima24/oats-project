@@ -239,6 +239,7 @@
     <Content Include="Views\Tests\NewTest_DeliveryTab.cshtml" />
     <Content Include="Views\Students\NewStudent.cshtml" />
     <Content Include="Views\Teachers\NewTeacher.cshtml" />
+    <Content Include="Views\Tests\TakeTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
