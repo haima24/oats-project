@@ -1,12 +1,13 @@
 ﻿html {
     background: url(./img/white_paper_texture_background_seamless_pattern.jpg);
+    font-size: 100%;
 }
 
 body {
-    font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: transparent;
+    font-family: "Open Sans", sans-serif;
+    color: #444444;
+    font-size: 13px;
+    line-height: 18px;
 }
 
 header, footer, nav, section {
@@ -194,7 +195,7 @@ i, cite, em, var, address, dfn {
     }
 
 #test-header {
-    background-color: rgb(130, 155, 205);
+    background-color: rgb(51, 102, 204);
     color: white;
     overflow: hidden;
     -webkit-border-radius: 5px;
@@ -345,7 +346,7 @@ i, cite, em, var, address, dfn {
     }
 
 #sidebar {
-    width: 200px;
+    width: 215px;
     margin-right: 18px;
 }
 
@@ -392,11 +393,16 @@ i, cite, em, var, address, dfn {
     }
 
 #checklist {
-    width: 740px;
+    width: 725px;
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+    #checklist .nt-qitem .nt-qmiddle {
+        position: relative;
+        padding: 10px 10px 0 10px;
+    }
 
     #checklist .nt-qitem:first-child {
         border-top: 1px solid #c7c7c7;
@@ -419,7 +425,7 @@ i, cite, em, var, address, dfn {
     }
 
     #checklist .nt-qitem {
-        width: 720px;
+        width: 705px;
         position: relative;
         overflow: hidden;
         background-color: white;
@@ -661,29 +667,6 @@ element.style {
     background: rgba(225, 205, 155, 0.92);
 }
 
-.nt-btn-sqr {
-    padding: 0;
-    display: inline-block;
-    border-style: none;
-    background-color: white;
-    width: 24px;
-    height: 24px;
-    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
-    background-size: 100%;
-    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
-    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: linear-gradient(top, #ffffff, #f2f2f2);
-    -webkit-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
-    -moz-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
-    box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-    border-radius: 3px;
-}
 
 #checklist .nt-qitem.nt-qitem-edit-inact:hover .nt-qans.nt-qans-hover:hover, #checklist .nt-qitem.nt-qitem-edit-act .nt-qans.nt-qans-hover:hover {
     background-color: #f8f2e4;
@@ -1075,10 +1058,6 @@ i.nt-icon {
     width: 180px;
 }
 
-i.nt-icon.search {
-    background-position: -40px -600px;
-}
-
 .nt-user-details .nt-asms-unrelated .nt-search-box .nt-btn-clear {
     right: 4px;
 }
@@ -1095,7 +1074,7 @@ i.nt-icon.search {
         width: 138px;
     }
 
-.nt-search-box .nt-icon.search {
+.nt-search-box .t-icon.icon-search {
     position: absolute;
     top: 5px;
     left: 5px;
@@ -1324,56 +1303,62 @@ i.nt-icon.search {
     -o-border-radius: 3px;
     border-radius: 3px;
 }
+
 .nt-user-details .nt-asms-unrelated .nt-search-results {
-z-index: 1;
-top: 34px;
+    z-index: 1;
+    top: 34px;
 }
+
 .nt-rolldown-search .nt-search-results {
-display: none;
-overflow: hidden;
-position: absolute;
-top: 29px;
-left: 0;
-background-color: white;
-padding: 0 10px 10px 10px;
-width: 272px;
--webkit-border-radius: 10px;
--moz-border-radius: 10px;
--ms-border-radius: 10px;
--o-border-radius: 10px;
-border-radius: 10px;
--webkit-box-shadow: 1px 2px #c7c7c7;
--moz-box-shadow: 1px 2px #c7c7c7;
-box-shadow: 1px 2px #c7c7c7;
+    display: none;
+    overflow: hidden;
+    position: absolute;
+    top: 29px;
+    left: 0;
+    background-color: white;
+    padding: 0 10px 10px 10px;
+    width: 272px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 1px 2px #c7c7c7;
+    -moz-box-shadow: 1px 2px #c7c7c7;
+    box-shadow: 1px 2px #c7c7c7;
 }
-.nt-rolldown-search .nt-search-results .nt-taglist {
-border-bottom: 1px solid #ececec;
-}
-.nt-rolldown-search .nt-search-results .nt-hitlist {
-min-height: 100px;
-max-height: 300px;
-margin-top: 10px;
-overflow-y: auto;
-}
+
+    .nt-rolldown-search .nt-search-results .nt-taglist {
+        border-bottom: 1px solid #ececec;
+    }
+
+    .nt-rolldown-search .nt-search-results .nt-hitlist {
+        min-height: 100px;
+        max-height: 300px;
+        margin-top: 10px;
+        overflow-y: auto;
+    }
+
 .nt-user-details .nt-asms-unrelated .nt-rolldown-search .nt-cover {
-position: absolute;
-text-align: center;
-font-weight: bold;
-font-size: 15px;
-height: 100%;
-width: 100%;
-background-color: white;
-top: 0px;
-left: 0px;
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    top: 0px;
+    left: 0px;
 }
+
 #settings {
-    width: 740px;
+    width: 720px;
 }
 
     #settings .nt-panel {
         position: relative;
         overflow: hidden;
-        width: 720px;
+        width: 700px;
         min-height: 100%;
         border: 1px solid #c7c7c7;
         background: white;
@@ -1395,7 +1380,7 @@ left: 0px;
         }
 
         #settings .nt-panel .nt-section {
-            width: 440px;
+            width: 420px;
             border-bottom: 1px solid #ececec;
             padding: 15px 20px;
             float: right;
@@ -1449,7 +1434,7 @@ left: 0px;
     position: absolute;
     left: 237px;
     top: 0;
-    width: 234px;
+    width: 236px;
     overflow: hidden;
 }
 
@@ -1496,4 +1481,164 @@ left: 0px;
     -webkit-box-shadow: 0 1px white;
     -moz-box-shadow: 0 1px white;
     box-shadow: 0 1px white;
+}
+
+#settings .nt-panel .nt-section button {
+    margin: 20px 0;
+}
+
+.nt-ctrl-line {
+    border-top: 1px solid white;
+    -webkit-box-shadow: 0 -1px #c7c7c7;
+    -moz-box-shadow: 0 -1px #c7c7c7;
+    box-shadow: 0 -1px #c7c7c7;
+}
+
+.nt-ctrl-foot, .nt-asms-list .nt-list-head > div.nt-ctrl-wide, .nt-asms-list .nt-list-row > div.nt-ctrl-wide {
+    padding: 5px 0 7px 0;
+}
+
+#settings .nt-panel .nt-section #asm_time_limit {
+    width: 35px;
+    margin: 0 3px;
+    padding: 2px;
+}
+
+#assignments .nt-acc-content .nt-search-input {
+    width: 160px;
+}
+
+.nt-ctrl-foot button.text.icon-right, .nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text.icon-right, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text.icon-right {
+    padding: 0 25px 0 10px;
+}
+
+.nt-ctrl-foot button.text, .nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text {
+    position: relative;
+    padding: 0 10px 0 25px;
+    font-size: 11px;
+    width: 156px;
+    float: right;
+}
+
+.nt-btn-sqr:hover {
+    background-position: top left;
+    -webkit-box-shadow: 0 1px 2px #828282, inset 0 1px 0 white;
+    -moz-box-shadow: 0 1px 2px #828282, inset 0 1px 0 white;
+    box-shadow: 0 1px 2px #828282, inset 0 1px 0 white;
+}
+
+.nt-btn-submit:hover {
+    background-position: top left;
+    -webkit-box-shadow: 0 1px 2px #a7a7a7;
+    -moz-box-shadow: 0 1px 2px #a7a7a7;
+    box-shadow: 0 1px 2px #a7a7a7;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8dd97b), color-stop(100%, #69bb56));
+    background-image: -webkit-linear-gradient(top, #8dd97b, #69bb56);
+    background-image: -moz-linear-gradient(top, #8dd97b, #69bb56);
+    background-image: -o-linear-gradient(top, #8dd97b, #69bb56);
+    background-image: linear-gradient(top, #8dd97b, #69bb56);
+}
+
+.nt-btn-sqr {
+    background-position: top left;
+    padding: 0;
+    display: inline-block;
+    border-style: none;
+    background-color: white;
+    width: 24px;
+    height: 24px;
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: linear-gradient(top, #ffffff, #f2f2f2);
+    -webkit-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+    -moz-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+    box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.nt-btn-submit {
+    background-position: top left;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background-color: #030303;
+    color: #fff;
+    border: 1px solid #519b41;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    text-shadow: 0 -1px 0 #27631a;
+    -webkit-box-shadow: 0 2px 0 #e3e3e3;
+    -moz-box-shadow: 0 2px 0 #e3e3e3;
+    box-shadow: 0 2px 0 #e3e3e3;
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #80c570), color-stop(100%, #59ab46));
+    background-image: -webkit-linear-gradient(top, #80c570, #59ab46);
+    background-image: -moz-linear-gradient(top, #80c570, #59ab46);
+    background-image: -o-linear-gradient(top, #80c570, #59ab46);
+    background-image: linear-gradient(top, #80c570, #59ab46);
+}
+
+.nt-btn-dark:hover {
+    background-position: top left;
+    -webkit-box-shadow: 0 1px 2px #a7a7a7;
+    -moz-box-shadow: 0 1px 2px #a7a7a7;
+    box-shadow: 0 1px 2px #a7a7a7;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6d6d6d), color-stop(100%, #222222));
+    background-image: -webkit-linear-gradient(top, #6d6d6d, #222222);
+    background-image: -moz-linear-gradient(top, #6d6d6d, #222222);
+    background-image: -o-linear-gradient(top, #6d6d6d, #222222);
+    background-image: linear-gradient(top, #6d6d6d, #222222);
+}
+
+.nt-btn-dark {
+    background-position: top left;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background-color: #030303;
+    color: #fff;
+    border: 1px solid #515151;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    text-shadow: 0 -1px 0 black;
+    -webkit-box-shadow: 0 2px 0 #e3e3e3;
+    -moz-box-shadow: 0 2px 0 #e3e3e3;
+    box-shadow: 0 2px 0 #e3e3e3;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6d6d6d), color-stop(100%, #434343));
+    background-image: -webkit-linear-gradient(top, #6d6d6d, #434343);
+    background-image: -moz-linear-gradient(top, #6d6d6d, #434343);
+    background-image: -o-linear-gradient(top, #6d6d6d, #434343);
+    background-image: linear-gradient(top, #6d6d6d, #434343);
+}
+
+.nt-ctrl-foot button.text i, .nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text i, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text i {
+    position: absolute;
+    left: 5px;
+    top: 1px;
+}
+
+.nt-ctrl-foot button.text.icon-right i, .nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text.icon-right i, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text.icon-right i {
+    left: auto;
+    right: 9px;
 }
