@@ -231,6 +231,7 @@
     <Content Include="Views\Teachers\Index.cshtml" />
     <Content Include="Views\Students\Index.cshtml" />
     <Content Include="Views\Tests\NewTest.cshtml" />
+    <Content Include="Views\Tests\NewTest_DeliveryTab.cshtml" />
     <Content Include="Views\Students\NewStudent.cshtml" />
     <Content Include="Views\Teachers\NewTeacher.cshtml" />
   </ItemGroup>

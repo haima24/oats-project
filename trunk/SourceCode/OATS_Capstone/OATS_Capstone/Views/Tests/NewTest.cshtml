@@ -57,7 +57,8 @@
             <div class="navbar-inner test-larger-custom">
                 <ul class="nav">
                     <li class="active"><a href="#">Content</a></li>
-                    <li><a href="#">Delivery</a></li>
+                    @*<li><a href="#">Delivery</a></li>*@
+                    <li><a href="@Url.Action("NewTest_DeliveryTab")">Delivery</a></li>
                     <li><a href="#">Response</a></li>
                     <li><a href="#">Score</a></li>
                 </ul>
@@ -101,13 +102,119 @@
                         </div>
                         <div class="nt-ctrl-search-tags nt-taglist"></div>
                     </div>
-                    <div class="nt-ctrl-list" style="height: 30px; min-height: 30px; overflow-y: auto;"></div>
+                    <div class="nt-ctrl-list" style="height: 30px; min-height: 30px; overflow-y: auto;">
+                        <div class="nt-qsearch nt-guide ui-draggable" id="4fa157bc48694e8da4adbb0e0760fc57" data-original-title="">
+                            <div>
+                                <i class="nt-icon type-radio"></i>
+                            </div>
+                            <div class="nt-qsearch-content">
+                                <div class="nt-qsearch-title">Likert Scale?</div>
+                                <div class="nt-qsearch-desc">Strongly Agree / Agree / Neutral / Disagree / Strongly Disagree</div>
+                            </div>
+                            <div class="nt-qsearch-popover-cont">
+                                <div class="nt-qsearch-popover">
+                                    <div class="nt-qtext nt-phrase">
+                                        Likert Scale?
+                                    </div>
+                                    <div class="nt-qanscont">
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">Strongly Agree</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">Agree</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">Neutral</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">Disagree</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">Strongly Disagree</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nt-taglist">
+                                        <div class="nt-tag nt-tag-hl" id="nt_qsearch_tags_bfd3ad19ac3141988b90019b7e6aba62"><span>Template<span></span></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nt-qsearch nt-guide ui-draggable" id="5fd8446ae1be4d3a8aea9bdc64dace7e" data-original-title="">
+                            <div>
+                                <i class="nt-icon type-radio"></i>
+                            </div>
+                            <div class="nt-qsearch-content">
+                                <div class="nt-qsearch-title">True-False question?</div>
+                                <div class="nt-qsearch-desc">True / False</div>
+                            </div>
+                            <div class="nt-qsearch-popover-cont">
+                                <div class="nt-qsearch-popover">
+                                    <div class="nt-qtext nt-phrase">
+                                        True-False question?
+                                    </div>
+                                    <div class="nt-qanscont">
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">True</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                        <div class="nt-qans">
+                                            <label class="radio nt-qans-label nt-qans-label-rep">
+                                                <input type="radio" disabled="disabled">
+                                                <div class="nt-qansdesc">False</div>
+                                            </label>
+                                            <div class="nt-qansrep">
+                                                <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nt-taglist">
+                                        <div class="nt-tag nt-tag-hl" id="nt_qsearch_tags_bfd3ad19ac3141988b90019b7e6aba62"><span>Template<span></span></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="qpaste" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-2" role="tabpanel" aria-expanded="false" aria-hidden="true">
                     <div class="nt-loader-large"></div>
-                    <textarea class="nt-guide" placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 30px; min-height: 30px; overflow-y: auto;"></textarea>
+                    <textarea class="nt-guide" placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 210px; min-height: 30px; overflow-y: auto;"></textarea>
                 </div>
 
                 <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-3" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
@@ -126,7 +233,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="nt-ctrl-list nt-taglist nt-guide" style="max-height: 0px; min-height: 30px; overflow-y: auto;">
+                    <div class="nt-ctrl-list nt-taglist nt-guide" style="max-height: 150px; min-height: 30px; overflow-y: auto;">
                         <div class="nt-tag nt-guide ui-draggable" id="21476e54ac0d42d294bb68bb8d6e0f0d">
                             <span>Amendments</span>
                             <i class="icon-remove-sign icon-white" data-original-title="Remove Tag"></i>
@@ -497,7 +604,7 @@
 
                     <div class="nt-qfoot">
 
-                        <div class="nt-qctrls" style="display:none;">
+                        <div class="nt-qctrls" style="display: none;">
 
 
                             <div class="nt-qoepts">
@@ -543,203 +650,257 @@
 
                 </div>
                 <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c255">
-	<div class="nt-qnum ">1.</div>
-<a class="nt-qanchor" name="Q1"></a>
-<!-- NOT isImg START -->
+                    <div class="nt-qnum ">1.</div>
+                    <a class="nt-qanchor" name="Q1"></a>
+                    <!-- NOT isImg START -->
 
 
-<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div><div class="redactor_box"><textarea name="text_c255" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c255" contenteditable="true" data-guide="content_q_phrase" dir="ltr"><p><br></p></div></div></div>
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Question</div>
+                        <div class="redactor_box">
+                            <textarea name="text_c255" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c255" contenteditable="true" data-guide="content_q_phrase" dir="ltr">
+                                <p>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-<!-- NOT isImg END -->
+                    <!-- NOT isImg END -->
 
-<!-- isImg START -->
-<!-- isImg END -->
+                    <!-- isImg START -->
+                    <!-- isImg END -->
 
-<div class="nt-qhctrls">
+                    <div class="nt-qhctrls">
 
-  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
 
 
-</div>
+                    </div>
 
-<div class="nt-qanscont nt-sortable"></div>
+                    <div class="nt-qanscont nt-sortable"></div>
 
-<div class="nt-qmiddle" style="">
+                    <div class="nt-qmiddle" style="">
 
 
 
-  <div class="ui-wrapper" style="overflow: hidden; position: relative; width: 710px; height: 28px; top: auto; left: auto; margin: 0px 0px 16px; padding-right: 7px;"><input type="text" data-original-title="Enter each word you accept as correct answer. Use quotes for answers with spaces." data-guide="content_q_oneliner_box" class="nt-qrespinput nt-guide ui-resizable" value="" maxlength="140" style="width: 696px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"><div class="ui-resizable-handle ui-resizable-e" style="z-index: 1000;"></div></div>
+                        <div class="ui-wrapper" style="overflow: hidden; position: relative; width: 710px; height: 28px; top: auto; left: auto; margin: 0px 0px 16px; padding-right: 7px;">
+                            <input type="text" data-original-title="Enter each word you accept as correct answer. Use quotes for answers with spaces." data-guide="content_q_oneliner_box" class="nt-qrespinput nt-guide ui-resizable" value="" maxlength="140" style="width: 696px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"><div class="ui-resizable-handle ui-resizable-e" style="z-index: 1000;"></div>
+                        </div>
 
-</div>
+                    </div>
 
-<div class="nt-qfoot">
+                    <div class="nt-qfoot">
 
-  <div class="nt-qctrls" style="display: none;">
+                        <div class="nt-qctrls" style="display: none;">
 
 
-    <div class="nt-qoepts">
-      <span>Max. Points:</span>
-      <input type="text" class="nt-guide" data-guide="content_q_oneliner_mxpts">
-    </div>
+                            <div class="nt-qoepts">
+                                <span>Max. Points:</span>
+                                <input type="text" class="nt-guide" data-guide="content_q_oneliner_mxpts">
+                            </div>
 
-    <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+                            <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
 
-      <option value="radio">Multiple choice</option>
-      <option value="checkbox">Checkbox</option>
-      <option value="essay">Essay</option>
-      <option value="oneliner" selected="">Short answer</option>
-      <option value="text">Text</option>
-      <option value="img">Image</option>
+                                <option value="radio">Multiple choice</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="essay">Essay</option>
+                                <option value="oneliner" selected="">Short answer</option>
+                                <option value="text">Text</option>
+                                <option value="img">Image</option>
 
-    </select>
-    <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+                            </select>
+                            <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
-    <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
-      Points
-    </button>
-  </div>
-  <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
-    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
-</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
-  </div>
+                            <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                                Points
+                            </button>
+                        </div>
+                        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+                            <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;">
+                                <div class="listcontainer" style="width: 100%; height: 24px;">
+                                    <div class="nt-tags list" style="width: 104px;">
+                                        <div class="nt-tag-adder item">
+                                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
 
 
-  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
-    <i class="t-icon i-tag"></i>
-  </button>
-</div>
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+                            <i class="t-icon i-tag"></i>
+                        </button>
+                    </div>
 
-</div>
-                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c261"><div class="nt-qnum nt-qnum-letter">A.</div>
-<a class="nt-qanchor" name="QA"></a>
-<!-- NOT isImg START -->
+                </div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c261">
+                    <div class="nt-qnum nt-qnum-letter">A.</div>
+                    <a class="nt-qanchor" name="QA"></a>
+                    <!-- NOT isImg START -->
 
 
-<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Text</div><div class="redactor_box"><textarea name="text_c261" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c261" contenteditable="true" data-guide="content_q_phrase" dir="ltr"><p><br></p></div></div></div>
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; top: 15px; left: 40px; font-size: 16px; line-height: 22px;">Enter Text</div>
+                        <div class="redactor_box">
+                            <textarea name="text_c261" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" id="text_c261" contenteditable="true" data-guide="content_q_phrase" dir="ltr">
+                                <p>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-<!-- NOT isImg END -->
+                    <!-- NOT isImg END -->
 
-<!-- isImg START -->
-<!-- isImg END -->
+                    <!-- isImg START -->
+                    <!-- isImg END -->
 
-<div class="nt-qhctrls">
+                    <div class="nt-qhctrls">
 
-  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
 
 
-</div>
+                    </div>
 
-<div class="nt-qanscont nt-sortable"></div>
+                    <div class="nt-qanscont nt-sortable"></div>
 
 
-<div class="nt-qfoot">
+                    <div class="nt-qfoot">
 
-  <div class="nt-qctrls" style="display: none;">
+                        <div class="nt-qctrls" style="display: none;">
 
 
 
-    <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+                            <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
 
-      <option value="radio">Multiple choice</option>
-      <option value="checkbox">Checkbox</option>
-      <option value="essay">Essay</option>
-      <option value="oneliner">Short answer</option>
-      <option value="text" selected="">Text</option>
-      <option value="img">Image</option>
+                                <option value="radio">Multiple choice</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="essay">Essay</option>
+                                <option value="oneliner">Short answer</option>
+                                <option value="text" selected="">Text</option>
+                                <option value="img">Image</option>
 
-    </select>
-    <button style="visibility: hidden" class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+                            </select>
+                            <button style="visibility: hidden" class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
-    <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
-      Points
-    </button>
-  </div>
-  <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
-    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
-</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
-  </div>
+                            <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                                Points
+                            </button>
+                        </div>
+                        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+                            <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;">
+                                <div class="listcontainer" style="width: 100%; height: 24px;">
+                                    <div class="nt-tags list" style="width: 104px;">
+                                        <div class="nt-tag-adder item">
+                                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
 
 
-  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
-    <i class="t-icon i-tag"></i>
-  </button>
-</div>
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+                            <i class="t-icon i-tag"></i>
+                        </button>
+                    </div>
 
-</div>
-                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c265"><div class="nt-qnum nt-qnum-letter">B.</div>
-<a class="nt-qanchor" name="QB"></a>
-<!-- NOT isImg START -->
-<!-- NOT isImg END -->
+                </div>
+                <div class="nt-qitem nt-qitem-edit ui-droppable nt-qitem-edit-inact" id="c265">
+                    <div class="nt-qnum nt-qnum-letter">B.</div>
+                    <a class="nt-qanchor" name="QB"></a>
+                    <!-- NOT isImg START -->
+                    <!-- NOT isImg END -->
 
-<!-- isImg START -->
+                    <!-- isImg START -->
 
-<div class="nt-qimg-ph nt-clickable nt-hover">
-  <i class="t-icon type-img"></i><span>Drag an image here or click here to select</span>
-</div>
+                    <div class="nt-qimg-ph nt-clickable nt-hover">
+                        <i class="t-icon type-img"></i><span>Drag an image here or click here to select</span>
+                    </div>
 
-<input style="display: none" type="file" class="nt-qfile" name="f">
+                    <input style="display: none" type="file" class="nt-qfile" name="f">
 
-<div class="nt-qimg-upload">Uploading Image...</div>
+                    <div class="nt-qimg-upload">Uploading Image...</div>
 
-<p align="center" class="nt-qimg-cont">
-  <img src="" style="width: ; height: ">
+                    <p align="center" class="nt-qimg-cont">
+                        <img src="" style="width: ; height: ">
 
-  <button class="nt-btn-circle nt-qimg-close" data-original-title="Delete Image">
-    <i class="t-icon remove"></i>
-  </button>
-</p>
+                        <button class="nt-btn-circle nt-qimg-close" data-original-title="Delete Image">
+                            <i class="t-icon remove"></i>
+                        </button>
+                    </p>
 
-<div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;"><div class="nt-ph" style="position: absolute; cursor: text; text-align: center; top: 15px; left: 15px; font-size: 12px; line-height: 16px; width: 700px;">Enter Description</div><div class="redactor_box"><textarea name="imgdesc_c265" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qimg-desc nt-qedit nt-delayedblur redactor_editor" id="imgdesc_c265" style="display: none;" contenteditable="true" dir="ltr"></div></div></div>
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+                        <div class="nt-ph" style="position: absolute; cursor: text; text-align: center; top: 15px; left: 15px; font-size: 12px; line-height: 16px; width: 700px;">Enter Description</div>
+                        <div class="redactor_box">
+                            <textarea name="imgdesc_c265" style="height: 22px; display: none;"></textarea><div class="nt-qtext nt-qimg-desc nt-qedit nt-delayedblur redactor_editor" id="imgdesc_c265" style="display: none;" contenteditable="true" dir="ltr"></div>
+                        </div>
+                    </div>
 
-<!-- isImg END -->
+                    <!-- isImg END -->
 
-<div class="nt-qhctrls">
+                    <div class="nt-qhctrls">
 
-  <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
-  <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
+                        <button class="nt-btn-circle nt-dupbtn nt-guide" data-guide="content_q_duplicate" data-original-title="Duplicate Question"><i class="t-icon copy"></i></button>
+                        <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_delete" data-original-title="Delete Question"><i class="t-icon remove"></i></button>
 
 
-</div>
+                    </div>
 
-<div class="nt-qanscont nt-sortable"></div>
+                    <div class="nt-qanscont nt-sortable"></div>
 
 
-<div class="nt-qfoot">
+                    <div class="nt-qfoot">
 
-  <div class="nt-qctrls" style="display: none;">
+                        <div class="nt-qctrls" style="display: none;">
 
 
 
-    <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
+                            <select class="nt-qtype-sel nt-guide" data-guide="content_q_qtype">
 
-      <option value="radio">Multiple choice</option>
-      <option value="checkbox">Checkbox</option>
-      <option value="essay">Essay</option>
-      <option value="oneliner">Short answer</option>
-      <option value="text">Text</option>
-      <option value="img" selected="">Image</option>
+                                <option value="radio">Multiple choice</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="essay">Essay</option>
+                                <option value="oneliner">Short answer</option>
+                                <option value="text">Text</option>
+                                <option value="img" selected="">Image</option>
 
-    </select>
-    <button style="visibility: hidden" class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+                            </select>
+                            <button style="visibility: hidden" class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
-    <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
-      Points
-    </button>
-  </div>
-  <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
-    <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;"><div class="listcontainer" style="width: 100%; height: 24px;"><div class="nt-tags list" style="width: 104px;"><div class="nt-tag-adder item"><input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
-</div></div><div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div><div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div></div></div>
-  </div>
+                            <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                                Points
+                            </button>
+                        </div>
+                        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+                            <div class="ui-widget-content hoverscroll horizontal" style="width: 100%; height: 24px;">
+                                <div class="listcontainer" style="width: 100%; height: 24px;">
+                                    <div class="nt-tags list" style="width: 104px;">
+                                        <div class="nt-tag-adder item">
+                                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
 
 
-  <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
-    <i class="t-icon i-tag"></i>
-  </button>
-</div>
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+                            <i class="t-icon i-tag"></i>
+                        </button>
+                    </div>
 
-</div>
+                </div>
             </div>
         </div>
     </div>

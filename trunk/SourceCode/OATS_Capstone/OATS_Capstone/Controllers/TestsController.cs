@@ -20,6 +20,10 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
+        public ActionResult NewTest_DeliveryTab()
+        {
+            return View();
+        }
 
     }
 }
