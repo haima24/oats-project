@@ -8,13 +8,38 @@ body {
     color: #444444;
     font-size: 13px;
     line-height: 18px;
-    background-color:transparent;
+    background-color: transparent;
 }
 
 header, footer, nav, section {
     display: block;
 }
 
+audio, canvas, video {
+    display: inline-block;
+}
+
+Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+
+input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="radio"][readonly], input[type="checkbox"][readonly] {
+    background-color: transparent;
+}
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
@@ -346,6 +371,24 @@ i, cite, em, var, address, dfn {
         float: left;
     }
 
+    #eventTab .nt-checklist-ctrl {
+        height: 37px;
+        margin-right: 17px;
+    }
+
+        #eventTab .nt-checklist-ctrl .nt-msg {
+            float: left;
+        }
+
+        #eventTab .nt-checklist-ctrl button {
+            display: none;
+            width: 90px;
+            margin-left: 10px;
+            padding: 3px 0;
+            font-size: 11px;
+            float: right;
+        }
+
 #sidebar {
     width: 215px;
     margin-right: 18px;
@@ -466,6 +509,19 @@ i, cite, em, var, address, dfn {
             border-radius: 4px;
         }
 
+        #checklist .nt-qitem.nt-qitem-review {
+            border-top: 1px solid #c7c7c7;
+        }
+
+            #checklist .nt-qitem.nt-qitem-review .nt-qans {
+                border-bottom: 1px solid #ececec;
+            }
+
+                #checklist .nt-qitem.nt-qitem-review .nt-qans .nt-qans-label .nt-qansdesc {
+                    width: 525px;
+                    margin-left: 17px;
+                }
+
 .nt-clickable {
     cursor: pointer;
 }
@@ -521,6 +577,12 @@ i, cite, em, var, address, dfn {
     top: 10px;
 }
 
+    #checklist .nt-qitem .nt-qhctrls label {
+        text-transform: uppercase;
+        font-size: 10px;
+        width: 53px;
+    }
+
     #checklist .nt-qitem .nt-qhctrls button {
         margin-left: 5px;
     }
@@ -554,8 +616,6 @@ i, cite, em, var, address, dfn {
     border-radius: 12px;
 }
 
-element.style {
-}
 
 #checklist .nt-qitem .nt-qans {
     position: relative;
@@ -602,11 +662,26 @@ element.style {
     width: 633px;
 }
 
+#checklist .nt-qitem .nt-qans .nt-qansrep {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    height: 100%;
+    float: none;
+}
+
 #checklist .nt-qitem .nt-qans .nt-qansctrls {
     display: none;
     position: absolute;
     top: 8px;
     right: 10px;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qans-label {
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
 }
 
 #checklist .nt-qitem .nt-qfoot {
@@ -615,19 +690,101 @@ element.style {
     height: 24px;
 }
 
-    #checklist .nt-qitem .nt-qfoot .nt-qctrls {
-        width: 100%;
-        text-align: right;
+    #checklist .nt-qitem .nt-qfoot .nt-qrep {
+        position: absolute;
+        top: 11px;
+        right: 15px;
+        font-size: 11px;
+        text-transform: uppercase;
     }
 
-        #checklist .nt-qitem .nt-qfoot .nt-qctrls .nt-qansadd {
-            float: left;
-            margin-left: 0;
+        #checklist .nt-qitem .nt-qfoot .nt-qrep span {
+            margin-left: 20px;
         }
 
-        #checklist .nt-qitem .nt-qfoot .nt-qctrls button {
+        #checklist .nt-qitem .nt-qfoot .nt-qrep .nt-crate, #checklist .nt-qitem .nt-qfoot .nt-qrep .nt-pbs {
+            font-weight: bold;
             margin-left: 5px;
         }
+
+    #checklist .nt-qitem .nt-qfoot .nt-qcomm-toggle {
+        position: absolute;
+        right: 10px;
+    }
+
+    #checklist .nt-qitem .nt-qfoot .nt-qoepts {
+        float: left;
+    }
+
+        #checklist .nt-qitem .nt-qfoot .nt-qoepts span {
+            vertical-align: middle;
+        }
+
+            #checklist .nt-qitem .nt-qfoot .nt-qoepts span.nt-hl-words-warn, #checklist .nt-qitem .nt-qfoot .nt-qoepts span.nt-ok {
+                font-size: 14px;
+                margin-left: 10px;
+                display: none;
+            }
+
+#checklist .nt-qitem .nt-qcomm {
+    display: none;
+    padding: 10px;
+}
+
+    #checklist .nt-qitem .nt-qcomm textarea {
+        width: 100%;
+        margin: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+#checklist .nt-qitem .nt-qfoot .nt-qctrls {
+    width: 100%;
+    text-align: right;
+}
+
+    #checklist .nt-qitem .nt-qfoot .nt-qctrls .nt-qansadd {
+        float: left;
+        margin-left: 0;
+    }
+
+    #checklist .nt-qitem .nt-qfoot .nt-qctrls button {
+        margin-left: 5px;
+    }
+
+#checklist .nt-qitem .nt-qans .nt-qansrep .nt-qansrep-corr {
+    font-size: 16px;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qansrep > div {
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qansrep .nt-qansrep-pct {
+    width: 45px;
+    text-align: center;
+}
+
+#checklist .nt-qitem .nt-qpts, #checklist .nt-qitem .nt-qmaxpts {
+    font-size: 10px;
+    background-color: #f8f8f8;
+    padding: 3px;
+    width: 45px;
+    text-align: center;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qansrep .nt-qansrep-color {
+    width: 18px;
+    height: 100%;
+}
 
 .nt-btn-text {
     font-size: 10px;
@@ -895,28 +1052,323 @@ a {
     font-size: 11px;
 }
 
-    .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
+
+.nt-scores-cont {
+    width: 725px;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid gainsboro;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+    .nt-scores-cont .nt-scores-table-cont {
+        width: 725px;
         position: relative;
-        padding-left: 15px;
-        padding-right: 25px;
-        text-align: left;
-        width: 31%;
-    }
-
-    .nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
-        display: inline-block;
-        padding: 10px 2px;
-        text-align: center;
-        vertical-align: top;
         overflow: hidden;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
     }
 
-        .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
-            width: 13%;
+        .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users {
+            padding: 0;
+            font-weight: bold;
         }
+
+        .nt-scores-cont .nt-scores-table-cont .nt-scores-table td {
+            padding: 10px 2px;
+        }
+
+        .nt-scores-cont .nt-scores-table-cont .nt-scores-table .nt-scores-table-boxplot {
+            width: 230px;
+            padding-left: 8px;
+        }
+
+        .nt-scores-cont .nt-scores-table-cont .nt-scores-table td .nt-scores-table-boxplot-container {
+            width: 210px;
+            display: inline-block;
+            position: relative;
+            border-left: 1px dotted;
+            border-right: 1px dotted;
+        }
+
+Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header td {
+    padding-top: 7px;
+    vertical-align: top;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header {
+    border-bottom: 1px solid #c7c7c7;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table {
+    width: 730px;
+    margin-bottom: 0px;
+    font-size: 14px;
+}
+
+
+
+    .nt-scores-cont .nt-scores-table-cont .nt-scores-table .nt-tr-sortable {
+        cursor: move;
+    }
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table-body tr {
+    border-top: 1px solid #ececec;
+}
+
+    .nt-scores-cont .nt-scores-table-cont .nt-scores-table-body tr:first-child {
+        border-top: 0;
+    }
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-users {
+    padding: 5px 0;
+    margin: 10px 20px 5px 20px;
+    border-bottom: 1px solid #ececec;
+}
+
+    .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-name {
+        display: inline-block;
+    }
+
+.nt-scores-cont .nt-scores-footer {
+    padding: 20px;
+    margin: 0px;
+    float: left;
+    position: relative;
+}
+
+    .nt-scores-cont .nt-scores-footer .notreptags {
+        width: 78%;
+    }
+    .nt-scores-cont .nt-scores-footer .notreptags .nt-tag-ph {
+font-size: 10px;
+margin-bottom: 5px;
+}
+    .nt-scores-cont .nt-scores-footer .notreptags .nt-tags {
+position: relative;
+border: 1px dotted gainsboro;
+width: 490px;
+height: 60px;
+padding: 6px 8px 8px 8px;
+overflow-x: hidden;
+overflow-y: auto;
+}
+    .nt-scores-cont .nt-scores-footer > div {
+        float: left;
+        position: relative;
+    }
+
+    .nt-scores-cont .nt-scores-footer .scorecontrols {
+        margin-top: 22px;
+        width: 22%;
+        text-align: center;
+    }
+    .nt-scores-cont .nt-scores-footer .scorecontrols .nt-btn-send {
+margin-bottom: 13px;
+}
+    .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-title, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-clb-header, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-asms-list .nt-list-head, .nt-asms-list .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-list-head, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label, .nt-user-details .nt-asms-unrelated .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-asms-unrelated-label, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-scores-table-title, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-scores-footer .notreptags .nt-tag-ph, .nt-scores-cont .nt-scores-footer .notreptags .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-tag-ph {
+        margin-right: 5px;
+    }
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-user .nt-grade {
+    float: right;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-users .nt-users > div {
+    display: inline-block;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-firstcol {
+    position: relative;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table td.nt-scores-table-firstcol {
+    width: 140px;
+    padding-left: 20px;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table tfoot td {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table td .nt-tag {
+    float: left;
+}
+
+    .nt-scores-cont .nt-scores-table-cont .nt-scores-table td .nt-tag i {
+        cursor: pointer;
+    }
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-firstcol .nt-scores-table-title, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-firstcol .nt-icons {
+    padding-top: 0;
+    text-align: left;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title {
+    text-align: center;
+    line-height: 14px;
+}
+
+    .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title .nt-desc {
+        height: 28px;
+    }
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-original-order {
+    margin-top: -15px;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-icons {
+    text-align: center;
+    padding-top: 3px;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table td.nt-scores-table-avgcol {
+    width: 78px;
+    text-align: center;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-avgcol .nt-scores-table-title {
+    cursor: pointer;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table-body {
+    overflow-x: hidden;
+}
+
+.nt-scores-cont .nt-scores-table-cont .nt-scores-table tfoot {
+    background-color: #EAEFFA;
+    border-top: 1px solid #bacbe3;
+    border-bottom: 1px solid #cad7e7;
+    font-weight: bold;
+}
+
+.nt-clb-header {
+    padding: 10px 5px;
+}
+
+    .nt-clb-header .nt-clb-header-control {
+        padding-right: 5px;
+    }
+
+    .nt-clb-header > div {
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    .nt-clb-header .nt-clb-header-content {
+        width: 100%;
+    }
+
+        .nt-clb-header .nt-clb-header-content > div.nt-clb-header-label {
+            width: 55%;
+        }
+
+        .nt-clb-header .nt-clb-header-content > div {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            float: left;
+        }
+
+            .nt-clb-header .nt-clb-header-content > div span {
+                padding-right: 5px;
+            }
+
+            .nt-clb-header .nt-clb-header-content > div > * {
+                vertical-align: middle;
+            }
+
+            .nt-clb-header .nt-clb-header-content > div.nt-clb-header-desc {
+                text-align: right;
+            }
+
+.nt-btn-circle-mini {
+    padding: 0;
+    display: inline-block;
+    border-style: none;
+    background-color: white;
+    width: 14px;
+    height: 14px;
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: linear-gradient(top, #ffffff, #f2f2f2);
+    -webkit-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+    -moz-box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+    box-shadow: 0 1px 2px #a3a3a3, inset 0 -1px 0 white;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    -ms-border-radius: 7px;
+    -o-border-radius: 7px;
+    border-radius: 7px;
+}
+
+    .nt-btn-circle-mini:active, .nt-btn-circle-mini.active {
+        -webkit-box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
+        -moz-box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
+        box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
+        color: #444444;
+    }
+
+#learners .nt-clb-header-desc span {
+    cursor: pointer;
+}
+
+#respUsers {
+    margin-top: 5px;
+}
+
+.nt-clb-item.nt-clb-item-sel {
+    background-color: #5A94E8;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.nt-clb-header .nt-clb-header-content > div span {
+    padding-right: 5px;
+}
+
+.nt-clb-header .nt-clb-header-content > div > * {
+    vertical-align: middle;
+}
+
+
+.nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
+    position: relative;
+    padding-left: 15px;
+    padding-right: 25px;
+    text-align: left;
+    width: 31%;
+}
+
+.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
+    display: inline-block;
+    padding: 10px 2px;
+    text-align: center;
+    vertical-align: top;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+    .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
+        width: 13%;
+    }
 
 .nt-date, .nt-time {
     overflow: hidden;
@@ -1294,6 +1746,30 @@ i.nt-icon {
 
 .nt-clb-item:hover .nt-clb-item-content .nt-clb-item-label {
     color: #444444;
+}
+
+.nt-clb-item.nt-clb-item-sel .nt-clb-item-content .nt-clb-item-label {
+    color: white;
+}
+
+.nt-clb-item.nt-clb-item-multi .nt-clb-item-content .nt-clb-item-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 80%;
+    padding-right: 5px;
+}
+
+.nt-clb-item.nt-clb-item-multi .nt-clb-item-content > div {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.nt-clb-item.nt-clb-item-multi .nt-clb-item-content .nt-clb-item-desc {
+    width: 20%;
+    text-align: center;
+    color: #999999;
 }
 
 .nt-itemhover, .nt-clb-item:hover, #checklist .nt-qitem .nt-qtext .nt-fitb > span .nt-qcorr-hl, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput .nt-qcorr-hl, .nt-qtype:hover, .nt-qsearch:hover, .nt-ctrl-search-tag-popup li.nt-tag-selected, .ac_results li.ac_over, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item:hover, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item.nt-item-selected, .nt-modalwelcome.nt-modalwelcome-dashboard .modal-body table td:hover {
