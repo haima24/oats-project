@@ -51,10 +51,10 @@
 }
 
 /** Month Container **/
-.kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:155px;vertical-align:top;}
+.kalendae .k-calendar {zoom:1;*display:inline;width:155px;vertical-align:top;}
 
 /** Month Separator **/
-.kalendae .k-separator {display: inline-block;zoom:1;*display:inline;width:2px;vertical-align:top;background:#ddd;height:155px;margin:0px 10px;}
+.kalendae .k-separator {display: inline-block;zoom:1;*display:inline;width:150px;vertical-align:top;background:#ddd;height:2px;margin:0px 10px;}
 
 /** Month Title Row **/
 .kalendae .k-title {text-align:center;white-space:nowrap;position:relative;height:18px;}

@@ -71,6 +71,15 @@
     });
 
 </script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $("#asmsOverview").kalendae({
+            months: 3,
+            mode: 'single',
+            selected: Kalendae.moment().subtract({ M: 1 })
+        });
+    });
+	    </script>
 <style>
     /*body {
         margin-top: 40px;
@@ -80,10 +89,11 @@
     }*/
 
     #calendar {
-        width: 700px;
+        width: 735px;
         /*margin: 0 auto;*/
         margin-left: 20px;
         vertical-align: top;
+        float: left;
     }
 
     #asmsOverview {
@@ -134,13 +144,7 @@
 </div>
 <div id="container" class="container wrapper">
     <div id='calendar'></div>
-    <div id='asmsOverview'>
-        <script type="text/javascript" charset="utf-8">
-            new Kalendae(document.body, {
-                months: 1,
-                mode: 'single',
-                selected: Kalendae.moment().subtract({ M: 1 })
-            });
-	    </script>
+    <div id="asmsOverview">
+        
     </div>
 </div>
