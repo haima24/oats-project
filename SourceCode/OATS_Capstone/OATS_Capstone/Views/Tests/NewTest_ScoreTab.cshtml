@@ -1,0 +1,411 @@
+﻿@{
+    ViewBag.Title = "NewTest_ScoreTab";
+}
+
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a id="logo" class="brand" href="#">OATS</a>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav">
+                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
+                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
+                    <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
+                    <li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li>
+                        <div class="navbar-search pull-left">
+                            <input type="text" class="search-query span2" placeholder="Search Tests">
+                        </div>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header">Name</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.nav-collapse -->
+        </div>
+    </div>
+    <!-- /navbar-inner -->
+</div>
+<div id="container" class="container wrapper">
+    <div id="test-header">
+        <div contenteditable="true" id="test-title">Enter Test Title</div>
+        <div id="eventDateFrom" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeFrom" class="test-date-time" contenteditable="true">4:00 pm</div>
+        <div class="spacer">_</div>
+        <div id="eventDateTo" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeTo" class="test-date-time" contenteditable="true">6:00 pm</div>
+    </div>
+    <div class="test-outer-tags">
+        <div class="test-tags">
+            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+        </div>
+    </div>
+    <div class="tabs-wrapper">
+        <div class="navbar">
+            <div class="navbar-inner test-larger-custom">
+                <ul class="nav">
+                    <li class="active"><a href="#">Content</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Response</a></li>
+                    <li><a href="#">Score</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="eventTab"><div id="sidebar">
+  <div style="" class="nt-acc-content nt-acc-content-noheader nt-acc-content-resp" id="learners"><div class="nt-ctrl-search ui-droppable nt-guide"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear ">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist"></div>
+</div>
+<div class="nt-ctrl-list"><div class="nt-ctrl-line"></div>
+<div class="nt-clb-header">
+  <div class="nt-clb-header-control">
+    <input type="checkbox" class="nt-ctrl-all nt-guide" data-guide="resp_selall_chkbox">
+  </div>
+  <div class="nt-clb-header-content">
+    <div class="nt-clb-header-label" data-sort-attr="name">
+      <span>Student</span>
+      <button class="nt-btn-circle-mini nt-sort-desc nt-guide" data-guide="resp_stud_down"><i class="icon-caret-down"></i></button>
+      <button class="nt-btn-circle-mini nt-sort-asc active nt-guide" data-guide="resp_stud_up"><i class="icon-caret-up"></i></button>
+    </div>
+    <div class="nt-clb-header-desc" data-sort-attr="_score">
+      <span class="nt-guide" data-guide="resp_score_title" data-original-title="Show Points">Score</span>
+      <button class="nt-btn-circle-mini nt-sort-desc nt-guide" data-guide="resp_score_down"><i class="icon-caret-down"></i></button>
+      <button class="nt-btn-circle-mini nt-sort-asc nt-guide" data-guide="resp_score_up"><i class="icon-caret-up"></i></button>
+    </div>
+  </div>
+</div>
+<div class="nt-ctrl-line"></div>
+<div id="respUsers" style="max-height: 287px; overflow-y: auto;"><div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel" id="087354383c404e04b097e582bf2bed9e"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox" checked="checked">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="akai777@gmail.com">
+  <div class="nt-clb-item-label">(E) <span class="nt-hl-sort">haima24</span></div>
+  <div class="nt-clb-item-desc">13%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="720c7cc797734ba2b7d6ee2c003eb448"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="a@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{A}</span></div>
+  <div class="nt-clb-item-desc">88%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="5d5761fb6ab34d5abc8fcdf33a095d12"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="b@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{B}</span></div>
+  <div class="nt-clb-item-desc">94%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="8c72394931d64f44abab763dd83e21b7"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="c@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{C}</span></div>
+  <div class="nt-clb-item-desc">63%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="05712696e3a54bd4a61dc9e9fbf7aef6"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="d@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{D}</span></div>
+  <div class="nt-clb-item-desc">75%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="62a8c62e551c4508a2ce75d6254bab57"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="e@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{E}</span></div>
+  <div class="nt-clb-item-desc">100%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="669c26d0763649de87811a285fa06e35"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="f@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{F}</span></div>
+  <div class="nt-clb-item-desc">25%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="6fd0fa31e2504e93884c16cb7eb76223"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="g@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{G}</span></div>
+  <div class="nt-clb-item-desc">81%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="0c2f047b1432412d85b92476040f4b47"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="h@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{H}</span></div>
+  <div class="nt-clb-item-desc">88%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="52a4eae9ba4649818d2bc0bcd3e5921a"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="i@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{I}</span></div>
+  <div class="nt-clb-item-desc">50%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="d16627173fa146d08c95414466bd0b94"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="j@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{J}</span></div>
+  <div class="nt-clb-item-desc">81%</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="9db918b0b64641fdb5c0ec52f7f38642"><div class="nt-clb-item-control nt-guide" data-guide="resp_stud_chkbox">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content nt-guide" data-guide="resp_stud_line" data-original-title="k@nomail.terascore.com">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{K}</span></div>
+  <div class="nt-clb-item-desc">69%</div>
+</div>
+</div></div>
+</div>
+</div>
+</div>
+<div class="nt-scores-msg hide" style="height: 244px; overflow-y: hidden; display: none;"></div>
+<div class="nt-scores-cont hide" style="height: 381px; overflow-y: hidden; display: block;">
+  <div class="nt-scores-table-cont" style="height: 244px; overflow-y: hidden;" id="c409"><table class="nt-scores-table nt-scores-table-header">
+<thead>
+  <tr>
+    <td colspan="6" class="nt-scores-table-users">
+      <div class="nt-user" style="">
+        <div class="nt-name">
+          <span class="nt-title">Name:</span>
+          <span class="nt-descr">(E) haima24</span>
+        </div>
+        <div class="nt-grade" style="display: none;">
+          <span class="nt-title">Grade:</span>
+          <span class="nt-descr"></span>
+        </div>
+      </div>
+      <div class="nt-users" style="display: none;">
+        <div class="nt-names"></div>
+        <div class="nt-more"></div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="nt-scores-table-firstcol">
+      <div class="nt-scores-table-title"><div class="nt-desc">Tags</div></div>
+      <div class="nt-icons nt-original-order" data-sort-attr="rank">
+        <button class="nt-btn-circle-mini active">
+          <i class="icon-reorder"></i>
+        </button>
+      </div>
+      <div class="nt-icons" data-sort-attr="tags">
+        <button class="nt-btn-circle-mini nt-sort-asc">
+          <i class="icon-caret-up"></i>
+        </button>
+        <button class="nt-btn-circle-mini nt-sort-desc">
+          <i class="icon-caret-down"></i>
+        </button>
+      </div>
+    </td>
+
+    <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
+      <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
+        <div class="nt-desc">
+          <span class="nt-selavg">Student<br>Score</span>
+          <span class="nt-score-col-mode">(/)</span>
+        </div>
+      </div>
+      <div class="nt-icons" data-sort-attr="selAvg">
+        <button class="nt-btn-circle-mini nt-sort-asc">
+          <i class="icon-caret-up"></i>
+        </button>
+        <button class="nt-btn-circle-mini nt-sort-desc">
+          <i class="icon-caret-down"></i>
+        </button>
+      </div>
+    </td>
+    <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
+      <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
+        <div class="nt-desc">
+          <span class="nt-egavg">Group<br>Avg</span>
+          <span class="nt-score-col-mode">(/)</span>
+        </div>
+      </div>
+      <div class="nt-icons" data-sort-attr="egAvg">
+        <button class="nt-btn-circle-mini nt-sort-asc">
+          <i class="icon-caret-up"></i>
+        </button>
+        <button class="nt-btn-circle-mini nt-sort-desc">
+          <i class="icon-caret-down"></i>
+        </button>
+      </div>
+    </td>
+    <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
+      <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
+        <div class="nt-desc">
+          <span class="nt-avgdiff">Difference</span>
+          <span class="nt-score-col-mode">(/)</span>
+        </div>
+      </div>
+      <div class="nt-icons" data-sort-attr="avgDiff">
+        <button class="nt-btn-circle-mini nt-sort-asc">
+          <i class="icon-caret-up"></i>
+        </button>
+        <button class="nt-btn-circle-mini nt-sort-desc">
+          <i class="icon-caret-down"></i>
+        </button>
+      </div>
+    </td>
+    <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
+      <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
+        <div class="nt-desc">
+          <span class="nt-grpstdev">Group<br>StDev</span>
+          <span class="nt-score-col-mode">(/)</span>
+        </div>
+      </div>
+      <div class="nt-icons" data-sort-attr="grpStdev">
+        <button class="nt-btn-circle-mini nt-sort-asc">
+          <i class="icon-caret-up"></i>
+        </button>
+        <button class="nt-btn-circle-mini nt-sort-desc">
+          <i class="icon-caret-down"></i>
+        </button>
+      </div>
+    </td>
+
+    <td class="nt-scores-table-boxplot">
+      <div class="nt-scores-table-title">Box Plot</div>
+    </td>
+  </tr>
+</thead>
+</table>
+<div class="nt-scores-table-body" id="c414" style="max-height: 73px; min-height: 20px; overflow-y: auto;"><table class="nt-scores-table">
+  <tbody class="ui-sortable" style=""><tr class="nt-tr-score nt-guide nt-tr-sortable" id="c410" style=""><td class="nt-scores-table-firstcol"><div class="nt-tag nt-guide" id="213777188afa4ad2ade546634c4479e4"><span>independence</span>
+<i class="icon-remove-sign icon-white nt-tag-remove nt-guide" data-original-title="Remove Tag"></i>
+</div></td>
+
+<td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
+  <span class="nt-selavg" style="display: none">25%</span>
+  <span class="nt-selavg-nat">1 / 4</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
+  <span class="nt-egavg" style="display: none">73%</span>
+  <span class="nt-egavg-nat">2.75 / 4</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
+  <span class="nt-avgdiff" style="display: none">-48%</span>
+  <span class="nt-avgdiff-nat">-1.75</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
+  <span class="nt-grpstdev" style="display: none">25%</span>
+  <span class="nt-grpstdev-nat">1</span>
+</td>
+
+<td class="nt-scores-table-boxplot">
+  <span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 158px; height: 19px; vertical-align: top; padding-left: 52px; padding-right: 0px;" width="158" height="19"></canvas></span>
+</td>
+</tr><tr class="nt-tr-score nt-guide nt-tr-sortable" id="c411" style=""><td class="nt-scores-table-firstcol"><div class="nt-tag nt-guide" id="dbd2bf37ce814821b11e061086e52063"><span>Amendments</span>
+<i class="icon-remove-sign icon-white nt-tag-remove nt-guide" data-original-title="Remove Tag"></i>
+</div></td>
+
+<td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
+  <span class="nt-selavg" style="display: none">0%</span>
+  <span class="nt-selavg-nat">0 / 4</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
+  <span class="nt-egavg" style="display: none">77%</span>
+  <span class="nt-egavg-nat">2.83 / 4</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
+  <span class="nt-avgdiff" style="display: none">-77%</span>
+  <span class="nt-avgdiff-nat">-2.83</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
+  <span class="nt-grpstdev" style="display: none">33%</span>
+  <span class="nt-grpstdev-nat">1.31</span>
+</td>
+
+<td class="nt-scores-table-boxplot">
+  <span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 210px; height: 19px; vertical-align: top; padding-left: 0px; padding-right: 0px;" width="210" height="19"></canvas></span>
+</td>
+</tr><tr class="nt-tr-score nt-guide nt-tr-sortable" id="c412" style=""><td class="nt-scores-table-firstcol"><div class="nt-tag nt-guide" id="f16a81c63468469aa599096b607aca77"><span>wars</span>
+<i class="icon-remove-sign icon-white nt-tag-remove nt-guide" data-original-title="Remove Tag"></i>
+</div></td>
+
+<td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
+  <span class="nt-selavg" style="display: none">17%</span>
+  <span class="nt-selavg-nat">1 / 6</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
+  <span class="nt-egavg" style="display: none">77%</span>
+  <span class="nt-egavg-nat">4.33 / 6</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
+  <span class="nt-avgdiff" style="display: none">-61%</span>
+  <span class="nt-avgdiff-nat">-3.33</span>
+</td>
+<td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
+  <span class="nt-grpstdev" style="display: none">22%</span>
+  <span class="nt-grpstdev-nat">1.3</span>
+</td>
+
+<td class="nt-scores-table-boxplot">
+  <span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 175px; height: 19px; vertical-align: top; padding-left: 35px; padding-right: 0px;" width="175" height="19"></canvas></span>
+</td>
+</tr></tbody>
+</table>
+</div>
+<table class="nt-scores-table nt-scores-table-footer nt-guide" data-guide="scores_lastline">
+<tfoot>
+  <tr><td class="nt-scores-table-firstcol">OVERALL:</td>
+
+  <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
+    <span class="nt-selavg" style="display: none">13%</span>
+    <span class="nt-selavg-nat">2 / 16</span>
+  </td>
+  <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
+    <span class="nt-egavg" style="display: none">74%</span>
+    <span class="nt-egavg-nat">11 / 16</span>
+  </td>
+  <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
+    <span class="nt-avgdiff" style="display: none">-61%</span>
+    <span class="nt-avgdiff-nat">-9</span>
+  </td>
+  <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
+    <span class="nt-grpstdev" style="display: none">21%</span>
+    <span class="nt-grpstdev-nat">3.3</span>
+  </td>
+
+  <td class="nt-scores-table-boxplot"><span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 184px; height: 19px; vertical-align: top; padding-left: 26px; padding-right: 0px;" width="184" height="19"></canvas></span></td>
+</tr></tfoot>
+</table>
+</div>
+  <div class="nt-scores-footer"><div class="notreptags">
+  <div class="nt-tag-ph">Not Reported Tags</div>
+  <div class="nt-tags nt-guide ui-droppable" data-guide="scores_not_rep_tags"><div class="nt-tag nt-guide ui-draggable" id="3d947919553f4c039ffcc17e264cc5a3"><span>presidents</span>
+<i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
+</div></div>
+</div>
+<div class="scorecontrols">
+  <button class="nt-btn-submit nt-btn-send nt-guide" data-guide="scores_email_scores_btn">Send Scores...</button>
+  <button class="nt-btn-text nt-btn-dl nt-guide" data-guide="scores_download">Download</button>
+</div>
+</div>
+</div>
+</div>
+    </div>
+</div>

@@ -243,6 +243,7 @@
     <Content Include="Views\Teachers\NewTeacher.cshtml" />
     <Content Include="Views\Tests\TakeTest.cshtml" />
     <Content Include="Views\Tests\NewTest_ResponseTab.cshtml" />
+    <Content Include="Views\Tests\NewTest_ScoreTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
