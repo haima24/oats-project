@@ -1087,7 +1087,7 @@ a {
         }
 
         .nt-scores-cont .nt-scores-table-cont .nt-scores-table td .nt-scores-table-boxplot-container {
-            width: 210px;
+            width: 200px;
             display: inline-block;
             position: relative;
             border-left: 1px dotted;
@@ -1104,7 +1104,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 }
 
 .nt-scores-cont .nt-scores-table-cont .nt-scores-table {
-    width: 730px;
+    width: 710px;
     margin-bottom: 0px;
     font-size: 14px;
 }
