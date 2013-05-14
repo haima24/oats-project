@@ -1,4 +1,25 @@
-﻿@{
+﻿@section additionheader{
+    <script src="~/Bootstrap/js/jquery.sparkline.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.nt-scores-table-boxplot-container').sparkline('html', {
+                type: "box",
+                width: '200px',
+                spotRadius: 4,
+                medianWidth: 2,
+                showOutliers: !1,
+                cornerRadius: 4,
+                strikeThrough: !0,
+                tooltipFormat: '<span>{{field:fields}}</span><span style="float: right; padding-left: 5px">{{value}}</span>',
+                numberFormatter: function (e) { return parseInt(e) },
+                tooltipFormatFieldlist: ["lw", "lq", "med", "uq", "rw"],
+                tooltipFormatFieldlistKey: "field",
+                tooltipValueLookups: { fields: { lw: "Minimum", lq: "25th perc", med: "Median",uq:"75th perc",rw:"Maximum"} }
+            });
+        });
+    </script>
+}
+@{
     ViewBag.Title = "NewTest_ScoreTab";
 }
 
@@ -184,8 +205,8 @@
 </div>
 </div>
 <div class="nt-scores-msg hide" style="height: 244px; overflow-y: hidden; display: none;"></div>
-<div class="nt-scores-cont hide" style="height: 381px; overflow-y: hidden; display: block;">
-  <div class="nt-scores-table-cont" style="height: 244px; overflow-y: hidden;" id="c409"><table class="nt-scores-table nt-scores-table-header">
+<div class="nt-scores-cont hide" style="height: 430px; overflow-y: hidden; display: block;">
+  <div class="nt-scores-table-cont" style="height: 300px; overflow-y: hidden;" id="c409"><table class="nt-scores-table nt-scores-table-header">
 <thead>
   <tr>
     <td colspan="6" class="nt-scores-table-users">
@@ -294,7 +315,7 @@
   </tr>
 </thead>
 </table>
-<div class="nt-scores-table-body" id="c414" style="max-height: 73px; min-height: 20px; overflow-y: auto;"><table class="nt-scores-table">
+<div class="nt-scores-table-body" id="c414" style="max-height: 125px; min-height: 20px; overflow-y: auto;"><table class="nt-scores-table">
   <tbody class="ui-sortable" style=""><tr class="nt-tr-score nt-guide nt-tr-sortable" id="c410" style=""><td class="nt-scores-table-firstcol"><div class="nt-tag nt-guide" id="213777188afa4ad2ade546634c4479e4"><span>independence</span>
 <i class="icon-remove-sign icon-white nt-tag-remove nt-guide" data-original-title="Remove Tag"></i>
 </div></td>
@@ -317,7 +338,7 @@
 </td>
 
 <td class="nt-scores-table-boxplot">
-  <span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 158px; height: 19px; vertical-align: top; padding-left: 52px; padding-right: 0px;" width="158" height="19"></canvas></span>
+  <span class="nt-scores-table-boxplot-container">1,2,3,4,5,6,7,8,9,10</span>
 </td>
 </tr><tr class="nt-tr-score nt-guide nt-tr-sortable" id="c411" style=""><td class="nt-scores-table-firstcol"><div class="nt-tag nt-guide" id="dbd2bf37ce814821b11e061086e52063"><span>Amendments</span>
 <i class="icon-remove-sign icon-white nt-tag-remove nt-guide" data-original-title="Remove Tag"></i>
@@ -341,7 +362,7 @@
 </td>
 
 <td class="nt-scores-table-boxplot">
-  <span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 210px; height: 19px; vertical-align: top; padding-left: 0px; padding-right: 0px;" width="210" height="19"></canvas></span>
+  <span class="nt-scores-table-boxplot-container">1,2,3,4,5,6,7,8,9,10</span>
 </td>
 </tr><tr class="nt-tr-score nt-guide nt-tr-sortable" id="c412" style=""><td class="nt-scores-table-firstcol"><div class="nt-tag nt-guide" id="f16a81c63468469aa599096b607aca77"><span>wars</span>
 <i class="icon-remove-sign icon-white nt-tag-remove nt-guide" data-original-title="Remove Tag"></i>
@@ -365,7 +386,7 @@
 </td>
 
 <td class="nt-scores-table-boxplot">
-  <span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 175px; height: 19px; vertical-align: top; padding-left: 35px; padding-right: 0px;" width="175" height="19"></canvas></span>
+  <span class="nt-scores-table-boxplot-container">1,2,3,4,5,6,7,8,9,10</span>
 </td>
 </tr></tbody>
 </table>
@@ -391,7 +412,7 @@
     <span class="nt-grpstdev-nat">3.3</span>
   </td>
 
-  <td class="nt-scores-table-boxplot"><span class="nt-scores-table-boxplot-container"><canvas style="display: inline-block; width: 184px; height: 19px; vertical-align: top; padding-left: 26px; padding-right: 0px;" width="184" height="19"></canvas></span></td>
+  <td class="nt-scores-table-boxplot"><span class="nt-scores-table-boxplot-container">1,2,3,4,5,6,7,8,9,10</span></td>
 </tr></tfoot>
 </table>
 </div>

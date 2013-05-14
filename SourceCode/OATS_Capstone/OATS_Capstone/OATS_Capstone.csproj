@@ -144,6 +144,7 @@
     <Content Include="Bootstrap\js\bootstrap.min.js" />
     <Content Include="Bootstrap\js\fullcalendar.min.js" />
     <Content Include="Bootstrap\js\jquery-1.9.1.min.js" />
+    <Content Include="Bootstrap\js\jquery.sparkline.js" />
     <Content Include="Bootstrap\js\kalendae.standalone.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
