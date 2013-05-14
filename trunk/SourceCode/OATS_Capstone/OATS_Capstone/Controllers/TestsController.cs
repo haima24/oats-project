@@ -24,6 +24,10 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
+        public ActionResult NewTest_ResponseTab()
+        {
+            return View();
+        }
         public ActionResult TakeTest()
         {
             return View();
