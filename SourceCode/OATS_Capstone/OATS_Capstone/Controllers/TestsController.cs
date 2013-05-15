@@ -20,15 +20,19 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-        public ActionResult NewTest_DeliveryTab()
-        {
-            return View();
-        }
         public ActionResult NewTest_ResponseTab()
         {
             return View();
         }
         public ActionResult NewTest_ScoreTab()
+        {
+            return View();
+        }
+        public ActionResult NewTest_SettingTab()
+        {
+            return View();
+        }
+        public ActionResult NewTest_InvitationTab()
         {
             return View();
         }
