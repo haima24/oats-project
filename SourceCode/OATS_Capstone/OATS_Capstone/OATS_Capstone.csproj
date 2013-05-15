@@ -44,6 +44,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -128,6 +130,51 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Answer.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OATSModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OATSModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OATSModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OATSModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OATSModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Question.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuestionType.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Role.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tag.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TagInRelationShip.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Test.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TestSchedule.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserInTest.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +191,7 @@
     <Content Include="Bootstrap\js\bootstrap.min.js" />
     <Content Include="Bootstrap\js\fullcalendar.min.js" />
     <Content Include="Bootstrap\js\jquery-1.9.1.min.js" />
+    <Content Include="Bootstrap\js\jquery.contenteditable.js" />
     <Content Include="Bootstrap\js\jquery.sparkline.js" />
     <Content Include="Bootstrap\js\kalendae.standalone.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -201,6 +249,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Resource\Scripts\NewStudentScript.js" />
     <Content Include="Resource\Scripts\Tests_Layout.js" />
     <Content Include="Style\img\student.png" />
     <Content Include="Style\img\teachers.png" />
@@ -208,6 +257,23 @@
     <Content Include="Style\img\white_paper_texture_background_seamless_pattern.jpg" />
     <Content Include="Style\Site.css" />
     <Content Include="Bootstrap\js\jquery-ui-1.10.2.custom.min.js" />
+    <EntityDeploy Include="Models\OATSModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OATSModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\OATSModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>OATSModel.edmx</DependentUpon>
+      <LastGenOutput>OATSModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\OATSModel.edmx.diagram">
+      <DependentUpon>OATSModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\OATSModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>OATSModel.edmx</DependentUpon>
+      <LastGenOutput>OATSModel.cs</LastGenOutput>
+    </Content>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -249,11 +315,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
     <Folder Include="Resource\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

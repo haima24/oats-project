@@ -1,0 +1,731 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="OATSDBModelStoreContainer">
+          <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Question" EntityType="OATSDBModel.Store.Question" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="QuestionType" EntityType="OATSDBModel.Store.QuestionType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Role" EntityType="OATSDBModel.Store.Role" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tag" EntityType="OATSDBModel.Store.Tag" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TagInRelationShip" EntityType="OATSDBModel.Store.TagInRelationShip" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Test" EntityType="OATSDBModel.Store.Test" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TestSchedule" EntityType="OATSDBModel.Store.TestSchedule" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="User" EntityType="OATSDBModel.Store.User" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserInTest" EntityType="OATSDBModel.Store.UserInTest" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.Store.FK_Answer_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_QuestionType" Association="OATSDBModel.Store.FK_Question_QuestionType">
+            <End Role="QuestionType" EntitySet="QuestionType" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_Test" Association="OATSDBModel.Store.FK_Question_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagInRelationShip_Question" Association="OATSDBModel.Store.FK_TagInRelationShip_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="TagInRelationShip" EntitySet="TagInRelationShip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagInRelationShip_Tag" Association="OATSDBModel.Store.FK_TagInRelationShip_Tag">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="TagInRelationShip" EntitySet="TagInRelationShip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagInRelationShip_Test" Association="OATSDBModel.Store.FK_TagInRelationShip_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="TagInRelationShip" EntitySet="TagInRelationShip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_User" Association="OATSDBModel.Store.FK_Test_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestDate_Test" Association="OATSDBModel.Store.FK_TestDate_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="TestSchedule" EntitySet="TestSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="OATSDBModel.Store.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTest_Test" Association="OATSDBModel.Store.FK_UserInTest_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="UserInTest" EntitySet="UserInTest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTest_User" Association="OATSDBModel.Store.FK_UserInTest_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserInTest" EntitySet="UserInTest" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="AnswerContent" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="IsRight" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionTitle" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="TestID" Type="int" Nullable="false" />
+          <Property Name="QuestionTypeID" Type="int" Nullable="false" />
+          <Property Name="ImageUrl" Type="varchar" MaxLength="50" />
+          <Property Name="TextDescription" Type="nvarchar" MaxLength="256" />
+          <Property Name="QuestionScore" Type="decimal" Nullable="false" Scale="2" />
+        </EntityType>
+        <EntityType Name="QuestionType">
+          <Key>
+            <PropertyRef Name="QuestionTypeID" />
+          </Key>
+          <Property Name="QuestionTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RoleDescription" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TagName" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TagInRelationShip">
+          <Key>
+            <PropertyRef Name="TagInRelationID" />
+          </Key>
+          <Property Name="TagInRelationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TagID" Type="int" />
+          <Property Name="TestID" Type="int" />
+          <Property Name="QuestionID" Type="int" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="TestID" />
+          </Key>
+          <Property Name="TestID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TestTitle" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="TestTime" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestSchedule">
+          <Key>
+            <PropertyRef Name="TestDateID" />
+          </Key>
+          <Property Name="TestDateID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TestID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="UserMail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="UserPhone" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserInTest">
+          <Key>
+            <PropertyRef Name="UserInTestID" />
+          </Key>
+          <Property Name="UserInTestID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TestID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+          <Property Name="TestTakenDate" Type="datetime" />
+          <Property Name="NumberOfAttend" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Answer_Question">
+          <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="1" />
+          <End Role="Answer" Type="OATSDBModel.Store.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_QuestionType">
+          <End Role="QuestionType" Type="OATSDBModel.Store.QuestionType" Multiplicity="1" />
+          <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionType">
+              <PropertyRef Name="QuestionTypeID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="QuestionTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_Test">
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="1" />
+          <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagInRelationShip_Question">
+          <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="0..1" />
+          <End Role="TagInRelationShip" Type="OATSDBModel.Store.TagInRelationShip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="TagInRelationShip">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagInRelationShip_Tag">
+          <End Role="Tag" Type="OATSDBModel.Store.Tag" Multiplicity="0..1" />
+          <End Role="TagInRelationShip" Type="OATSDBModel.Store.TagInRelationShip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="TagID" />
+            </Principal>
+            <Dependent Role="TagInRelationShip">
+              <PropertyRef Name="TagID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagInRelationShip_Test">
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="0..1" />
+          <End Role="TagInRelationShip" Type="OATSDBModel.Store.TagInRelationShip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="TagInRelationShip">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_User">
+          <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestDate_Test">
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="1" />
+          <End Role="TestSchedule" Type="OATSDBModel.Store.TestSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="TestSchedule">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="OATSDBModel.Store.Role" Multiplicity="0..1" />
+          <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTest_Test">
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="1" />
+          <End Role="UserInTest" Type="OATSDBModel.Store.UserInTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="UserInTest">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTest_User">
+          <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
+          <End Role="UserInTest" Type="OATSDBModel.Store.UserInTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserInTest">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OATSDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OATSDBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Answers" EntityType="OATSDBModel.Answer" />
+          <EntitySet Name="Questions" EntityType="OATSDBModel.Question" />
+          <EntitySet Name="QuestionTypes" EntityType="OATSDBModel.QuestionType" />
+          <EntitySet Name="Roles" EntityType="OATSDBModel.Role" />
+          <EntitySet Name="Tags" EntityType="OATSDBModel.Tag" />
+          <EntitySet Name="TagInRelationShips" EntityType="OATSDBModel.TagInRelationShip" />
+          <EntitySet Name="Tests" EntityType="OATSDBModel.Test" />
+          <EntitySet Name="TestSchedules" EntityType="OATSDBModel.TestSchedule" />
+          <EntitySet Name="Users" EntityType="OATSDBModel.User" />
+          <EntitySet Name="UserInTests" EntityType="OATSDBModel.UserInTest" />
+          <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.FK_Answer_Question">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_QuestionType" Association="OATSDBModel.FK_Question_QuestionType">
+            <End Role="QuestionType" EntitySet="QuestionTypes" />
+            <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_Test" Association="OATSDBModel.FK_Question_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagInRelationShip_Question" Association="OATSDBModel.FK_TagInRelationShip_Question">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="TagInRelationShip" EntitySet="TagInRelationShips" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="OATSDBModel.FK_User_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagInRelationShip_Tag" Association="OATSDBModel.FK_TagInRelationShip_Tag">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="TagInRelationShip" EntitySet="TagInRelationShips" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagInRelationShip_Test" Association="OATSDBModel.FK_TagInRelationShip_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="TagInRelationShip" EntitySet="TagInRelationShips" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_User" Association="OATSDBModel.FK_Test_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestDate_Test" Association="OATSDBModel.FK_TestDate_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="TestSchedule" EntitySet="TestSchedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTest_Test" Association="OATSDBModel.FK_UserInTest_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="UserInTest" EntitySet="UserInTests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTest_User" Association="OATSDBModel.FK_UserInTest_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserInTest" EntitySet="UserInTests" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="AnswerContent" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="IsRight" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionTitle" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="TestID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionTypeID" Type="Int32" Nullable="false" />
+          <Property Name="ImageUrl" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TextDescription" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="QuestionScore" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Answers" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
+          <NavigationProperty Name="QuestionType" Relationship="OATSDBModel.FK_Question_QuestionType" FromRole="Question" ToRole="QuestionType" />
+          <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Question_Test" FromRole="Question" ToRole="Test" />
+          <NavigationProperty Name="TagInRelationShips" Relationship="OATSDBModel.FK_TagInRelationShip_Question" FromRole="Question" ToRole="TagInRelationShip" />
+        </EntityType>
+        <EntityType Name="QuestionType">
+          <Key>
+            <PropertyRef Name="QuestionTypeID" />
+          </Key>
+          <Property Name="QuestionTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Questions" Relationship="OATSDBModel.FK_Question_QuestionType" FromRole="QuestionType" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleDescription" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Users" Relationship="OATSDBModel.FK_User_Role" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TagName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="TagInRelationShips" Relationship="OATSDBModel.FK_TagInRelationShip_Tag" FromRole="Tag" ToRole="TagInRelationShip" />
+        </EntityType>
+        <EntityType Name="TagInRelationShip">
+          <Key>
+            <PropertyRef Name="TagInRelationID" />
+          </Key>
+          <Property Name="TagInRelationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TagID" Type="Int32" />
+          <Property Name="TestID" Type="Int32" />
+          <Property Name="QuestionID" Type="Int32" />
+          <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_TagInRelationShip_Question" FromRole="TagInRelationShip" ToRole="Question" />
+          <NavigationProperty Name="Tag" Relationship="OATSDBModel.FK_TagInRelationShip_Tag" FromRole="TagInRelationShip" ToRole="Tag" />
+          <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_TagInRelationShip_Test" FromRole="TagInRelationShip" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="TestID" />
+          </Key>
+          <Property Name="TestID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TestTitle" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TestTime" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Questions" Relationship="OATSDBModel.FK_Question_Test" FromRole="Test" ToRole="Question" />
+          <NavigationProperty Name="TagInRelationShips" Relationship="OATSDBModel.FK_TagInRelationShip_Test" FromRole="Test" ToRole="TagInRelationShip" />
+          <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Test_User" FromRole="Test" ToRole="User" />
+          <NavigationProperty Name="TestSchedules" Relationship="OATSDBModel.FK_TestDate_Test" FromRole="Test" ToRole="TestSchedule" />
+          <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="Test" ToRole="UserInTest" />
+        </EntityType>
+        <EntityType Name="TestSchedule">
+          <Key>
+            <PropertyRef Name="TestDateID" />
+          </Key>
+          <Property Name="TestDateID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TestID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_TestDate_Test" FromRole="TestSchedule" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="UserMail" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="UserPhone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="UserCountry" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="RoleID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="OATSDBModel.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Tests" Relationship="OATSDBModel.FK_Test_User" FromRole="User" ToRole="Test" />
+          <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_User" FromRole="User" ToRole="UserInTest" />
+        </EntityType>
+        <EntityType Name="UserInTest">
+          <Key>
+            <PropertyRef Name="UserInTestID" />
+          </Key>
+          <Property Name="UserInTestID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TestID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="TestTakenDate" Type="DateTime" Precision="3" />
+          <Property Name="NumberOfAttend" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="UserInTest" ToRole="Test" />
+          <NavigationProperty Name="User" Relationship="OATSDBModel.FK_UserInTest_User" FromRole="UserInTest" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Answer_Question">
+          <End Role="Question" Type="OATSDBModel.Question" Multiplicity="1" />
+          <End Role="Answer" Type="OATSDBModel.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_QuestionType">
+          <End Role="QuestionType" Type="OATSDBModel.QuestionType" Multiplicity="1" />
+          <End Role="Question" Type="OATSDBModel.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionType">
+              <PropertyRef Name="QuestionTypeID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="QuestionTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_Test">
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="1" />
+          <End Role="Question" Type="OATSDBModel.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagInRelationShip_Question">
+          <End Role="Question" Type="OATSDBModel.Question" Multiplicity="0..1" />
+          <End Role="TagInRelationShip" Type="OATSDBModel.TagInRelationShip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="TagInRelationShip">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="OATSDBModel.Role" Multiplicity="0..1" />
+          <End Role="User" Type="OATSDBModel.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagInRelationShip_Tag">
+          <End Role="Tag" Type="OATSDBModel.Tag" Multiplicity="0..1" />
+          <End Role="TagInRelationShip" Type="OATSDBModel.TagInRelationShip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="TagID" />
+            </Principal>
+            <Dependent Role="TagInRelationShip">
+              <PropertyRef Name="TagID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagInRelationShip_Test">
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="0..1" />
+          <End Role="TagInRelationShip" Type="OATSDBModel.TagInRelationShip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="TagInRelationShip">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_User">
+          <End Role="User" Type="OATSDBModel.User" Multiplicity="1" />
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestDate_Test">
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="1" />
+          <End Role="TestSchedule" Type="OATSDBModel.TestSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="TestSchedule">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTest_Test">
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="1" />
+          <End Role="UserInTest" Type="OATSDBModel.UserInTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="UserInTest">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTest_User">
+          <End Role="User" Type="OATSDBModel.User" Multiplicity="1" />
+          <End Role="UserInTest" Type="OATSDBModel.UserInTest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserInTest">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OATSDBModelStoreContainer" CdmEntityContainer="OATSDBEntities">
+          <EntitySetMapping Name="Answers">
+            <EntityTypeMapping TypeName="OATSDBModel.Answer">
+              <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
+                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="IsRight" ColumnName="IsRight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questions">
+            <EntityTypeMapping TypeName="OATSDBModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuestionTitle" ColumnName="QuestionTitle" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="QuestionTypeID" ColumnName="QuestionTypeID" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="TextDescription" ColumnName="TextDescription" />
+                <ScalarProperty Name="QuestionScore" ColumnName="QuestionScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionTypes">
+            <EntityTypeMapping TypeName="OATSDBModel.QuestionType">
+              <MappingFragment StoreEntitySet="QuestionType">
+                <ScalarProperty Name="QuestionTypeID" ColumnName="QuestionTypeID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="OATSDBModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="OATSDBModel.Tag">
+              <MappingFragment StoreEntitySet="Tag">
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TagInRelationShips">
+            <EntityTypeMapping TypeName="OATSDBModel.TagInRelationShip">
+              <MappingFragment StoreEntitySet="TagInRelationShip">
+                <ScalarProperty Name="TagInRelationID" ColumnName="TagInRelationID" />
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tests">
+            <EntityTypeMapping TypeName="OATSDBModel.Test">
+              <MappingFragment StoreEntitySet="Test">
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="TestTitle" ColumnName="TestTitle" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="TestTime" ColumnName="TestTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestSchedules">
+            <EntityTypeMapping TypeName="OATSDBModel.TestSchedule">
+              <MappingFragment StoreEntitySet="TestSchedule">
+                <ScalarProperty Name="TestDateID" ColumnName="TestDateID" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="OATSDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserMail" ColumnName="UserMail" />
+                <ScalarProperty Name="UserPhone" ColumnName="UserPhone" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserCountry" ColumnName="UserCountry" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInTests">
+            <EntityTypeMapping TypeName="OATSDBModel.UserInTest">
+              <MappingFragment StoreEntitySet="UserInTest">
+                <ScalarProperty Name="UserInTestID" ColumnName="UserInTestID" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="TestTakenDate" ColumnName="TestTakenDate" />
+                <ScalarProperty Name="NumberOfAttend" ColumnName="NumberOfAttend" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
