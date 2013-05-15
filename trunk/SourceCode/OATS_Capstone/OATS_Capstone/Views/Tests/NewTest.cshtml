@@ -11,7 +11,7 @@
                     <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
                     <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
                     <li>
-                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                        <button class="oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
                 </ul>
 
                 <ul class="nav pull-right">
@@ -56,8 +56,8 @@
             <div class="navbar-inner test-larger-custom">
                 <ul class="nav">
                     <li class="active"><a href="@Url.Action("NewTest")">Content</a></li>
-                    @*<li><a href="#">Delivery</a></li>*@
-                    <li><a href="@Url.Action("NewTest_DeliveryTab")">Delivery</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Invitation</a></li>
                     <li><a href="@Url.Action("NewTest_ResponseTab")">Response</a></li>
                     <li><a href="@Url.Action("NewTest_ScoreTab")">Score</a></li>
                 </ul>
@@ -359,12 +359,12 @@
                             </div>
                             <div class="nt-qansscore">
                                 <input type="text" class="nt-on-score nt-guide" data-guide="content_q_pntval" placeholder="Point Value" value="0" data-original-title="Point Value">
-                                <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
                                 <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
-                                <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
                                     <i class="t-icon remove"></i>
                                 </button>
                             </div>
@@ -377,7 +377,7 @@
 
                         <div class="nt-qctrls" style="display: none">
 
-                            <button class="btn nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none" data-original-title="">
+                            <button class="nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none" data-original-title="">
                                 Add New Answer
                             </button>
 
@@ -392,9 +392,9 @@
                                 <option value="img">Image</option>
 
                             </select>
-                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+                            <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
-                            <button class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                            <button class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
                                 Points
                             </button>
                         </div>
@@ -413,7 +413,7 @@
                         </div>
 
 
-                        <button class="btn nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none">
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none">
                             <i class="t-icon i-setting"></i>
                         </button>
                     </div>
@@ -469,12 +469,12 @@
                                 <input type="text" class="nt-on-score nt-chk-score nt-guide" data-guide="content_q_pntval" placeholder="Pts" value="0" data-original-title="Point Value">
                                 <span class="nt-qscorelabel">Off:</span>
                                 <input type="text" class="nt-off-score nt-chk-score nt-guide" data-guide="content_q_pntval_off" placeholder="Pts" value="0" data-original-title="Point Value">
-                                <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
                                 <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
-                                <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
                                     <i class="t-icon remove"></i>
                                 </button>
                             </div>
@@ -499,12 +499,12 @@
                                 <input type="text" class="nt-on-score nt-chk-score nt-guide" data-guide="content_q_pntval" placeholder="Pts" value="0" data-original-title="Point Value">
                                 <span class="nt-qscorelabel">Off:</span>
                                 <input type="text" class="nt-off-score nt-chk-score nt-guide" data-guide="content_q_pntval_off" placeholder="Pts" value="0" data-original-title="Point Value">
-                                <button class="btn nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
+                                <button class="nt-btn-sqr nt-not_scored nt-guide" data-guide="content_q_na" data-original-title="Not Applicable">N/A</button>
                                 <!-- NOTE: bonus button disabled -->
                                 <button style="display: none" class="nt-btn-sqr nt-bonus" data-original-title="Bonus Points"><i class="t-icon gift"></i></button>
                             </div>
                             <div class="nt-qansctrls">
-                                <button class="btn nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
+                                <button class="nt-btn-circle nt-delbtn nt-guide" data-guide="content_q_answer_del" data-original-title="Delete Answer" style="display: none;">
                                     <i class="t-icon remove"></i>
                                 </button>
                             </div>
@@ -517,7 +517,7 @@
 
                         <div class="nt-qctrls" style="display: none;">
 
-                            <button class="btn nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none;" data-original-title="">
+                            <button class="nt-btn-text nt-qansadd nt-guide" data-guide="content_q_addanswer" style="display: none;" data-original-title="">
                                 Add New Answer
                             </button>
 
@@ -532,9 +532,9 @@
                                 <option value="img">Image</option>
 
                             </select>
-                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+                            <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
-                            <button class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                            <button class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
                                 Points
                             </button>
                         </div>
@@ -553,7 +553,7 @@
                         </div>
 
 
-                        <button class="btn nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="display: none;">
                             <i class="t-icon i-setting"></i>
                         </button>
                     </div>
@@ -621,9 +621,9 @@
                                 <option value="img">Image</option>
 
                             </select>
-                            <button class="btn nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
+                            <button class="nt-btn-sqr nt-reqbtn nt-guide" data-guide="content_q_ansreq" data-original-title="Answer Required"><i class="t-icon asterisk"></i></button>
 
-                            <button style="visibility: hidden" class="btn nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
+                            <button style="visibility: hidden" class="nt-btn-text nt-scrbtn nt-guide" data-guide="content_q_points" data-original-title="Scoring Settings">
                                 Points
                             </button>
                         </div>
@@ -642,7 +642,7 @@
                         </div>
 
 
-                        <button class="btn nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="">
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle nt-guide" data-guide="content_q_tagbtn" data-original-title="Tags" style="">
                             <i class="t-icon i-setting"></i>
                         </button>
                     </div>

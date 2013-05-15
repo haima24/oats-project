@@ -1,0 +1,183 @@
+﻿@{
+    ViewBag.Title = "NewTest_InvitationTab";
+}
+
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a id="logo" class="brand" href="#">OATS</a>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav">
+                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
+                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
+                    <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
+                    <li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li>
+                        <div class="navbar-search pull-left">
+                            <input type="text" class="search-query span2" placeholder="Search Tests">
+                        </div>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header">Name</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.nav-collapse -->
+        </div>
+    </div>
+    <!-- /navbar-inner -->
+</div>
+<div id="container" class="container wrapper">
+    <div id="test-header">
+        <div contenteditable="true" id="test-title">Enter Test Title</div>
+        <div id="eventDateFrom" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeFrom" class="test-date-time" contenteditable="true">4:00 pm</div>
+        <div class="spacer">_</div>
+        <div id="eventDateTo" class="test-date-time" contenteditable="true">8 May 2013</div>
+        <div id="eventTimeTo" class="test-date-time" contenteditable="true">6:00 pm</div>
+    </div>
+    <div class="test-outer-tags">
+        <div class="test-tags">
+            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+        </div>
+    </div>
+    <div class="tabs-wrapper">
+        <div class="navbar">
+            <div class="navbar-inner test-larger-custom">
+                <ul class="nav">
+                    <li><a href="@Url.Action("NewTest")">Content</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Invitation</a></li>
+                    <li class="active"><a href="@Url.Action("NewTest_ResponseTab")">Response</a></li>
+                    <li><a href="@Url.Action("NewTest_ScoreTab")">Score</a></li>
+                </ul>
+            </div>
+        </div>
+  <div id="eventTab"><div class="nt-asm-inv">
+  <div class="nt-asm-inv-cont" style="height: 440px; overflow-y: auto;">
+    <div class="nt-asm-inv-table-cont nt-learner" id="36ab7f668914495c9a2cd85447c14fe9"><div class="nt-asm-inv-head">  
+  <div class="nt-asm-inv-title"><span>Invited Students</span><span class="nt-cnt">(2)</span></div>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="nt-desc">Name</th>
+      <th class="nt-desc">Email Address</th>
+      <th class="nt-ctrl"></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr id="17ba750d0b5844ff9a7a439bc6a0a6bf"><td class="nt-desc nt-name">Sample Student <span class="nt-hl-sort">{O}</span></td>
+<td class="nt-desc nt-email">o@nomail.terascore.com</td>
+<td class="nt-ctrl">
+  <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_learner_remove" data-original-title="Remove">
+    <i class="icon-remove"></i>
+  </button>
+</td>
+</tr><tr id="87141f33b0bc4ec49f7d0be02e675a64"><td class="nt-desc nt-name">Sample Student <span class="nt-hl-sort">{T}</span></td>
+<td class="nt-desc nt-email">t@nomail.terascore.com</td>
+<td class="nt-ctrl">
+  <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_learner_remove" data-original-title="Remove">
+    <i class="icon-remove"></i>
+  </button>
+</td>
+</tr></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        <button style="visibility: visible; display: inline-block;" class="nt-btn-submit nt-icon-left nt-guide" data-action="invite" data-guide="inv_learner_more">
+          <i class="icon-envelope"></i>
+          Invite More Students
+        </button>
+        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="remove" data-guide="inv_remove">
+          <i class="icon-remove"></i>
+          Remove
+        </button>
+        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="re_invite" data-guide="inv_reinv">
+          <i class="icon-repeat"></i>
+          Re-invite
+        </button>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+</div>
+    <div class="nt-asm-inv-table-cont nt-educator" id="36ab7f668914495c9a2cd85447c14fe9"><div class="nt-asm-inv-head">  
+  <div class="nt-asm-inv-title"><span>Invited Educators</span><span class="nt-cnt">(4)</span></div>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="nt-desc">Name</th>
+      <th class="nt-desc">Email Address</th>
+      <th class="nt-ctrl"></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr id="087354383c404e04b097e582bf2bed9e"><td class="nt-desc nt-name"><span class="nt-hl-sort">haima24</span></td>
+<td class="nt-desc nt-email">akai777@gmail.com</td>
+<td class="nt-ctrl">
+  <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_educator_remove" data-original-title="Remove">
+    <i class="icon-remove"></i>
+  </button>
+</td>
+</tr><tr id="e4d569d625a244e1a62dd1d7aa7291e8"><td class="nt-desc nt-name">Sample Teacher <span class="nt-hl-sort">{1}</span></td>
+<td class="nt-desc nt-email">t1@nomail.terascore.com</td>
+<td class="nt-ctrl">
+  <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_educator_remove" data-original-title="Remove">
+    <i class="icon-remove"></i>
+  </button>
+</td>
+</tr><tr id="a8d44a66db26446d857e85c1721f1ba1"><td class="nt-desc nt-name">Sample Teacher <span class="nt-hl-sort">{2}</span></td>
+<td class="nt-desc nt-email">t2@nomail.terascore.com</td>
+<td class="nt-ctrl">
+  <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_educator_remove" data-original-title="Remove">
+    <i class="icon-remove"></i>
+  </button>
+</td>
+</tr><tr id="c7de548b6fa3435ca9b6b4d12e000f2b"><td class="nt-desc nt-name">Sample Teacher <span class="nt-hl-sort">{3}</span></td>
+<td class="nt-desc nt-email">t3@nomail.terascore.com</td>
+<td class="nt-ctrl">
+  <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_educator_remove" data-original-title="Remove">
+    <i class="icon-remove"></i>
+  </button>
+</td>
+</tr></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        <button style="visibility: visible; display: inline-block;" class="nt-btn-submit nt-icon-left nt-guide" data-action="invite" data-guide="inv_educator_more">
+          <i class="icon-envelope"></i>
+          Invite More Educators
+        </button>
+        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="remove" data-guide="inv_remove">
+          <i class="icon-remove"></i>
+          Remove
+        </button>
+        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="re_invite" data-guide="inv_reinv">
+          <i class="icon-repeat"></i>
+          Re-invite
+        </button>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+</div>
+  </div>
+</div>
+</div>
+    </div>
+</div>
