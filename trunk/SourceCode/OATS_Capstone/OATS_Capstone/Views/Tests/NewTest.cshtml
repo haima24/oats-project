@@ -11,7 +11,7 @@
                     <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
                     <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
                     <li>
-                        <button class="oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
                 </ul>
 
                 <ul class="nav pull-right">
@@ -64,32 +64,32 @@
             </div>
         </div>
         <div id="eventTab">
-            <div id="sidebar" class="ui-accordion ui-widget ui-helper-reset" role="tablist">
+            <div id="sidebar" role="tablist">
                 <div class="t-accord-header">New Question<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content">
-                    <div class="t-question-type t-question-type-radio ui-draggable" id="c46">
+                    <div class="t-question-type t-question-type-radio" id="c46">
                         <i class="t-icon i-radio"></i><span>Radio choice</span>
                     </div>
-                    <div class="t-question-type t-question-type-multiple ui-draggable" id="c47">
+                    <div class="t-question-type t-question-type-multiple" id="c47">
                         <i class="t-icon i-multiple"></i><span>Multiple choice</span>
                     </div>
-                    <div class="t-question-type t-question-type-essay ui-draggable" id="c48">
+                    <div class="t-question-type t-question-type-essay" id="c48">
                         <i class="t-icon i-essay"></i><span>Essay</span>
                     </div>
-                    <div class="t-question-type t-question-type-short ui-draggable" id="c49">
+                    <div class="t-question-type t-question-type-short" id="c49">
                         <i class="t-icon i-short"></i><span>Short answer</span>
                     </div>
-                    <div class="t-question-type t-question-type-text ui-draggable" id="c50">
+                    <div class="t-question-type t-question-type-text" id="c50">
                         <i class="t-icon i-text"></i><span>Text</span>
                     </div>
-                    <div class="t-question-type t-question-type-img ui-draggable" id="c51">
+                    <div class="t-question-type t-question-type-img" id="c51">
                         <i class="t-icon i-img"></i><span>Image</span>
                     </div>
                 </div>
 
                 <div class="t-accord-header">Reuse Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
                 <div class="t-accord-content">
-                    <div class="nt-ctrl-search ui-droppable nt-guide">
+                    <div class="nt-ctrl-search nt-guide">
                         <div class="nt-search-box">
                             <input type="text" placeholder="Search or pick a template" class="nt-search-input ">
                             <i class="t-icon search"></i>
@@ -102,7 +102,7 @@
                         <div class="nt-ctrl-search-tags nt-taglist"></div>
                     </div>
                     <div class="nt-ctrl-list" style="height: 130px; min-height: 30px; overflow-y: auto;">
-                        <div class="nt-qsearch nt-guide ui-draggable" id="4fa157bc48694e8da4adbb0e0760fc57" data-original-title="">
+                        <div class="nt-qsearch nt-guide" id="4fa157bc48694e8da4adbb0e0760fc57" data-original-title="">
                             <div>
                                 <i class="nt-icon type-radio"></i>
                             </div>
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="nt-qsearch nt-guide ui-draggable" id="5fd8446ae1be4d3a8aea9bdc64dace7e" data-original-title="">
+                        <div class="nt-qsearch nt-guide" id="5fd8446ae1be4d3a8aea9bdc64dace7e" data-original-title="">
                             <div>
                                 <i class="nt-icon type-radio"></i>
                             </div>
@@ -210,14 +210,14 @@
                     </div>
                 </div>
 
-                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-2" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
-                <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="qpaste" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-2" role="tabpanel" aria-expanded="false" aria-hidden="true">
+                <div class="t-accord-header nt-hover" role="tab" aria-controls="qpaste" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Import Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
+                <div class="t-accord-content" id="qpaste" style="display: none;" role="tabpanel" aria-expanded="false" aria-hidden="true">
                     <div class="nt-loader-large"></div>
                     <textarea class="nt-guide" placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 210px; min-height: 30px; overflow-y: auto;"></textarea>
                 </div>
 
-                <div class="t-accord-header nt-hover ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-sidebar-header-3" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
-                <div class="t-accord-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="tags" style="display: none;" aria-labelledby="ui-accordion-sidebar-header-3" role="tabpanel" aria-expanded="false" aria-hidden="true">
+                <div class="t-accord-header nt-hover" role="tab" aria-controls="tags" aria-selected="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tags<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
+                <div class="t-accord-content" id="tags" style="display: none;" role="tabpanel" aria-expanded="false" aria-hidden="true">
                     <div class="nt-ctrl-search nt-guide">
                         <div class="nt-search-box">
                             <input type="text" placeholder="Search" class="nt-search-input add">
