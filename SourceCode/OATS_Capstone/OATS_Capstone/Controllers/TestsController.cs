@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TugberkUg.MVC.Helpers;
 
 namespace OATS_Capstone.Controllers
 {
@@ -20,21 +21,37 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-        public ActionResult NewTest_ResponseTab()
+        public JsonResult QuestionTypes()
         {
-            return View();
+            var obj = new { 
+                radio = this.RenderPartialViewToString("P_Type_Radio"),
+                multiple=this.RenderPartialViewToString("P_Type_Multiple"),
+                essay=this.RenderPartialViewToString("P_Type_Essay"),
+                shortanswer=this.RenderPartialViewToString("P_Type_ShortAnswer"),
+                text=this.RenderPartialViewToString("P_Type_Text"),
+                image=this.RenderPartialViewToString("P_Type_Image")
+            };
+            return Json(obj);
         }
-        public ActionResult NewTest_ScoreTab()
+        public JsonResult NewTest_ContentTab()
         {
-            return View();
+            return Json(new { tab = this.RenderPartialViewToString("P_ContentTab") });
         }
-        public ActionResult NewTest_SettingTab()
+        public JsonResult NewTest_ResponseTab()
         {
-            return View();
+            return Json(new { tab = this.RenderPartialViewToString("P_ResponseTab") });
         }
-        public ActionResult NewTest_InvitationTab()
+        public JsonResult NewTest_ScoreTab()
         {
-            return View();
+            return Json(new { tab = this.RenderPartialViewToString("P_ScoreTab") });
+        }
+        public JsonResult NewTest_SettingTab()
+        {
+            return Json(new { tab = this.RenderPartialViewToString("P_SettingTab") });
+        }
+        public JsonResult NewTest_InvitationTab()
+        {
+            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab") });
         }
         public ActionResult TakeTest()
         {
