@@ -16,9 +16,10 @@ namespace OATS_Capstone.Models
     {
         public Test()
         {
+            this.Invitations = new HashSet<Invitation>();
             this.Questions = new HashSet<Question>();
             this.TagInRelationShips = new HashSet<TagInRelationShip>();
-            this.TestSchedules = new HashSet<TestSchedule>();
+            this.TestSettings = new HashSet<TestSetting>();
             this.UserInTests = new HashSet<UserInTest>();
         }
     
@@ -26,12 +27,15 @@ namespace OATS_Capstone.Models
         public string TestTitle { get; set; }
         public int UserID { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public int TestTime { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<int> TestTime { get; set; }
     
+        public virtual ICollection<Invitation> Invitations { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<TagInRelationShip> TagInRelationShips { get; set; }
         public virtual User User { get; set; }
-        public virtual ICollection<TestSchedule> TestSchedules { get; set; }
+        public virtual ICollection<TestSetting> TestSettings { get; set; }
         public virtual ICollection<UserInTest> UserInTests { get; set; }
     }
 }
