@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OATS_Capstone.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,11 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Tests/
+
+        public ActionResult TestsXml()
+        {
+            return null;
+        }
 
         public ActionResult Index()
         {
