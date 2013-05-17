@@ -160,6 +160,7 @@
     <Compile Include="Models\Role.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchTemplateModel.cs" />
     <Compile Include="Models\SingletonDb.cs" />
     <Compile Include="Models\Tag.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
@@ -179,6 +180,7 @@
     <Compile Include="Models\UserInTest.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

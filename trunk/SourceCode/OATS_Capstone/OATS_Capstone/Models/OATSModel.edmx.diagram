@@ -12,7 +12,6 @@
         <EntityTypeShape EntityType="OATSDBModel.Tag" Width="1.5" PointX="10.5" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.TagInRelationShip" Width="1.5" PointX="12.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.Test" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.TestSchedule" Width="1.5" PointX="7.5" PointY="9.875" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.User" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.UserInTest" Width="1.5" PointX="10.5" PointY="5.625" IsExpanded="true" />
         <AssociationConnector Association="OATSDBModel.FK_Answer_Question" ManuallyRouted="false" />
@@ -23,7 +22,6 @@
         <AssociationConnector Association="OATSDBModel.FK_TagInRelationShip_Tag" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_TagInRelationShip_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_Test_User" ManuallyRouted="false" />
-        <AssociationConnector Association="OATSDBModel.FK_TestDate_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTest_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTest_User" ManuallyRouted="false" />
       </Diagram>
