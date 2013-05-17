@@ -13,9 +13,20 @@ namespace OATS_Capstone.Controllers
         //
         // GET: /Tests/
 
-        public ActionResult TestsXml()
+        public JsonResult TestsSearch()
         {
-            return null;
+            var db = SingletonDb.Instance();
+            var tests = db.Tests.ToList();
+            var listTestsSearch = new List<SearchingTests>();
+            tests.ForEach(delegate(Test test) {
+                var testTemplate = new SearchingTests();
+                testTemplate.Id = test.TestID;
+                testTemplate.TestTitle = test.TestTitle; 
+                testTemplate.StartDate = test.StartDate;
+                testTemplate.EndDate = test.EndDate;
+                listTestsSearch.Add(testTemplate);
+            });
+            return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
         }
 
         public ActionResult Index()
