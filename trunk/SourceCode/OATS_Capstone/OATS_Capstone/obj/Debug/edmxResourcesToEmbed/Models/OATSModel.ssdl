@@ -2,18 +2,28 @@
 <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="OATSDBModelStoreContainer">
     <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Invitation" EntityType="OATSDBModel.Store.Invitation" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Question" EntityType="OATSDBModel.Store.Question" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="QuestionType" EntityType="OATSDBModel.Store.QuestionType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Role" EntityType="OATSDBModel.Store.Role" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SettingTypes" EntityType="OATSDBModel.Store.SettingTypes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Tag" EntityType="OATSDBModel.Store.Tag" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TagInRelationShip" EntityType="OATSDBModel.Store.TagInRelationShip" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Test" EntityType="OATSDBModel.Store.Test" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TestSchedule" EntityType="OATSDBModel.Store.TestSchedule" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TestSettings" EntityType="OATSDBModel.Store.TestSettings" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="User" EntityType="OATSDBModel.Store.User" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserInTest" EntityType="OATSDBModel.Store.UserInTest" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.Store.FK_Answer_Question">
       <End Role="Question" EntitySet="Question" />
       <End Role="Answer" EntitySet="Answer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invitation_Test" Association="OATSDBModel.Store.FK_Invitation_Test">
+      <End Role="Test" EntitySet="Test" />
+      <End Role="Invitation" EntitySet="Invitation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invitation_User" Association="OATSDBModel.Store.FK_Invitation_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Invitation" EntitySet="Invitation" />
     </AssociationSet>
     <AssociationSet Name="FK_Question_QuestionType" Association="OATSDBModel.Store.FK_Question_QuestionType">
       <End Role="QuestionType" EntitySet="QuestionType" />
@@ -39,9 +49,13 @@
       <End Role="User" EntitySet="User" />
       <End Role="Test" EntitySet="Test" />
     </AssociationSet>
-    <AssociationSet Name="FK_TestDate_Test" Association="OATSDBModel.Store.FK_TestDate_Test">
+    <AssociationSet Name="FK_TestSettings_SettingTypes" Association="OATSDBModel.Store.FK_TestSettings_SettingTypes">
+      <End Role="SettingTypes" EntitySet="SettingTypes" />
+      <End Role="TestSettings" EntitySet="TestSettings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TestSettings_Test" Association="OATSDBModel.Store.FK_TestSettings_Test">
       <End Role="Test" EntitySet="Test" />
-      <End Role="TestSchedule" EntitySet="TestSchedule" />
+      <End Role="TestSettings" EntitySet="TestSettings" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Role" Association="OATSDBModel.Store.FK_User_Role">
       <End Role="Role" EntitySet="Role" />
@@ -64,6 +78,14 @@
     <Property Name="AnswerContent" Type="nvarchar" Nullable="false" MaxLength="50" />
     <Property Name="QuestionID" Type="int" Nullable="false" />
     <Property Name="IsRight" Type="varchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Invitation">
+    <Key>
+      <PropertyRef Name="InvitationID" />
+    </Key>
+    <Property Name="InvitationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TestID" Type="int" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Question">
     <Key>
@@ -91,6 +113,14 @@
     <Property Name="RoleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="RoleDescription" Type="nvarchar" Nullable="false" MaxLength="50" />
   </EntityType>
+  <EntityType Name="SettingTypes">
+    <Key>
+      <PropertyRef Name="SettingTypeID" />
+    </Key>
+    <Property Name="SettingTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="SettingTypeKey" Type="varchar" Nullable="false" MaxLength="10" />
+    <Property Name="SettingTypeDescription" Type="nvarchar" MaxLength="128" />
+  </EntityType>
   <EntityType Name="Tag">
     <Key>
       <PropertyRef Name="TagID" />
@@ -115,16 +145,18 @@
     <Property Name="TestTitle" Type="nvarchar" Nullable="false" MaxLength="50" />
     <Property Name="UserID" Type="int" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
-    <Property Name="TestTime" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="TestSchedule">
-    <Key>
-      <PropertyRef Name="TestDateID" />
-    </Key>
-    <Property Name="TestDateID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="TestID" Type="int" Nullable="false" />
     <Property Name="StartDate" Type="datetime" Nullable="false" />
     <Property Name="EndDate" Type="datetime" />
+    <Property Name="TestTime" Type="int" />
+  </EntityType>
+  <EntityType Name="TestSettings">
+    <Key>
+      <PropertyRef Name="TestSettingID" />
+    </Key>
+    <Property Name="TestSettingID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TestID" Type="int" />
+    <Property Name="SettingTypeID" Type="int" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -159,6 +191,30 @@
       </Principal>
       <Dependent Role="Answer">
         <PropertyRef Name="QuestionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invitation_Test">
+    <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="1" />
+    <End Role="Invitation" Type="OATSDBModel.Store.Invitation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Test">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="Invitation">
+        <PropertyRef Name="TestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invitation_User">
+    <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
+    <End Role="Invitation" Type="OATSDBModel.Store.Invitation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Invitation">
+        <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -234,14 +290,26 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TestDate_Test">
-    <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="1" />
-    <End Role="TestSchedule" Type="OATSDBModel.Store.TestSchedule" Multiplicity="*" />
+  <Association Name="FK_TestSettings_SettingTypes">
+    <End Role="SettingTypes" Type="OATSDBModel.Store.SettingTypes" Multiplicity="1" />
+    <End Role="TestSettings" Type="OATSDBModel.Store.TestSettings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SettingTypes">
+        <PropertyRef Name="SettingTypeID" />
+      </Principal>
+      <Dependent Role="TestSettings">
+        <PropertyRef Name="SettingTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TestSettings_Test">
+    <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="0..1" />
+    <End Role="TestSettings" Type="OATSDBModel.Store.TestSettings" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Test">
         <PropertyRef Name="TestID" />
       </Principal>
-      <Dependent Role="TestSchedule">
+      <Dependent Role="TestSettings">
         <PropertyRef Name="TestID" />
       </Dependent>
     </ReferentialConstraint>

@@ -11,6 +11,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Invitations">
+      <EntityTypeMapping TypeName="OATSDBModel.Invitation">
+        <MappingFragment StoreEntitySet="Invitation">
+          <ScalarProperty Name="InvitationID" ColumnName="InvitationID" />
+          <ScalarProperty Name="TestID" ColumnName="TestID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Questions">
       <EntityTypeMapping TypeName="OATSDBModel.Question">
         <MappingFragment StoreEntitySet="Question">
@@ -40,6 +49,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SettingTypes">
+      <EntityTypeMapping TypeName="OATSDBModel.SettingType">
+        <MappingFragment StoreEntitySet="SettingTypes">
+          <ScalarProperty Name="SettingTypeID" ColumnName="SettingTypeID" />
+          <ScalarProperty Name="SettingTypeKey" ColumnName="SettingTypeKey" />
+          <ScalarProperty Name="SettingTypeDescription" ColumnName="SettingTypeDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tags">
       <EntityTypeMapping TypeName="OATSDBModel.Tag">
         <MappingFragment StoreEntitySet="Tag">
@@ -65,17 +83,19 @@
           <ScalarProperty Name="TestTitle" ColumnName="TestTitle" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
           <ScalarProperty Name="TestTime" ColumnName="TestTime" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TestSchedules">
-      <EntityTypeMapping TypeName="OATSDBModel.TestSchedule">
-        <MappingFragment StoreEntitySet="TestSchedule">
-          <ScalarProperty Name="TestDateID" ColumnName="TestDateID" />
+    <EntitySetMapping Name="TestSettings">
+      <EntityTypeMapping TypeName="OATSDBModel.TestSetting">
+        <MappingFragment StoreEntitySet="TestSettings">
+          <ScalarProperty Name="TestSettingID" ColumnName="TestSettingID" />
           <ScalarProperty Name="TestID" ColumnName="TestID" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="SettingTypeID" ColumnName="SettingTypeID" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
