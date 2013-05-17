@@ -163,6 +163,7 @@
     <Compile Include="Models\Role.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchingTemplate.cs" />
     <Compile Include="Models\SettingType.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -261,7 +262,10 @@
     <Content Include="Global.asax" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
     <Content Include="Resource\Scripts\NewTestScript.js" />
+    <Content Include="Resource\Scripts\SearchTests.js" />
     <Content Include="Resource\Scripts\Tests_Layout.js" />
+    <Content Include="Scripts\jquery-1.8.3.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Style\img\student.png" />
     <Content Include="Style\img\teachers.png" />
     <Content Include="Style\img\tests.png" />

@@ -1537,9 +1537,8 @@ i.nt-icon {
     width: 270px;
 }
 
-.nt-rolldown-search .nt-search-input {
-    background-color: #969696;
-    border: 1px solid #000;
+.navbar-search .nt-search-input {
+    background-color: rgb(243, 244, 247);
     width: 180px;
 }
 
