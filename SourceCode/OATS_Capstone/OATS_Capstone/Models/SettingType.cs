@@ -12,13 +12,17 @@ namespace OATS_Capstone.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TestSchedule
+    public partial class SettingType
     {
-        public int TestDateID { get; set; }
-        public int TestID { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
+        public SettingType()
+        {
+            this.TestSettings = new HashSet<TestSetting>();
+        }
     
-        public virtual Test Test { get; set; }
+        public int SettingTypeID { get; set; }
+        public string SettingTypeKey { get; set; }
+        public string SettingTypeDescription { get; set; }
+    
+        public virtual ICollection<TestSetting> TestSettings { get; set; }
     }
 }
