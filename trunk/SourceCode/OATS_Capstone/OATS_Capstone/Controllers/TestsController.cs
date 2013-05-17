@@ -37,6 +37,14 @@ namespace OATS_Capstone.Controllers
         {
             return Json(new { tab = this.RenderPartialViewToString("P_ContentTab") });
         }
+        public JsonResult Index_CalendarTab()
+        {
+            return Json(new { tab = this.RenderPartialViewToString("P_CalendarTab") });
+        }
+        public JsonResult Index_TestListTab()
+        {
+            return Json(new { tab = this.RenderPartialViewToString("P_TestListTab") });
+        }
         public JsonResult NewTest_ResponseTab()
         {
             return Json(new { tab = this.RenderPartialViewToString("P_ResponseTab") });

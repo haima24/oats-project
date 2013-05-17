@@ -1,0 +1,100 @@
+﻿<script>
+    $(function () {
+        $("#accordion").accordion();
+    });
+</script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $("#asmsOverview").kalendae({
+            months: 3,
+            mode: 'single',
+            selected: Kalendae.moment().subtract({ M: 1 })
+        });
+    });
+</script>
+<style>
+    /*body {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 13px;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    }*/
+
+    #accordion {
+        width: 735px;
+        /*margin: 0 auto;*/
+        margin-left: 20px;
+        vertical-align: top;
+        float: left;
+    }
+
+    #asmsOverview {
+        margin-right: 5px;
+        vertical-align: top;
+    }
+</style>
+<style type="text/css" media="screen">
+    .kalendae .k-days span.closed {
+        background: red;
+    }
+</style>
+<div id="accordion" role="tablist">
+    <h3>Recent Tests<h3>
+        <div class="nt-user-details hide" style="display: block;">
+            <div id="asmsList" style="height: 186px; overflow-y: auto;" class="nt-flex-acc">
+                <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
+                    <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
+                    <div class="nt-asms-list nt-guide">
+                        <a>
+                            <div class="nt-list-head">
+
+                                <div class="nt-name">
+                                    Tests
+                                </div>
+                                <div class="nt-date">Start</div>
+                                <div class="nt-date">End</div>
+
+
+                                <div class="nt-rate">Resp. Rate</div>
+
+                                <div class="nt-perc">Avg.</div>
+                                <div class="nt-perc">St.Dev.</div>
+                                <i class="nt-icon arrow-up"></i>
+                                <div>&nbsp;</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>Running Tests<h3>
+            <div class="nt-user-details hide" style="display: block;">
+                <div id="asmsList" style="height: 186px; overflow-y: auto;" class="nt-flex-acc">
+                    <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
+                        <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
+                        <div class="nt-asms-list nt-guide">
+                            <a>
+                                <div class="nt-list-head">
+
+                                    <div class="nt-name">
+                                        Tests
+                                    </div>
+                                    <div class="nt-date">Start</div>
+                                    <div class="nt-date">End</div>
+
+
+                                    <div class="nt-rate">Resp. Rate</div>
+
+                                    <div class="nt-perc">Avg.</div>
+                                    <div class="nt-perc">St.Dev.</div>
+                                    <i class="nt-icon arrow-up"></i>
+                                    <div>&nbsp;</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+<div id="asmsOverview">
+</div>
