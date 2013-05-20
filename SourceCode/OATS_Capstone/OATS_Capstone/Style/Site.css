@@ -2271,3 +2271,12 @@ i.nt-icon {
     height:15px;
     background: url(./img/arrow-right.png) no-repeat;
 }
+.search-autocomple
+{
+    background-color:white;
+    border: 1px solid #aaaaaa;
+}
+.search-autocomplete-hover-item:hover
+{
+    background-color:#66FFFF;
+}
