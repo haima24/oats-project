@@ -16,12 +16,14 @@ namespace OATS_Capstone.Models
     {
         public Tag()
         {
-            this.TagInRelationShips = new HashSet<TagInRelationShip>();
+            this.Questions = new HashSet<Question>();
+            this.Tests = new HashSet<Test>();
         }
     
         public int TagID { get; set; }
         public string TagName { get; set; }
     
-        public virtual ICollection<TagInRelationShip> TagInRelationShips { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Test> Tests { get; set; }
     }
 }

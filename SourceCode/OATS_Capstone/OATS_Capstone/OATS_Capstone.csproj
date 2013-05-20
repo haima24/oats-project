@@ -171,9 +171,6 @@
     <Compile Include="Models\Tag.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TagInRelationShip.cs">
-      <DependentUpon>OATSModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Test.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>

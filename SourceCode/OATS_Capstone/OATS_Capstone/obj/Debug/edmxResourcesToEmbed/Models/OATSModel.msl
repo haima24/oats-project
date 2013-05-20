@@ -17,6 +17,7 @@
           <ScalarProperty Name="InvitationID" ColumnName="InvitationID" />
           <ScalarProperty Name="TestID" ColumnName="TestID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="InvitationDateTime" ColumnName="InvitationDateTime" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -66,26 +67,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TagInRelationShips">
-      <EntityTypeMapping TypeName="OATSDBModel.TagInRelationShip">
-        <MappingFragment StoreEntitySet="TagInRelationShip">
-          <ScalarProperty Name="TagInRelationID" ColumnName="TagInRelationID" />
-          <ScalarProperty Name="TagID" ColumnName="TagID" />
-          <ScalarProperty Name="TestID" ColumnName="TestID" />
-          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Tests">
       <EntityTypeMapping TypeName="OATSDBModel.Test">
         <MappingFragment StoreEntitySet="Test">
           <ScalarProperty Name="TestID" ColumnName="TestID" />
           <ScalarProperty Name="TestTitle" ColumnName="TestTitle" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="TestTime" ColumnName="TestTime" />
+          <ScalarProperty Name="CreatedUserID" ColumnName="CreatedUserID" />
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+          <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -125,5 +116,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <AssociationSetMapping Name="TagInQuestion" TypeName="OATSDBModel.TagInQuestion" StoreEntitySet="TagInQuestion">
+      <EndProperty Name="Question">
+        <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+      </EndProperty>
+      <EndProperty Name="Tag">
+        <ScalarProperty Name="TagID" ColumnName="TagID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TagInTest" TypeName="OATSDBModel.TagInTest" StoreEntitySet="TagInTest">
+      <EndProperty Name="Tag">
+        <ScalarProperty Name="TagID" ColumnName="TagID" />
+      </EndProperty>
+      <EndProperty Name="Test">
+        <ScalarProperty Name="TestID" ColumnName="TestID" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

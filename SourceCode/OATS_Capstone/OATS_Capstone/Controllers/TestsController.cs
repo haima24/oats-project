@@ -22,8 +22,8 @@ namespace OATS_Capstone.Controllers
                 var testTemplate = new SearchingTests();
                 testTemplate.Id = test.TestID;
                 testTemplate.TestTitle = test.TestTitle; 
-                testTemplate.StartDate = test.StartDate;
-                testTemplate.EndDate = test.EndDate;
+                testTemplate.StartDate = test.StartDateTime;
+                testTemplate.EndDate = test.EndDateTime;
                 listTestsSearch.Add(testTemplate);
             });
             return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
