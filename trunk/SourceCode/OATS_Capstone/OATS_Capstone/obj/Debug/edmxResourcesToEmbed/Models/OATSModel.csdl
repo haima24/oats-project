@@ -8,7 +8,6 @@
     <EntitySet Name="Roles" EntityType="OATSDBModel.Role" />
     <EntitySet Name="SettingTypes" EntityType="OATSDBModel.SettingType" />
     <EntitySet Name="Tags" EntityType="OATSDBModel.Tag" />
-    <EntitySet Name="TagInRelationShips" EntityType="OATSDBModel.TagInRelationShip" />
     <EntitySet Name="Tests" EntityType="OATSDBModel.Test" />
     <EntitySet Name="TestSettings" EntityType="OATSDBModel.TestSetting" />
     <EntitySet Name="Users" EntityType="OATSDBModel.User" />
@@ -33,10 +32,6 @@
       <End Role="Test" EntitySet="Tests" />
       <End Role="Question" EntitySet="Questions" />
     </AssociationSet>
-    <AssociationSet Name="FK_TagInRelationShip_Question" Association="OATSDBModel.FK_TagInRelationShip_Question">
-      <End Role="Question" EntitySet="Questions" />
-      <End Role="TagInRelationShip" EntitySet="TagInRelationShips" />
-    </AssociationSet>
     <AssociationSet Name="FK_User_Role" Association="OATSDBModel.FK_User_Role">
       <End Role="Role" EntitySet="Roles" />
       <End Role="User" EntitySet="Users" />
@@ -44,14 +39,6 @@
     <AssociationSet Name="FK_TestSettings_SettingTypes" Association="OATSDBModel.FK_TestSettings_SettingTypes">
       <End Role="SettingTypes" EntitySet="SettingTypes" />
       <End Role="TestSettings" EntitySet="TestSettings" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TagInRelationShip_Tag" Association="OATSDBModel.FK_TagInRelationShip_Tag">
-      <End Role="Tag" EntitySet="Tags" />
-      <End Role="TagInRelationShip" EntitySet="TagInRelationShips" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TagInRelationShip_Test" Association="OATSDBModel.FK_TagInRelationShip_Test">
-      <End Role="Test" EntitySet="Tests" />
-      <End Role="TagInRelationShip" EntitySet="TagInRelationShips" />
     </AssociationSet>
     <AssociationSet Name="FK_Test_User" Association="OATSDBModel.FK_Test_User">
       <End Role="User" EntitySet="Users" />
@@ -68,6 +55,14 @@
     <AssociationSet Name="FK_UserInTest_User" Association="OATSDBModel.FK_UserInTest_User">
       <End Role="User" EntitySet="Users" />
       <End Role="UserInTest" EntitySet="UserInTests" />
+    </AssociationSet>
+    <AssociationSet Name="TagInQuestion" Association="OATSDBModel.TagInQuestion">
+      <End Role="Question" EntitySet="Questions" />
+      <End Role="Tag" EntitySet="Tags" />
+    </AssociationSet>
+    <AssociationSet Name="TagInTest" Association="OATSDBModel.TagInTest">
+      <End Role="Tag" EntitySet="Tags" />
+      <End Role="Test" EntitySet="Tests" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Answer">
@@ -87,6 +82,7 @@
     <Property Name="InvitationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
     <Property Name="TestID" Type="Int32" Nullable="false" />
     <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="InvitationDateTime" Type="DateTime" Precision="3" />
     <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Invitation" ToRole="Test" />
     <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Invitation_User" FromRole="Invitation" ToRole="User" />
   </EntityType>
@@ -104,7 +100,7 @@
     <NavigationProperty Name="Answers" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
     <NavigationProperty Name="QuestionType" Relationship="OATSDBModel.FK_Question_QuestionType" FromRole="Question" ToRole="QuestionType" />
     <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Question_Test" FromRole="Question" ToRole="Test" />
-    <NavigationProperty Name="TagInRelationShips" Relationship="OATSDBModel.FK_TagInRelationShip_Question" FromRole="Question" ToRole="TagInRelationShip" />
+    <NavigationProperty Name="Tags" Relationship="OATSDBModel.TagInQuestion" FromRole="Question" ToRole="Tag" />
   </EntityType>
   <EntityType Name="QuestionType">
     <Key>
@@ -137,19 +133,8 @@
     </Key>
     <Property Name="TagID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
     <Property Name="TagName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="TagInRelationShips" Relationship="OATSDBModel.FK_TagInRelationShip_Tag" FromRole="Tag" ToRole="TagInRelationShip" />
-  </EntityType>
-  <EntityType Name="TagInRelationShip">
-    <Key>
-      <PropertyRef Name="TagInRelationID" />
-    </Key>
-    <Property Name="TagInRelationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-    <Property Name="TagID" Type="Int32" />
-    <Property Name="TestID" Type="Int32" />
-    <Property Name="QuestionID" Type="Int32" />
-    <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_TagInRelationShip_Question" FromRole="TagInRelationShip" ToRole="Question" />
-    <NavigationProperty Name="Tag" Relationship="OATSDBModel.FK_TagInRelationShip_Tag" FromRole="TagInRelationShip" ToRole="Tag" />
-    <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_TagInRelationShip_Test" FromRole="TagInRelationShip" ToRole="Test" />
+    <NavigationProperty Name="Questions" Relationship="OATSDBModel.TagInQuestion" FromRole="Tag" ToRole="Question" />
+    <NavigationProperty Name="Tests" Relationship="OATSDBModel.TagInTest" FromRole="Tag" ToRole="Test" />
   </EntityType>
   <EntityType Name="Test">
     <Key>
@@ -157,17 +142,17 @@
     </Key>
     <Property Name="TestID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
     <Property Name="TestTitle" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-    <Property Name="UserID" Type="Int32" Nullable="false" />
-    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="EndDate" Type="DateTime" Precision="3" />
-    <Property Name="TestTime" Type="Int32" />
+    <Property Name="CreatedUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EndDateTime" Type="DateTime" Precision="3" />
+    <Property Name="Duration" Type="Int32" />
     <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Test" ToRole="Invitation" />
     <NavigationProperty Name="Questions" Relationship="OATSDBModel.FK_Question_Test" FromRole="Test" ToRole="Question" />
-    <NavigationProperty Name="TagInRelationShips" Relationship="OATSDBModel.FK_TagInRelationShip_Test" FromRole="Test" ToRole="TagInRelationShip" />
     <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Test_User" FromRole="Test" ToRole="User" />
     <NavigationProperty Name="TestSettings" Relationship="OATSDBModel.FK_TestSettings_Test" FromRole="Test" ToRole="TestSettings" />
     <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="Test" ToRole="UserInTest" />
+    <NavigationProperty Name="Tags" Relationship="OATSDBModel.TagInTest" FromRole="Test" ToRole="Tag" />
   </EntityType>
   <EntityType Name="TestSetting">
     <Key>
@@ -270,18 +255,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TagInRelationShip_Question">
-    <End Role="Question" Type="OATSDBModel.Question" Multiplicity="0..1" />
-    <End Role="TagInRelationShip" Type="OATSDBModel.TagInRelationShip" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="QuestionID" />
-      </Principal>
-      <Dependent Role="TagInRelationShip">
-        <PropertyRef Name="QuestionID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_User_Role">
     <End Role="Role" Type="OATSDBModel.Role" Multiplicity="0..1" />
     <End Role="User" Type="OATSDBModel.User" Multiplicity="*" />
@@ -306,30 +279,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TagInRelationShip_Tag">
-    <End Role="Tag" Type="OATSDBModel.Tag" Multiplicity="0..1" />
-    <End Role="TagInRelationShip" Type="OATSDBModel.TagInRelationShip" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Tag">
-        <PropertyRef Name="TagID" />
-      </Principal>
-      <Dependent Role="TagInRelationShip">
-        <PropertyRef Name="TagID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TagInRelationShip_Test">
-    <End Role="Test" Type="OATSDBModel.Test" Multiplicity="0..1" />
-    <End Role="TagInRelationShip" Type="OATSDBModel.TagInRelationShip" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Test">
-        <PropertyRef Name="TestID" />
-      </Principal>
-      <Dependent Role="TagInRelationShip">
-        <PropertyRef Name="TestID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Test_User">
     <End Role="User" Type="OATSDBModel.User" Multiplicity="1" />
     <End Role="Test" Type="OATSDBModel.Test" Multiplicity="*" />
@@ -338,7 +287,7 @@
         <PropertyRef Name="UserID" />
       </Principal>
       <Dependent Role="Test">
-        <PropertyRef Name="UserID" />
+        <PropertyRef Name="CreatedUserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -377,5 +326,13 @@
         <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
+  </Association>
+  <Association Name="TagInQuestion">
+    <End Role="Question" Type="OATSDBModel.Question" Multiplicity="*" />
+    <End Role="Tag" Type="OATSDBModel.Tag" Multiplicity="*" />
+  </Association>
+  <Association Name="TagInTest">
+    <End Role="Tag" Type="OATSDBModel.Tag" Multiplicity="*" />
+    <End Role="Test" Type="OATSDBModel.Test" Multiplicity="*" />
   </Association>
 </Schema>

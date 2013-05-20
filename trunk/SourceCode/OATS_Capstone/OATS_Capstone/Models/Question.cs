@@ -17,7 +17,7 @@ namespace OATS_Capstone.Models
         public Question()
         {
             this.Answers = new HashSet<Answer>();
-            this.TagInRelationShips = new HashSet<TagInRelationShip>();
+            this.Tags = new HashSet<Tag>();
         }
     
         public int QuestionID { get; set; }
@@ -31,6 +31,6 @@ namespace OATS_Capstone.Models
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual QuestionType QuestionType { get; set; }
         public virtual Test Test { get; set; }
-        public virtual ICollection<TagInRelationShip> TagInRelationShips { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }
