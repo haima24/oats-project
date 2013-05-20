@@ -12,4 +12,20 @@ namespace OATS_Capstone.Models
         public DateTime StartDate;
         public DateTime? EndDate;
     }
+
+    public class SearchingStudents
+    {
+        public int UserID;
+        public int? RoleID;
+        public string LastName;
+        public string FirstName;
+    }
+
+    public class SearchingTeachers
+    {
+        public int UserID;
+        public int? RoleID;
+        public string LastName;
+        public string FirstName;
+    }
 }
