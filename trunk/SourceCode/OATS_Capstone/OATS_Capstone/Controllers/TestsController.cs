@@ -13,14 +13,7 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Tests/
-        public ActionResult TestsXml()
-        {
-            var db=SingletonDb.Instance();
-            var test = db.Tests.ToList().FirstOrDefault();
-            var testxml = Utils.GetXMLFromObject(test);
-            return null;
-        }
-
+      
         public JsonResult TestsSearch()
         {
             var db = SingletonDb.Instance();
@@ -36,7 +29,6 @@ namespace OATS_Capstone.Controllers
             });
             return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
         }
-
         public ActionResult Index()
         {
             return View();
