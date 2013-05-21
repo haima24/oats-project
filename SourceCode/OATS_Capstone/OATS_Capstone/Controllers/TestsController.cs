@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using OATS_Capstone.Models;
 using TugberkUg.MVC.Helpers;
 
 namespace OATS_Capstone.Controllers
@@ -13,7 +12,6 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Tests/
-      
         public JsonResult TestsSearch()
         {
             var db = SingletonDb.Instance();

@@ -19,6 +19,21 @@ audio, canvas, video {
     display: inline-block;
 }
 
+#savestatus {
+    color: #999999;
+    z-index: 1;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    text-align: center;
+}
+
+    #savestatus .nt-desc {
+        padding: 2px 10px;
+        display: none;
+        background: url(./img/white_paper_texture_background_seamless_pattern.jpg);
+    }
+
 .nt-tr-score.nt-guide.nt-tr-sortable table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -501,6 +516,10 @@ i, cite, em, var, address, dfn {
 
         #checklist .nt-qitem .nt-qnum-letter {
             display: none;
+        }
+
+        #checklist .nt-qitem.nt-qitem-edit-act .nt-qnum-letter {
+            display: block;
         }
 
         #checklist .nt-qitem .nt-qimg-ph {
@@ -2268,15 +2287,28 @@ i.nt-icon {
                 }
 
 .highlight {
-    height:15px;
+    height: 15px;
     background: url(./img/arrow-right.png) no-repeat;
 }
-.search-autocomple
-{
-    background-color:white;
+
+.search-autocomple {
+    background-color: white;
     border: 1px solid #aaaaaa;
+    width: 230px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
 }
-.search-autocomplete-hover-item:hover
-{
-    background-color:#66FFFF;
+
+.search-autocomplete-hover-item:hover {
+    width: 228px;
+    background-color: gainsboro;
+    border: 1px solid #aaaaaa;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
 }

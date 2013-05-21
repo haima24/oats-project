@@ -16,7 +16,9 @@
                     return false;
                 }
             }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple");}
                 var li = $("<li>").append("<a>" + item.label + "</a>");
+                if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
                 li.appendTo(ul);
                 return li;
             };

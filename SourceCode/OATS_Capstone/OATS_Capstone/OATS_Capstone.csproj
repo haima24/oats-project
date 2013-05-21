@@ -257,8 +257,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Resource\Scripts\CommonScript.js" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
-    <Content Include="Resource\Scripts\NewTeacherScript.js" />
     <Content Include="Resource\Scripts\NewTestScript.js" />
     <Content Include="Resource\Scripts\SearchTests.js" />
     <Content Include="Resource\Scripts\Tests_Layout.js" />
@@ -310,9 +310,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
