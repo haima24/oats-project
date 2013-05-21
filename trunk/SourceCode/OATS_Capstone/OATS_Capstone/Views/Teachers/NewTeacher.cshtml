@@ -2,9 +2,13 @@
     ViewBag.Title = "NewTeacher";
 }
 <script src="~/Resource/Scripts/Tests_Layout.js"></script>
+}<script src="~/Resource/Scripts/SearchTeachers.js"></script>
 <script src="~/Resource/Scripts/NewTeacherScript.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
+        <div id="savestatus" style="display:none;">
+            <span class="nt-desc" style="display: inline;"></span>
+        </div>
         <div class="container">
             <a id="logo" class="brand" href="#">OATS</a>
             <div class="nav-collapse collapse navbar-responsive-collapse">
@@ -19,7 +23,7 @@
                 <ul class="nav pull-right">
                     <li>
                         <div class="navbar-search pull-left">
-                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests">
+                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests"/>
                         </div>
                     </li>
                     <li class="divider-vertical"></li>

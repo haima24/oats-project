@@ -2,8 +2,12 @@
     ViewBag.Title = "Index";
 }
 <script src="~/Resource/Scripts/NewTestScript.js"></script>
+<script src="~/Resource/Scripts/SearchTests.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
+        <div id="savestatus" style="display:none;">
+            <span class="nt-desc" style="display: inline;"></span>
+        </div>
         <div class="container">
             <a id="logo" class="brand" href="#">OATS</a>
             <div class="nav-collapse collapse navbar-responsive-collapse">
@@ -40,7 +44,7 @@
 </div>
 <div id="container" class="container wrapper">
     <div id="test-header">
-        <div contenteditable="true" id="test-title">Enter Test Title</div>
+        <div contenteditable="true" action="@Url.Action("")" id="test-title"></div>
         <div id="eventDateFrom" class="test-date-time" contenteditable="true">8 May 2013</div>
         <div id="eventTimeFrom" class="test-date-time" contenteditable="true">4:00 pm</div>
         <div class="spacer">_</div>
