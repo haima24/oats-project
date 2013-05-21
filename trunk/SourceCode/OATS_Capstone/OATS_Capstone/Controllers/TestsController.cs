@@ -74,7 +74,9 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult NewTest_InvitationTab()
         {
-            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab") });
+            var db=SingletonDb.Instance();
+            var invitations = db.Invitations;
+            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab",invitations) });
         }
         public ActionResult TakeTest()
         {
