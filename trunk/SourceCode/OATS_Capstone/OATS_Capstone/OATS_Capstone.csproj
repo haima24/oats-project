@@ -183,7 +183,6 @@
     <Compile Include="Models\UserInTest.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +201,7 @@
     <Content Include="Bootstrap\js\fullcalendar.min.js" />
     <Content Include="Bootstrap\js\jquery-1.9.1.min.js" />
     <Content Include="Bootstrap\js\jquery.contenteditable.js" />
+    <Content Include="Bootstrap\js\jquery.filedrop.js" />
     <Content Include="Bootstrap\js\jquery.sparkline.js" />
     <Content Include="Bootstrap\js\kalendae.standalone.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -259,6 +259,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Resource\Scripts\ImageUploadScript.js" />
     <Content Include="Resource\Scripts\SearchTeachers.js" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
     <Content Include="Resource\Scripts\NewTestScript.js" />
@@ -267,6 +268,11 @@
     <Content Include="Resource\Scripts\Tests_Layout.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
+    <Content Include="Style\img\background_tile_1.jpg" />
+    <Content Include="Style\img\background_tile_2.jpg" />
+    <Content Include="Style\img\background_tile_3.jpg" />
+    <Content Include="Style\img\blue_line.jpg" />
+    <Content Include="Style\img\done.png" />
     <Content Include="Style\img\student.png" />
     <Content Include="Style\img\teachers.png" />
     <Content Include="Style\img\tests.png" />
