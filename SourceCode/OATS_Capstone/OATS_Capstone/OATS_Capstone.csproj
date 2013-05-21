@@ -52,6 +52,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -94,10 +98,6 @@
     <Reference Include="System.Web.Providers">
       <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.1\lib\net40\System.Web.Providers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
@@ -127,7 +127,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Models\SearchingTemplate.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\TestsController.cs" />
@@ -164,6 +163,7 @@
     <Compile Include="Models\Role.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchingTemplate.cs" />
     <Compile Include="Models\SettingType.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -183,6 +183,7 @@
     <Compile Include="Models\UserInTest.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +196,7 @@
     <Content Include="Bootstrap\css\kalendae.css" />
     <Content Include="Bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Bootstrap\js\bootstrap-modal.js" />
     <Content Include="Bootstrap\js\bootstrap.js" />
     <Content Include="Bootstrap\js\bootstrap.min.js" />
     <Content Include="Bootstrap\js\fullcalendar.min.js" />
@@ -257,9 +259,14 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Resource\Scripts\SearchTeachers.js" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
     <Content Include="Resource\Scripts\NewTestScript.js" />
+    <Content Include="Resource\Scripts\SearchStudents.js" />
+    <Content Include="Resource\Scripts\SearchTests.js" />
     <Content Include="Resource\Scripts\Tests_Layout.js" />
+    <Content Include="Scripts\jquery-1.8.3.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Style\img\student.png" />
     <Content Include="Style\img\teachers.png" />
     <Content Include="Style\img\tests.png" />
@@ -299,7 +306,9 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
