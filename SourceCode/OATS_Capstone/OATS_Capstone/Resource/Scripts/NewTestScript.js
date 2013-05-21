@@ -14,7 +14,7 @@ function loadChanges() {
     if (tab.length>0 && listkey) {
         var content = getLocalStorage(listkey);
         $("#checklist[content-tab=true]").html(content);
-        initFunctionalities();
+        initDragAndDrop();
     }
 }
 
@@ -26,7 +26,7 @@ function sortByNumberOrLetters() {
         $(this).html(String.fromCharCode(65 + i) + ". ");
     });
 }
-function initFunctionalities() {
+function initDragAndDrop() {
     $(".t-question-type").draggable({
         connectToSortable: "#checklist",
         helper: "clone",
@@ -41,6 +41,8 @@ function initFunctionalities() {
         placeholder: 'highlight',
         stop: function (ev, ui) {
             sortByNumberOrLetters();
+            initEditable();
+            saveChanges();
         },
         update: function (ev, ui) {
             var obj = ui.item;
@@ -53,33 +55,50 @@ function initFunctionalities() {
                 if (obj.hasClass("t-question-type-text")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.text) : obj.replaceWith(questions.text); }
                 if (obj.hasClass("t-question-type-img")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.image) : obj.replaceWith(questions.image); }
                 sortByNumberOrLetters();
+                initEditable();
+                saveChanges();
                 //obj.remove();
             }
         }
     });
     //separator
-    $("#test-title").contentEditable({
-        "placeholder": "Enter Test Title",
+    
+    
+}
+function initEditable() {
+    
+    $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").contentEditable({
+        "placeholder": "<i>Enter Answer</i>",
         "onBlur": function (element) {
-            var email = element.content;
-            $.post("/Students/NewStudentByEmail", { "email": email }, function (response) {
-                // do something with response
-
-            });
         },
     });
-    //separator
-    //$(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").contentEditable({
-    //    "placeholder": "Enter Test Title",
-    //    "onBlur": function (element) {
-    //        var email = element.content;
-            
-    //    },
-    //});
+    $(".nt-qtext.nt-qedit").contentEditable({
+        "placeholder": "<i>Enter Question</i>",
+        "onBlur": function (element) {
+        },
+    });
 }
 
 $(function () {
     emptylist = $(".nt-empty-list-ph");
+
+    loadChanges();
+
+    $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
+        this.focus();
+    });
+    $(".nt-qtext.nt-qedit").live("mousedown", function (ev) {
+        this.focus();
+    });
+
+
+    //separator
+    $("#test-title").contentEditable({
+        "placeholder": "<i>Enter Test Title</i>",
+        "onBlur": function (element) {
+
+        },
+    });
     //separator
     $(".tab-event").live("click", function (e) {
         e.preventDefault();
@@ -121,6 +140,8 @@ $(function () {
             if (cur.hasClass("t-question-type-text")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.text) : etab.append(questions.text); }
             if (cur.hasClass("t-question-type-img")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.image) : etab.append(questions.image); }
             sortByNumberOrLetters();
+            initEditable();
+            saveChanges();
         }
     });
     //separator
@@ -129,6 +150,8 @@ $(function () {
         var etab = $("#checklist");
         if (content && etab) {
             etab.append(content.prop("outerHTML"))
+            initEditable();
+            saveChanges();
         }
     });
     //separator
@@ -139,7 +162,8 @@ $(function () {
             $("#checklist").html(emptylist);
         }
         sortByNumberOrLetters();
+        saveChanges();
     });
     //separator
-    initFunctionalities();
+    initDragAndDrop();
 });
