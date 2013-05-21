@@ -38,6 +38,36 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
+        public JsonResult NewTeacherByEmail(string email)
+        {
+            var error = string.Empty;
+            var iserror = false;
+            var db = SingletonDb.Instance();
+            var emailsInDb = db.Users.Select(i => i.UserMail);
+            if (!emailsInDb.Contains(email.Trim())) //not exist in db
+            {
+                var newUser = new User();
+                newUser.UserMail = email;
+
+                //She or he is a Teacher
+                newUser.RoleID = 3;
+                db.Users.Add(newUser);
+                var affectedRow = db.SaveChanges();
+                if (affectedRow <= 0)
+                {
+                    //error
+                    error = "There was an unhandle problem in server.";
+                    iserror = true;
+                }
+            }
+            var result = new
+            {
+                iserror,
+                error
+            };
+            return Json(result);
+        }
+
 
     }
 }
