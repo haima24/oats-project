@@ -85,7 +85,8 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult Index_TestListTab()
         {
-            return Json(new { tab = this.RenderPartialViewToString("P_TestListTab") });
+            var db = SingletonDb.Instance();
+            return Json(new { tab = this.RenderPartialViewToString("P_TestListTab", db.Tests) });
         }
         public JsonResult NewTest_ResponseTab()
         {
