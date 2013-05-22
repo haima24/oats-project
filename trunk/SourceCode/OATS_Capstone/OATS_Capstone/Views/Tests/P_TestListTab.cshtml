@@ -1,4 +1,5 @@
-﻿<script>
+﻿@model IEnumerable<OATS_Capstone.Models.Test>
+<script>
     $(function () {
         $("#accordion").accordion();
     });
@@ -75,20 +76,31 @@
                         <div class="nt-asms-list nt-guide">
                             <a>
                                 <div class="nt-list-head">
-
                                     <div class="nt-name">
                                         Tests
                                     </div>
                                     <div class="nt-date">Start</div>
                                     <div class="nt-date">End</div>
-
-
                                     <div class="nt-rate">Resp. Rate</div>
-
                                     <div class="nt-perc">Avg.</div>
                                     <div class="nt-perc">St.Dev.</div>
                                     <i class="nt-icon arrow-up"></i>
                                     <div>&nbsp;</div>
+                                </div>
+                                <div class="nt-list-cont">
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class="nt-list-row nt-guide">
+                                            <div class="nt-name">
+                                                @item.TestTitle
+                                            </div>
+                                            <div class="nt-date">@item.StartDate</div>
+                                            <div class="nt-date">@item.EndDate</div>
+                                            <div class="nt-rate">N/A</div>
+                                            <div class="nt-perc">-</div>
+                                            <div class="nt-perc">-</div>
+                                        </div>
+                                    }
                                 </div>
                             </a>
                         </div>
@@ -98,3 +110,4 @@
 </div>
 <div id="asmsOverview">
 </div>
+
