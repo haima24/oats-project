@@ -9,11 +9,8 @@ namespace OATS_Capstone.Models
     {
         public int Id;
         public string TestTitle;
-        //public DateTime StartDate;
-        //public DateTime? EndDate;
-
-        public string StartDate;
-        public string EndDate;
+        public DateTime StartDate;
+        public DateTime? EndDate;
     }
 
     public class SearchingStudents
