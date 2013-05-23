@@ -1,5 +1,4 @@
-﻿/// <reference path="SearchStudents.js" />
-$(function () {
+﻿$(function () {
     $.post("/Students/StudentsSearch", function (res) {
         if (res) {
             var source = res.map(function (obj, index) {
@@ -26,7 +25,3 @@ $(function () {
     });
 
 });
-
-
-
-
