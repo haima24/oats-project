@@ -44,10 +44,11 @@ namespace OATS_Capstone.Controllers
             var db = SingletonDb.Instance();
             var tests = db.Tests.ToList();
             var listTestsSearch = new List<SearchingTests>();
-            tests.ForEach(delegate(Test test) {
+            tests.ForEach(delegate(Test test)
+            {
                 var testTemplate = new SearchingTests();
                 testTemplate.Id = test.TestID;
-                testTemplate.TestTitle = test.TestTitle; 
+                testTemplate.TestTitle = test.TestTitle;
                 testTemplate.StartDate = test.StartDateTime;
                 testTemplate.EndDate = test.EndDateTime;
                 listTestsSearch.Add(testTemplate);
@@ -65,19 +66,37 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult QuestionTypes()
         {
-            var obj = new { 
+            var obj = new
+            {
                 radio = this.RenderPartialViewToString("P_Type_Radio"),
-                multiple=this.RenderPartialViewToString("P_Type_Multiple"),
-                essay=this.RenderPartialViewToString("P_Type_Essay"),
-                shortanswer=this.RenderPartialViewToString("P_Type_ShortAnswer"),
-                text=this.RenderPartialViewToString("P_Type_Text"),
-                image=this.RenderPartialViewToString("P_Type_Image")
+                multiple = this.RenderPartialViewToString("P_Type_Multiple"),
+                essay = this.RenderPartialViewToString("P_Type_Essay"),
+                shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer"),
+                text = this.RenderPartialViewToString("P_Type_Text"),
+                image = this.RenderPartialViewToString("P_Type_Image")
             };
             return Json(obj);
         }
         public JsonResult NewTest_ContentTab()
         {
             return Json(new { tab = this.RenderPartialViewToString("P_ContentTab") });
+        }
+        public JsonResult TestCalendarObjectResult()
+        {
+            var db = SingletonDb.Instance();
+            var tests = db.Tests.ToList();
+            var listTestCalendar = new List<TestCalendarObject>();
+
+            tests.ForEach(delegate(Test test)
+            {
+                var template = new TestCalendarObject();
+                template.id = test.TestID;
+                template.testTitle = test.TestTitle;
+                template.startDateTime = test.StartDateTime;
+                template.endDateTime = test.EndDateTime;
+                listTestCalendar.Add(template);
+            });
+            return Json(listTestCalendar);
         }
         public JsonResult Index_CalendarTab()
         {
@@ -102,9 +121,9 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult NewTest_InvitationTab()
         {
-            var db=SingletonDb.Instance();
+            var db = SingletonDb.Instance();
             var invitations = db.Invitations;
-            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab",invitations) });
+            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", invitations) });
         }
         public ActionResult TakeTest()
         {

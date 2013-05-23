@@ -1,17 +1,48 @@
 ﻿var questions;
 var emptylist;
-var listkey="listquestion";
+var listkey = "listquestion";
+var events;
+function initCalendar() {
+
+    $.post("/Tests/TestCalendarObjectResult", function (res) {
+        events = res.map(function (obj) {
+            return {
+                id: obj.id,
+                title: obj.testTitle,
+                start: convertJsonDatetoDate(obj.startDateTime),
+                end: convertJsonDatetoDate(obj.endDateTime)
+            };
+        });
+        $('#calendar').fullCalendar({
+            theme: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: true,
+            events: events
+        });
+
+    });
+
+    $("#asmsOverview").kalendae({
+        months: 3,
+        mode: 'single',
+        selected: Kalendae.moment().subtract({ M: 1 })
+    });
+}
 
 function saveChanges() {
-    var tab=$("#checklist[content-tab=true]");
-    if (tab.length>0) {
+    var tab = $("#checklist[content-tab=true]");
+    if (tab.length > 0) {
         var content = tab.html();
         setLocalStorage(listkey, content);
     }
 }
 function loadChanges() {
     var tab = $("#checklist[content-tab=true]");
-    if (tab.length>0 && listkey) {
+    if (tab.length > 0 && listkey) {
         var content = getLocalStorage(listkey);
         $("#checklist[content-tab=true]").html(content);
         initDragAndDrop();
@@ -62,11 +93,11 @@ function initDragAndDrop() {
         }
     });
     //separator
-    
-    
+
+
 }
 function initEditable() {
-    
+
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").contentEditable({
         "placeholder": "<i>Enter Answer</i>",
         "onBlur": function (element) {
@@ -82,6 +113,9 @@ function initEditable() {
 $(function () {
     emptylist = $(".nt-empty-list-ph");
 
+    
+
+    initCalendar();
     loadChanges();
 
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
@@ -115,6 +149,8 @@ $(function () {
 
                 saveChanges();
                 tabcontent.html(res.tab);
+
+                initCalendar();
                 loadChanges();
 
                 //rebind accordition

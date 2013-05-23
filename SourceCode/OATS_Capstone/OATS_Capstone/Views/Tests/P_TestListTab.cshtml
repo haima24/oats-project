@@ -4,15 +4,6 @@
         $("#accordion").accordion();
     });
 </script>
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function () {
-        $("#asmsOverview").kalendae({
-            months: 3,
-            mode: 'single',
-            selected: Kalendae.moment().subtract({ M: 1 })
-        });
-    });
-</script>
 <style>
     /*body {
         margin-top: 40px;
@@ -94,8 +85,8 @@
                                             <div class="nt-name">
                                                 @item.TestTitle
                                             </div>
-                                            <div class="nt-date">@item.StartDate</div>
-                                            <div class="nt-date">@item.EndDate</div>
+                                            <div class="nt-date">@item.StartDateTime</div>
+                                            <div class="nt-date">@item.EndDateTime</div>
                                             <div class="nt-rate">N/A</div>
                                             <div class="nt-perc">-</div>
                                             <div class="nt-perc">-</div>

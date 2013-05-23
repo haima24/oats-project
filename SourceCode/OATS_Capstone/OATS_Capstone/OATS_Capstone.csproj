@@ -154,6 +154,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>OATSModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ObjectTemplate.cs" />
     <Compile Include="Models\Question.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -259,6 +260,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Resource\Scripts\CommonUtil.js" />
     <Content Include="Resource\Scripts\ImageUploadScript.js" />
     <Content Include="Resource\Scripts\SearchTeachers.js" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
