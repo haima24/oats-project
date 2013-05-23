@@ -196,9 +196,9 @@
     <Content Include="Bootstrap\css\kalendae.css" />
     <Content Include="Bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Bootstrap\img\glyphicons-halflings.png" />
-    <Content Include="Bootstrap\js\bootstrap-modal.js" />
     <Content Include="Bootstrap\js\bootstrap.js" />
     <Content Include="Bootstrap\js\bootstrap.min.js" />
+    <Content Include="Bootstrap\js\dropzone.js" />
     <Content Include="Bootstrap\js\fullcalendar.min.js" />
     <Content Include="Bootstrap\js\jquery-1.9.1.min.js" />
     <Content Include="Bootstrap\js\jquery.contenteditable.js" />
@@ -347,6 +347,7 @@
     <Content Include="Views\Tests\P_Type_Image.cshtml" />
     <Content Include="Views\Tests\P_CalendarTab.cshtml" />
     <Content Include="Views\Tests\P_TestListTab.cshtml" />
+    <Content Include="Views\Tests\P_RenderPreviewImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

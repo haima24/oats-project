@@ -10,10 +10,11 @@ namespace OATS_Capstone.Models
         private static OATSDBEntities _oatsEntities= null;
         public static OATSDBEntities Instance()
         {
-            if (_oatsEntities == null)
-            {
-                _oatsEntities = new OATSDBEntities();
-            }
+            //if (_oatsEntities == null)
+            //{
+            //    _oatsEntities = new OATSDBEntities();
+            //}
+            _oatsEntities = new OATSDBEntities();
             return _oatsEntities;
         }
     }

@@ -18,120 +18,116 @@ header, footer, nav, section {
 audio, canvas, video {
     display: inline-block;
 }
-#dropbox:before{
-	display: block;
-	content:'';
-	height:4px;
-	width:100%;
-	background:url('./img/blue_line.jpg');
-	position: absolute;
-	top:0;
-	left:0;
-	box-shadow:0 2px 2px rgba(0,0,0,0.4);
-    border-radius:3px 3px 0 0;
-}
-#dropbox{
-	background:url('./img/background_tile_3.jpg');
-	
-	border-radius:3px;
-	position: relative;
-	margin:80px auto 90px;
-	min-height: 290px;
-	overflow: hidden;
-	padding-bottom: 40px;
-    width: 990px;
-	
-	box-shadow:0 0 4px rgba(0,0,0,0.3) inset,0 -3px 2px rgba(0,0,0,0.1);
-}
 
-
-#dropbox .message{
-	font-size: 11px;
-    text-align: center;
-    padding-top:160px;
+#dropbox:before {
     display: block;
-}
-
-#dropbox .message i{
-	color:#ccc;
-	font-size:10px;
-}
-
-#dropbox .preview{
-	width:125px;
-	height: 150px;
-	float:left;
-	margin: 20px 0 0 20px;
-	position: relative;
-	text-align: center;
-}
-
-#dropbox .preview img{
-	max-width: 125px;
-	max-height:150px;
-	border:3px solid #fff;
-	display: block;
-	
-	box-shadow:0 0 2px #000;
-}
-
-#dropbox .imageHolder{
-	display: inline-block;
-	position:relative;
-}
-
-#dropbox .uploaded{
-	position: absolute;
-	top:0;
-	left:0;
-	height:100%;
-	width:100%;
-	background: url('../Images/done.png') no-repeat center center rgba(255,255,255,0.5);
-	display: none;
-}
-
-#dropbox .preview.done .uploaded{
-	display: block;
-}
-
-#dropbox .remove {
-    background-color: red;
+    content: '';
+    height: 4px;
     width: 100%;
-    height: 20px;
-    display: block;
-    margin-top: 30px;
-    cursor: pointer;
+    background: url('./img/blue_line.jpg');
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.4);
+    border-radius: 3px 3px 0 0;
 }
 
-#dropbox .progressHolder{
-	position: absolute;
-	background-color:#252f38;
-	height:12px;
-	width:100%;
-	left:0;
-	bottom: 0;
-	
-	box-shadow:0 0 2px #000;
+#dropbox {
+    background: url('./img/background_tile_3.jpg');
+    border-radius: 3px;
+    position: relative;
+    margin: 80px auto 90px;
+    min-height: 290px;
+    overflow: hidden;
+    padding-bottom: 40px;
+    width: 990px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3) inset,0 -3px 2px rgba(0,0,0,0.1);
 }
 
-#dropbox .progress{
-	background-color:#2586d0;
-	position: absolute;
-	height:100%;
-	left:0;
-	width:0;
-	
-	box-shadow: 0 0 1px rgba(255, 255, 255, 0.4) inset;
-	
-	-moz-transition:0.25s;
-	-webkit-transition:0.25s;
-	-o-transition:0.25s;
-	transition:0.25s;
-}
 
-#dropbox .preview.done .progress{
-	width:100% !important;
-}
+    #dropbox .message {
+        font-size: 11px;
+        text-align: center;
+        padding-top: 160px;
+        display: block;
+    }
+
+        #dropbox .message i {
+            color: #ccc;
+            font-size: 10px;
+        }
+
+    #dropbox .preview {
+        width: 125px;
+        height: 150px;
+        float: left;
+        margin: 20px 0 0 20px;
+        position: relative;
+        text-align: center;
+    }
+
+        #dropbox .preview img {
+            max-width: 125px;
+            max-height: 150px;
+            border: 3px solid #fff;
+            display: block;
+            box-shadow: 0 0 2px #000;
+        }
+
+    #dropbox .imageHolder {
+        display: inline-block;
+        position: relative;
+    }
+
+    #dropbox .uploaded {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: url('../Images/done.png') no-repeat center center rgba(255,255,255,0.5);
+        display: none;
+    }
+
+    #dropbox .preview.done .uploaded {
+        display: block;
+    }
+
+    #dropbox .remove {
+        background-color: red;
+        width: 100%;
+        height: 20px;
+        display: block;
+        margin-top: 30px;
+        cursor: pointer;
+    }
+
+    #dropbox .progressHolder {
+        position: absolute;
+        background-color: #252f38;
+        height: 12px;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        box-shadow: 0 0 2px #000;
+    }
+
+    #dropbox .progress {
+        background-color: #2586d0;
+        position: absolute;
+        height: 100%;
+        left: 0;
+        width: 0;
+        box-shadow: 0 0 1px rgba(255, 255, 255, 0.4) inset;
+        -moz-transition: 0.25s;
+        -webkit-transition: 0.25s;
+        -o-transition: 0.25s;
+        transition: 0.25s;
+    }
+
+    #dropbox .preview.done .progress {
+        width: 100% !important;
+    }
 
 #savestatus {
     color: #999999;
@@ -671,7 +667,7 @@ i, cite, em, var, address, dfn {
 
 #checklist .nt-qitem .nt-qimg-upload {
     display: none;
-    background: url(../img/loader-bar-dark.gif?v=174) left no-repeat;
+    background: url('./img/loader.gif') left no-repeat;
     background-position: 255px 10px;
     height: 42px;
     margin: 10px;
@@ -802,7 +798,7 @@ i, cite, em, var, address, dfn {
     min-height: 18px;
     margin-left: 5px;
     padding: 5px;
-    width: 633px;
+    width: 620px;
 }
 
 #checklist .nt-qitem .nt-qans .nt-qansrep {
@@ -818,6 +814,9 @@ i, cite, em, var, address, dfn {
     position: absolute;
     top: 8px;
     right: 10px;
+}
+#checklist .nt-qitem .nt-qans:hover .nt-qansctrls {
+display: block;
 }
 
 #checklist .nt-qitem .nt-qans .nt-qans-label {
@@ -1597,6 +1596,20 @@ i.nt-icon {
     border-bottom: 1px solid #ECECEC;
 }
 
+.nt-asms-list .nt-list-row:first-child {
+    border-top: 0;
+}
+
+.nt-asms-list .nt-list-row {
+    border-top: 1px solid #ececec;
+    font-size: 12px;
+}
+
+    .nt-asms-list .nt-list-row .nt-name {
+        text-overflow: ellipsis;
+        font-size: 14px;
+    }
+
     .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
         position: relative;
         padding-left: 15px;
@@ -1605,6 +1618,11 @@ i.nt-icon {
         width: 31%;
     }
 
+        .nt-asms-list .nt-list-head > div.nt-name button, .nt-asms-list .nt-list-row > div.nt-name button {
+            position: absolute;
+            top: 9px;
+            right: 0;
+        }
 
     .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
         width: 13%;
@@ -2153,6 +2171,10 @@ i.nt-icon {
     padding: 0 25px 0 10px;
 }
 
+.nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text {
+    width: auto;
+}
+
 .nt-ctrl-foot button.text, .nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text {
     position: relative;
     padding: 0 10px 0 25px;
@@ -2274,6 +2296,10 @@ i.nt-icon {
     position: absolute;
     left: 5px;
     top: 1px;
+}
+
+.nt-ctrl-foot .nt-btn-sqr i, .nt-asms-list .nt-list-head > div.nt-ctrl-wide .nt-btn-sqr i, .nt-asms-list .nt-list-row > div.nt-ctrl-wide .nt-btn-sqr i {
+    font-size: 14px;
 }
 
 .nt-ctrl-foot button.text.icon-right i, .nt-asms-list .nt-list-head > div.nt-ctrl-wide button.text.icon-right i, .nt-asms-list .nt-list-row > div.nt-ctrl-wide button.text.icon-right i {
@@ -2408,16 +2434,26 @@ i.nt-icon {
 .search-autocomple {
     background-color: white;
     border: 1px solid #aaaaaa;
-    width: 230px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
+    padding-right:5px;
 }
-
+.search-autocomplete-hover-item {
+    text-decoration: none;
+    display: block;
+    padding: 2px .4em;
+    line-height: 1.5;
+    min-height: 0;
+    font-weight: normal;
+}
+    .search-autocomplete-hover-item a {
+        color:black;
+    }
 .search-autocomplete-hover-item:hover {
-    width: 228px;
+    width:100%;
     background-color: gainsboro;
     border: 1px solid #aaaaaa;
     -webkit-border-radius: 5px;
@@ -2425,4 +2461,5 @@ i.nt-icon {
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
+    text-decoration: none;
 }

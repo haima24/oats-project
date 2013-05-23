@@ -34,11 +34,15 @@ function initCalendar() {
 }
 
 function saveChanges() {
+    var savestatus = $("#savestatus");
+    savestatus.show();
+    $(".nt-desc", savestatus).html("Saving...");
     var tab = $("#checklist[content-tab=true]");
     if (tab.length > 0) {
         var content = tab.html();
         setLocalStorage(listkey, content);
     }
+    $(".nt-desc", savestatus).html("All changes saved.");
 }
 function loadChanges() {
     var tab = $("#checklist[content-tab=true]");
@@ -46,12 +50,15 @@ function loadChanges() {
         var content = getLocalStorage(listkey);
         $("#checklist[content-tab=true]").html(content);
         initDragAndDrop();
+        initEditable();
     }
 }
 
 function sortByNumberOrLetters() {
     $("#checklist .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
         $(this).html((i + 1) + ". ");
+        var radioes = $(this).parent().find("input[type=radio]:not([name])");
+        radioes.attr("name", "ans_" + (i + 1));
     });
     $("#checklist .nt-qnum.nt-qnum-letter").each(function (i) {
         $(this).html(String.fromCharCode(65 + i) + ". ");
@@ -72,6 +79,7 @@ function initDragAndDrop() {
         placeholder: 'highlight',
         stop: function (ev, ui) {
             sortByNumberOrLetters();
+            initImageUploadFacility();
             initEditable();
             saveChanges();
         },
@@ -86,6 +94,7 @@ function initDragAndDrop() {
                 if (obj.hasClass("t-question-type-text")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.text) : obj.replaceWith(questions.text); }
                 if (obj.hasClass("t-question-type-img")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.image) : obj.replaceWith(questions.image); }
                 sortByNumberOrLetters();
+                initImageUploadFacility();
                 initEditable();
                 saveChanges();
                 //obj.remove();
@@ -110,12 +119,33 @@ function initEditable() {
     });
 }
 
+function initImageUploadFacility()
+{
+    if(questions&&questions.imagepreview){
+        $(".nt-qimg-ph.nt-clickable").dropzone({
+            url: "/Tests/UploadFiles",
+            paramName: "files",
+            previewTemplate: questions.imagepreview,
+            uploadprogress: function (ev) {
+                $(this.element).hide();
+                $(this.element).parent().find(".nt-qimg-upload").show();
+            },
+            success: function (file,res) {
+            },
+            complete: function (ev) {
+                $(this.element).parent().find(".nt-qimg-upload").hide();
+            },
+            });
+    }
+}
+
 $(function () {
     emptylist = $(".nt-empty-list-ph");
 
     
 
     initCalendar();
+    initImageUploadFacility();
     loadChanges();
 
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
@@ -174,9 +204,10 @@ $(function () {
             if (cur.hasClass("t-question-type-essay")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.essay) : etab.append(questions.essay); }
             if (cur.hasClass("t-question-type-short")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.shortanswer) : etab.append(questions.shortanswer); }
             if (cur.hasClass("t-question-type-text")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.text) : etab.append(questions.text); }
-            if (cur.hasClass("t-question-type-img")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.image) : etab.append(questions.image); }
+            if (cur.hasClass("t-question-type-img")) { $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.image) : etab.append(questions.image); initImageUploadFacility();}
             sortByNumberOrLetters();
             initEditable();
+            initImageUploadFacility();
             saveChanges();
         }
     });
@@ -186,12 +217,13 @@ $(function () {
         var etab = $("#checklist");
         if (content && etab) {
             etab.append(content.prop("outerHTML"))
+            initImageUploadFacility();
             initEditable();
             saveChanges();
         }
     });
     //separator
-    $(".bt-delete").live("click", function (ev) {
+    $(".nt-qhctrls .bt-delete").live("click", function (ev) {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         content.remove()
         if ($("#checklist").children().length == 0) {
@@ -201,5 +233,61 @@ $(function () {
         saveChanges();
     });
     //separator
-    initDragAndDrop();
+    $(".nt-btn-text.nt-qansadd").live("click", function (ev) {
+        var parent = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
+        var anstemplate = $(".nt-qans.nt-qans-edit", parent).clone().get(0);
+        $(".nt-qanscont", parent).append(anstemplate);
+        //when add an answer, show delete button on answer line
+        
+        if ($(".nt-qans.nt-qans-edit", parent).length > 2) {
+            $(".nt-qansctrls .bt-delete", parent).show();
+        } else {
+            $(".nt-qansctrls .bt-delete", parent).hide();
+        }
+        initEditable();
+        saveChanges();
+    });
+    //separator
+    $(".nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
+        var parent = $(this).closest(".nt-qitem.nt-qitem-edit");
+        var ansline = $(this).closest(".nt-qans.nt-qans-edit");
+        ansline.remove();
+        if ($(".nt-qans.nt-qans-edit", parent).length > 2) {
+            $(".nt-qansctrls .bt-delete", parent).show();
+        } else {
+            $(".nt-qansctrls .bt-delete", parent).hide();
+        }
+        saveChanges();
+    });
+    //separator
+    $(".nt-qtype-sel-predef,.nt-qtype-sel").live("change", function (ev) {
+        var questiontype = $(this).val();
+        var itemParent = $(this).closest(".nt-qitem.nt-qitem-edit");
+        switch (questiontype) {
+            case "radio":
+                itemParent.replaceWith(questions.radio);
+                break;
+            case "multiple":
+                itemParent.replaceWith(questions.multiple);
+                break;
+            case "essay":
+                itemParent.replaceWith(questions.essay);
+                break;
+            case "shortanswer":
+                itemParent.replaceWith(questions.shortanswer);
+                break;
+            case "text":
+                itemParent.replaceWith(questions.text);
+                break;
+            case "img":
+                itemParent.replaceWith(questions.image);
+                break;
+            default:
+                break;
+        }
+        sortByNumberOrLetters();
+        initImageUploadFacility();
+        initEditable();
+        saveChanges();
+    });
 });

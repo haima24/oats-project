@@ -69,11 +69,12 @@ namespace OATS_Capstone.Controllers
             var obj = new
             {
                 radio = this.RenderPartialViewToString("P_Type_Radio"),
-                multiple = this.RenderPartialViewToString("P_Type_Multiple"),
-                essay = this.RenderPartialViewToString("P_Type_Essay"),
-                shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer"),
-                text = this.RenderPartialViewToString("P_Type_Text"),
-                image = this.RenderPartialViewToString("P_Type_Image")
+                multiple=this.RenderPartialViewToString("P_Type_Multiple"),
+                essay=this.RenderPartialViewToString("P_Type_Essay"),
+                shortanswer=this.RenderPartialViewToString("P_Type_ShortAnswer"),
+                text=this.RenderPartialViewToString("P_Type_Text"),
+                image=this.RenderPartialViewToString("P_Type_Image"),
+                imagepreview=this.RenderPartialViewToString("P_RenderPreviewImage")
             };
             return Json(obj);
         }
