@@ -1175,13 +1175,6 @@ div.hoverscroll {
     border-radius: 4px;
 }
 
-.accordion-group {
-    margin-bottom: 2px;
-    border: 1px solid #E5E5E5;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
 
 .nt-user-details .nt-asms-list-cont.upandrunning .nt-list-head, .nt-user-details .nt-asms-list-cont.upandrunning .nt-asms-list {
     -moz-border-radius-topleft: 4px;
@@ -1522,35 +1515,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     vertical-align: middle;
 }
 
-
-.nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
-    position: relative;
-    padding-left: 15px;
-    padding-right: 25px;
-    text-align: left;
-    width: 31%;
-}
-
-.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
-    display: inline-block;
-    padding: 10px 2px;
-    text-align: center;
-    vertical-align: top;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-    .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
-        width: 13%;
-    }
-
-.nt-date, .nt-time {
-    overflow: hidden;
-    white-space: nowrap;
-}
-
 i.nt-icon.arrow-up {
     background-position: 0 -100px;
 }
@@ -1608,6 +1572,8 @@ i.nt-icon {
     border-bottom: 1px solid #ECECEC;
 }
 
+<<<<<<< .mine
+=======
 .nt-asms-list .nt-list-row:first-child {
     border-top: 0;
 }
@@ -1660,6 +1626,7 @@ i.nt-icon {
     width: 7%;
 }
 
+>>>>>>> .r53
 .nt-user-details .nt-asms-unrelated {
     z-index: 1;
     position: absolute;
@@ -2482,4 +2449,231 @@ i.nt-icon {
 .preview-container {
     padding-bottom: 20px;
     display: block;
+}
+
+
+.accordion-group {
+    margin-bottom: 2px;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#asmsList .accordion-group:first-child .accordion-heading {
+    -webkit-border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    -ms-border-radius: 4px 4px 0 0;
+    -o-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
+}
+
+#asmsList .accordion-heading {
+    font-weight: bold;
+    background-color: #f8f8f8;
+    text-transform: uppercase;
+    height: 50px;
+}
+
+.accordion-heading {
+    border-bottom: 0;
+}
+
+#asmsList .accordion-heading .accordion-toggle {
+    position: relative;
+    font-size: 0;
+    color: #444444;
+    line-height: 50px;
+    padding: 0 0 0 10px;
+}
+
+.accordion-heading .accordion-toggle {
+    display: block;
+    padding: 8px 15px;
+}
+
+.accordion-toggle {
+    cursor: pointer;
+}
+
+a, a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a {
+    color: #0088cc;
+    text-decoration: none;
+}
+
+user agent stylesheeta:-webkit-any-link {
+    color: -webkit-link;
+    text-decoration: underline;
+    cursor: auto;
+}
+
+Inherited from div.accordion-heading.nt-guide #asmsList .accordion-heading {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.nt-led.on {
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
+}
+
+.nt-led {
+    width: 9px;
+    height: 9px;
+    border: 1px solid #c7c7c7;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    -ms-border-radius: 9px;
+    -o-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#asmsList .accordion-heading .accordion-toggle i {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+i.nt-icon.arrow-up {
+    background-position: 0 -100px;
+}
+
+i.nt-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    background: url(../img/sprites.png?v=177) no-repeat;
+}
+
+user agent stylesheeti, cite, em, var, address, dfn {
+    font-style: italic;
+}
+
+#asmsList .accordion-heading .accordion-toggle .nt-desc {
+    margin-left: 4px;
+}
+
+#asmsList .accordion-heading .accordion-toggle > div {
+    margin-right: 2px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+#asmsList .accordion-group.nt-acc-open .accordion-body {
+    padding-bottom: 4px;
+}
+
+#asmsList .accordion-inner {
+    padding: 0;
+    overflow-x: hidden;
+    border-top: 1px solid #c7c7c7;
+}
+
+.accordion-inner {
+    padding: 9px 15px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.nt-asms-list .nt-list-head {
+    position: relative;
+    border-bottom: 1px solid #ececec;
+}
+
+.nt-title, .nt-clb-header, .nt-asms-list .nt-list-head, .nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label, #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table th, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title, .nt-scores-cont .nt-scores-footer .notreptags .nt-tag-ph {
+    text-transform: uppercase;
+    color: #8e5e19;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.nt-asms-list .nt-list-row:first-child {
+    border-top: 0;
+}
+
+.nt-asms-list .nt-list-row {
+    border-top: 1px solid #ececec;
+    font-size: 12px;
+}
+
+    .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
+        position: relative;
+        padding-left: 15px;
+        padding-right: 25px;
+        text-align: left;
+        width: 31%;
+    }
+
+    .nt-asms-list .nt-list-row .nt-name {
+        text-overflow: ellipsis;
+        font-size: 14px;
+    }
+
+        .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
+            width: 13%;
+        }
+
+
+.nt-date, .nt-time {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.nt-asms-list .nt-list-head > div.nt-rate, .nt-asms-list .nt-list-row > div.nt-rate {
+    width: 16%;
+}
+
+    .nt-asms-list .nt-list-head > div.nt-perc, .nt-asms-list .nt-list-row > div.nt-perc {
+        width: 7%;
+    }
+
+.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
+    display: inline-block;
+    padding: 10px 2px;
+    text-align: center;
+    vertical-align: top;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+    .nt-asms-list .nt-list-head > div.nt-ctrl-wide, .nt-asms-list .nt-list-row > div.nt-ctrl-wide {
+        width: auto;
+    }
+
+    .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
+        padding: 6px 1px;
+        width: 10%;
+        text-align: right;
+    }
+
+    .nt-ctrl-foot, .nt-asms-list .nt-list-head > div.nt-ctrl-wide, .nt-asms-list .nt-list-row > div.nt-ctrl-wide {
+        padding: 5px 0 7px 0;
+    }
+
+
+#asmsList .accordion-group.nt-acc-hl {
+    margin: 0 -15px;
+    padding: 10px;
+    border-width: 5px;
+}
+
+
+.accordion-group {
+    margin-bottom: 2px;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
