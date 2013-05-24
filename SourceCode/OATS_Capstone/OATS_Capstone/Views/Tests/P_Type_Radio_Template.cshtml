@@ -1,14 +1,12 @@
-﻿@model OATS_Capstone.Models.Question
-<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="radio">
-    <input type="hidden" class="question-id" value="@Model.QuestionID" />
-    <div class="nt-qnum ">@Model.LabelOrder</div>
+﻿<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="radio">
+    <div class="nt-qnum "></div>
     <a class="nt-qanchor"></a>
     <!-- NOT isImg START -->
 
 
     <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
         <div class="redactor_box">
-            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
+            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true"></div>
         </div>
     </div>
 
@@ -24,21 +22,13 @@
     </div>
 
     <div class="nt-qanscont nt-sortable">
-        @foreach(var ans in Model.Answers){
-            
         <div class="nt-qans nt-qans-edit nt-qans-hover">
-            <input type="hidden" class="answer-id" value="@ans.AnswerID" />
             <div class="nt-qanselem">
-                @if (ans.IsRight) { 
-                    <input type="radio" checked="checked"/>
-                }else{
-                    <input type="radio" />
-                }
-                
+                <input type="radio"/>
             </div>
             <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                 <div class="redactor_box">
-                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@ans.AnswerContent</div>
+                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true"></div>
                 </div>
             </div>
             <div class="nt-qansscore">
@@ -54,7 +44,29 @@
             </div>
 
         </div>
-        }
+        <div class="nt-qans nt-qans-edit nt-qans-hover">
+            <div class="nt-qanselem">
+                <input type="radio" />
+            </div>
+            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                <div class="redactor_box">
+                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true"></div>
+                </div>
+            </div>
+            <div class="nt-qansscore">
+                <input type="text" class="nt-on-score" placeholder="Point Value" value="0" />
+                <button class="nt-btn-sqr nt-not_scored">N/A</button>
+                <!-- NOTE: bonus button disabled -->
+                <button style="display: none" class="nt-btn-sqr nt-bonus"><i class="t-icon gift"></i></button>
+            </div>
+            <div class="nt-qansctrls">
+                <button class="nt-btn-circle bt-delete" style="display: none;">
+                    <i class="icon-remove"></i>
+                </button>
+            </div>
+
+        </div>
+
     </div>
 
 

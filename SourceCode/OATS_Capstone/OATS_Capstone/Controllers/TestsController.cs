@@ -38,7 +38,11 @@ namespace OATS_Capstone.Controllers
             }
         }
 
+        public JsonResult SaveNewTest(Test test)
+        {
 
+            return Json("Done");
+        }
         public JsonResult TestsSearch()
         {
             var db = SingletonDb.Instance();
@@ -60,21 +64,37 @@ namespace OATS_Capstone.Controllers
             return View();
         }
 
-        public ActionResult NewTest()
+        public ActionResult MakeTest()
         {
-            return View();
+            var db = SingletonDb.Instance();
+            var test = new Test();
+            test.TestTitle = String.Empty;
+            test.CreatedUserID = 1;//must be fix, this is for test purpose
+            test.CreatedDateTime = DateTime.Now;
+            test.StartDateTime = DateTime.Now;
+            db.Tests.Add(test);
+            db.SaveChanges();
+            var generatedId=test.TestID;
+            return RedirectToAction("NewTest", new {id=generatedId});
+        }
+        public ActionResult NewTest(int id) 
+        {
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == id);
+            return View(test);
         }
         public JsonResult QuestionTypes()
         {
             var obj = new
             {
-                radio = this.RenderPartialViewToString("P_Type_Radio"),
-                multiple=this.RenderPartialViewToString("P_Type_Multiple"),
-                essay=this.RenderPartialViewToString("P_Type_Essay"),
-                shortanswer=this.RenderPartialViewToString("P_Type_ShortAnswer"),
-                text=this.RenderPartialViewToString("P_Type_Text"),
-                image=this.RenderPartialViewToString("P_Type_Image"),
-                imagepreview=this.RenderPartialViewToString("P_RenderPreviewImage")
+                radio = this.RenderPartialViewToString("P_Type_Radio_Template"),
+                multiple = this.RenderPartialViewToString("P_Type_Multiple_Template"),
+                essay = this.RenderPartialViewToString("P_Type_Essay_Template"),
+                shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer_Template"),
+                text = this.RenderPartialViewToString("P_Type_Text_Template"),
+                image = this.RenderPartialViewToString("P_Type_Image_Template"),
+                imagepreview=this.RenderPartialViewToString("P_RenderPreviewImage"),
+                empty=this.RenderPartialViewToString("P_Type_Empty_Template")
             };
             return Json(obj);
         }

@@ -1,12 +1,13 @@
-﻿<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact">
-                    <div class="nt-qnum "></div>
+﻿@model OATS_Capstone.Models.Question
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="shortanswer">
+                    <div class="nt-qnum ">@Model.LabelOrder</div>
                     <a class="nt-qanchor"></a>
                     <!-- NOT isImg START -->
 
 
                     <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
                         <div class="redactor_box">
-                            <div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" contenteditable="true"></div>
+                            <div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
                         </div>
                     </div>
 
@@ -30,7 +31,7 @@
 
 
                         <div style="overflow: hidden; position: relative; width: 710px; height: 28px; top: auto; left: auto; margin: 0px 0px 16px; padding-right: 7px;">
-                            <input type="text"  class="nt-qrespinput" value="" maxlength="140" style="width: 670px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"/>
+                            <input type="text"  class="nt-qrespinput" value="@Model.TextDescription" maxlength="140" style="width: 670px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"/>
                         </div>
 
                     </div>

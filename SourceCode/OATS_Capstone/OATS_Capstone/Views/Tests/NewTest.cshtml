@@ -1,8 +1,12 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+@model OATS_Capstone.Models.Test
 <script src="~/Resource/Scripts/NewTestScript.js"></script>
 <script src="~/Resource/Scripts/SearchTests.js"></script>
+@if(Model!=null){
+<input id="test-id" type="hidden" value="@Model.TestID" />
+    }
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div id="savestatus" style="display:none;">
@@ -16,7 +20,7 @@
                     <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
                     <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
                     <li>
-                        <button class="btn oval" onclick="window.location='@Url.Action("NewTest")'">New</button></li>
+                        <button class="btn oval" onclick="window.location='@Url.Action("MakeTest")'">New</button></li>
                 </ul>
 
                 <ul class="nav pull-right">
@@ -44,7 +48,7 @@
 </div>
 <div id="container" class="container wrapper">
     <div id="test-header">
-        <div contenteditable="true" action="@Url.Action("")" id="test-title"></div>
+        <div contenteditable="true" id="test-title">@if(Model!=null){@Model.TestTitle}</div>
         <div id="eventDateFrom" class="test-date-time" contenteditable="true">8 May 2013</div>
         <div id="eventTimeFrom" class="test-date-time" contenteditable="true">4:00 pm</div>
         <div class="spacer">_</div>
@@ -69,7 +73,7 @@
             </div>
         </div>
         <div id="eventTab">
-            @Html.Partial("P_ContentTab")
+            @Html.Partial("P_ContentTab",Model)
         </div>
     </div>
 </div>
