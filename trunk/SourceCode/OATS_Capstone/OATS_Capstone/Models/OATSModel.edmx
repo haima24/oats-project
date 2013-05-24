@@ -87,7 +87,7 @@
           <Property Name="AnswerID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="AnswerContent" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="QuestionID" Type="int" Nullable="false" />
-          <Property Name="IsRight" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsRight" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Invitation">
           <Key>
@@ -459,7 +459,7 @@
           <Property Name="AnswerID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="AnswerContent" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
-          <Property Name="IsRight" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsRight" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
         </EntityType>
         <EntityType Name="Invitation">

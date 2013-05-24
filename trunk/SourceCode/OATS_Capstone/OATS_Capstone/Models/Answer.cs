@@ -17,7 +17,7 @@ namespace OATS_Capstone.Models
         public int AnswerID { get; set; }
         public string AnswerContent { get; set; }
         public int QuestionID { get; set; }
-        public string IsRight { get; set; }
+        public bool IsRight { get; set; }
     
         public virtual Question Question { get; set; }
     }
