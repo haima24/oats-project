@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<OATS_Capstone.Models.Test>
 <script>
     $(function () {
-        $("#accordion").accordion();
+        $("#asmsList").accordion({
+            header: ".accordion-heading"
+        });
     });
 </script>
 <style>
@@ -12,13 +14,6 @@
         font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
     }*/
 
-    #accordion {
-        width: 735px;
-        /*margin: 0 auto;*/
-        margin-left: 20px;
-        vertical-align: top;
-        float: left;
-    }
 
     #asmsOverview {
         margin-right: 5px;
@@ -30,56 +25,97 @@
         background: red;
     }
 </style>
-<div id="accordion" role="tablist">
-    <h3>Recent Tests<h3>
-        <div class="nt-user-details hide" style="display: block;">
-            <div id="asmsList" style="height: 186px; overflow-y: auto;" class="nt-flex-acc">
-                <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
-                    <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
-                    <div class="nt-asms-list nt-guide">
-                        <a>
-                            <div class="nt-list-head">
+    <div id="asmsList" style="height: 700px; overflow-y: visible; float: left; width: 740px;" class="nt-flex-acc" >
+        <div class="accordion-group nt-acc-group   nt-acc-open">
+            <div class="accordion-heading nt-guide" data-guide="tests_recent">
 
-                                <div class="nt-name">
-                                    Tests
-                                </div>
-                                <div class="nt-date">Start</div>
-                                <div class="nt-date">End</div>
+                <a class="accordion-toggle" href="#">
+                    <div class="nt-led on"></div>
+                    <div class="nt-led "></div>
+                    <div class="nt-led "></div>
+                    <i class="nt-icon arrow-up"></i>
+                    <div class="nt-desc">Recent Tests</div>
+                </a>
+            </div>
+            <div id="recent" class="accordion-body" style="height: 200px;">
+                <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
+                    <a>
+                        <div class="nt-list-head">
 
-
-                                <div class="nt-rate">Resp. Rate</div>
-
-                                <div class="nt-perc">Avg.</div>
-                                <div class="nt-perc">St.Dev.</div>
-                                <i class="nt-icon arrow-up"></i>
-                                <div>&nbsp;</div>
+                            <div class="nt-name">
+                                Tests
                             </div>
-                        </a>
+                            <div class="nt-date">Start</div>
+                            <div class="nt-date">End</div>
+
+
+                            <div class="nt-rate">Resp. Rate</div>
+
+                            <div class="nt-perc">Avg.</div>
+                            <div class="nt-perc">St.Dev.</div>
+                            <div>&nbsp;</div>
+                        </div>
+                    </a>
+
+                    <div class="nt-list-cont">
+                        <div class="nt-list-row nt-guide">
+                            <div class="nt-name">
+                                <span data-original-title="Open this test">Enter Test Title
+                                </span>
+
+                            </div>
+
+
+                            <div class="nt-date">
+                                23 May 2013
+                            </div>
+                            <div class="nt-date">
+                                23 May 2013
+                            </div>
+
+
+                            <div class="nt-rate ">N/A</div>
+
+                            <div class="nt-perc">-</div>
+                            <div class="nt-perc">-</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <h3>Running Tests<h3>
-            <div class="nt-user-details hide" style="display: block;">
-                <div id="asmsList" style="height: 186px; overflow-y: auto;" class="nt-flex-acc">
-                    <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
-                        <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
-                        <div class="nt-asms-list nt-guide">
-                            <a>
-                                <div class="nt-list-head">
-                                    <div class="nt-name">
-                                        Tests
-                                    </div>
-                                    <div class="nt-date">Start</div>
-                                    <div class="nt-date">End</div>
-                                    <div class="nt-rate">Resp. Rate</div>
-                                    <div class="nt-perc">Avg.</div>
-                                    <div class="nt-perc">St.Dev.</div>
-                                    <i class="nt-icon arrow-up"></i>
-                                    <div>&nbsp;</div>
-                                </div>
-                                <div class="nt-list-cont">
-                                    @foreach (var item in Model)
+        <div class="accordion-group nt-acc-group">
+            <div class="accordion-heading nt-guide" data-guide="tests_recent">
+
+                <a class="accordion-toggle" href="#">
+                    <div class="nt-led "></div>
+                    <div class="nt-led on"></div>
+                    <div class="nt-led "></div>
+                    <i class="nt-icon arrow-up"></i>
+                    <div class="nt-desc">Running Tests</div>
+                </a>
+            </div>
+            <div class="accordion-body" style="height: 200px;">
+                <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
+                    <a>
+                        <div class="nt-list-head">
+
+                            <div class="nt-name">
+                                Tests
+                            </div>
+                            <div class="nt-date">Start</div>
+                            <div class="nt-date">End</div>
+
+
+                            <div class="nt-rate">Resp. Rate</div>
+
+                            <div class="nt-perc">Avg.</div>
+                            <div class="nt-perc">St.Dev.</div>
+                            <div>&nbsp;</div>
+                        </div>
+                    </a>
+
+                    <div class="nt-list-cont">
+                        @foreach (var item in Model)
                                     {
                                         <div class="nt-list-row nt-guide">
                                             <div class="nt-name">
@@ -92,13 +128,11 @@
                                             <div class="nt-perc">-</div>
                                         </div>
                                     }
-                                </div>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
-</div>
+        </div>
+    </div>
 <div id="asmsOverview">
 </div>
 
