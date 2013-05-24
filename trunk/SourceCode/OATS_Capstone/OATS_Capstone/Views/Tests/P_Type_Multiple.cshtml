@@ -1,121 +1,111 @@
-﻿<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact">
-                    <div class="nt-qnum "></div>
-                    <a class="nt-qanchor"></a>
-                    <!-- NOT isImg START -->
+﻿@model OATS_Capstone.Models.Question
+
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="multiple">
+    <input type="hidden" class="question-id" value="@Model.QuestionID" />
+    <div class="nt-qnum ">@Model.LabelOrder</div>
+    <a class="nt-qanchor"></a>
+    <!-- NOT isImg START -->
 
 
-                    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+        <div class="redactor_box">
+            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
+        </div>
+
+        <!-- NOT isImg END -->
+
+        <!-- isImg START -->
+        <!-- isImg END -->
+
+        <div class="nt-qhctrls">
+            <button class="nt-btn-circle bt-duplicate"><i class="t-icon i-duplicate"></i></button>
+            <button class="nt-btn-circle bt-delete"><i class="icon-remove"></i></button>
+        </div>
+
+        <div class="nt-qanscont nt-sortable">
+            @foreach (var ans in Model.Answers)
+            {
+                <div class="nt-qans nt-qans-edit nt-qans-hover">
+                    <input type="hidden" class="answer-id" value="@ans.AnswerID" />
+                    <div class="nt-qanselem">
+                        @if (ans.IsRight)
+                        { 
+                            <input type="checkbox" checked="checked" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" />
+                        }
+                    </div>
+                    <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                         <div class="redactor_box">
-                         <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true"></div>
-                    </div>
-
-                    <!-- NOT isImg END -->
-
-                    <!-- isImg START -->
-                    <!-- isImg END -->
-
-                    <div class="nt-qhctrls">
-                        <button class="nt-btn-circle bt-duplicate"><i class="t-icon i-duplicate"></i></button>
-                        <button class="nt-btn-circle bt-delete"><i class="icon-remove"></i></button>
-                    </div>
-
-                    <div class="nt-qanscont nt-sortable">
-                        <div class="nt-qans nt-qans-edit nt-qans-hover">
-                            <div class="nt-qanselem">
-                                <input type="checkbox"/>
-                            </div>
-                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
-                                <div class="redactor_box">
-                                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true"></div>
-                                </div>
-                            </div>
-                            <div class="nt-qansscore">
-                                <span class="nt-qscorelabel">On:</span>
-                                <input type="text" class="nt-on-score nt-chk-score" placeholder="Pts" value="0"/>
-                                <span class="nt-qscorelabel">Off:</span>
-                                <input type="text" class="nt-off-score nt-chk-score" placeholder="Pts" value="0"/>
-                                <button class="nt-btn-sqr nt-not_scored">N/A</button>
-                                <!-- NOTE: bonus button disabled -->
-                                <button style="display: none" class="nt-btn-sqr nt-bonus"><i class="t-icon gift"></i></button>
-                            </div>
-                            <div class="nt-qansctrls">
-                                <button class="nt-btn-circle bt-delete" style="display: none;">
-                                    <i class="icon-remove"></i>
-                                </button>
-                            </div>
-
-                        </div>
-                        <div class="nt-qans nt-qans-edit nt-qans-hover">
-                            <div class="nt-qanselem">
-                                <input type="checkbox"/>
-                            </div>
-                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
-                                <div class="redactor_box">
-                                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true"></div>
-                                </div>
-                            </div>
-                            <div class="nt-qansscore">
-                                <span class="nt-qscorelabel">On:</span>
-                                <input type="text" class="nt-on-score nt-chk-score" placeholder="Pts" value="0"/>
-                                <span class="nt-qscorelabel">Off:</span>
-                                <input type="text" class="nt-off-score nt-chk-score" placeholder="Pts" value="0"/>
-                                <button class="nt-btn-sqr nt-not_scored">N/A</button>
-                                <!-- NOTE: bonus button disabled -->
-                                <button style="display: none" class="nt-btn-sqr nt-bonus"><i class="t-icon gift"></i></button>
-                            </div>
-                            <div class="nt-qansctrls">
-                                <button class="nt-btn-circle bt-delete" style="display: none;">
-                                    <i class="icon-remove"></i>
-                                </button>
-                            </div>
-
+                            <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@ans.AnswerContent</div>
                         </div>
                     </div>
-
-
-                    <div class="nt-qfoot">
-
-                        <div class="nt-qctrls" style="display: none;">
-
-                            <button class="nt-btn-text nt-qansadd" style="display: none;">
-                                Add New Answer
-                            </button>
-
-
-                            <select class="nt-qtype-sel-predef">
-
-                                <option value="radio">Radio choice</option>
-                                <option value="checkbox" selected="">Checkbox</option>
-                                <option value="essay">Essay</option>
-                                <option value="shortanswer">Short answer</option>
-                                <option value="text">Text</option>
-                                <option value="img">Image</option>
-
-                            </select>
-                            <button class="nt-btn-sqr nt-reqbtn"><i class="t-icon asterisk"></i></button>
-
-                            <button class="nt-btn-text nt-scrbtn">
-                                Points
-                            </button>
-                        </div>
-                        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
-                            <div class="hoverscroll horizontal" style="width: 100%; height: 24px;">
-                                <div class="listcontainer" style="width: 100%; height: 24px;">
-                                    <div class="nt-tags list" style="width: 104px;">
-                                        <div class="nt-tag-adder item">
-                                            <input type="text" class="input-small ac_input" placeholder="Add Tag..." autocomplete="off"/>
-                                        </div>
-                                    </div>
-                                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
-                                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle" style="display: none;">
-                            <i class="t-icon i-setting"></i>
+                    <div class="nt-qansscore">
+                        <span class="nt-qscorelabel">On:</span>
+                        <input type="text" class="nt-on-score nt-chk-score" placeholder="Pts" value="0" />
+                        <span class="nt-qscorelabel">Off:</span>
+                        <input type="text" class="nt-off-score nt-chk-score" placeholder="Pts" value="0" />
+                        <button class="nt-btn-sqr nt-not_scored">N/A</button>
+                        <!-- NOTE: bonus button disabled -->
+                        <button style="display: none" class="nt-btn-sqr nt-bonus"><i class="t-icon gift"></i></button>
+                    </div>
+                    <div class="nt-qansctrls">
+                        <button class="nt-btn-circle bt-delete" style="display: none;">
+                            <i class="icon-remove"></i>
                         </button>
                     </div>
 
                 </div>
+            }
+        </div>
+
+
+        <div class="nt-qfoot">
+
+            <div class="nt-qctrls" style="display: none;">
+
+                <button class="nt-btn-text nt-qansadd" style="display: none;">
+                    Add New Answer
+                </button>
+
+
+                <select class="nt-qtype-sel-predef">
+
+                    <option value="radio">Radio choice</option>
+                    <option value="checkbox" selected="">Checkbox</option>
+                    <option value="essay">Essay</option>
+                    <option value="shortanswer">Short answer</option>
+                    <option value="text">Text</option>
+                    <option value="img">Image</option>
+
+                </select>
+                <button class="nt-btn-sqr nt-reqbtn"><i class="t-icon asterisk"></i></button>
+
+                <button class="nt-btn-text nt-scrbtn">
+                    Points
+                </button>
+            </div>
+            <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+                <div class="hoverscroll horizontal" style="width: 100%; height: 24px;">
+                    <div class="listcontainer" style="width: 100%; height: 24px;">
+                        <div class="nt-tags list" style="width: 104px;">
+                            <div class="nt-tag-adder item">
+                                <input type="text" class="input-small ac_input" placeholder="Add Tag..." autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                        <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="nt-btn-sqr nt-qctrls-qtags-toggle" style="display: none;">
+                <i class="t-icon i-setting"></i>
+            </button>
+        </div>
+
+    </div>
+    </div>

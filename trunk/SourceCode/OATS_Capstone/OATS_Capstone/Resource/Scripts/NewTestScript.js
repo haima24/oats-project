@@ -39,20 +39,57 @@ function saveChanges() {
     savestatus.show();
     $(".nt-desc", savestatus).html("Saving...");
     var tab = $("#checklist[content-tab=true]");
-    if (tab.length > 0) {
-        var content = tab.html();
-        setLocalStorage(listkey, content);
-    }
+    //save on content-tab
+    var test = new Object();
+    test.TestID = parseInt($("#test-id").val());
+    test.TestTitle = $("#test-title").html();
+     var quesJqueryArray= $(".nt-qitem").map(function (iItem, item) {
+        var question = new Object();
+        if ($(".question-id", item)) { question.QuestionID = parseInt($(".question-id", item).val()); }
+        question.QuestionTitle = $(".nt-qtext.nt-qedit", item).html();
+        //question.SerialOrder = iItem;
+        //question.LabelOrder = $(".nt-qnum", item).html();
+        //question.QuestionType = {Type:$(item).attr("question-type")};
+        //question.Answers = $(".nt-qans", item).map(function (iAns, ans) {
+        //    var answer = new Object();
+        //    if ($(".answer-id", ans)) { answer.AnswerID = parseInt($(".answer-id", ans).val()); }
+        //    answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
+        //    answer.AnswerContent = $(".nt-qansdesc", ans).html();
+        //    return answer;
+        //});
+        return question;
+     });
+    test.Questions = convertJqueryArrayToJSArray(quesJqueryArray);
+    var data = {
+        test: test
+    };
+    $.ajax({
+        type: "POST",
+        url: "/Tests/SaveNewTest",
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async:false,
+        success: function (res) {
+        }
+
+    });
+    //save on setting-tab
+
+    //save on invitation-tab
+
+    //save on score-tab
+
     $(".nt-desc", savestatus).html("All changes saved.");
 }
 function loadChanges() {
-    var tab = $("#checklist[content-tab=true]");
-    if (tab.length > 0 && listkey) {
-        var content = getLocalStorage(listkey);
-        $("#checklist[content-tab=true]").html(content);
-        initDragAndDrop();
-        initEditable();
-    }
+    //var tab = $("#checklist[content-tab=true]");
+    //if (tab.length > 0 && listkey) {
+    //    var content = getLocalStorage(listkey);
+    //    $("#checklist[content-tab=true]").html(content);
+    //    initDragAndDrop();
+    //    initEditable();
+    //}
 }
 
 function sortByNumberOrLetters() {
@@ -82,7 +119,6 @@ function initDragAndDrop() {
             sortByNumberOrLetters();
             initImageUploadFacility();
             initEditable();
-            saveChanges();
         },
         update: function (ev, ui) {
             var cur = ui.item;
@@ -97,7 +133,6 @@ function initDragAndDrop() {
                 sortByNumberOrLetters();
                 initImageUploadFacility();
                 initEditable();
-                saveChanges();
                 //obj.remove();
             }
         }
@@ -148,15 +183,11 @@ function initImageUploadFacility() {
 }
 
 $(function () {
-    emptylist = $(".nt-empty-list-ph");
-
-
 
     initCalendar();
+    initDragAndDrop();
+    initEditable();
     
-    loadChanges();
-    
-
 
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
         this.focus();
@@ -219,7 +250,6 @@ $(function () {
             sortByNumberOrLetters();
             initEditable();
             initImageUploadFacility();
-            saveChanges();
         }
     });
     //separator
@@ -231,7 +261,6 @@ $(function () {
             etab.append(content.prop("outerHTML"))
             initImageUploadFacility();
             initEditable();
-            saveChanges();
         }
     });
     //separator
@@ -239,15 +268,15 @@ $(function () {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         content.remove()
         if ($("#checklist").children().length == 0) {
-            $("#checklist").html(emptylist);
+            $("#checklist").html(questions.empty);
         }
         sortByNumberOrLetters();
-        saveChanges();
     });
     //separator
     $(".nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         var anstemplate = $(".nt-qans.nt-qans-edit", parent).clone().get(0);
+        $("input[type=radio],[type=checkbox]",anstemplate).removeAttr("checked");
         $(".nt-qansdesc.nt-qedit", anstemplate).html("");
         $(".nt-qanscont", parent).append(anstemplate);
         //when add an answer, show delete button on answer line
@@ -258,7 +287,6 @@ $(function () {
             $(".nt-qansctrls .bt-delete", parent).hide();
         }
         initEditable();
-        saveChanges();
     });
     //separator
     $(".nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
@@ -270,7 +298,6 @@ $(function () {
         } else {
             $(".nt-qansctrls .bt-delete", parent).hide();
         }
-        saveChanges();
     });
     //separator
     $(".nt-qtype-sel-predef,.nt-qtype-sel").live("change", function (ev) {
@@ -363,6 +390,9 @@ $(function () {
         sortByNumberOrLetters();
         initImageUploadFacility();
         initEditable();
-        saveChanges();
     });
+});
+
+$(window).unload(function () {
+    saveChanges();
 });

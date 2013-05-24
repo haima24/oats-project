@@ -348,6 +348,13 @@
     <Content Include="Views\Tests\P_CalendarTab.cshtml" />
     <Content Include="Views\Tests\P_TestListTab.cshtml" />
     <Content Include="Views\Tests\P_RenderPreviewImage.cshtml" />
+    <Content Include="Views\Tests\P_Type_Essay_Template.cshtml" />
+    <Content Include="Views\Tests\P_Type_Image_Template.cshtml" />
+    <Content Include="Views\Tests\P_Type_Multiple_Template.cshtml" />
+    <Content Include="Views\Tests\P_Type_Radio_Template.cshtml" />
+    <Content Include="Views\Tests\P_Type_ShortAnswer_Template.cshtml" />
+    <Content Include="Views\Tests\P_Type_Text_Template.cshtml" />
+    <Content Include="Views\Tests\P_Type_Empty_Template.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

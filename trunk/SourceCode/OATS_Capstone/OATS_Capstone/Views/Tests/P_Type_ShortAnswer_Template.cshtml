@@ -1,13 +1,12 @@
-﻿@model OATS_Capstone.Models.Question
-<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="essay">
-                    <div class="nt-qnum ">@Model.LabelOrder</div>
+﻿<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="shortanswer">
+                    <div class="nt-qnum "></div>
                     <a class="nt-qanchor"></a>
                     <!-- NOT isImg START -->
 
 
                     <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
                         <div class="redactor_box">
-                            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
+                            <div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" contenteditable="true"></div>
                         </div>
                     </div>
 
@@ -18,8 +17,8 @@
 
                     <div class="nt-qhctrls">
 
-                        <button class="nt-btn-circle bt-duplicate nt-guide"><i class="t-icon i-duplicate"></i></button>
-                        <button class="nt-btn-circle bt-delete nt-guide"><i class="icon-remove"></i></button>
+                        <button class="nt-btn-circle bt-duplicate"><i class="t-icon i-duplicate"></i></button>
+                        <button class="nt-btn-circle bt-delete"><i class="icon-remove"></i></button>
 
 
                     </div>
@@ -29,10 +28,10 @@
                     <div class="nt-qmiddle">
 
 
-                        <div style="overflow: hidden; position: relative; width: 710px; height: 102px; top: auto; left: auto; margin: 0px 0px 16px; padding-bottom: 16px;">
-                            <textarea class="nt-qrespinput" style="width: 670px; overflow-x: hidden; overflow-y: auto; height: 92px; margin: 0px; resize: none; position: static; zoom: 1; display: block;">@Model.TextDescription</textarea>
-                        </div>
 
+                        <div style="overflow: hidden; position: relative; width: 710px; height: 28px; top: auto; left: auto; margin: 0px 0px 16px; padding-right: 7px;">
+                            <input type="text"  class="nt-qrespinput" value="" maxlength="140" style="width: 670px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"/>
+                        </div>
 
                     </div>
 
@@ -50,8 +49,8 @@
 
                                 <option value="radio">Radio choice</option>
                                 <option value="multiple">Multiple Choice</option>
-                                <option value="essay" selected="">Essay</option>
-                                <option value="shortanswer">Short answer</option>
+                                <option value="essay">Essay</option>
+                                <option value="shortanswer" selected="">Short answer</option>
                                 <option value="text">Text</option>
                                 <option value="img">Image</option>
 
@@ -62,7 +61,7 @@
                                 Points
                             </button>
                         </div>
-                        <div class="nt-qtagcont" style="border-top-width: 0px; display: none;">
+                        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
                             <div class="hoverscroll horizontal" style="width: 100%; height: 24px;">
                                 <div class="listcontainer" style="width: 100%; height: 24px;">
                                     <div class="nt-tags list" style="width: 104px;">
@@ -77,8 +76,8 @@
                         </div>
 
 
-                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle">
-                            <i class="t-icon i-setting"></i>
+                        <button class="nt-btn-sqr nt-qctrls-qtags-toggle" style="display: none;">
+                            <i class="t-icon i-tag"></i>
                         </button>
                     </div>
 
