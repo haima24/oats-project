@@ -619,7 +619,8 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
       }
       if (this.options.previewsContainer) {
         if (typeof this.options.previewsContainer === "string") {
-          this.previewsContainer = document.querySelector(this.options.previewsContainer);
+            //this.previewsContainer = document.querySelector(this.options.previewsContainer);
+            this.previewsContainer=this.element.parentNode.querySelector(this.options.previewsContainer);
         } else if (this.options.previewsContainer.nodeType != null) {
           this.previewsContainer = this.options.previewsContainer;
         }
