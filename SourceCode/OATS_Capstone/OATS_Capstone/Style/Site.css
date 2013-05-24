@@ -685,8 +685,13 @@ i, cite, em, var, address, dfn {
     #checklist .nt-qitem .nt-qimg-cont .nt-qimg-close {
         display: none;
         position: absolute;
-        top: 10px;
+        top: -10px;
     }
+
+#checklist .nt-qitem .preview-container:hover .nt-qimg-cont .nt-qimg-close {
+    display: inline-block;
+}
+
 
 .nt-ph {
     font-style: italic;
@@ -815,8 +820,9 @@ i, cite, em, var, address, dfn {
     top: 8px;
     right: 10px;
 }
+
 #checklist .nt-qitem .nt-qans:hover .nt-qansctrls {
-display: block;
+    display: block;
 }
 
 #checklist .nt-qitem .nt-qans .nt-qans-label {
@@ -857,6 +863,12 @@ display: block;
     #checklist .nt-qitem .nt-qfoot .nt-qoepts {
         float: left;
     }
+
+        #checklist .nt-qitem .nt-qfoot .nt-qoepts input {
+            width: 70px;
+            margin: 0 5px 0 10px;
+            padding: 3px;
+        }
 
         #checklist .nt-qitem .nt-qfoot .nt-qoepts span {
             vertical-align: middle;
@@ -2439,8 +2451,9 @@ i.nt-icon {
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
-    padding-right:5px;
+    padding-right: 5px;
 }
+
 .search-autocomplete-hover-item {
     text-decoration: none;
     display: block;
@@ -2449,17 +2462,24 @@ i.nt-icon {
     min-height: 0;
     font-weight: normal;
 }
+
     .search-autocomplete-hover-item a {
-        color:black;
+        color: black;
     }
-.search-autocomplete-hover-item:hover {
-    width:100%;
-    background-color: gainsboro;
-    border: 1px solid #aaaaaa;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
-    text-decoration: none;
+
+    .search-autocomplete-hover-item:hover {
+        width: 100%;
+        background-color: gainsboro;
+        border: 1px solid #aaaaaa;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+.preview-container {
+    padding-bottom: 20px;
+    display: block;
 }
