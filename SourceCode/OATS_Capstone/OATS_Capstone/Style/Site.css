@@ -1572,8 +1572,6 @@ i.nt-icon {
     border-bottom: 1px solid #ECECEC;
 }
 
-<<<<<<< .mine
-=======
 .nt-asms-list .nt-list-row:first-child {
     border-top: 0;
 }
@@ -1626,7 +1624,6 @@ i.nt-icon {
     width: 7%;
 }
 
->>>>>>> .r53
 .nt-user-details .nt-asms-unrelated {
     z-index: 1;
     position: absolute;
@@ -2654,7 +2651,6 @@ user agent stylesheeti, cite, em, var, address, dfn {
 
     .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
         padding: 6px 1px;
-        width: 10%;
         text-align: right;
     }
 

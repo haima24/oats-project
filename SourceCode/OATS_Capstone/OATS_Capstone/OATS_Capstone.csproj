@@ -262,6 +262,7 @@
     <Content Include="Global.asax" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
     <Content Include="Resource\Scripts\ImageUploadScript.js" />
+    <Content Include="Resource\Scripts\NewTest_IndexScript.js" />
     <Content Include="Resource\Scripts\SearchTeachers.js" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
     <Content Include="Resource\Scripts\NewTestScript.js" />

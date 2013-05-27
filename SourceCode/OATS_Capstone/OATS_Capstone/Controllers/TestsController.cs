@@ -40,8 +40,72 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult SaveNewTest(Test test)
         {
+            var success = false;
+            var db = SingletonDb.Instance();
 
-            return Json("Done");
+            try
+            {
+                var realTest = db.Tests.FirstOrDefault(i => i.TestID == test.TestID);
+                if (realTest != null)
+                {
+                    realTest.TestTitle = test.TestTitle;
+                    var questions = test.Questions.ToList();
+                    var realQuestions = realTest.Questions;
+                    questions.ForEach(delegate(Question question)
+                    {
+                        if (question.QuestionID != 0)
+                        {
+                            var ques = realQuestions.FirstOrDefault(i => i.QuestionID == question.QuestionID);
+                            ques.QuestionTitle = question.QuestionTitle;
+                            var answers = question.Answers.ToList();
+                            var realAnswers = ques.Answers;
+                            answers.ForEach(delegate(Answer answer)
+                            {
+                                if (answer.AnswerID != 0)
+                                {
+                                    var ans = realAnswers.FirstOrDefault(k => k.AnswerID == answer.AnswerID);
+                                    ans.AnswerContent = answer.AnswerContent;
+                                    ans.IsRight = answer.IsRight;
+                                }
+                                else
+                                {
+                                    var ans = new Answer();
+                                    ans.AnswerContent = answer.AnswerContent;
+                                    ans.IsRight = answer.IsRight;
+                                    realAnswers.Add(ans);
+                                }
+                            });
+                        }
+                        else
+                        {
+                            var ques = new Question();
+                            ques.QuestionTitle = question.QuestionTitle;
+                            var answers = question.Answers.ToList();
+                            answers.ForEach(delegate(Answer answer)
+                            {
+                                var ans = new Answer();
+                                ans.AnswerContent = answer.AnswerContent;
+                                ans.IsRight = answer.IsRight;
+                                ques.Answers.Add(ans);
+                            });
+                            realQuestions.Add(ques);
+                        }
+                    });
+
+
+
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            
+            return Json(new { success });
         }
         public JsonResult TestsSearch()
         {
@@ -74,10 +138,10 @@ namespace OATS_Capstone.Controllers
             test.StartDateTime = DateTime.Now;
             db.Tests.Add(test);
             db.SaveChanges();
-            var generatedId=test.TestID;
-            return RedirectToAction("NewTest", new {id=generatedId});
+            var generatedId = test.TestID;
+            return RedirectToAction("NewTest", new { id = generatedId });
         }
-        public ActionResult NewTest(int id) 
+        public ActionResult NewTest(int id)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
@@ -93,8 +157,8 @@ namespace OATS_Capstone.Controllers
                 shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer_Template"),
                 text = this.RenderPartialViewToString("P_Type_Text_Template"),
                 image = this.RenderPartialViewToString("P_Type_Image_Template"),
-                imagepreview=this.RenderPartialViewToString("P_RenderPreviewImage"),
-                empty=this.RenderPartialViewToString("P_Type_Empty_Template")
+                imagepreview = this.RenderPartialViewToString("P_RenderPreviewImage"),
+                empty = this.RenderPartialViewToString("P_Type_Empty_Template")
             };
             return Json(obj);
         }
