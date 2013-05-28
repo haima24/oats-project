@@ -24,27 +24,16 @@ function sortByNumberOrLetters() {
         $(this).html(String.fromCharCode(65 + i) + ". ");
     });
 }
-function resortInDb() {
-    var questions = $("[question-id]").map(function (index, item) {
-        var question = new Object();
-        question.QuestionID = parseInt($(item).attr("question-id"));
-        question.SerialOrder = index;
-        question.LabelOrder = $(".nt-qnum", item).html();
-        return question;
-    }).convertJqueryArrayToJSArray();
-    //$.post("/Tests/ResortQuestions", { questions: questions }, function (res) {
-    //    //addtional doing here
-    //});
-    $.ajax({
-        type: "POST",
-        url: "/Tests/ResortQuestions",
-        data: JSON.stringify({ questions: questions }),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (res) {
+function showOrHideDeleteLineAnswer() {
+    $(".nt-qitem").each(function (i, o) {
+        if ($(".nt-qans.nt-qans-edit", o).length > 2) {
+            $(".nt-qansctrls .bt-delete", o).show();
+        } else {
+            $(".nt-qansctrls .bt-delete", o).hide();
         }
-
     });
+
+
 }
 function initDragAndDrop() {
     $(".t-question-type").draggable({
@@ -104,16 +93,28 @@ function initDragAndDrop() {
 }
 function initEditable() {
 
-    $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").contentEditable({
+    $(".nt-qans .nt-qansdesc").contentEditable({
         "placeholder": "<i>Enter Answer</i>",
         "onBlur": function (element) {
-
+            updateAnswer($(element).closest(".nt-qans"));
         },
     });
-    $(".nt-qtext.nt-qedit").contentEditable({
+    $("div.nt-qitem[question-type=Text] .nt-qtext").contentEditable({
+        "placeholder": "<i>Enter Text</i>",
+        "onBlur": function (element) {
+            var item = $(element).closest(".nt-qitem");
+            var quesid = item.attr("question-id");
+            var content = element.content == "<i>Enter Text</i>" ? "" : element.content;
+            updateQuestionTitle(quesid, content);
+        },
+    });
+    $("div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit").contentEditable({
         "placeholder": "<i>Enter Question</i>",
         "onBlur": function (element) {
-
+            var item = $(element).closest(".nt-qitem");
+            var quesid = item.attr("question-id");
+            var content = element.content == "<i>Enter Question</i>" ? "" : element.content;
+            updateQuestionTitle(quesid, content);
         },
     });
 }
@@ -121,8 +122,13 @@ function initImageUploadFacility() {
     if (questions && questions.imagepreview) {
         $(".nt-qimg-ph.nt-clickable").each(function () {
             if (!this.dropzone) {
+                var questionidString = $(this).closest(".nt-qitem").attr("question-id");
+                var questionid = parseInt(questionidString);
                 $(this).dropzone({
                     url: "/Tests/UploadFiles",
+                    params: {
+                        questionid: questionid
+                    },
                     paramName: "files",
                     previewTemplate: questions.imagepreview,
                     previewsContainer: ".preview-container",
@@ -144,12 +150,43 @@ function initImageUploadFacility() {
     }
 }
 
+
 //test facility
+function updateAnswer(lineElement) {
+    var answerid = parseInt($(lineElement).attr("answer-id"));
+    var answerContent = $(".nt-qansdesc", lineElement).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", lineElement).html();
+    var isright = $(".nt-qanselem input[type=radio],[type=checkbox]", lineElement).attr("checked") ? true : false;
+    var type = lineElement.closest(".nt-qitem").attr("question-type");
+    $.post("/Tests/UpdateAnswer", { answerid: answerid, answerContent: answerContent, isright: isright, type: type }, function (res) {
+    });
+}
+function resortInDb() {
+    var questions = $("[question-id]").map(function (index, item) {
+        var question = new Object();
+        question.QuestionID = parseInt($(item).attr("question-id"));
+        question.SerialOrder = index;
+        question.LabelOrder = $(".nt-qnum", item).html();
+        return question;
+    }).convertJqueryArrayToJSArray();
+    //$.post("/Tests/ResortQuestions", { questions: questions }, function (res) {
+    //    //addtional doing here
+    //});
+    $.ajax({
+        type: "POST",
+        url: "/Tests/ResortQuestions",
+        data: JSON.stringify({ questions: questions }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+        }
+
+    });
+}
 function addQuestion(elementid, testid, type, questiontitle, answers, serialorder, labelorder, onaddquestion) {
     var data = {
         testid: parseInt(testid),
         type: type,
-        questiontitle: type=="Image"?"":questiontitle,
+        questiontitle: type == "Image" ? "" : questiontitle,
         serialorder: serialorder,
         labelorder: labelorder,
         answers: answers
@@ -172,6 +209,24 @@ function addQuestion(elementid, testid, type, questiontitle, answers, serialorde
         onaddquestion();
     }
 }
+function updateQuestionTitle(questionidString, newtext) {
+    var questionid = parseInt(questionidString);
+    $.post("/Tests/UpdateQuestionTitle", { questionid: questionid, newtext: newtext }, function (res) {
+    });
+}
+function deleteQuestion(questionidString) {
+    var questionid = parseInt(questionidString);
+    $.post("/Tests/DeleteQuestion", { questionid: questionid }, function (res) {
+        if (res.success) {
+            resortInDb();
+        }
+    });
+}
+function deleteAnswer(answeridString) {
+    var answerid = parseInt(answeridString);
+    $.post("/Tests/DeleteAnswer", { answerid: answerid }, function (res) {
+    });
+}
 function addAnswer(element, qid) {
     var questionid = parseInt(qid);
     var data = { questionid: questionid };
@@ -190,7 +245,11 @@ function addAnswer(element, qid) {
 
     });
 }
-
+function saveTextDescription(questionidString, text) {
+    var questionid = parseInt(questionidString);
+    $.post("/Tests/UpdateQuestionTextDescription", { questionid: questionid, text: text }, function (res) {
+    });
+}
 $(function () {
 
     initDragAndDrop();
@@ -221,7 +280,9 @@ $(function () {
         var li = $(link).closest("li");
         nav.find("li").removeClass("active");
         li.addClass("active");
-        $.post(action, function (res) {
+        var testidString = $("#test-id").val();
+        var testid = parseInt(testidString);
+        $.post(action, { testid: testid }, function (res) {
             var i = 0;
             var tabcontent = $("#eventTab");
             if (tabcontent && res.tab) {
@@ -259,7 +320,7 @@ $(function () {
 
             var eleid = obj.attr("id")
             var testid = $("#test-id").val();
-            var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" ? "" : $(".nt-qtext", obj).html();
+            var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" || "<i>Enter Text</i>" ? "" : $(".nt-qtext", obj).html();
             var serialorder = obj.index();
             var labelorder = $(".nt-qnum", obj).html();
             var answers = $(".nt-qans", obj).map(function (iAns, ans) {
@@ -268,7 +329,7 @@ $(function () {
                 return answer;
             }).convertJqueryArrayToJSArray();
             addQuestion(eleid, testid, type, questiontitle, answers, serialorder, labelorder);
-
+            sortByNumberOrLetters();
 
             initEditable();
             initImageUploadFacility();
@@ -279,8 +340,31 @@ $(function () {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         var etab = $("#checklist");
         if (content && etab) {
-            content.uniqueId();
-            etab.append(content.prop("outerHTML"))
+            var duplicated = $(content).clone();
+            duplicated.removeAttr("id");
+            duplicated.removeAttr("question-id");
+            $(".nt-qans", duplicated).removeAttr("answer-id");
+            $(".nt-qanselem input[type=radio][name]", duplicated).removeAttrs("name");
+            duplicated.uniqueId();
+            duplicated.insertAfter(content);
+            sortByNumberOrLetters();
+
+            var eleid = duplicated.attr("id");
+            var testid = $("#test-id").val();
+            var type = duplicated.attr("question-type");
+            var serialorder = duplicated.index();
+            var labelorder = $(".nt-qnum", duplicated).html();
+            var questiontitle = $(".nt-qtext", duplicated).html();
+            var answers = $(".nt-qans", duplicated).map(function (iAns, ans) {
+                var answer = new Object();
+                answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
+                answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
+                return answer;
+            }).convertJqueryArrayToJSArray();
+            addQuestion(eleid, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+                resortInDb();
+            });
+
             initImageUploadFacility();
             initEditable();
 
@@ -294,32 +378,28 @@ $(function () {
             $("#checklist").html(questions.empty);
         }
         sortByNumberOrLetters();
+        deleteQuestion($(content).attr("question-id"));
 
     });
     //separator
     $(".nt-btn-text.nt-qansadd").live("click", function (ev) {
-        var parent = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
+        var parent = $(ev.target).closest(".nt-qitem");
 
         addAnswer(parent, parent.attr("question-id"));
 
         //when add an answer, show delete button on answer line
-        if ($(".nt-qans.nt-qans-edit", parent).length > 2) {
-            $(".nt-qansctrls .bt-delete", parent).show();
-        } else {
-            $(".nt-qansctrls .bt-delete", parent).hide();
-        }
+        sortByNumberOrLetters();
+        showOrHideDeleteLineAnswer();
         initEditable();
     });
     //separator
     $(".nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
-        var parent = $(this).closest(".nt-qitem.nt-qitem-edit");
+        var parent = $(this).closest(".nt-qitem");
         var ansline = $(this).closest(".nt-qans.nt-qans-edit");
+        var ansid = ansline.attr("answer-id");
         ansline.remove();
-        if ($(".nt-qans.nt-qans-edit", parent).length > 2) {
-            $(".nt-qansctrls .bt-delete", parent).show();
-        } else {
-            $(".nt-qansctrls .bt-delete", parent).hide();
-        }
+        showOrHideDeleteLineAnswer();
+        deleteAnswer(ansid);
 
     });
     //separator
@@ -416,6 +496,14 @@ $(function () {
     });
     //separator
     $(".nt-qanselem input[type=checkbox],[type=radio]").live("change", function (ev) {
-
+        updateAnswer($(this).closest(".nt-qans"));
     });
+    //separator
+    $(".nt-qitem textarea.nt-qrespinput,.nt-qitem input.nt-qrespinput").live("change", function (ev) {
+        var pItem = $(this).closest(".nt-qitem");
+        var quesidString = pItem.attr("question-id");
+        saveTextDescription(quesidString, $(this).val());
+    });
+    showOrHideDeleteLineAnswer();
+    sortByNumberOrLetters();
 });
