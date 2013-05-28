@@ -268,7 +268,11 @@ $(function () {
     $("#test-title").contentEditable({
         "placeholder": "<i>Enter Test Title</i>",
         "onBlur": function (element) {
-
+            var testidString = $("#test-id").val();
+            var testid = parseInt(testidString);
+            var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
+            $.post("/Tests/UpdateTestTitle", { testid: testid, text: text }, function (res) {
+            });
         },
     });
     //separator

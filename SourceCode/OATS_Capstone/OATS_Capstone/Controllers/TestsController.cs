@@ -379,5 +379,30 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success });
         }
+        public JsonResult UpdateTestTitle(int testid, string text)
+        {
+            var success = false;
+
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    test.TestTitle = text;
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
+            return Json(new { success });
+        }
     }
 }
