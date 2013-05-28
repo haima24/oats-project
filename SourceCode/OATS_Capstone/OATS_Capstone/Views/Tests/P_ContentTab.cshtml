@@ -234,29 +234,7 @@
             var orderedQuestions = Model.Questions.OrderBy(i => i.SerialOrder);
             foreach (var question in orderedQuestions)
             {
-                switch (question.QuestionType.Type)
-                {
-                    case "Radio":
-        @Html.Partial("P_Type_Radio", question)
-                        break;
-                    case "Multiple":
-        @Html.Partial("P_Type_Multiple", question)
-                        break;
-                    case "Essay":
-        @Html.Partial("P_Type_Essay", question)
-                        break;
-                    case "ShortAnswer":
-        @Html.Partial("P_Type_ShortAnswer", question)
-                        break;
-                    case "Text":
-        @Html.Partial("P_Type_Text", question)
-                        break;
-                    case "Image":
-        @Html.Partial("P_Type_Image", question)
-                        break;
-                    default:
-                        break;
-                }
+                     @Html.Partial("P_Question_Instance",question)
             }
         }
     }

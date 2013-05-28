@@ -1218,7 +1218,7 @@ a {
 
 
 .nt-scores-cont {
-    width: 725px;
+    width: 720px;
     position: relative;
     overflow: hidden;
     background-color: white;
@@ -1231,7 +1231,7 @@ a {
 }
 
     .nt-scores-cont .nt-scores-table-cont {
-        width: 725px;
+        width: 720px;
         position: relative;
         overflow: hidden;
     }

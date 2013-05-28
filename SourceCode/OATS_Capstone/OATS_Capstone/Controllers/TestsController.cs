@@ -42,7 +42,8 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var db = SingletonDb.Instance();
-
+            Question firstAddedQuestion = null;
+            var questionHtml = String.Empty;
             try
             {
                 var realTest = db.Tests.FirstOrDefault(i => i.TestID == test.TestID);
@@ -53,10 +54,14 @@ namespace OATS_Capstone.Controllers
                     var realQuestions = realTest.Questions;
                     questions.ForEach(delegate(Question question)
                     {
+                        var quesType = db.QuestionTypes.FirstOrDefault(i => i.Type == question.QuestionType.Type);
                         if (question.QuestionID != 0)
                         {
                             var ques = realQuestions.FirstOrDefault(i => i.QuestionID == question.QuestionID);
                             ques.QuestionTitle = question.QuestionTitle;
+                            ques.QuestionType = quesType;
+                            ques.LabelOrder = question.LabelOrder;
+                            ques.SerialOrder = question.SerialOrder;
                             var answers = question.Answers.ToList();
                             var realAnswers = ques.Answers;
                             answers.ForEach(delegate(Answer answer)
@@ -80,6 +85,9 @@ namespace OATS_Capstone.Controllers
                         {
                             var ques = new Question();
                             ques.QuestionTitle = question.QuestionTitle;
+                            ques.QuestionType = quesType;
+                            ques.LabelOrder = question.LabelOrder;
+                            ques.SerialOrder = question.SerialOrder;
                             var answers = question.Answers.ToList();
                             answers.ForEach(delegate(Answer answer)
                             {
@@ -88,6 +96,11 @@ namespace OATS_Capstone.Controllers
                                 ans.IsRight = answer.IsRight;
                                 ques.Answers.Add(ans);
                             });
+
+                            if (firstAddedQuestion == null)
+                            {
+                                firstAddedQuestion = ques;
+                            }
                             realQuestions.Add(ques);
                         }
                     });
@@ -97,15 +110,19 @@ namespace OATS_Capstone.Controllers
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
+                        if (firstAddedQuestion != null)
+                        {
+                            questionHtml = this.RenderPartialViewToString("P_Question_Instance", firstAddedQuestion);
+                        }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                
+                success = false;
             }
             
-            return Json(new { success });
+            return Json(new { success,questionHtml });
         }
         public JsonResult TestsSearch()
         {

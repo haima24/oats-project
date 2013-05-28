@@ -5,7 +5,7 @@ var events;
 var question_holder = new Array();
 
 
-function saveChanges() {
+function saveChanges(qid) {
     var savestatus = $("#savestatus");
     savestatus.show();
     $(".nt-desc", savestatus).html("Saving...");
@@ -17,7 +17,7 @@ function saveChanges() {
     test.Questions= $(".nt-qitem").map(function (iItem, item) {
         var question = new Object();
         if ($(".question-id", item)) { question.QuestionID = parseInt($(".question-id", item).val()); }
-        question.QuestionTitle = $(".nt-qtext.nt-qedit", item).html();
+        question.QuestionTitle = $(".nt-qtext.nt-qedit", item).html() == "<i>Enter Question</i>" ? "" : $(".nt-qtext.nt-qedit", item).html();
         question.SerialOrder = iItem;
         question.LabelOrder = $(".nt-qnum", item).html();
         question.QuestionType = {Type:$(item).attr("question-type")};
@@ -25,7 +25,7 @@ function saveChanges() {
             var answer = new Object();
             if ($(".answer-id", ans)) { answer.AnswerID = parseInt($(".answer-id", ans).val()); }
             answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
-            answer.AnswerContent = $(".nt-qansdesc", ans).html();
+            answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", ans).html();
             return answer;
         }).convertJqueryArrayToJSArray();
         return question;
@@ -41,6 +41,10 @@ function saveChanges() {
         contentType: "application/json; charset=utf-8",
         async:false,
         success: function (res) {
+            if (qid) {
+                $("#" + qid).html($(res.questionHtml).html());
+                initEditable();
+            }
         }
 
     });
@@ -221,7 +225,7 @@ $(function () {
             sortByNumberOrLetters();
             initEditable();
             initImageUploadFacility();
-            saveChanges();
+            saveChanges(obj.attr("id"));
         }
     });
     //separator
@@ -252,6 +256,7 @@ $(function () {
         var anstemplate = $(".nt-qans.nt-qans-edit", parent).clone().get(0);
         $("input[type=radio],[type=checkbox]",anstemplate).removeAttr("checked");
         $(".nt-qansdesc.nt-qedit", anstemplate).html("");
+        $("input.answer-id", anstemplate).remove();
         $(".nt-qanscont", parent).append(anstemplate);
         //when add an answer, show delete button on answer line
 
@@ -261,7 +266,7 @@ $(function () {
             $(".nt-qansctrls .bt-delete", parent).hide();
         }
         initEditable();
-        saveChanges();
+        saveChanges(qid);
     });
     //separator
     $(".nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
@@ -366,6 +371,10 @@ $(function () {
         sortByNumberOrLetters();
         initImageUploadFacility();
         initEditable();
+        saveChanges();
+    });
+    //separator
+    $(".nt-qanselem input[type=checkbox],[type=radio]").live("change", function (ev) {
         saveChanges();
     });
 });
