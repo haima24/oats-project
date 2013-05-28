@@ -14,14 +14,30 @@ namespace OATS_Capstone.Controllers
         //
         // GET: /Tests/
         [HttpPost]
-        public ActionResult UploadFiles(IEnumerable<HttpPostedFileBase> files)
+        public ActionResult UploadFiles(IEnumerable<HttpPostedFileBase> files, int questionid)
         {
+            var message = String.Empty;
             foreach (HttpPostedFileBase file in files)
             {
                 string filePath = Path.Combine(Server.MapPath("~/Resource/Images"), file.FileName);
                 System.IO.File.WriteAllBytes(filePath, this.ReadData(file.InputStream));
+                //write path to db
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    question.ImageUrl = "~/Resource/Images/" + file.FileName;
+                    if (db.SaveChanges() > 0)
+                    {
+                        message = "All files have been successfully stored.";
+                    }
+                }
+                else
+                {
+                    message = "Problem in storing images.";
+                }
             }
-            return this.Json("All files have been successfully stored.");
+            return this.Json(message);
         }
 
         private byte[] ReadData(Stream stream)
@@ -93,9 +109,11 @@ namespace OATS_Capstone.Controllers
             };
             return Json(obj);
         }
-        public JsonResult NewTest_ContentTab()
+        public JsonResult NewTest_ContentTab(int testid)
         {
-            return Json(new { tab = this.RenderPartialViewToString("P_ContentTab") });
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+            return Json(new { tab = this.RenderPartialViewToString("P_ContentTab", test) });
         }
         public JsonResult TestCalendarObjectResult()
         {
@@ -179,10 +197,11 @@ namespace OATS_Capstone.Controllers
 
             return Json(new { success, questionHtml });
         }
-        public JsonResult AddAnswer(int questionid) {
+        public JsonResult AddAnswer(int questionid)
+        {
             var db = SingletonDb.Instance();
-            var questionHtml=String.Empty;
-            var success=false;
+            var questionHtml = String.Empty;
+            var success = false;
             var ans = new Answer();
             ans.AnswerContent = String.Empty;
             try
@@ -203,17 +222,48 @@ namespace OATS_Capstone.Controllers
 
                 success = false;
             }
-            
+
             return Json(new { success, questionHtml });
+        }
+        public JsonResult UpdateAnswer(int answerid, string answerContent, bool isright, string type)
+        {
+            var success = false;
+            var db = SingletonDb.Instance();
+            try
+            {
+                var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
+                if (ans != null)
+                {
+                    ans.AnswerContent = answerContent;
+                    if (type == "Radio")
+                    {
+                        var questionid = ans.QuestionID;
+                        var ansInQues = db.Answers.Where(k => k.QuestionID == questionid).ToList();
+                        ansInQues.ForEach(h => h.IsRight = false);
+                    }
+                    ans.IsRight = isright;
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
+            return Json(new { success });
         }
         public JsonResult ResortQuestions(List<Question> questions)
         {
             var success = false;
-            var db=SingletonDb.Instance();
-            var questionsDb=db.Questions;
+            var db = SingletonDb.Instance();
+            var questionsDb = db.Questions;
             try
             {
-                questions.ForEach(delegate(Question question) {
+                questions.ForEach(delegate(Question question)
+                {
                     var ques = questionsDb.FirstOrDefault(i => i.QuestionID == question.QuestionID);
                     ques.LabelOrder = question.LabelOrder;
                     ques.SerialOrder = question.SerialOrder;
@@ -226,9 +276,107 @@ namespace OATS_Capstone.Controllers
             catch (Exception)
             {
 
-               success = false;
+                success = false;
             }
 
+            return Json(new { success });
+        }
+        public JsonResult DeleteQuestion(int questionid)
+        {
+            var success = false;
+            var db = SingletonDb.Instance();
+            try
+            {
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    var removedAnswer = db.Answers.Where(k => k.QuestionID == questionid).ToList();
+                    removedAnswer.ForEach(m => db.Answers.Remove(m));
+                    db.Questions.Remove(question);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
+            return Json(new { success });
+        }
+        public JsonResult DeleteAnswer(int answerid)
+        {
+            var success = false;
+            var db = SingletonDb.Instance();
+            try
+            {
+                var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
+                if (ans != null)
+                {
+                    db.Answers.Remove(ans);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
+            return Json(new { success });
+        }
+        public JsonResult UpdateQuestionTitle(int questionid, string newtext)
+        {
+            var success = false;
+
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    question.QuestionTitle = newtext;
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
+            return Json(new { success });
+        }
+        public JsonResult UpdateQuestionTextDescription(int questionid, string text)
+        {
+            var success = false;
+
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    question.TextDescription = text;
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
             return Json(new { success });
         }
     }

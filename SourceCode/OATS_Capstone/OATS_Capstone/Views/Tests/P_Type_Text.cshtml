@@ -1,5 +1,5 @@
 ﻿@model OATS_Capstone.Models.Question
-<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Text">
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Text" question-id="@Model.QuestionID">
                     <div class="nt-qnum nt-qnum-letter">@Model.LabelOrder</div>
                     <a class="nt-qanchor"></a>
                     <!-- NOT isImg START -->
@@ -7,7 +7,7 @@
 
                     <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
                         <div class="redactor_box">
-                            <div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" contenteditable="true">@Model.TextDescription</div>
+                            <div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
                         </div>
                     </div>
 
