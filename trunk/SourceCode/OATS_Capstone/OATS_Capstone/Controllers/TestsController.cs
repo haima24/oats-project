@@ -88,12 +88,14 @@ namespace OATS_Capstone.Controllers
             var generatedId = test.TestID;
             return RedirectToAction("NewTest", new { id = generatedId });
         }
+
         public ActionResult NewTest(int id)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
+
         public JsonResult QuestionTypes()
         {
             var obj = new
