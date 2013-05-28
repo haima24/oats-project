@@ -601,6 +601,7 @@ i, cite, em, var, address, dfn {
         -moz-border-radius-bottomright: 5px;
         -webkit-border-bottom-right-radius: 5px;
         border-bottom-right-radius: 5px;
+        margin-bottom:20px;
     }
 
     #checklist .nt-qitem {

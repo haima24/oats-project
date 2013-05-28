@@ -22,3 +22,8 @@ $.fn.extend({
         return arr;
     }
 });
+function showInfoMessage(message) {
+
+}
+function showErrorMessage(message) {
+}

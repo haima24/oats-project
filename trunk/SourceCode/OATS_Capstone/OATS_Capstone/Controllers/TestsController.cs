@@ -38,92 +38,6 @@ namespace OATS_Capstone.Controllers
             }
         }
 
-        public JsonResult SaveNewTest(Test test)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            Question firstAddedQuestion = null;
-            var questionHtml = String.Empty;
-            try
-            {
-                var realTest = db.Tests.FirstOrDefault(i => i.TestID == test.TestID);
-                if (realTest != null)
-                {
-                    realTest.TestTitle = test.TestTitle;
-                    var questions = test.Questions.ToList();
-                    var realQuestions = realTest.Questions;
-                    questions.ForEach(delegate(Question question)
-                    {
-                        var quesType = db.QuestionTypes.FirstOrDefault(i => i.Type == question.QuestionType.Type);
-                        if (question.QuestionID != 0)
-                        {
-                            var ques = realQuestions.FirstOrDefault(i => i.QuestionID == question.QuestionID);
-                            ques.QuestionTitle = question.QuestionTitle;
-                            ques.QuestionType = quesType;
-                            ques.LabelOrder = question.LabelOrder;
-                            ques.SerialOrder = question.SerialOrder;
-                            var answers = question.Answers.ToList();
-                            var realAnswers = ques.Answers;
-                            answers.ForEach(delegate(Answer answer)
-                            {
-                                if (answer.AnswerID != 0)
-                                {
-                                    var ans = realAnswers.FirstOrDefault(k => k.AnswerID == answer.AnswerID);
-                                    ans.AnswerContent = answer.AnswerContent;
-                                    ans.IsRight = answer.IsRight;
-                                }
-                                else
-                                {
-                                    var ans = new Answer();
-                                    ans.AnswerContent = answer.AnswerContent;
-                                    ans.IsRight = answer.IsRight;
-                                    realAnswers.Add(ans);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            var ques = new Question();
-                            ques.QuestionTitle = question.QuestionTitle;
-                            ques.QuestionType = quesType;
-                            ques.LabelOrder = question.LabelOrder;
-                            ques.SerialOrder = question.SerialOrder;
-                            var answers = question.Answers.ToList();
-                            answers.ForEach(delegate(Answer answer)
-                            {
-                                var ans = new Answer();
-                                ans.AnswerContent = answer.AnswerContent;
-                                ans.IsRight = answer.IsRight;
-                                ques.Answers.Add(ans);
-                            });
-
-                            if (firstAddedQuestion == null)
-                            {
-                                firstAddedQuestion = ques;
-                            }
-                            realQuestions.Add(ques);
-                        }
-                    });
-
-
-
-                    if (db.SaveChanges() > 0)
-                    {
-                        success = true;
-                        if (firstAddedQuestion != null)
-                        {
-                            questionHtml = this.RenderPartialViewToString("P_Question_Instance", firstAddedQuestion);
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-            }
-            
-            return Json(new { success,questionHtml });
-        }
         public JsonResult TestsSearch()
         {
             var db = SingletonDb.Instance();
@@ -232,5 +146,90 @@ namespace OATS_Capstone.Controllers
             return View();
         }
 
+        public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder)
+        {
+            var db = SingletonDb.Instance();
+            var success = false;
+            var questionHtml = String.Empty;
+            try
+            {
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var qType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
+                    var question = new Question();
+                    question.QuestionTitle = questiontitle;
+                    question.SerialOrder = serialorder;
+                    question.LabelOrder = labelorder;
+                    question.QuestionType = qType;
+                    question.Answers = answers;
+                    test.Questions.Add(question);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                        questionHtml = this.RenderPartialViewToString("P_Question_Instance", question);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                success = false;
+            }
+
+            return Json(new { success, questionHtml });
+        }
+        public JsonResult AddAnswer(int questionid) {
+            var db = SingletonDb.Instance();
+            var questionHtml=String.Empty;
+            var success=false;
+            var ans = new Answer();
+            ans.AnswerContent = String.Empty;
+            try
+            {
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    question.Answers.Add(ans);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                        questionHtml = this.RenderPartialViewToString("P_Question_Instance", question);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                success = false;
+            }
+            
+            return Json(new { success, questionHtml });
+        }
+        public JsonResult ResortQuestions(List<Question> questions)
+        {
+            var success = false;
+            var db=SingletonDb.Instance();
+            var questionsDb=db.Questions;
+            try
+            {
+                questions.ForEach(delegate(Question question) {
+                    var ques = questionsDb.FirstOrDefault(i => i.QuestionID == question.QuestionID);
+                    ques.LabelOrder = question.LabelOrder;
+                    ques.SerialOrder = question.SerialOrder;
+                });
+                if (db.SaveChanges() > 0)
+                {
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+
+               success = false;
+            }
+
+            return Json(new { success });
+        }
     }
 }
