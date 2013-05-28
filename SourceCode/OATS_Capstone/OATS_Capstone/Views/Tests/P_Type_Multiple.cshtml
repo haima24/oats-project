@@ -1,7 +1,6 @@
 ﻿@model OATS_Capstone.Models.Question
 
-<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Multiple">
-    <input type="hidden" class="question-id" value="@Model.QuestionID" />
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Multiple" question-id="@Model.QuestionID">
     <div class="nt-qnum ">@Model.LabelOrder</div>
     <a class="nt-qanchor"></a>
     <!-- NOT isImg START -->
@@ -25,8 +24,7 @@
         <div class="nt-qanscont nt-sortable">
             @foreach (var ans in Model.Answers)
             {
-                <div class="nt-qans nt-qans-edit nt-qans-hover">
-                    <input type="hidden" class="answer-id" value="@ans.AnswerID" />
+                <div class="nt-qans nt-qans-edit nt-qans-hover" answer-id="@ans.AnswerID">
                     <div class="nt-qanselem">
                         @if (ans.IsRight)
                         { 
