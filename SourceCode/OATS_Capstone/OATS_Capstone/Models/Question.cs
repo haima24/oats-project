@@ -11,19 +11,17 @@ namespace OATS_Capstone.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class Question
     {
         public Question()
         {
             this.Answers = new HashSet<Answer>();
+            this.UserInTestDetails = new HashSet<UserInTestDetail>();
             this.Tags = new HashSet<Tag>();
         }
     
         public int QuestionID { get; set; }
-
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string QuestionTitle { get; set; }
         public int TestID { get; set; }
         public int QuestionTypeID { get; set; }
@@ -36,6 +34,7 @@ namespace OATS_Capstone.Models
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual QuestionType QuestionType { get; set; }
         public virtual Test Test { get; set; }
+        public virtual ICollection<UserInTestDetail> UserInTestDetails { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
     }
 }

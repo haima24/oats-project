@@ -11,13 +11,10 @@ namespace OATS_Capstone.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class Answer
     {
         public int AnswerID { get; set; }
-
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AnswerContent { get; set; }
         public int QuestionID { get; set; }
         public bool IsRight { get; set; }

@@ -19,6 +19,7 @@
           <EntitySet Name="TestSettings" EntityType="OATSDBModel.Store.TestSettings" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="User" EntityType="OATSDBModel.Store.User" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTest" EntityType="OATSDBModel.Store.UserInTest" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserInTestDetail" EntityType="OATSDBModel.Store.UserInTestDetail" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.Store.FK_Answer_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="Answer" EntitySet="Answer" />
@@ -79,6 +80,14 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserInTest" EntitySet="UserInTest" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserInTestDetail_Question" Association="OATSDBModel.Store.FK_UserInTestDetail_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="UserInTestDetail" EntitySet="UserInTestDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTestDetail_UserInTest" Association="OATSDBModel.Store.FK_UserInTestDetail_UserInTest">
+            <End Role="UserInTest" EntitySet="UserInTest" />
+            <End Role="UserInTestDetail" EntitySet="UserInTestDetail" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Answer">
           <Key>
@@ -107,7 +116,7 @@
           <Property Name="TestID" Type="int" Nullable="false" />
           <Property Name="QuestionTypeID" Type="int" Nullable="false" />
           <Property Name="ImageUrl" Type="varchar" MaxLength="50" />
-          <Property Name="TextDescription" Type="nvarchar" MaxLength="256" />
+          <Property Name="TextDescription" Type="nvarchar" MaxLength="1024" />
           <Property Name="QuestionScore" Type="decimal" Nullable="false" Scale="2" />
           <Property Name="SerialOrder" Type="int" />
           <Property Name="LabelOrder" Type="varchar" MaxLength="10" />
@@ -201,6 +210,16 @@
           <Property Name="Score" Type="int" Nullable="false" />
           <Property Name="TestTakenDate" Type="datetime" />
           <Property Name="NumberOfAttend" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInTestDetail">
+          <Key>
+            <PropertyRef Name="UserInTestID" />
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="UserInTestID" Type="int" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="AnswerContent" Type="nvarchar" MaxLength="1024" />
+          <Property Name="AnswerIDs" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Answer_Question">
           <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="1" />
@@ -382,6 +401,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserInTestDetail_Question">
+          <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="1" />
+          <End Role="UserInTestDetail" Type="OATSDBModel.Store.UserInTestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="UserInTestDetail">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTestDetail_UserInTest">
+          <End Role="UserInTest" Type="OATSDBModel.Store.UserInTest" Multiplicity="1" />
+          <End Role="UserInTestDetail" Type="OATSDBModel.Store.UserInTestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInTest">
+              <PropertyRef Name="UserInTestID" />
+            </Principal>
+            <Dependent Role="UserInTestDetail">
+              <PropertyRef Name="UserInTestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
@@ -399,6 +442,7 @@
           <EntitySet Name="TestSettings" EntityType="OATSDBModel.TestSetting" />
           <EntitySet Name="Users" EntityType="OATSDBModel.User" />
           <EntitySet Name="UserInTests" EntityType="OATSDBModel.UserInTest" />
+          <EntitySet Name="UserInTestDetails" EntityType="OATSDBModel.UserInTestDetail" />
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.FK_Answer_Question">
             <End Role="Question" EntitySet="Questions" />
             <End Role="Answer" EntitySet="Answers" />
@@ -418,6 +462,10 @@
           <AssociationSet Name="FK_Question_Test" Association="OATSDBModel.FK_Question_Test">
             <End Role="Test" EntitySet="Tests" />
             <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTestDetail_Question" Association="OATSDBModel.FK_UserInTestDetail_Question">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="UserInTestDetail" EntitySet="UserInTestDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="OATSDBModel.FK_User_Role">
             <End Role="Role" EntitySet="Roles" />
@@ -442,6 +490,10 @@
           <AssociationSet Name="FK_UserInTest_User" Association="OATSDBModel.FK_UserInTest_User">
             <End Role="User" EntitySet="Users" />
             <End Role="UserInTest" EntitySet="UserInTests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInTestDetail_UserInTest" Association="OATSDBModel.FK_UserInTestDetail_UserInTest">
+            <End Role="UserInTest" EntitySet="UserInTests" />
+            <End Role="UserInTestDetail" EntitySet="UserInTestDetails" />
           </AssociationSet>
           <AssociationSet Name="TagInQuestion" Association="OATSDBModel.TagInQuestion">
             <End Role="Question" EntitySet="Questions" />
@@ -482,13 +534,14 @@
           <Property Name="TestID" Type="Int32" Nullable="false" />
           <Property Name="QuestionTypeID" Type="Int32" Nullable="false" />
           <Property Name="ImageUrl" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="TextDescription" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="TextDescription" Type="String" MaxLength="1024" Unicode="true" FixedLength="false" />
           <Property Name="QuestionScore" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="SerialOrder" Type="Int32" />
           <Property Name="LabelOrder" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Answers" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
           <NavigationProperty Name="QuestionType" Relationship="OATSDBModel.FK_Question_QuestionType" FromRole="Question" ToRole="QuestionType" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Question_Test" FromRole="Question" ToRole="Test" />
+          <NavigationProperty Name="UserInTestDetails" Relationship="OATSDBModel.FK_UserInTestDetail_Question" FromRole="Question" ToRole="UserInTestDetail" />
           <NavigationProperty Name="Tags" Relationship="OATSDBModel.TagInQuestion" FromRole="Question" ToRole="Tag" />
         </EntityType>
         <EntityType Name="QuestionType">
@@ -583,6 +636,19 @@
           <Property Name="NumberOfAttend" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="UserInTest" ToRole="Test" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_UserInTest_User" FromRole="UserInTest" ToRole="User" />
+          <NavigationProperty Name="UserInTestDetails" Relationship="OATSDBModel.FK_UserInTestDetail_UserInTest" FromRole="UserInTest" ToRole="UserInTestDetail" />
+        </EntityType>
+        <EntityType Name="UserInTestDetail">
+          <Key>
+            <PropertyRef Name="UserInTestID" />
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="UserInTestID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="AnswerContent" Type="String" MaxLength="1024" Unicode="true" FixedLength="false" />
+          <Property Name="AnswerIDs" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_UserInTestDetail_Question" FromRole="UserInTestDetail" ToRole="Question" />
+          <NavigationProperty Name="UserInTest" Relationship="OATSDBModel.FK_UserInTestDetail_UserInTest" FromRole="UserInTestDetail" ToRole="UserInTest" />
         </EntityType>
         <Association Name="FK_Answer_Question">
           <End Role="Question" Type="OATSDBModel.Question" Multiplicity="1" />
@@ -641,6 +707,18 @@
             </Principal>
             <Dependent Role="Question">
               <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTestDetail_Question">
+          <End Role="Question" Type="OATSDBModel.Question" Multiplicity="1" />
+          <End Role="UserInTestDetail" Type="OATSDBModel.UserInTestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="UserInTestDetail">
+              <PropertyRef Name="QuestionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -713,6 +791,18 @@
             </Principal>
             <Dependent Role="UserInTest">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInTestDetail_UserInTest">
+          <End Role="UserInTest" Type="OATSDBModel.UserInTest" Multiplicity="1" />
+          <End Role="UserInTestDetail" Type="OATSDBModel.UserInTestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInTest">
+              <PropertyRef Name="UserInTestID" />
+            </Principal>
+            <Dependent Role="UserInTestDetail">
+              <PropertyRef Name="UserInTestID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -844,6 +934,16 @@
                 <ScalarProperty Name="Score" ColumnName="Score" />
                 <ScalarProperty Name="TestTakenDate" ColumnName="TestTakenDate" />
                 <ScalarProperty Name="NumberOfAttend" ColumnName="NumberOfAttend" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInTestDetails">
+            <EntityTypeMapping TypeName="OATSDBModel.UserInTestDetail">
+              <MappingFragment StoreEntitySet="UserInTestDetail">
+                <ScalarProperty Name="UserInTestID" ColumnName="UserInTestID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
+                <ScalarProperty Name="AnswerIDs" ColumnName="AnswerIDs" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
