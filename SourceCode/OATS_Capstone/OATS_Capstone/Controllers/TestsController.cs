@@ -54,6 +54,29 @@ namespace OATS_Capstone.Controllers
             }
         }
 
+        public JsonResult TestsAssignStudentSearch(int userid)
+        {
+             
+            var db = SingletonDb.Instance();
+            var user = db.Users.FirstOrDefault(p=>p.UserID==userid);
+            var testsInInivation=user.Invitations.Select(i=>i.Test);
+
+            var tests = db.Tests.ToList();
+            var listTestsSearch = new List<SearchingTests>();
+            tests.ForEach(delegate(Test test)
+            {
+                if(!testsInInivation.Contains(test)){
+                var testTemplate = new SearchingTests();
+                testTemplate.Id = test.TestID;
+                testTemplate.TestTitle = test.TestTitle;
+                testTemplate.StartDate = test.StartDateTime;
+                testTemplate.EndDate = test.EndDateTime;
+                listTestsSearch.Add(testTemplate);
+                }
+            });
+            return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
+        }
+
         public JsonResult TestsSearch()
         {
             var db = SingletonDb.Instance();

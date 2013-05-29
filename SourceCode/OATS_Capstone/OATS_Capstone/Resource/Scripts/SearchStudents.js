@@ -25,9 +25,8 @@
     });
 
 
-
-
-    $.post("/Tests/TestsSearch", function (res) {
+    var userid = parseInt($('#user-id').val());
+    $.post("/Tests/TestsAssignStudentSearch", { userid: userid }, function (res) {
         if (res) {
             var source = res.map(function (obj, index) {
                 return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
@@ -40,8 +39,15 @@
                     return false;
                 },
                 select: function (ev, ui) {
-                    $(".navbar-search .nt-search-input").val(ui.item.label);
-                    window.location.href="/Tests/NewTest/"+ui.item.id;
+                    var data = {
+                        testID: parseInt(ui.item.id),
+                        userID: userid
+                    };
+                    $.post('/Students/AssignTestToStudent', data, function (response) {
+                        if (response.generatedHtml) {
+                            $("#asmsList").html(response.generatedHtml)
+                        }
+                    });         
                     return false;
                 }
             }).data("ui-autocomplete")._renderItem = function (ul, item) {
