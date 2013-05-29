@@ -184,6 +184,9 @@
     <Compile Include="Models\UserInTest.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserInTestDetail.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
