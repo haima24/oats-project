@@ -63,16 +63,35 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var db = SingletonDb.Instance();
-            var invitation = new Invitation();
-            invitation.UserID = userId;
-            invitation.TestID = testId;
-            if (userId !=0 && testId != 0)
+            //var invitation = new Invitation();
+            //invitation.UserID = userId;
+            //invitation.TestID = testId;
+
+            //var generatedHtml = string.Empty;
+            
+
+            //if (userId !=0 && testId != 0)
+            //{
+            //    db.Invitations.Add(invitation);
+            //    db.SaveChanges();
+            //    success = true;
+            //    generatedHtml =  this.RenderPartialViewToString("P_Assign_Test_To_Student",invitation.User );
+            //}
+            var generatedHtml = string.Empty;
+            var user = db.Users.FirstOrDefault(i => i.UserID == userId);//find user in db
+            var test = db.Tests.FirstOrDefault(k => k.TestID == testId);//find test in db
+            if (user != null && test != null)
             {
-                db.Invitations.Add(invitation);
-                db.SaveChanges();
-                success = true;
+                var invitation = new Invitation();
+                invitation.Test = test;
+                user.Invitations.Add(invitation);
+                if (db.SaveChanges() > 0)
+                {
+                    success = true;
+                    generatedHtml = this.RenderPartialViewToString("P_Assign_Test_To_Student", user);
+                }
             }
-            return Json(success);
+            return Json(new {success=success,generatedHtml=generatedHtml});
 
         }
             

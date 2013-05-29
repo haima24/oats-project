@@ -357,6 +357,7 @@
     <Content Include="Views\Tests\P_Type_Text_Template.cshtml" />
     <Content Include="Views\Tests\P_Type_Empty_Template.cshtml" />
     <Content Include="Views\Tests\P_Question_Instance.cshtml" />
+    <Content Include="Views\Students\P_Assign_Test_To_Student.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
