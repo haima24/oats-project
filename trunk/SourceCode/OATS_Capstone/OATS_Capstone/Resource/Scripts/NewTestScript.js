@@ -14,6 +14,10 @@ function loadChanges() {
     //    initEditable();
     //}
 }
+function statusSaving() {
+}
+function statusSaved() {
+}
 function sortByNumberOrLetters() {
     $("#checklist .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
         $(this).html((i + 1) + ". ");

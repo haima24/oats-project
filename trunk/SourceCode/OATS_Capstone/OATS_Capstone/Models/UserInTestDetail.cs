@@ -12,22 +12,14 @@ namespace OATS_Capstone.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserInTest
+    public partial class UserInTestDetail
     {
-        public UserInTest()
-        {
-            this.UserInTestDetails = new HashSet<UserInTestDetail>();
-        }
-    
         public int UserInTestID { get; set; }
-        public int TestID { get; set; }
-        public int UserID { get; set; }
-        public int Score { get; set; }
-        public Nullable<System.DateTime> TestTakenDate { get; set; }
-        public int NumberOfAttend { get; set; }
+        public int QuestionID { get; set; }
+        public string AnswerContent { get; set; }
+        public string AnswerIDs { get; set; }
     
-        public virtual Test Test { get; set; }
-        public virtual User User { get; set; }
-        public virtual ICollection<UserInTestDetail> UserInTestDetails { get; set; }
+        public virtual Question Question { get; set; }
+        public virtual UserInTest UserInTest { get; set; }
     }
 }
