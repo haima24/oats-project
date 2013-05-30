@@ -277,13 +277,22 @@ $(function () {
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
 
+
+
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
         this.focus();
     });
     $(".nt-qtext.nt-qedit").live("mousedown", function (ev) {
         this.focus();
     });
-
+    //separator
+    $(".nt-qsearch-content").popover({
+        trigger: "hover",
+        html:true,
+        content: function () {
+           return $(this).closest(".nt-qsearch").find(".nt-qsearch-popover-cont").html();
+        }
+    });
 
     //separator
     $("#test-title").contentEditable({
