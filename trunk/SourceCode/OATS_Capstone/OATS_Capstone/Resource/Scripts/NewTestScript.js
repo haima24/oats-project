@@ -5,15 +5,6 @@ var events;
 var question_holder = new Array();
 
 
-function loadChanges() {
-    //var tab = $("#checklist[content-tab=true]");
-    //if (tab.length > 0 && listkey) {
-    //    var content = getLocalStorage(listkey);
-    //    $("#checklist[content-tab=true]").html(content);
-    //    initDragAndDrop();
-    //    initEditable();
-    //}
-}
 function statusSaving() {
 }
 function statusSaved() {
@@ -512,6 +503,44 @@ $(function () {
         var quesidString = pItem.attr("question-id");
         saveTextDescription(quesidString, $(this).val());
     });
+    $(".nt-ctrl-all").live("change", function (ev) {
+        //$(".nt-clb-list input[type=checkbox]").checked = false;//not work
+        $(".nt-clb-list input[type=checkbox]").each(function () {
+            if (ev.target.checked) {
+                $(this).attr("checked", true);
+            } else {
+                $(this).attr("checked", false);
+            }
+        });
+    });
+
+    $(".nt-clb-list input[type=checkbox]").live("change", function () {
+        var isOneUncheck = $('.nt-clb-list input[type=checkbox]').is(function (index) {
+            return !this.checked;
+        });
+        if (isOneUncheck) {
+            $(".nt-ctrl-all").attr("checked", false);
+        } else {
+            $(".nt-ctrl-all").attr("checked", true);
+        }
+    });
+
+    $("#myModal button.nt-btn-ok").live("click",function(ev){
+        var container = $("#myModal .nt-clb-list");
+        var checkedCheckbox = $("input[type=checkbox]:checked", container);
+        var chekcedIds = checkedCheckbox.map(function (index, element) {
+            return parseInt($(element).attr("user-id"));
+
+        }).convertJqueryArrayToJSArray();
+
+        //ajax call to controller here $.post
+
+    });
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
+
+
+
+   
+
 });
