@@ -1,0 +1,24 @@
+﻿@model OATS_Capstone.Models.Question
+@switch (Model.QuestionType.Type)
+{
+    case "Radio":
+    @Html.Partial("P_Reuse_Template_Radio", Model)
+        break;
+    case "Multiple":
+    @Html.Partial("P_Reuse_Template_Multiple", Model)
+        break;
+    case "Essay":
+    @Html.Partial("P_Reuse_Template_Essay", Model)
+        break;
+    case "ShortAnswer":
+    @Html.Partial("P_Reuse_Template_ShortAnswer", Model)
+        break;
+    case "Text":
+    @Html.Partial("P_Reuse_Template_Text", Model)
+        break;
+    case "Image":
+    @Html.Partial("P_Reuse_Template_Image", Model)
+        break;
+    default:
+        break;
+}

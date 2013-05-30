@@ -25,6 +25,7 @@
     <link href="~/Bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="~/Bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script src="~/Bootstrap/js/bootstrap.js"></script>
+
     <link href="~/Style/Site.css" rel="stylesheet" />
 
     <script src="~/Bootstrap/js/kalendae.standalone.js"></script>
@@ -34,14 +35,17 @@
 
     <script src="~/Bootstrap/js/dropzone.js"></script>
     @*<script src="~/Bootstrap/js/jquery.filedrop.js"></script>*@
-    
     <script src="~/Resource/Scripts/CommonScript.js"></script>
     <script src="~/Resource/Scripts/Tests_Layout.js"></script>
     @RenderSection("additionheader", required: false)
 
 </head>
 <body>
-
+    <div id="message-popup" class="alert" style="display: none">
+        <a class="close" href="#">×</a>
+        <h4 class="alert-heading"></h4>
+        <div></div>
+    </div>
     @RenderBody()
 
     @RenderSection("scripts", required: false)
