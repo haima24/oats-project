@@ -1,5 +1,6 @@
 ﻿using OATS_Capstone.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -228,13 +229,40 @@ namespace OATS_Capstone.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 success = false;
             }
 
             return Json(new { success, questionHtml });
+        }
+        public JsonResult AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
+        {
+            var db = SingletonDb.Instance();
+            var success = false;
+            var arraylist = new ArrayList();
+            try
+            {
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null) {
+                    listquestion.ForEach(k => test.Questions.Add(k.QuestionItem));
+
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                        listquestion.ForEach(delegate(QuestionItemTemplate item) {
+                            arraylist.Add(new { ClientID = item.ClientID, QuestionHtml = this.RenderPartialViewToString("P_Question_Instance", item.QuestionItem) });
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                success = false;
+            }
+            return Json(new { success, arraylist });
         }
         public JsonResult AddAnswer(int questionid)
         {
@@ -278,7 +306,10 @@ namespace OATS_Capstone.Controllers
                     {
                         var questionid = ans.QuestionID;
                         var ansInQues = db.Answers.Where(k => k.QuestionID == questionid).ToList();
+                        if (isright)
+                        { 
                         ansInQues.ForEach(h => h.IsRight = false);
+                        }
                     }
                     ans.IsRight = isright;
                     if (db.SaveChanges() > 0)

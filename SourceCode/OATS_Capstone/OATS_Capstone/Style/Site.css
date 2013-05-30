@@ -1858,9 +1858,11 @@ i.nt-icon {
     top: 125px;
     left: 85px;
 }
-
+#sidebar #qpaste textarea.blur {
+    -webkit-filter:blur(2px);
+}
 .nt-loader-large {
-    background: url(../img/loader-light-large.gif?v=174);
+    background: url('./img/loader-large.gif') left no-repeat;
     width: 32px;
     height: 32px;
 }
@@ -1936,7 +1938,7 @@ i.nt-icon {
     color: #999999;
 }
 
-.nt-itemhover, .nt-clb-item:hover, #checklist .nt-qitem .nt-qtext .nt-fitb > span .nt-qcorr-hl, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput .nt-qcorr-hl, .nt-qtype:hover, .nt-qsearch:hover, .nt-ctrl-search-tag-popup li.nt-tag-selected, .ac_results li.ac_over, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item:hover, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item.nt-item-selected, .nt-modalwelcome.nt-modalwelcome-dashboard .modal-body table td:hover {
+.nt-itemhover, .nt-clb-item:hover, #checklist .nt-qitem .nt-qtext .nt-fitb > span .nt-qcorr-hl, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput .nt-qcorr-hl, .t-question-type:hover, .nt-qsearch:hover, .nt-ctrl-search-tag-popup li.nt-tag-selected, .ac_results li.ac_over, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item:hover, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item.nt-item-selected, .nt-modalwelcome.nt-modalwelcome-dashboard .modal-body table td:hover {
     background-color: rgba(90, 148, 233, 0.3);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
