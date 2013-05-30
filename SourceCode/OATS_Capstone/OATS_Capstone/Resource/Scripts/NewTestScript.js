@@ -6,8 +6,12 @@ var question_holder = new Array();
 var testid;
 
 function statusSaving() {
+    $("#savestatus .nt-desc").html("Saving...");
+    $("#savestatus").show();
 }
 function statusSaved() {
+    $("#savestatus .nt-desc").html("All changes saved.");
+    $("#savestatus").fadeOut("slow");
 }
 function sortByNumberOrLetters() {
     $("#checklist .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
@@ -150,7 +154,13 @@ function updateAnswer(lineElement) {
     var answerContent = $(".nt-qansdesc", lineElement).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", lineElement).html();
     var isright = $(".nt-qanselem input[type=radio],[type=checkbox]", lineElement).attr("checked") ? true : false;
     var type = lineElement.closest(".nt-qitem").attr("question-type");
+    statusSaving();
     $.post("/Tests/UpdateAnswer", { answerid: answerid, answerContent: answerContent, isright: isright, type: type }, function (res) {
+        if (!res.success) {
+            showMessage("error", res.message);
+        } else {
+            statusSaved();
+        }
     });
 }
 function resortInDb() {
@@ -164,6 +174,7 @@ function resortInDb() {
     //$.post("/Tests/ResortQuestions", { questions: questions }, function (res) {
     //    //addtional doing here
     //});
+    statusSaving();
     $.ajax({
         type: "POST",
         url: "/Tests/ResortQuestions",
@@ -173,6 +184,8 @@ function resortInDb() {
         success: function (res) {
             if (!res.success) {
                 showMessage("error", res.message);
+            } else {
+                statusSaved();
             }
         }
 
@@ -187,6 +200,7 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         labelorder: labelorder,
         answers: answers
     };
+    statusSaving();
     $.ajax({
         type: "POST",
         url: "/Tests/AddNewQuestion",
@@ -197,6 +211,7 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         success: function (res) {
             if (res && res.success && res.questionHtml != "") {
                 $(element).replaceWith($(res.questionHtml));
+                statusSaved();
             } else {
                 showMessage("error", res.message);
             }
@@ -208,6 +223,7 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
     }
 }
 function addListQuestion(list, onAfterAddListQuestion) {
+    statusSaving();
     $.ajax({
         type: "POST",
         url: "/Tests/AddListQuestion",
@@ -222,6 +238,7 @@ function addListQuestion(list, onAfterAddListQuestion) {
                         ele.replaceWith($(item.QuestionHtml));
                     }
                 });
+                statusSaved();
                 showMessage("success", res.message);
             } else {
                 showMessage("error", res.message);
@@ -237,19 +254,24 @@ function addListQuestion(list, onAfterAddListQuestion) {
 }
 function updateQuestionTitle(questionidString, newtext) {
     var questionid = parseInt(questionidString);
+    statusSaving();
     $.post("/Tests/UpdateQuestionTitle", { questionid: questionid, newtext: newtext }, function (res) {
         if (!res.success) {
             showMessage("error", res.message);
+        } else {
+            statusSaved();
         }
     });
 }
 function deleteQuestion(questionidString, onsuccess) {
     var questionid = parseInt(questionidString);
+    statusSaving();
     $.post("/Tests/DeleteQuestion", { questionid: questionid }, function (res) {
         if (res.success) {
             if (onsuccess && typeof (onsuccess) === "function") {
                 onsuccess();
             }
+            statusSaved();
         } else {
             showMessage("error", res.message);
         }
@@ -257,19 +279,22 @@ function deleteQuestion(questionidString, onsuccess) {
 }
 function deleteAnswer(answeridString, onsuccess) {
     var answerid = parseInt(answeridString);
+    statusSaving();
     $.post("/Tests/DeleteAnswer", { answerid: answerid }, function (res) {
         if (res.success) {
             if (onsuccess && typeof (onsuccess) === "function") {
                 onsuccess();
             }
+            statusSaved();
         } else {
             showMessage("error", res.message);
         }
     });
 }
-function addAnswer(element, qid) {
+function addAnswer(element, qid, onsuccess) {
     var questionid = parseInt(qid);
     var data = { questionid: questionid };
+    statusSaving();
     $.ajax({
         type: "POST",
         url: "/Tests/AddAnswer",
@@ -279,6 +304,10 @@ function addAnswer(element, qid) {
         success: function (res) {
             if (res && res.success && res.questionHtml != "") {
                 $(element).replaceWith($(res.questionHtml));
+                if (onsuccess && typeof (onsuccess) === "function") {
+                    onsuccess();
+                }
+                statusSaved();
             } else {
                 showMessage("error", res.message);
             }
@@ -288,9 +317,12 @@ function addAnswer(element, qid) {
 }
 function saveTextDescription(questionidString, text) {
     var questionid = parseInt(questionidString);
+    statusSaving();
     $.post("/Tests/UpdateQuestionTextDescription", { questionid: questionid, text: text }, function (res) {
         if (!res.success) {
             showMessage("error", res.message);
+        } else {
+            statusSaved();
         }
     });
 }
@@ -300,8 +332,6 @@ $(function () {
     initEditable();
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
-
-
 
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
         this.focus();
@@ -322,10 +352,13 @@ $(function () {
     $("#test-title").contentEditable({
         "placeholder": "<i>Enter Test Title</i>",
         "onBlur": function (element) {
+            statusSaving();
             var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
             $.post("/Tests/UpdateTestTitle", { testid: testid, text: text }, function (res) {
                 if (!res.success) {
                     showMessage("error", res.message);
+                } else {
+                    statusSaved();
                 }
             });
         },
@@ -442,12 +475,14 @@ $(function () {
     $(".nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
 
-        addAnswer(parent, parent.attr("question-id"));
+        addAnswer(parent, parent.attr("question-id"), function () {
+            sortByNumberOrLetters();
+            showOrHideDeleteLineAnswer();
+            initEditable();
+        });
 
         //when add an answer, show delete button on answer line
-        sortByNumberOrLetters();
-        showOrHideDeleteLineAnswer();
-        initEditable();
+        
     });
     //separator
     $(".nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
