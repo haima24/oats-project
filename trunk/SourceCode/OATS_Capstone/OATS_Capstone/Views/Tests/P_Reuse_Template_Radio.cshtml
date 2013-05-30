@@ -1,10 +1,11 @@
-﻿<div class="nt-qsearch">
+﻿@model OATS_Capstone.Models.Question
+<div class="nt-qsearch">
                 <div>
                     <i class="t-icon i-radio"></i>
                 </div>
                 <div class="nt-qsearch-content">
-                    <div class="nt-qsearch-title">Likert Scale?</div>
-                    <div class="nt-qsearch-desc">Strongly Agree / Agree / Neutral / Disagree / Strongly Disagree</div>
+                    <div class="nt-qsearch-title">@Model.QuestionTitle</div>
+                    <div class="nt-qsearch-desc">@Model.Answers.Where(k=>!String.IsNullOrEmpty(k.AnswerContent)).Select(i=>i.AnswerContent).Aggregate((w,n)=>w+"/ "+n)</div>
                 </div>
                 <div class="nt-qsearch-popover-cont">
                     <div class="nt-qsearch-popover">
