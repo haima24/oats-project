@@ -18,7 +18,13 @@ header, footer, nav, section {
 audio, canvas, video {
     display: inline-block;
 }
-
+#message-popup {
+position: fixed;
+z-index: 10000;
+width: 400px;
+left: -225px;
+margin-left: 50%;
+}
 #dropbox:before {
     display: block;
     content: '';

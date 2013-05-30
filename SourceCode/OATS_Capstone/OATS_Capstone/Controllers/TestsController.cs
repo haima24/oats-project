@@ -209,6 +209,7 @@ namespace OATS_Capstone.Controllers
             var db = SingletonDb.Instance();
             var success = false;
             var questionHtml = String.Empty;
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
@@ -231,17 +232,18 @@ namespace OATS_Capstone.Controllers
             }
             catch (Exception ex)
             {
-
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
 
-            return Json(new { success, questionHtml });
+            return Json(new { success,message, questionHtml });
         }
         public JsonResult AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
         {
             var db = SingletonDb.Instance();
             var success = false;
             var arraylist = new ArrayList();
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
@@ -258,6 +260,7 @@ namespace OATS_Capstone.Controllers
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
+                        message = "Import questions complete.";
                         listquestion.ForEach(delegate(QuestionItemTemplate item) {
                             arraylist.Add(new { ClientID = item.ClientID, QuestionHtml = this.RenderPartialViewToString("P_Question_Instance", item.QuestionItem) });
                         });
@@ -268,8 +271,9 @@ namespace OATS_Capstone.Controllers
             {
 
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, arraylist });
+            return Json(new { success,message, arraylist });
         }
         public JsonResult AddAnswer(int questionid)
         {
@@ -278,6 +282,7 @@ namespace OATS_Capstone.Controllers
             var success = false;
             var ans = new Answer();
             ans.AnswerContent = String.Empty;
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
@@ -303,6 +308,7 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var db = SingletonDb.Instance();
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
@@ -329,64 +335,89 @@ namespace OATS_Capstone.Controllers
             {
 
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success });
+            return Json(new { success,message });
         }
-        public JsonResult ResortQuestions(List<Question> questions)
+        public JsonResult ResortQuestions(int count,List<Question> questions)
         {
             var success = false;
             var db = SingletonDb.Instance();
             var questionsDb = db.Questions;
+            var message = Constants.DefaultProblemMessage;
             try
             {
-                questions.ForEach(delegate(Question question)
-                {
-                    var ques = questionsDb.FirstOrDefault(i => i.QuestionID == question.QuestionID);
-                    ques.LabelOrder = question.LabelOrder;
-                    ques.SerialOrder = question.SerialOrder;
-                });
-                if (db.SaveChanges() > 0)
+                if (count == 0)
                 {
                     success = true;
                 }
-            }
-            catch (Exception)
-            {
-
-                success = false;
-            }
-
-            return Json(new { success });
-        }
-        public JsonResult DeleteQuestion(int questionid)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            try
-            {
-                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
-                if (question != null)
+                else
                 {
-                    var removedAnswer = db.Answers.Where(k => k.QuestionID == questionid).ToList();
-                    removedAnswer.ForEach(m => db.Answers.Remove(m));
-                    db.Questions.Remove(question);
+                    questions.ForEach(delegate(Question question)
+                    {
+                        var ques = questionsDb.FirstOrDefault(i => i.QuestionID == question.QuestionID);
+                        ques.LabelOrder = question.LabelOrder;
+                        ques.SerialOrder = question.SerialOrder;
+                    });
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
                     }
                 }
+                
             }
             catch (Exception)
             {
 
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success });
+
+            return Json(new { success,message });
+        }
+        public JsonResult DeleteQuestion(int questionid)
+        {
+            var success = false;
+            var db = SingletonDb.Instance();
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    if (question.UserInTestDetails.Count > 0)
+                    {
+                        success = false;
+                        message = "This Question Already In Use.";
+                    }
+                    else
+                    {
+                        question.Answers.ToList().ForEach(k => db.Answers.Remove(k));
+                        var tags = question.Tags.ToList();
+                        tags.ForEach(k => question.Tags.Remove(k));
+                        db.Questions.Remove(question);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            message = Constants.DefaultSuccessMessage;
+                        }
+                    }
+                    
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success,message });
         }
         public JsonResult DeleteAnswer(int answerid)
         {
             var success = false;
             var db = SingletonDb.Instance();
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
@@ -401,15 +432,15 @@ namespace OATS_Capstone.Controllers
             }
             catch (Exception)
             {
-
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success });
+            return Json(new { success,message });
         }
         public JsonResult UpdateQuestionTitle(int questionid, string newtext)
         {
             var success = false;
-
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
@@ -428,13 +459,14 @@ namespace OATS_Capstone.Controllers
             {
 
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success });
+            return Json(new { success ,message});
         }
         public JsonResult UpdateQuestionTextDescription(int questionid, string text)
         {
             var success = false;
-
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
@@ -453,13 +485,14 @@ namespace OATS_Capstone.Controllers
             {
 
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success });
+            return Json(new { success,message});
         }
         public JsonResult UpdateTestTitle(int testid, string text)
         {
             var success = false;
-
+            var message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
@@ -478,8 +511,9 @@ namespace OATS_Capstone.Controllers
             {
 
                 success = false;
+                message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success });
+            return Json(new { success,message });
         }
     }
 }

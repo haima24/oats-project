@@ -136,6 +136,7 @@
     <Compile Include="Models\Answer.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Invitation.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -328,7 +329,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -362,6 +365,13 @@
     <Content Include="Views\Tests\P_Type_Empty_Template.cshtml" />
     <Content Include="Views\Tests\P_Question_Instance.cshtml" />
     <Content Include="Views\Students\P_Assign_Test_To_Student.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_Radio.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_Text.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_Multiple.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_Essay.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_ShortAnswer.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_Image.cshtml" />
+    <Content Include="Views\Tests\P_Reuse_Template_Question_Instance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

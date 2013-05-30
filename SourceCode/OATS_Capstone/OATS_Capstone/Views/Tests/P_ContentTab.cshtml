@@ -1,4 +1,7 @@
 ﻿@model OATS_Capstone.Models.Test
+@{
+    var templateQuestions=Model.Questions.Where(i=>i.Tags.Any(k=>k.TagName=="Template")).Take(2);
+}
 <div id="sidebar" role="tablist">
     <div class="t-accord-header">New Question<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
     <div class="t-accord-content">
@@ -37,45 +40,9 @@
             <div class="nt-ctrl-search-tags nt-taglist"></div>
         </div>
         <div class="nt-ctrl-list" style="height: 130px; min-height: 30px; overflow-y: auto;">
-            <div class="nt-qsearch">
-                <div>
-                    <i class="t-icon i-radio"></i>
-                </div>
-                <div class="nt-qsearch-content">
-                    <div class="nt-qsearch-title">True-False question?</div>
-                    <div class="nt-qsearch-desc">True / False</div>
-                </div>
-                <div class="nt-qsearch-popover-cont">
-                    <div class="nt-qsearch-popover">
-                        <div class="nt-qtext nt-phrase">
-                            True-False question?
-                        </div>
-                        <div class="nt-qanscont">
-                            <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">True</div>
-                                </label>
-                                <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
-                                </div>
-                            </div>
-                            <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">False</div>
-                                </label>
-                                <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="nt-taglist">
-                            <div class="nt-tag nt-tag-hl"><span>Template<span></span></span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @foreach(var tQuestion in templateQuestions){
+                @Html.Partial("P_Reuse_Template_Question_Instance",tQuestion)
+            }
         </div>
     </div>
 
