@@ -1796,7 +1796,9 @@ i.nt-icon {
     font-size: 15px;
     font-weight: 600;
 }
-
+.nt-qsearch-popover .nt-qans {
+    display:inline-table;
+}
 .nt-qsearch-popover .nt-qans .nt-qans-label {
     display: inline-block;
     font-size: 13px;
@@ -1804,7 +1806,6 @@ i.nt-icon {
     margin: 0;
     vertical-align: middle;
 }
-
     .nt-qsearch-popover .nt-qans .nt-qans-label input {
         margin: 0px 5px 0px 0px;
         padding: 0;
