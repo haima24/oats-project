@@ -3,7 +3,7 @@ var emptylist;
 var listkey = "listquestion";
 var events;
 var question_holder = new Array();
-
+var testid;
 
 function statusSaving() {
 }
@@ -62,8 +62,6 @@ function initDragAndDrop() {
                 if (cur.hasClass("t-question-type-img")) { type = "Image"; var obj = $(questions.image); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : cur.replaceWith(obj); }
                 sortByNumberOrLetters();
 
-                var eleid = obj.attr("id")
-                var testid = $("#test-id").val();
                 var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" ? "" : $(".nt-qtext", obj).html();
                 var serialorder = obj.index();
                 var labelorder = $(".nt-qnum", obj).html();
@@ -72,7 +70,7 @@ function initDragAndDrop() {
                     answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
                     return answer;
                 }).convertJqueryArrayToJSArray();
-                addQuestion(eleid, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+                addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder, function () {
                     resortInDb();
                 });
 
@@ -177,9 +175,9 @@ function resortInDb() {
 
     });
 }
-function addQuestion(elementid, testid, type, questiontitle, answers, serialorder, labelorder, onaddquestion) {
+function addQuestion(element, testidentify, type, questiontitle, answers, serialorder, labelorder, onaddquestion) {
     var data = {
-        testid: parseInt(testid),
+        testid: testidentify,
         type: type,
         questiontitle: type == "Image" ? "" : questiontitle,
         serialorder: serialorder,
@@ -195,7 +193,7 @@ function addQuestion(elementid, testid, type, questiontitle, answers, serialorde
         async: false,
         success: function (res) {
             if (res && res.success && res.questionHtml != "") {
-                $("#" + elementid).replaceWith($(res.questionHtml));
+                $(element).replaceWith($(res.questionHtml));
             }
         }
 
@@ -203,6 +201,33 @@ function addQuestion(elementid, testid, type, questiontitle, answers, serialorde
     if (onaddquestion && typeof (onaddquestion) === "function") {
         onaddquestion();
     }
+}
+function addListQuestion(list, onAfterAddListQuestion) {
+    $.ajax({
+        type: "POST",
+        url: "/Tests/AddListQuestion",
+        data: JSON.stringify({ testid: testid, listquestion: list }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (res) {
+            if (res.success && res.arraylist) {
+                $(res.arraylist).each(function (index, item) {
+                    if (item.ClientID && item.QuestionHtml)
+                    {
+                        var ele = $("#" + item.ClientID);
+                        ele.replaceWith($(item.QuestionHtml));
+                    }
+                });
+            }
+        },
+        complete: function () {
+            if (onAfterAddListQuestion && typeof (onAfterAddListQuestion) === "function") {
+                onAfterAddListQuestion();
+            }
+        }
+
+    });
 }
 function updateQuestionTitle(questionidString, newtext) {
     var questionid = parseInt(questionidString);
@@ -249,7 +274,8 @@ $(function () {
 
     initDragAndDrop();
     initEditable();
-
+    var testidString = $("#test-id").val();
+    testid = parseInt(testidString);
 
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
         this.focus();
@@ -263,8 +289,6 @@ $(function () {
     $("#test-title").contentEditable({
         "placeholder": "<i>Enter Test Title</i>",
         "onBlur": function (element) {
-            var testidString = $("#test-id").val();
-            var testid = parseInt(testidString);
             var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
             $.post("/Tests/UpdateTestTitle", { testid: testid, text: text }, function (res) {
             });
@@ -279,8 +303,6 @@ $(function () {
         var li = $(link).closest("li");
         nav.find("li").removeClass("active");
         li.addClass("active");
-        var testidString = $("#test-id").val();
-        var testid = parseInt(testidString);
         $.post(action, { testid: testid }, function (res) {
             var i = 0;
             var tabcontent = $("#eventTab");
@@ -312,13 +334,11 @@ $(function () {
             if (cur.hasClass("t-question-type-radio")) { type = "Radio"; var obj = $(questions.radio); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
             if (cur.hasClass("t-question-type-multiple")) { type = "Multiple"; var obj = $(questions.multiple); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
             if (cur.hasClass("t-question-type-essay")) { type = "Essay"; var obj = $(questions.essay); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-short")) { type = "ShortAnswer"; var obj = $(questions.shortanswer); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.shortanswer) : etab.append(obj); }
+            if (cur.hasClass("t-question-type-short")) { type = "ShortAnswer"; var obj = $(questions.shortanswer); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
             if (cur.hasClass("t-question-type-text")) { type = "Text"; var obj = $(questions.text); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
             if (cur.hasClass("t-question-type-img")) { type = "Image"; var obj = $(questions.image); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
             sortByNumberOrLetters();
 
-            var eleid = obj.attr("id")
-            var testid = $("#test-id").val();
             var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" || "<i>Enter Text</i>" ? "" : $(".nt-qtext", obj).html();
             var serialorder = obj.index();
             var labelorder = $(".nt-qnum", obj).html();
@@ -327,7 +347,7 @@ $(function () {
                 answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
                 return answer;
             }).convertJqueryArrayToJSArray();
-            addQuestion(eleid, testid, type, questiontitle, answers, serialorder, labelorder);
+            addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder);
             sortByNumberOrLetters();
 
             initEditable();
@@ -348,8 +368,6 @@ $(function () {
             duplicated.insertAfter(content);
             sortByNumberOrLetters();
 
-            var eleid = duplicated.attr("id");
-            var testid = $("#test-id").val();
             var type = duplicated.attr("question-type");
             var serialorder = duplicated.index();
             var labelorder = $(".nt-qnum", duplicated).html();
@@ -360,7 +378,7 @@ $(function () {
                 answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
                 return answer;
             }).convertJqueryArrayToJSArray();
-            addQuestion(eleid, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+            addQuestion(duplicated, testid, type, questiontitle, answers, serialorder, labelorder, function () {
                 resortInDb();
             });
 
@@ -496,6 +514,69 @@ $(function () {
     //separator
     $(".nt-qanselem input[type=checkbox],[type=radio]").live("change", function (ev) {
         updateAnswer($(this).closest(".nt-qans"));
+    });
+    //separator
+    $("#qpaste textarea").live("paste", function (ev) {
+        setTimeout(function () {
+            var textarea = $("#qpaste textarea");
+            if (textarea) {
+                //begin effect
+                textarea.addClass("blur");
+                $("#qpaste .nt-loader-large").show();
+                //begin effect
+                var pastedText = textarea.val();
+                var questionslist = pastedText.split(/\n[\n]+/);
+                var questionGenerated = new Array();
+                $(questionslist).each(function (index, element) {
+                    var lines = element.split("\n");
+                    if (lines.length > 0) {
+                        var question = new Object();
+                        var htmlQuestion;
+                        if (lines.length == 1) {
+                            //text
+                            question.QuestionType = { Type: "Text" };
+                            question.QuestionTitle = lines[0];
+                            htmlQuestion = $(questions.text);
+                        } else {
+                            //radio question
+                            question.QuestionType = { Type: "Radio" };
+                            question.QuestionTitle = lines[0];
+                            question.Answers = $(lines).map(function (i, o) {
+                                if (i > 0) {
+                                    return { AnswerContent: o };
+                                }
+                            }).convertJqueryArrayToJSArray();
+                            htmlQuestion = $(questions.radio);
+                        }
+                        htmlQuestion.uniqueId();
+                        $("#checklist").append(htmlQuestion);
+                        var clientid = htmlQuestion.attr("id");
+                        questionGenerated.push({ clientid: clientid, question: question });
+                    }
+
+                });
+                sortByNumberOrLetters();
+                var listquestion = $(questionGenerated).map(function (idex, ele) {
+                    var cid = ele.clientid;
+                    var ques = ele.question;
+                    if (cid && ques) {
+                        var obj = $("#" + cid);
+                        ques.SerialOrder = obj.index();
+                        ques.LabelOrder = $(".nt-qnum", obj).html();
+                        return { ClientID: cid, QuestionItem: ques };
+                    }
+                }).convertJqueryArrayToJSArray();
+
+                addListQuestion(listquestion, function (res) {
+
+                });
+                //end effect
+                textarea.val("");
+                $("#qpaste .nt-loader-large").hide();
+                textarea.removeClass("blur");
+                //end effect
+            }
+        }, 100);
     });
     //separator
     $(".nt-qitem textarea.nt-qrespinput,.nt-qitem input.nt-qrespinput").live("change", function (ev) {

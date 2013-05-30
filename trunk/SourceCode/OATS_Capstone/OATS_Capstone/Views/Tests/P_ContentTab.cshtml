@@ -146,80 +146,12 @@
     </div>
 
     <div class="t-accord-header nt-hover" role="tab">Import Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
-    <div class="t-accord-content" style="display: none;">
+    <div class="t-accord-content" id="qpaste">
         <div class="nt-loader-large"></div>
-        <textarea placeholder="Paste or drag and drop questions here from any document to add them to this test." data-guide="content_import_paste" style="height: 210px; min-height: 30px; overflow-y: auto;"></textarea>
-    </div>
-
-    <div class="t-accord-header nt-hover">Tags<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
-    <div class="t-accord-content" id="tags" style="display: none;">
-        <div class="nt-ctrl-search">
-            <div class="nt-search-box">
-                <input type="text" placeholder="Search" class="nt-search-input add" />
-                <i class="t-icon search"></i>
-
-                <button class="nt-btn-circle nt-btn-add">
-                    <i class="icon-plus"></i>
-                </button>
-
-                <button class="nt-btn-icon nt-btn-clear add">
-                    <i class="icon-remove-sign"></i>
-                </button>
-            </div>
-        </div>
-        <div class="nt-ctrl-list nt-taglist" style="max-height: 150px; min-height: 30px; overflow-y: auto;">
-            <div class="nt-tag">
-                <span>Amendments</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>Class of 2015</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>Class of 2016</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>Math</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>SAMPLE</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>Statue</span>
-                <i class="icon-remove-sign icon-white nt-tag-remove"></i>
-            </div>
-            <div class="nt-tag">
-                <span>Template</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>Welcome</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag">
-                <span>history</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag" id="3dcf77afc7a9492d8851e4551da1f43e">
-                <span>independence</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag" id="1bef3c1a1a4b487eab938c15a297f713">
-                <span>presidents</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-            <div class="nt-tag" id="4d9168633b2e4bcb8919d3b012c3bb25">
-                <span>wars</span>
-                <i class="icon-remove-sign icon-white"></i>
-            </div>
-        </div>
+        <textarea placeholder="Paste or drag and drop questions here from any document to add them to this test." style="height: 210px; min-height: 30px; overflow-y: auto;"></textarea>
     </div>
 </div>
-<div id="checklist" content-tab="true" class="nt-sortable" style="height: 380px; overflow-y: auto;">
+<div id="checklist" content-tab="true" class="nt-sortable" style="height: 500px; overflow-y: auto;">
 
     @if (Model == null)
     { @Html.Partial("P_Type_Empty_Template") }
