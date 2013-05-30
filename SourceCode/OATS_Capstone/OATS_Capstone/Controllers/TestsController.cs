@@ -304,41 +304,7 @@ namespace OATS_Capstone.Controllers
 
             return Json(new { success, questionHtml });
         }
-        public JsonResult UpdateAnswer(int answerid, string answerContent, bool isright, string type)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var message = Constants.DefaultProblemMessage;
-            try
-            {
-                var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
-                if (ans != null)
-                {
-                    ans.AnswerContent = answerContent;
-                    if (type == "Radio")
-                    {
-                        var questionid = ans.QuestionID;
-                        var ansInQues = db.Answers.Where(k => k.QuestionID == questionid).ToList();
-                        if (isright)
-                        { 
-                        ansInQues.ForEach(h => h.IsRight = false);
-                        }
-                    }
-                    ans.IsRight = isright;
-                    if (db.SaveChanges() > 0)
-                    {
-                        success = true;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return Json(new { success,message });
-        }
+        
         public JsonResult ResortQuestions(int count,List<Question> questions)
         {
             var success = false;
@@ -437,6 +403,41 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success,message });
         }
+        public JsonResult UpdateAnswer(int answerid, string answerContent, bool isright, string type)
+        {
+            var success = false;
+            var db = SingletonDb.Instance();
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
+                if (ans != null)
+                {
+                    ans.AnswerContent = answerContent;
+                    if (type == "Radio")
+                    {
+                        var questionid = ans.QuestionID;
+                        var ansInQues = db.Answers.Where(k => k.QuestionID == questionid).ToList();
+                        if (isright)
+                        {
+                            ansInQues.ForEach(h => h.IsRight = false);
+                        }
+                    }
+                    ans.IsRight = isright;
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message });
+        }
         public JsonResult UpdateQuestionTitle(int questionid, string newtext)
         {
             var success = false;
@@ -448,7 +449,7 @@ namespace OATS_Capstone.Controllers
                 if (question != null)
                 {
                     question.QuestionTitle = newtext;
-                    if (db.SaveChanges() > 0)
+                    if (db.SaveChanges() >= 0)
                     {
                         success = true;
                     }
@@ -474,7 +475,7 @@ namespace OATS_Capstone.Controllers
                 if (question != null)
                 {
                     question.TextDescription = text;
-                    if (db.SaveChanges() > 0)
+                    if (db.SaveChanges() >= 0)
                     {
                         success = true;
                     }
@@ -500,7 +501,7 @@ namespace OATS_Capstone.Controllers
                 if (test != null)
                 {
                     test.TestTitle = text;
-                    if (db.SaveChanges() > 0)
+                    if (db.SaveChanges() >= 0)
                     {
                         success = true;
                     }

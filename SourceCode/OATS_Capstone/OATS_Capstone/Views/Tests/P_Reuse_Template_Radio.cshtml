@@ -10,55 +10,36 @@
                 <div class="nt-qsearch-popover-cont">
                     <div class="nt-qsearch-popover">
                         <div class="nt-qtext nt-phrase">
-                            Likert Scale?
+                            @Model.QuestionTitle
                         </div>
                         <div class="nt-qanscont">
+                        @foreach(var ans in Model.Answers){
+                        
                             <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">Strongly Agree</div>
+                                @if (ans.IsRight)
+                                {
+                                    <label class="radio nt-qans-label nt-qans-label-rep">
+                                    <input type="radio" checked="checked"  disabled="disabled" />
+                                    <div class="nt-qansdesc">@ans.AnswerContent</div>
                                 </label>
                                 <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                    <div class="nt-qpts">0 pts</div>
                                 </div>
-                            </div>
-                            <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">Agree</div>
+                                }
+                                else { 
+                                    <label class="radio nt-qans-label nt-qans-label-rep">
+                                    <input type="radio"  disabled="disabled" />
+                                    <div class="nt-qansdesc">@ans.AnswerContent</div>
                                 </label>
                                 <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+                                    <div class="nt-qpts" style="display: none;">0 pts</div>
                                 </div>
+                                }
+                                
                             </div>
-                            <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">Neutral</div>
-                                </label>
-                                <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
-                                </div>
+                        
+                        }
                             </div>
-                            <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">Disagree</div>
-                                </label>
-                                <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
-                                </div>
-                            </div>
-                            <div class="nt-qans">
-                                <label class="radio nt-qans-label nt-qans-label-rep">
-                                    <input type="radio" disabled="disabled" />
-                                    <div class="nt-qansdesc">Strongly Disagree</div>
-                                </label>
-                                <div class="nt-qansrep">
-                                    <div class="nt-qpts" style="visibility: hidden">0 pts</div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="nt-taglist">
                             <div class="nt-tag nt-tag-hl"><span>Template<span></span></span></div>
                         </div>
