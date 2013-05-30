@@ -359,7 +359,7 @@ namespace OATS_Capstone.Controllers
                         ques.LabelOrder = question.LabelOrder;
                         ques.SerialOrder = question.SerialOrder;
                     });
-                    if (db.SaveChanges() > 0)
+                    if (db.SaveChanges() >=0)
                     {
                         success = true;
                     }

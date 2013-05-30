@@ -7,7 +7,7 @@ var testid;
 
 function statusSaving() {
     $("#savestatus .nt-desc").html("Saving...");
-    $("#savestatus").show();
+    $("#savestatus").fadeIn("slow");
 }
 function statusSaved() {
     $("#savestatus .nt-desc").html("All changes saved.");
