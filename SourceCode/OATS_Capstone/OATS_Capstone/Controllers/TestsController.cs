@@ -119,6 +119,18 @@ namespace OATS_Capstone.Controllers
             return View(test);
         }
 
+        public JsonResult AddUserToInivtationTest(int testid, List<int> userids)
+        {
+            //find test by id
+
+            //find users by id
+
+            //get invitation list of test
+
+            //add users to invition list
+
+            return Json("done");
+        }
         public JsonResult QuestionTypes()
         {
             var obj = new
@@ -181,8 +193,10 @@ namespace OATS_Capstone.Controllers
         public JsonResult NewTest_InvitationTab()
         {
             var db = SingletonDb.Instance();
-            var invitations = db.Invitations;
-            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", invitations) });
+            var invitations = db.Invitations.ToList();
+            var users = db.Users.ToList();
+            var master = new InvitationMasterModel() { InvitationList = invitations, UserList = users };
+            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", master) });
         }
         public ActionResult TakeTest()
         {
