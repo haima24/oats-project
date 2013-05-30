@@ -139,6 +139,7 @@
     <Compile Include="Models\Invitation.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\InvitationMasterModel.cs" />
     <Compile Include="Models\OATSModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

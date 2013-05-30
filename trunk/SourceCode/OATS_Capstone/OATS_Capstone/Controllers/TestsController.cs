@@ -246,7 +246,14 @@ namespace OATS_Capstone.Controllers
             {
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null) {
-                    listquestion.ForEach(k => test.Questions.Add(k.QuestionItem));
+                    listquestion.ForEach(delegate(QuestionItemTemplate item) {
+                        var type = item.QuestionItem.QuestionType.Type;
+                        var realType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
+                        if (realType != null) {
+                            item.QuestionItem.QuestionType = realType;
+                        }
+                        test.Questions.Add(item.QuestionItem);
+                    });
 
                     if (db.SaveChanges() > 0)
                     {

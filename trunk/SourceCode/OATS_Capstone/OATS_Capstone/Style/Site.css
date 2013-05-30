@@ -1828,7 +1828,10 @@ i.nt-icon {
     box-shadow: inset 0 0 10px #0044ff;
     text-shadow: 1px 1px 1px black;
 }
-
+.nt-tag.nt-tag-hl > span {
+    position:relative;
+    top:5px;
+}
 .nt-taglist > div {
     float: left;
     margin: 2px 4px 2px 0;
