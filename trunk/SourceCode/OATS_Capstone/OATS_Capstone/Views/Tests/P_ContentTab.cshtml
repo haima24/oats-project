@@ -39,7 +39,7 @@
             </div>
             <div class="nt-ctrl-search-tags nt-taglist"></div>
         </div>
-        <div class="nt-ctrl-list" style="height: 130px; min-height: 30px; overflow-y: auto;">
+        <div class="nt-ctrl-list" style="max-height: 200px; min-height: 30px; overflow-y: auto;">
             @foreach(var tQuestion in templateQuestions){
                 @Html.Partial("P_Reuse_Template_Question_Instance",tQuestion)
             }
