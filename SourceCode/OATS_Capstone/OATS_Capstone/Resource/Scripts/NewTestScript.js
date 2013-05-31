@@ -758,6 +758,20 @@ $(function () {
         }).convertJqueryArrayToJSArray();
 
         //ajax call to controller here $.post
+        //$.post("/Tests/AddUserToInivtationTest", { testid: testid, userids: chekcedIds }, function (response) {
+        //});
+        $.ajax({
+            type: "POST",
+            url: "/Tests/AddUserToInivtationTest",
+            data: JSON.stringify({ testid: testid, userids: chekcedIds }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                $("#eventTab").html($(res));
+            }
+
+        });
+        $("#myModal").modal('hide');
 
     });
     showOrHideDeleteLineAnswer();
