@@ -138,15 +138,23 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult AddUserToInivtationTest(int testid, List<int> userids)
         {
-            //find test by id
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
 
-            //find users by id
-
-            //get invitation list of test
-
-            //add users to invition list
-
-            return Json("done");
+            userids.ForEach(delegate(int id)
+            {
+                var user = db.Users.FirstOrDefault(k => k.UserID == id);
+                if (user != null)
+                {
+                    var invitation = new Invitation();
+                    invitation.User = user;
+                    test.Invitations.Add(invitation);
+                }
+            });
+            db.SaveChanges();
+            var master=new InvitationMasterModel(){UserList=db.Users.ToList(),InvitationList=test.Invitations.ToList()};
+            var generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
+            return Json(generatedHtml);
         }
         public JsonResult QuestionTypes()
         {
@@ -219,10 +227,11 @@ namespace OATS_Capstone.Controllers
         {
             return Json(new { tab = this.RenderPartialViewToString("P_SettingTab") });
         }
-        public JsonResult NewTest_InvitationTab()
+        public JsonResult NewTest_InvitationTab(int testid)
         {
             var db = SingletonDb.Instance();
-            var invitations = db.Invitations.ToList();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+            var invitations = test.Invitations.ToList();
             var users = db.Users.ToList();
             var master = new InvitationMasterModel() { InvitationList = invitations, UserList = users };
             return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", master) });
