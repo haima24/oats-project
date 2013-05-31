@@ -1,54 +1,45 @@
-﻿<div class="nt-qsearch"><div>
-  <i class="nt-icon type-checkbox"></i>
-</div>
-<div class="nt-qsearch-content">
-  <div class="nt-qsearch-title"><p>One plus ten is</p>
-</div>
-  <div class="nt-qsearch-desc">ten
- / 11
- / muoi mot
-</div>
-</div>
-<div class="nt-qsearch-popover-cont">
-  <div class="nt-qsearch-popover">
-    <div class="nt-qtext nt-phrase">
-    <p>One plus ten is</p>
+﻿@model OATS_Capstone.Models.Question
+<div class="nt-qsearch" question-id="@Model.QuestionID">
+    <div>
+        <i class="t-icon i-multiple"></i>
+    </div>
+    <div class="nt-qsearch-content">
+        <div class="nt-qsearch-title">
+            <p>@Model.QuestionTitle</p>
+        </div>
+        <div class="nt-qsearch-desc">@Model.Answers.Where(k => !String.IsNullOrEmpty(k.AnswerContent)).Select(i => i.AnswerContent).Aggregate((w, n) => w + "/ " + n)</div>
+    </div>
+    <div class="nt-qsearch-popover-cont">
+        <div class="nt-qsearch-popover">
+            <div class="nt-qtext nt-phrase">
+                <p>@Model.QuestionTitle</p>
 
-    </div>
-    <div class="nt-qanscont">
-      <div class="nt-qans">
-        <label class="checkbox nt-qans-label nt-qans-label-rep">
-          <input type="checkbox" disabled="disabled">
-          <div class="nt-qansdesc"><p>ten</p>
-</div>
-        </label>
-        <div class="nt-qansrep">
-          <div class="nt-qpts" style="visibility: hidden">0 pts</div>
+            </div>
+            <div class="nt-qanscont">
+                @foreach (var ans in Model.Answers)
+                {
+                    <div class="nt-qans">
+                        <label class="checkbox nt-qans-label nt-qans-label-rep">
+                            @if (ans.IsRight)
+                            {
+                                <input type="checkbox" checked="checked" disabled="disabled" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" disabled="disabled" />
+                            }
+                            <div class="nt-qansdesc">
+                                <p>@ans.AnswerContent</p>
+                            </div>
+                        </label>
+                        <div class="nt-qansrep">
+                            <div class="nt-qpts">@(ans.Score??0) pts</div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="nt-taglist">
+            </div>
         </div>
-      </div>
-      <div class="nt-qans">
-        <label class="checkbox nt-qans-label nt-qans-label-rep">
-          <input type="checkbox" disabled="disabled" checked="checked">
-          <div class="nt-qansdesc"><p>11</p>
-</div>
-        </label>
-        <div class="nt-qansrep">
-          <div class="nt-qpts">1 pt</div>
-        </div>
-      </div>
-      <div class="nt-qans">
-        <label class="checkbox nt-qans-label nt-qans-label-rep">
-          <input type="checkbox" disabled="disabled" checked="checked">
-          <div class="nt-qansdesc"><p><span class="nt-qsearch-hl">muoi</span> mot</p>
-</div>
-        </label>
-        <div class="nt-qansrep">
-          <div class="nt-qpts">1 pt</div>
-        </div>
-      </div>
     </div>
-    <div class="nt-taglist">
-    </div>
-  </div>
-</div>
 </div>

@@ -55,6 +55,52 @@ namespace OATS_Capstone.Controllers
             }
         }
 
+        public JsonResult ReuseQuestionTemplate(int questionid)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var questionHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                questionHtml = this.RenderPartialViewToString("P_Question_Instance", question);
+                success = true;
+            }
+            catch (Exception)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message, questionHtml });
+        }
+        public JsonResult ReuseSearchQuestionTemplate(int maxrows,string term)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var renderedHtmlList = new List<String>();
+            try
+            {
+                var db = SingletonDb.Instance();
+                var questions = db.Questions.ToList();
+                var matchQuestions = questions.Where(delegate(Question question) {
+                    return question.QuestionTitle.Contains(term)
+                        || question.Answers.Any(k => k.AnswerContent.Contains(term));
+                });
+                var matches = matchQuestions.Take(maxrows).ToList();
+                matches.ForEach(delegate(Question question) {
+                    var html = this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", question);
+                    renderedHtmlList.Add(html);
+                });
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
+            return Json(new { success, message, renderedHtmlList });
+        }
         public JsonResult TestsAssignStudentSearch(int userid)
         {
 
@@ -78,7 +124,6 @@ namespace OATS_Capstone.Controllers
             });
             return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
         }
-
         public JsonResult TestsSearch()
         {
 
@@ -114,7 +159,6 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-
         public ActionResult MakeTest()
         {
             var db = SingletonDb.Instance();
@@ -128,14 +172,12 @@ namespace OATS_Capstone.Controllers
             var generatedId = test.TestID;
             return RedirectToAction("NewTest", new { id = generatedId });
         }
-
         public ActionResult NewTest(int id)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
-
         public JsonResult AddUserToInivtationTest(int testid, List<int> userids)
         {
             var db = SingletonDb.Instance();
@@ -240,8 +282,7 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-
-        public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder)
+        public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder, string textdescription)
         {
             var db = SingletonDb.Instance();
             var success = false;
@@ -254,6 +295,7 @@ namespace OATS_Capstone.Controllers
                 {
                     var qType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
                     var question = new Question();
+                    if (textdescription != null) { question.TextDescription = textdescription; }
                     question.QuestionTitle = questiontitle;
                     question.SerialOrder = serialorder;
                     question.LabelOrder = labelorder;

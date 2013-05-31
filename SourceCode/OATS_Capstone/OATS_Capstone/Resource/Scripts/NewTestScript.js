@@ -115,6 +115,15 @@ function initEditable() {
         },
     });
 }
+function initPopover() {
+    $(".nt-qsearch-content").popover({
+        trigger: "hover",
+        html: true,
+        content: function () {
+            return $(this).closest(".nt-qsearch").find(".nt-qsearch-popover-cont").html();
+        }
+    });
+}
 function initImageUploadFacility() {
     if (questions && questions.imagepreview) {
         $(".nt-qimg-ph.nt-clickable").each(function () {
@@ -205,13 +214,14 @@ function resortInDb() {
 
     });
 }
-function addQuestion(element, testidentify, type, questiontitle, answers, serialorder, labelorder, onaddquestion) {
+function addQuestion(element, testidentify, type, questiontitle, answers, serialorder, labelorder, onaddquestion, textdescription) {
     var data = {
         testid: testidentify,
         type: type,
         questiontitle: type == "Image" ? "" : questiontitle,
         serialorder: serialorder,
         labelorder: labelorder,
+        textdescription:textdescription,
         answers: answers
     };
     statusSaving();
@@ -347,21 +357,43 @@ $(function () {
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
 
+    //separator
+    initPopover();
+    //separator
+    $("#sidebar .nt-ctrl-search input[type=text]").autocomplete({
+        minLength: 0,
+        source: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/ReuseSearchQuestionTemplate",
+                data: JSON.stringify({ maxrows: 4, term: req.term }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success && r.renderedHtmlList) {
+                        var list = $("#sidebar .nt-ctrl-list");
+                        list.empty();
+                        $(r.renderedHtmlList).each(function (i, o) {
+                            list.append(o);
+                        });
+                        initPopover();
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+
+            });
+            //res([{ label: 'Example', value: 'ex' }]);
+        }
+    });
+    //separator
     $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
         this.focus();
     });
+    //separator
     $(".nt-qtext.nt-qedit").live("mousedown", function (ev) {
         this.focus();
     });
-    //separator
-    $(".nt-qsearch-content").popover({
-        trigger: "hover",
-        html: true,
-        content: function () {
-            return $(this).closest(".nt-qsearch").find(".nt-qsearch-popover-cont").html();
-        }
-    });
-
     //separator
     $("#test-title").contentEditable({
         "placeholder": "<i>Enter Test Title</i>",
@@ -393,8 +425,6 @@ $(function () {
 
 
                 tabcontent.html(res.tab);
-
-                loadChanges();
 
                 //rebind accordition
                 $("#sidebar").accordion();
@@ -461,9 +491,10 @@ $(function () {
                 answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
                 return answer;
             }).convertJqueryArrayToJSArray();
+            var textdes=$(".nt-qrespinput",duplicated).val();
             addQuestion(duplicated, testid, type, questiontitle, answers, serialorder, labelorder, function () {
                 resortInDb();
-            });
+            },textdes);
 
             initImageUploadFacility();
             initEditable();
@@ -733,7 +764,48 @@ $(function () {
     });
     //separator
     $("#sidebar .nt-ctrl-list .nt-qsearch").live("click", function (ev) {
-
+        var questionidString = $(this).attr("question-id");
+        var questionid = parseInt(questionidString);
+        var templateQuestion;
+        if (!isNaN(questionid))
+        {
+            statusSaving();
+            $.post("/Tests/ReuseQuestionTemplate", { questionid: questionid }, function (res) {
+                if (res && res.success && res.questionHtml) {
+                    var newItem = $(res.questionHtml);
+                    var type=newItem.attr("question-type");
+                    newItem.removeAttr("id");//if exist
+                    newItem.removeAttr("question-id");
+                    $(".nt-qans", newItem).removeAttr("answer-id");
+                    $(".nt-qanselem input[type=radio][name]", newItem).removeAttr("name");
+                    newItem.uniqueId();
+                    var clist = $("#checklist");
+                    if ($(".nt-empty-list-ph", clist).length == 1) {
+                        clist.html(newItem)
+                    } else {
+                        clist.append(newItem);
+                    }
+                    sortByNumberOrLetters();
+                    var type = newItem.attr("question-type");
+                    var serialorder = newItem.index();
+                    var labelorder = $(".nt-qnum", newItem).html();
+                    var questiontitle = $(".nt-qtext", newItem).html();
+                    var answers = $(".nt-qans", newItem).map(function (iAns, ans) {
+                        var answer = new Object();
+                        answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
+                        answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
+                        return answer;
+                    }).convertJqueryArrayToJSArray();
+                    var textdes = $(".nt-qrespinput", newItem).val();
+                    addQuestion(newItem, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+                        resortInDb();
+                    }, textdes);
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
     });
     //separator
     $(".nt-qitem .nt-scrbtn").live("click", function (ev) {

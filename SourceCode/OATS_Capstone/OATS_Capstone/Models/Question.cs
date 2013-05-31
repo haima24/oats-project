@@ -29,6 +29,8 @@ namespace OATS_Capstone.Models
         public int TestID { get; set; }
         public int QuestionTypeID { get; set; }
         public string ImageUrl { get; set; }
+
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string TextDescription { get; set; }
         public decimal QuestionScore { get; set; }
         public Nullable<int> SerialOrder { get; set; }
