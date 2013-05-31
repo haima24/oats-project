@@ -1,24 +1,30 @@
 ﻿function initCalendar() {
-
+    $('#calendar').addClass("loading");
     $.post("/Tests/TestCalendarObjectResult", function (res) {
-        events = res.map(function (obj) {
-            return {
-                id: obj.id,
-                title: obj.testTitle,
-                start: convertJsonDatetoDate(obj.startDateTime),
-                end: convertJsonDatetoDate(obj.endDateTime)
-            };
-        });
-        $('#calendar').fullCalendar({
-            theme: true,
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            editable: true,
-            events: events
-        });
+        if (res.success) {
+            events = $(res.listTestCalendar).map(function (obj) {
+                return {
+                    id: obj.id,
+                    title: obj.testTitle,
+                    start: convertJsonDatetoDate(obj.startDateTime),
+                    end: convertJsonDatetoDate(obj.endDateTime)
+                };
+            });
+            $('#calendar').fullCalendar({
+                theme: true,
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                editable: true,
+                events: events
+            });
+            $('#calendar').removeClass("loading");
+        } else {
+            showMessage("error", res.message);
+        }
+        
 
     });
 

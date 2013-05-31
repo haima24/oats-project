@@ -57,22 +57,23 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult TestsAssignStudentSearch(int userid)
         {
-             
+
             var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(p=>p.UserID==userid);
-            var testsInInivation=user.Invitations.Select(i=>i.Test);
+            var user = db.Users.FirstOrDefault(p => p.UserID == userid);
+            var testsInInivation = user.Invitations.Select(i => i.Test);
 
             var tests = db.Tests.ToList();
             var listTestsSearch = new List<SearchingTests>();
             tests.ForEach(delegate(Test test)
             {
-                if(!testsInInivation.Contains(test)){
-                var testTemplate = new SearchingTests();
-                testTemplate.Id = test.TestID;
-                testTemplate.TestTitle = test.TestTitle;
-                testTemplate.StartDate = test.StartDateTime;
-                testTemplate.EndDate = test.EndDateTime;
-                listTestsSearch.Add(testTemplate);
+                if (!testsInInivation.Contains(test))
+                {
+                    var testTemplate = new SearchingTests();
+                    testTemplate.Id = test.TestID;
+                    testTemplate.TestTitle = test.TestTitle;
+                    testTemplate.StartDate = test.StartDateTime;
+                    testTemplate.EndDate = test.EndDateTime;
+                    listTestsSearch.Add(testTemplate);
                 }
             });
             return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
@@ -80,19 +81,34 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult TestsSearch()
         {
-            var db = SingletonDb.Instance();
-            var tests = db.Tests.ToList();
+
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
             var listTestsSearch = new List<SearchingTests>();
-            tests.ForEach(delegate(Test test)
+            try
             {
-                var testTemplate = new SearchingTests();
-                testTemplate.Id = test.TestID;
-                testTemplate.TestTitle = test.TestTitle;
-                testTemplate.StartDate = test.StartDateTime;
-                testTemplate.EndDate = test.EndDateTime;
-                listTestsSearch.Add(testTemplate);
-            });
-            return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
+                var db = SingletonDb.Instance();
+                var tests = db.Tests.ToList();
+                tests.ForEach(delegate(Test test)
+                {
+                    var testTemplate = new SearchingTests();
+                    testTemplate.Id = test.TestID;
+                    testTemplate.TestTitle = test.TestTitle;
+                    testTemplate.StartDate = test.StartDateTime;
+                    testTemplate.EndDate = test.EndDateTime;
+                    listTestsSearch.Add(testTemplate);
+                });
+                success = true;
+                message = String.Empty;
+            }
+            catch (Exception)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+
+            return Json(new { listTestsSearch, success });
         }
         public ActionResult Index()
         {
@@ -155,20 +171,32 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult TestCalendarObjectResult()
         {
-            var db = SingletonDb.Instance();
-            var tests = db.Tests.ToList();
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
             var listTestCalendar = new List<TestCalendarObject>();
-
-            tests.ForEach(delegate(Test test)
+            try
             {
-                var template = new TestCalendarObject();
-                template.id = test.TestID;
-                template.testTitle = test.TestTitle;
-                template.startDateTime = test.StartDateTime;
-                template.endDateTime = test.EndDateTime;
-                listTestCalendar.Add(template);
-            });
-            return Json(listTestCalendar);
+                var db = SingletonDb.Instance();
+                var tests = db.Tests.ToList();
+
+
+                tests.ForEach(delegate(Test test)
+                {
+                    var template = new TestCalendarObject();
+                    template.id = test.TestID;
+                    template.testTitle = test.TestTitle;
+                    template.startDateTime = test.StartDateTime;
+                    template.endDateTime = test.EndDateTime;
+                    listTestCalendar.Add(template);
+                });
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
+
+            return Json(new { listTestCalendar, success, message });
         }
         public JsonResult Index_CalendarTab()
         {
@@ -236,7 +264,7 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
 
-            return Json(new { success,message, questionHtml });
+            return Json(new { success, message, questionHtml });
         }
         public JsonResult AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
         {
@@ -247,11 +275,14 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null) {
-                    listquestion.ForEach(delegate(QuestionItemTemplate item) {
+                if (test != null)
+                {
+                    listquestion.ForEach(delegate(QuestionItemTemplate item)
+                    {
                         var type = item.QuestionItem.QuestionType.Type;
                         var realType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
-                        if (realType != null) {
+                        if (realType != null)
+                        {
                             item.QuestionItem.QuestionType = realType;
                         }
                         test.Questions.Add(item.QuestionItem);
@@ -261,7 +292,8 @@ namespace OATS_Capstone.Controllers
                     {
                         success = true;
                         message = "Import questions complete.";
-                        listquestion.ForEach(delegate(QuestionItemTemplate item) {
+                        listquestion.ForEach(delegate(QuestionItemTemplate item)
+                        {
                             arraylist.Add(new { ClientID = item.ClientID, QuestionHtml = this.RenderPartialViewToString("P_Question_Instance", item.QuestionItem) });
                         });
                     }
@@ -273,7 +305,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message, arraylist });
+            return Json(new { success, message, arraylist });
         }
         public JsonResult AddAnswer(int questionid)
         {
@@ -304,8 +336,8 @@ namespace OATS_Capstone.Controllers
 
             return Json(new { success, questionHtml });
         }
-        
-        public JsonResult ResortQuestions(int count,List<Question> questions)
+
+        public JsonResult ResortQuestions(int count, List<Question> questions)
         {
             var success = false;
             var db = SingletonDb.Instance();
@@ -325,12 +357,12 @@ namespace OATS_Capstone.Controllers
                         ques.LabelOrder = question.LabelOrder;
                         ques.SerialOrder = question.SerialOrder;
                     });
-                    if (db.SaveChanges() >=0)
+                    if (db.SaveChanges() >= 0)
                     {
                         success = true;
                     }
                 }
-                
+
             }
             catch (Exception)
             {
@@ -339,7 +371,7 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
 
-            return Json(new { success,message });
+            return Json(new { success, message });
         }
         public JsonResult DeleteQuestion(int questionid)
         {
@@ -368,8 +400,8 @@ namespace OATS_Capstone.Controllers
                             message = Constants.DefaultSuccessMessage;
                         }
                     }
-                    
-                    
+
+
                 }
             }
             catch (Exception ex)
@@ -377,7 +409,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message });
+            return Json(new { success, message });
         }
         public JsonResult DeleteAnswer(int answerid)
         {
@@ -401,7 +433,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message });
+            return Json(new { success, message });
         }
         public JsonResult UpdateAnswer(int answerid, string answerContent, bool isright, string type)
         {
@@ -462,7 +494,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success ,message});
+            return Json(new { success, message });
         }
         public JsonResult UpdateQuestionTextDescription(int questionid, string text)
         {
@@ -488,7 +520,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message});
+            return Json(new { success, message });
         }
         public JsonResult UpdateTestTitle(int testid, string text)
         {
@@ -514,7 +546,37 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message });
+            return Json(new { success, message });
+        }
+        public JsonResult UpdateQuestionType(int questionid, string type)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (test != null)
+                {
+                    var questionType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
+                    if (questionType != null)
+                    {
+                        test.QuestionType = questionType;
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message });
         }
     }
 }
