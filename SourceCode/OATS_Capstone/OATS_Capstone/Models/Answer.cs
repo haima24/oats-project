@@ -21,6 +21,7 @@ namespace OATS_Capstone.Models
         public string AnswerContent { get; set; }
         public int QuestionID { get; set; }
         public bool IsRight { get; set; }
+        public Nullable<int> Score { get; set; }
     
         public virtual Question Question { get; set; }
     }
