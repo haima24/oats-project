@@ -18,13 +18,38 @@ header, footer, nav, section {
 audio, canvas, video {
     display: inline-block;
 }
-#message-popup {
-position: fixed;
-z-index: 10000;
-width: 400px;
-left: -225px;
-margin-left: 50%;
+
+.kalendae .k-days span.closed {
+    background: red;
 }
+
+#calendar {
+    min-height: 400px;
+    width: 735px;
+    /*margin: 0 auto;*/
+    margin-left: 20px;
+    vertical-align: top;
+    float: left;
+}
+
+    #calendar.loading {
+        background: url('./img/loader-larger-clock.gif') center no-repeat;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+#asmsOverview {
+    margin-right: 5px;
+    vertical-align: top;
+}
+
+#message-popup {
+    position: fixed;
+    z-index: 10000;
+    width: 400px;
+    left: -225px;
+    margin-left: 50%;
+}
+
 #dropbox:before {
     display: block;
     content: '';
@@ -607,7 +632,7 @@ i, cite, em, var, address, dfn {
         -moz-border-radius-bottomright: 5px;
         -webkit-border-bottom-right-radius: 5px;
         border-bottom-right-radius: 5px;
-        margin-bottom:20px;
+        margin-bottom: 20px;
     }
 
     #checklist .nt-qitem {
@@ -984,6 +1009,13 @@ i, cite, em, var, address, dfn {
         box-shadow: 0 1px 2px #828282, inset 0 1px 0 white;
     }
 
+    .nt-btn-text:active, .nt-btn-text.active {
+        -webkit-box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
+        -moz-box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
+        box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
+        color: #444444;
+    }
+
 #checklist .nt-qitem .nt-qans .nt-qansscore {
     position: absolute;
     right: 50px;
@@ -995,6 +1027,18 @@ i, cite, em, var, address, dfn {
     background: rgba(225, 205, 155, 0.92);
 }
 
+    #checklist .nt-qitem .nt-qans .nt-qansscore input {
+        width: 70px;
+        margin: 0;
+    }
+
+        #checklist .nt-qitem .nt-qans .nt-qansscore input.nt-on-score {
+            margin-right: 15px;
+        }
+
+        #checklist .nt-qitem .nt-qans .nt-qansscore input.nt-chk-score {
+            width: 40px;
+        }
 
 #checklist .nt-qitem.nt-qitem-edit-inact:hover .nt-qans.nt-qans-hover:hover, #checklist .nt-qitem.nt-qitem-edit-act .nt-qans.nt-qans-hover:hover {
     background-color: #f8f2e4;
@@ -1724,15 +1768,17 @@ i.nt-icon {
     top: 6px;
     right: 8px;
 }
+
 .nt-search-box:hover .nt-btn-clear {
     display: block;
     position: absolute;
     top: 6px;
     right: 8px;
 }
-    .nt-search-box .nt-btn-clear.add {
-        right: 29px;
-    }
+
+.nt-search-box .nt-btn-clear.add {
+    right: 29px;
+}
 
 .nt-search-box .nt-btn-add {
     position: absolute;
@@ -1796,38 +1842,41 @@ i.nt-icon {
     font-size: 15px;
     font-weight: 600;
 }
+
 .nt-qsearch-popover .nt-qans {
-    display:inline-table;
+    display: inline-table;
 }
-.nt-qsearch-popover .nt-qans .nt-qans-label {
-    display: inline-block;
-    font-size: 13px;
-    padding: 0;
-    margin: 0;
-    vertical-align: middle;
-}
-    .nt-qsearch-popover .nt-qans .nt-qans-label input {
-        margin: 0px 5px 0px 0px;
+
+    .nt-qsearch-popover .nt-qans .nt-qans-label {
+        display: inline-block;
+        font-size: 13px;
         padding: 0;
-        height: 28px;
-        float: left;
+        margin: 0;
+        vertical-align: middle;
     }
 
-    .nt-qsearch-popover .nt-qans .nt-qans-label .nt-qansdesc {
-        float: left;
-        min-height: 18px;
-        margin-left: 5px;
-        padding: 5px;
-        width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .nt-qsearch-popover .nt-qans .nt-qans-label input {
+            margin: 0px 5px 0px 0px;
+            padding: 0;
+            height: 28px;
+            float: left;
+        }
 
-.nt-qsearch-popover .nt-qans .nt-qansrep {
-    height: 100%;
-    float: right;
-    margin-top: 2px;
-}
+        .nt-qsearch-popover .nt-qans .nt-qans-label .nt-qansdesc {
+            float: left;
+            min-height: 18px;
+            margin-left: 5px;
+            padding: 5px;
+            width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .nt-qsearch-popover .nt-qans .nt-qansrep {
+        height: 100%;
+        float: right;
+        margin-top: 2px;
+    }
 
 .nt-tag.nt-tag-hl {
     -webkit-box-shadow: inset 0 0 10px #0044ff;
@@ -1835,10 +1884,12 @@ i.nt-icon {
     box-shadow: inset 0 0 10px #0044ff;
     text-shadow: 1px 1px 1px black;
 }
-.nt-tag.nt-tag-hl > span {
-    position:relative;
-    top:5px;
-}
+
+    .nt-tag.nt-tag-hl > span {
+        position: relative;
+        top: 5px;
+    }
+
 .nt-taglist > div {
     float: left;
     margin: 2px 4px 2px 0;
@@ -1868,9 +1919,11 @@ i.nt-icon {
     top: 125px;
     left: 85px;
 }
+
 #sidebar #qpaste textarea.blur {
-    -webkit-filter:blur(2px);
+    -webkit-filter: blur(2px);
 }
+
 .nt-loader-large {
     background: url('./img/loader-large.gif') left no-repeat;
     width: 32px;
@@ -2634,9 +2687,9 @@ user agent stylesheeti, cite, em, var, address, dfn {
         font-size: 14px;
     }
 
-        .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
-            width: 13%;
-        }
+    .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
+        width: 13%;
+    }
 
 
 .nt-date, .nt-time {
@@ -2648,9 +2701,9 @@ user agent stylesheeti, cite, em, var, address, dfn {
     width: 16%;
 }
 
-    .nt-asms-list .nt-list-head > div.nt-perc, .nt-asms-list .nt-list-row > div.nt-perc {
-        width: 7%;
-    }
+.nt-asms-list .nt-list-head > div.nt-perc, .nt-asms-list .nt-list-row > div.nt-perc {
+    width: 7%;
+}
 
 .nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
     display: inline-block;
