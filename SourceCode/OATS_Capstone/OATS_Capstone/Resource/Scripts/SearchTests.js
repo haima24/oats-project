@@ -1,9 +1,9 @@
 ﻿$(function () {
     $.post("/Tests/TestsSearch", function (res) {
         if (res.success) {
-            var source = $(res.listTestsSearch).map(function (obj, index) {
+            var source = $(res.listTestsSearch).map(function (index, obj) {
                 return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
-            });
+            }).convertJqueryArrayToJSArray();
             $(".navbar-search .nt-search-input").autocomplete({
                 minLength: 0,
                 source: source,
