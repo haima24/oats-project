@@ -26,6 +26,7 @@ namespace OATS_Capstone.Models
         }
     
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<FeedBack> FeedBacks { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionType> QuestionTypes { get; set; }

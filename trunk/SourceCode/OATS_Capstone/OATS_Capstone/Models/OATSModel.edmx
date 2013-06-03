@@ -7,6 +7,7 @@
       <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="OATSDBModelStoreContainer">
           <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="FeedBack" EntityType="OATSDBModel.Store.FeedBack" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Invitation" EntityType="OATSDBModel.Store.Invitation" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Question" EntityType="OATSDBModel.Store.Question" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="QuestionType" EntityType="OATSDBModel.Store.QuestionType" store:Type="Tables" Schema="dbo" />
@@ -23,6 +24,14 @@
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.Store.FK_Answer_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedBack_Test" Association="OATSDBModel.Store.FK_FeedBack_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="FeedBack" EntitySet="FeedBack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedBack_User" Association="OATSDBModel.Store.FK_FeedBack_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="FeedBack" EntitySet="FeedBack" />
           </AssociationSet>
           <AssociationSet Name="FK_Invitation_Test" Association="OATSDBModel.Store.FK_Invitation_Test">
             <End Role="Test" EntitySet="Test" />
@@ -98,6 +107,16 @@
           <Property Name="QuestionID" Type="int" Nullable="false" />
           <Property Name="IsRight" Type="bit" Nullable="false" />
           <Property Name="Score" Type="int" />
+          <Property Name="SerialOrder" Type="int" />
+        </EntityType>
+        <EntityType Name="FeedBack">
+          <Key>
+            <PropertyRef Name="FeedBackID" />
+          </Key>
+          <Property Name="FeedBackID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="TestID" Type="int" Nullable="false" />
+          <Property Name="FeedBackDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Invitation">
           <Key>
@@ -201,6 +220,7 @@
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
           <Property Name="UserCountry" Type="nvarchar" MaxLength="50" />
           <Property Name="RoleID" Type="int" />
+          <Property Name="LastLogin" Type="datetime" />
         </EntityType>
         <EntityType Name="UserInTest">
           <Key>
@@ -232,6 +252,30 @@
             </Principal>
             <Dependent Role="Answer">
               <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedBack_Test">
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="1" />
+          <End Role="FeedBack" Type="OATSDBModel.Store.FeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="FeedBack">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedBack_User">
+          <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
+          <End Role="FeedBack" Type="OATSDBModel.Store.FeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FeedBack">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -434,6 +478,7 @@
       <Schema Namespace="OATSDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="OATSDBEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="Answers" EntityType="OATSDBModel.Answer" />
+          <EntitySet Name="FeedBacks" EntityType="OATSDBModel.FeedBack" />
           <EntitySet Name="Invitations" EntityType="OATSDBModel.Invitation" />
           <EntitySet Name="Questions" EntityType="OATSDBModel.Question" />
           <EntitySet Name="QuestionTypes" EntityType="OATSDBModel.QuestionType" />
@@ -448,6 +493,14 @@
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.FK_Answer_Question">
             <End Role="Question" EntitySet="Questions" />
             <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedBack_Test" Association="OATSDBModel.FK_FeedBack_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="FeedBack" EntitySet="FeedBacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedBack_User" Association="OATSDBModel.FK_FeedBack_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="FeedBack" EntitySet="FeedBacks" />
           </AssociationSet>
           <AssociationSet Name="FK_Invitation_Test" Association="OATSDBModel.FK_Invitation_Test">
             <End Role="Test" EntitySet="Tests" />
@@ -515,7 +568,19 @@
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
           <Property Name="IsRight" Type="Boolean" Nullable="false" />
           <Property Name="Score" Type="Int32" />
+          <Property Name="SerialOrder" Type="Int32" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="FeedBack">
+          <Key>
+            <PropertyRef Name="FeedBackID" />
+          </Key>
+          <Property Name="FeedBackID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="TestID" Type="Int32" Nullable="false" />
+          <Property Name="FeedBackDateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_FeedBack_Test" FromRole="FeedBack" ToRole="Test" />
+          <NavigationProperty Name="User" Relationship="OATSDBModel.FK_FeedBack_User" FromRole="FeedBack" ToRole="User" />
         </EntityType>
         <EntityType Name="Invitation">
           <Key>
@@ -593,6 +658,7 @@
           <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndDateTime" Type="DateTime" Precision="3" />
           <Property Name="Duration" Type="Int32" />
+          <NavigationProperty Name="FeedBacks" Relationship="OATSDBModel.FK_FeedBack_Test" FromRole="Test" ToRole="FeedBack" />
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Test" ToRole="Invitation" />
           <NavigationProperty Name="Questions" Relationship="OATSDBModel.FK_Question_Test" FromRole="Test" ToRole="Question" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Test_User" FromRole="Test" ToRole="User" />
@@ -623,6 +689,8 @@
           <Property Name="FirstName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="UserCountry" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="RoleID" Type="Int32" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="FeedBacks" Relationship="OATSDBModel.FK_FeedBack_User" FromRole="User" ToRole="FeedBack" />
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_User" FromRole="User" ToRole="Invitation" />
           <NavigationProperty Name="Role" Relationship="OATSDBModel.FK_User_Role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="Tests" Relationship="OATSDBModel.FK_Test_User" FromRole="User" ToRole="Test" />
@@ -663,6 +731,30 @@
             </Principal>
             <Dependent Role="Answer">
               <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedBack_Test">
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="1" />
+          <End Role="FeedBack" Type="OATSDBModel.FeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="FeedBack">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedBack_User">
+          <End Role="User" Type="OATSDBModel.User" Multiplicity="1" />
+          <End Role="FeedBack" Type="OATSDBModel.FeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FeedBack">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -832,6 +924,17 @@
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
                 <ScalarProperty Name="IsRight" ColumnName="IsRight" />
                 <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="SerialOrder" ColumnName="SerialOrder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FeedBacks">
+            <EntityTypeMapping TypeName="OATSDBModel.FeedBack">
+              <MappingFragment StoreEntitySet="FeedBack">
+                <ScalarProperty Name="FeedBackID" ColumnName="FeedBackID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="FeedBackDateTime" ColumnName="FeedBackDateTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -928,6 +1031,7 @@
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserCountry" ColumnName="UserCountry" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
