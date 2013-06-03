@@ -2,14 +2,14 @@
     $('#calendar').addClass("loading");
     $.post("/Tests/TestCalendarObjectResult", function (res) {
         if (res.success) {
-            events = $(res.listTestCalendar).map(function (obj) {
+            events = $(res.listTestCalendar).map(function (index,obj) {
                 return {
                     id: obj.id,
                     title: obj.testTitle,
                     start: convertJsonDatetoDate(obj.startDateTime),
                     end: convertJsonDatetoDate(obj.endDateTime)
                 };
-            });
+            }).convertJqueryArrayToJSArray();
             $('#calendar').fullCalendar({
                 theme: true,
                 header: {
