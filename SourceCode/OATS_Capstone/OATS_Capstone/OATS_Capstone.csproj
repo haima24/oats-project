@@ -137,6 +137,9 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\FeedBack.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Invitation.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
