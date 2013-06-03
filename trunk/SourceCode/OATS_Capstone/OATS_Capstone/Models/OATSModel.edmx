@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="OATSDBModelStoreContainer">
           <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeedBack" EntityType="OATSDBModel.Store.FeedBack" store:Type="Tables" Schema="dbo" />
@@ -116,6 +116,7 @@
           <Property Name="FeedBackID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="TestID" Type="int" Nullable="false" />
+          <Property Name="FeedBackDetail" Type="nvarchar" MaxLength="1024" />
           <Property Name="FeedBackDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Invitation">
@@ -471,8 +472,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OATSDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -581,6 +581,7 @@
           <Property Name="FeedBackDateTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_FeedBack_Test" FromRole="FeedBack" ToRole="Test" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_FeedBack_User" FromRole="FeedBack" ToRole="User" />
+          <Property Type="String" Name="FeedBackDetail" MaxLength="1024" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Invitation">
           <Key>
@@ -931,6 +932,7 @@
           <EntitySetMapping Name="FeedBacks">
             <EntityTypeMapping TypeName="OATSDBModel.FeedBack">
               <MappingFragment StoreEntitySet="FeedBack">
+                <ScalarProperty Name="FeedBackDetail" ColumnName="FeedBackDetail" />
                 <ScalarProperty Name="FeedBackID" ColumnName="FeedBackID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
