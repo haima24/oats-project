@@ -17,6 +17,7 @@ namespace OATS_Capstone.Models
         public int FeedBackID { get; set; }
         public int UserID { get; set; }
         public int TestID { get; set; }
+        public string FeedBackDetail { get; set; }
         public Nullable<System.DateTime> FeedBackDateTime { get; set; }
     
         public virtual Test Test { get; set; }
