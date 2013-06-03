@@ -11,19 +11,15 @@ namespace OATS_Capstone.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
-    public partial class Answer
+    public partial class FeedBack
     {
-        public int AnswerID { get; set; }
-
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string AnswerContent { get; set; }
-        public int QuestionID { get; set; }
-        public bool IsRight { get; set; }
-        public Nullable<int> Score { get; set; }
-        public Nullable<int> SerialOrder { get; set; }
+        public int FeedBackID { get; set; }
+        public int UserID { get; set; }
+        public int TestID { get; set; }
+        public Nullable<System.DateTime> FeedBackDateTime { get; set; }
     
-        public virtual Question Question { get; set; }
+        public virtual Test Test { get; set; }
+        public virtual User User { get; set; }
     }
 }

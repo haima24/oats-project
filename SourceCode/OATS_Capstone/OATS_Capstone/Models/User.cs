@@ -16,6 +16,7 @@ namespace OATS_Capstone.Models
     {
         public User()
         {
+            this.FeedBacks = new HashSet<FeedBack>();
             this.Invitations = new HashSet<Invitation>();
             this.Tests = new HashSet<Test>();
             this.UserInTests = new HashSet<UserInTest>();
@@ -29,7 +30,9 @@ namespace OATS_Capstone.Models
         public string FirstName { get; set; }
         public string UserCountry { get; set; }
         public Nullable<int> RoleID { get; set; }
+        public Nullable<System.DateTime> LastLogin { get; set; }
     
+        public virtual ICollection<FeedBack> FeedBacks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<Test> Tests { get; set; }
