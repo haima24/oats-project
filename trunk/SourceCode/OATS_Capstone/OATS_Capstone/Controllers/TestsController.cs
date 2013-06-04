@@ -75,7 +75,8 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message, questionHtml });
         }
-        public JsonResult ReuseSearchQuestionTemplate(int maxrows,string term)
+       
+        public JsonResult ReuseSearchQuestionTemplate(int maxrows, string term)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -84,12 +85,14 @@ namespace OATS_Capstone.Controllers
             {
                 var db = SingletonDb.Instance();
                 var questions = db.Questions.ToList();
-                var matchQuestions = questions.Where(delegate(Question question) {
+                var matchQuestions = questions.Where(delegate(Question question)
+                {
                     return question.QuestionTitle.Contains(term)
                         || question.Answers.Any(k => k.AnswerContent.Contains(term));
                 });
                 var matches = matchQuestions.Take(maxrows).ToList();
-                matches.ForEach(delegate(Question question) {
+                matches.ForEach(delegate(Question question)
+                {
                     var html = this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", question);
                     renderedHtmlList.Add(html);
                 });
@@ -153,7 +156,7 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
 
-            return Json(new { listTestsSearch, success });
+            return Json(new { listTestsSearch, success, message });
         }
         public ActionResult Index()
         {
@@ -194,7 +197,7 @@ namespace OATS_Capstone.Controllers
                 }
             });
             db.SaveChanges();
-            var master=new InvitationMasterModel(){UserList=db.Users.ToList(),InvitationList=test.Invitations.ToList()};
+            var master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
             var generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
             return Json(generatedHtml);
         }
@@ -371,6 +374,9 @@ namespace OATS_Capstone.Controllers
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
                 if (question != null)
                 {
+                    var maxSerial = question.Answers.Max(k => k.SerialOrder);
+                    if (maxSerial.HasValue) { ans.SerialOrder = maxSerial.Value + 1; }
+                    else { ans.SerialOrder = 0; }
                     question.Answers.Add(ans);
                     if (db.SaveChanges() > 0)
                     {
@@ -379,13 +385,13 @@ namespace OATS_Capstone.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 success = false;
             }
 
-            return Json(new { success, questionHtml });
+            return Json(new { success, questionHtml, message });
         }
 
         public JsonResult ResortQuestions(int count, List<Question> questions)
@@ -486,32 +492,28 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message });
         }
-        public JsonResult UpdateAnswer(int answerid, string answerContent, bool isright, string type)
+        public JsonResult UpdateAnswer(List<Answer> answers)
         {
             var success = false;
             var db = SingletonDb.Instance();
             var message = Constants.DefaultProblemMessage;
             try
             {
-                var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
-                if (ans != null)
+                answers.ForEach(delegate(Answer ans)
                 {
-                    ans.AnswerContent = answerContent;
-                    if (type == "Radio")
+                    var ansDb = db.Answers.FirstOrDefault(i => i.AnswerID == ans.AnswerID);
+                    if (ansDb != null)
                     {
-                        var questionid = ans.QuestionID;
-                        var ansInQues = db.Answers.Where(k => k.QuestionID == questionid).ToList();
-                        if (isright)
-                        {
-                            ansInQues.ForEach(h => h.IsRight = false);
-                        }
+                        ansDb.AnswerContent = ans.AnswerContent;
+                        ansDb.IsRight = ans.IsRight;
+                        ansDb.Score = ans.Score;
+                        ansDb.SerialOrder = ans.SerialOrder;
                     }
-                    ans.IsRight = isright;
                     if (db.SaveChanges() >= 0)
                     {
                         success = true;
                     }
-                }
+                });
             }
             catch (Exception)
             {
@@ -628,6 +630,29 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
             return Json(new { success, message });
+        }
+        public JsonResult UpdateStartEnd(int testid,DateTime start,DateTime end)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null) {
+                    test.StartDateTime = start;
+                    test.EndDateTime = end;
+                    if (db.SaveChanges() >= 0) {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success,message});
         }
     }
 }
