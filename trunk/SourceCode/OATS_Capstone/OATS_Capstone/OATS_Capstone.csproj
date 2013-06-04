@@ -380,7 +380,7 @@
     <Content Include="Views\Tests\P_Reuse_Template_ShortAnswer.cshtml" />
     <Content Include="Views\Tests\P_Reuse_Template_Image.cshtml" />
     <Content Include="Views\Tests\P_Reuse_Template_Question_Instance.cshtml" />
-    <Content Include="Views\Tests\P_Inner_Container.cshtml" />
+    <Content Include="Views\Tests\DoTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

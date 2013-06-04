@@ -119,7 +119,7 @@
                                     {
                                         <div class="nt-list-row nt-guide">
                                             <div class="nt-name">
-                                                @item.TestTitle
+                                                <a href="@Url.Action("DoTest", new {testid=item.TestID })">@item.TestTitle</a>
                                             </div>
                                             <div class="nt-date">@item.StartDateTime</div>
                                             <div class="nt-date">@item.EndDateTime</div>

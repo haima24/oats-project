@@ -1,11 +1,8 @@
-﻿@section additionheader{
-    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
-}
-
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
-<script src="~/Resource/Scripts/NewTest_IndexScript.js"></script>
+@model OATS_Capstone.Models.Test
+<script src="~/Resource/Scripts/NewTestScript.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div id="savestatus" style="display:none;">
@@ -25,7 +22,7 @@
                 <ul class="nav pull-right">
                     <li>
                         <div class="navbar-search pull-left">
-                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests" />
+                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests"/>
                         </div>
                     </li>
                     <li class="divider-vertical"></li>
@@ -45,18 +42,24 @@
     </div>
     <!-- /navbar-inner -->
 </div>
-<div id="container" class="container wrapper">
-    <div class="tabs-wrapper">
-        <div class="navbar">
-            <div class="navbar-inner test-larger-custom">
-                <ul class="nav">
-                    <li class="active"><a class="tab-event" href="@Url.Action("Index_CalendarTab")">Calendar</a></li>
-                    <li><a class="tab-event" href="@Url.Action("Index_TestListTab")">Test List</a></li>
-                </ul>
-            </div>
-        </div>
-        <div id="eventTab">
-            @Html.Partial("P_CalendarTab")
-        </div>
-    </div>
+<div id="checklist" content-tab="true" class="nt-sortable" style="height: 500px; overflow-y: auto;">
+
+    @if (Model == null)
+    { @Html.Partial("P_Type_Empty_Template") }
+    else
+    {
+        if (Model.Questions.Count == 0)
+        {
+        @Html.Partial("P_Type_Empty_Template")
+        }
+        else
+        {
+            var orderedQuestions = Model.Questions.OrderBy(i => i.SerialOrder);
+            foreach (var question in orderedQuestions)
+            {
+                     @Html.Partial("P_Question_Instance",question)
+            }
+        }
+    }
+
 </div>
