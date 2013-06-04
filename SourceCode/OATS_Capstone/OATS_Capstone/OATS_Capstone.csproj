@@ -171,6 +171,9 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchingTemplate.cs" />
+    <Compile Include="Models\SettingConfig.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SettingType.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -179,9 +182,6 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Test.cs">
-      <DependentUpon>OATSModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TestSetting.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">

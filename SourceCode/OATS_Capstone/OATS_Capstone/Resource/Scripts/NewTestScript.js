@@ -230,9 +230,7 @@ function initDateTimePicker() {
     var dFString = $("#eventDateFrom").attr("current-date");
     var dTString = $("#eventDateTo").attr("current-date");
     var dF = !isNaN(parseInt(dFString)) ? new Date(parseInt(dFString)) : new Date();
-    dF.setUTCHours(dF.getHours());
     var dT = !isNaN(parseInt(dTString)) ? new Date(parseInt(dTString)) : new Date();
-    dT.setUTCHours(dT.getHours())
 
     dFromObj = dF;
     dToObj = dT;
@@ -241,8 +239,8 @@ function initDateTimePicker() {
         language: 'en',
         pick12HourFormat: true,
         pickSeconds: false
-    }).datetimepicker('setDate', dT).on('changeDate', function (ev) {
-        dFromObj = ev.date;
+    }).datetimepicker('setLocalDate', dF).on('changeDate', function (ev) {
+        dFromObj = ev.localDate;
         checkConstraintStartEnd(dFromObj, dToObj, function () {
             updateStartEndDate(testid, dFromObj, dToObj);
         });
@@ -251,8 +249,8 @@ function initDateTimePicker() {
         language: 'en',
         pick12HourFormat: true,
         pickSeconds: false
-    }).datetimepicker('setDate', dF).on('changeDate', function (ev) {
-        dToObj = ev.date;
+    }).datetimepicker('setLocalDate', dT).on('changeDate', function (ev) {
+        dToObj = ev.localDate;
         checkConstraintStartEnd(dFromObj, dToObj, function () {
             updateStartEndDate(testid, dFromObj, dToObj);
         });
@@ -261,15 +259,11 @@ function initDateTimePicker() {
 
 function updateStartEndDate(testid, start, end) {
     statusSaving();
-    var iStart = new Date(start);
-    var iEnd = new Date(end);
-    iStart.setHours(iStart.getUTCHours());
-    iEnd.setHours(iEnd.getUTCHours());
 
     $.ajax({
         type: "POST",
         url: "/Tests/UpdateStartEnd",
-        data: JSON.stringify({ testid: testid, start: iStart, end: iEnd }),
+        data: JSON.stringify({ testid: testid, start: start, end: end }),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (res) {
@@ -1030,6 +1024,11 @@ $(function () {
     $(".nt-qitem .nt-qans").live("change", function (ev) {
         updateAnswer($(this).closest(".nt-qans"), ev.target);
     });
+    //separator
+    $("#eventDel").live("click", function (ev) {
+
+    });
+    //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
 
