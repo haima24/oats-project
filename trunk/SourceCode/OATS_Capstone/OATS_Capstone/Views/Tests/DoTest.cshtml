@@ -5,7 +5,7 @@
 <script src="~/Resource/Scripts/NewTestScript.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
-        <div id="savestatus" style="display:none;">
+        <div id="savestatus" style="display: none;">
             <span class="nt-desc" style="display: inline;"></span>
         </div>
         <div class="container">
@@ -22,7 +22,7 @@
                 <ul class="nav pull-right">
                     <li>
                         <div class="navbar-search pull-left">
-                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests"/>
+                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests" />
                         </div>
                     </li>
                     <li class="divider-vertical"></li>
@@ -42,24 +42,347 @@
     </div>
     <!-- /navbar-inner -->
 </div>
-<div id="checklist" content-tab="true" class="nt-sortable" style="height: 500px; overflow-y: auto;">
+<div id="container" class="container nt-well nt-de-cont">
+    @*<div class="nt-header">Demo to copy</div>*@
+    <div class="nt-checklist-cont" style="height: 447px; overflow-y: auto;">
+        <div class="nt-msg"></div>
+        <div class="nt-username">Admin User</div>
+        @*<div class="nt-asm-title">Demo to copy</div>*@
+        <div id="checklist">
+            <div class="nt-qitem">
+                <div class="nt-qnum "></div>
+                <a class="nt-qanchor" name="Qundefined"></a>
+                <!-- NOT isImg START -->
 
-    @if (Model == null)
-    { @Html.Partial("P_Type_Empty_Template") }
-    else
-    {
-        if (Model.Questions.Count == 0)
-        {
-        @Html.Partial("P_Type_Empty_Template")
-        }
-        else
-        {
-            var orderedQuestions = Model.Questions.OrderBy(i => i.SerialOrder);
-            foreach (var question in orderedQuestions)
-            {
-                     @Html.Partial("P_Question_Instance",question)
-            }
-        }
-    }
+                <div class="nt-qmaxpts">1 pt</div>
 
+                <div class="nt-qtext " >
+
+                    <p>Multiple choice</p>
+
+                </div>
+
+                <!-- NOT isImg END -->
+
+                <!-- isImg START -->
+                <!-- isImg END -->
+
+
+                <div class="nt-qanscont nt-sortable">
+                    <div class="nt-qans nt-qans-hover" >
+                        <!-- TODO: consistent editable / fillable display -->
+                        <label class="radio nt-qans-label ">
+                            <input type="radio" id="ans_c399" name="ans_c398" value="0">
+                            <div class="nt-qansdesc">
+                                <p>dap an 1</p>
+                            </div>
+                        </label>
+
+
+
+
+                    </div>
+                    <div class="nt-qans nt-qans-hover" id="c400">
+                        <!-- TODO: consistent editable / fillable display -->
+                        <label class="radio nt-qans-label ">
+                            <input type="radio" id="ans_c400" name="ans_c398" value="1">
+                            <div class="nt-qansdesc">
+                                <p>dap an 2</p>
+                            </div>
+                        </label>
+
+
+
+
+                    </div>
+                </div>
+
+
+                <div class="nt-qfoot">
+
+
+                    <div class="nt-qrep" style="display: none">
+                        <span>Correct:</span><span class="nt-crate"></span>
+                        <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="nt-qitem" id="6565c1f0403b4e55995294d3a116acf0">
+                <div class="nt-qnum "></div>
+                <a class="nt-qanchor" name="Qundefined"></a>
+                <!-- NOT isImg START -->
+
+                <div class="nt-qmaxpts">2 pts</div>
+
+                <div class="nt-qtext " id="text_6565c1f0403b4e55995294d3a116acf0">
+
+                    <p>Check box</p>
+
+                </div>
+
+                <!-- NOT isImg END -->
+
+                <!-- isImg START -->
+                <!-- isImg END -->
+
+
+                <div class="nt-qanscont nt-sortable">
+                    <div class="nt-qans nt-qans-hover" id="c402">
+                        <!-- TODO: consistent editable / fillable display -->
+                        <label class="checkbox nt-qans-label ">
+                            <input type="checkbox" id="ans_c402" name="ans_c401">
+                            <div class="nt-qansdesc">
+                                <p>dap an 1</p>
+                            </div>
+                        </label>
+
+
+
+
+                    </div>
+                    <div class="nt-qans nt-qans-hover" id="c403">
+                        <!-- TODO: consistent editable / fillable display -->
+                        <label class="checkbox nt-qans-label ">
+                            <input type="checkbox" id="ans_c403" name="ans_c401">
+                            <div class="nt-qansdesc">
+                                <p>dap an 2</p>
+                            </div>
+                        </label>
+
+
+
+
+                    </div>
+                    <div class="nt-qans nt-qans-hover" id="c404">
+                        <!-- TODO: consistent editable / fillable display -->
+                        <label class="checkbox nt-qans-label ">
+                            <input type="checkbox" id="ans_c404" name="ans_c401">
+                            <div class="nt-qansdesc">
+                                <p>dap an 3</p>
+                            </div>
+                        </label>
+
+
+
+
+                    </div>
+                </div>
+
+
+                <div class="nt-qfoot">
+
+
+                    <div class="nt-qrep" style="display: none">
+                        <span>Correct:</span><span class="nt-crate"></span>
+                        <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="nt-qitem" id="481df2fda8a744f3abad6e2a2822b312">
+                <div class="nt-qnum "></div>
+                <a class="nt-qanchor" name="Qundefined"></a>
+                <!-- NOT isImg START -->
+
+                <div class="nt-qmaxpts">3 pts</div>
+
+                <div class="nt-qtext " id="text_481df2fda8a744f3abad6e2a2822b312">
+
+                    <p>essay</p>
+
+                </div>
+
+                <!-- NOT isImg END -->
+
+                <!-- isImg START -->
+                <!-- isImg END -->
+
+
+                <div class="nt-qanscont nt-sortable"></div>
+
+                <div class="nt-qmiddle">
+
+
+                    <div class="nt-format-hint" style="width: 710px;">(select text to format)</div>
+                    <div class="redactor_box">
+                        <textarea name="qresp_481df2fda8a744f3abad6e2a2822b312" style="height: 18px; display: none;"></textarea><div class="nt-qrespinput nt-delayedblur redactor_editor" id="qresp_481df2fda8a744f3abad6e2a2822b312" contenteditable="true" dir="ltr" style="width: 696px; min-height: 92px;">
+                            <p>
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="nt-qfoot">
+                    <ul class="redactor_toolbar" style="width: 708px; display: block;">
+                        <li><a href="javascript:void(null);" title="Bold" class="redactor_btn_bold" tabindex="-1"></a></li>
+                        <li><a href="javascript:void(null);" title="Italic" class="redactor_btn_italic" tabindex="-1"></a></li>
+                        <li class="redactor_separator"></li>
+                        <li><a href="javascript:void(null);" title="• Unordered List" class="redactor_btn_unorderedlist" tabindex="-1"></a></li>
+                        <li><a href="javascript:void(null);" title="1. Ordered List" class="redactor_btn_orderedlist" tabindex="-1"></a></li>
+                        <li class="redactor_separator"></li>
+                        <li><a href="javascript:void(null);" title="&lt; Outdent" class="redactor_btn_outdent" tabindex="-1"></a></li>
+                        <li><a href="javascript:void(null);" title="&gt; Indent" class="redactor_btn_indent" tabindex="-1"></a></li>
+                        <li class="redactor_separator"></li>
+                        <li><a href="javascript:void(null);" title="Align text to the left" class="redactor_btn_alignleft" tabindex="-1"></a></li>
+                        <li><a href="javascript:void(null);" title="Center text" class="redactor_btn_aligncenter" tabindex="-1"></a></li>
+                        <li><a href="javascript:void(null);" title="Align text to the right" class="redactor_btn_alignright" tabindex="-1"></a></li>
+                        <li><a href="javascript:void(null);" title="Justify text" class="redactor_btn_justify" tabindex="-1"></a></li>
+                        <li class="redactor_separator"></li>
+                        <li><a href="javascript:void(null);" title="Insert Image" class="redactor_btn_image" tabindex="-1"></a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="nt-qitem" id="8a9540281675422c952bb22055598ae5">
+                <div class="nt-qnum "></div>
+                <a class="nt-qanchor" name="Qundefined"></a>
+                <!-- NOT isImg START -->
+
+                <div class="nt-qmaxpts">1 pt</div>
+
+                <div class="nt-qtext " id="text_8a9540281675422c952bb22055598ae5">
+                    <p>Short answer</p>
+
+
+                </div>
+
+                <!-- NOT isImg END -->
+
+                <!-- isImg START -->
+                <!-- isImg END -->
+
+
+                <div class="nt-qanscont nt-sortable"></div>
+
+                <div class="nt-qmiddle" style="">
+
+
+
+                    <input type="text" class="nt-qrespinput nt-guide" value="" maxlength="140" style="width: 696px;">
+                </div>
+
+                <div class="nt-qfoot">
+
+
+                    <div class="nt-qrep" style="display: none">
+                        <span>Correct:</span><span class="nt-crate"></span>
+                        <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="nt-qitem" id="87a8d1c80b9d402595fa65554efe26d4">
+                <div class="nt-qnum nt-qnum-letter"></div>
+                <a class="nt-qanchor" name="Qundefined"></a>
+                <!-- NOT isImg START -->
+
+
+                <div class="nt-qtext " id="text_87a8d1c80b9d402595fa65554efe26d4">
+
+                    <p>Text</p>
+
+                </div>
+
+                <!-- NOT isImg END -->
+
+                <!-- isImg START -->
+                <!-- isImg END -->
+
+
+                <div class="nt-qanscont nt-sortable"></div>
+
+
+                <div class="nt-qfoot">
+
+
+                    <div class="nt-qrep" style="display: none">
+                        <span>Correct:</span><span class="nt-crate"></span>
+                        <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="nt-qitem" id="ed573d25460141a49b9107d3eeeced42">
+                <div class="nt-qnum nt-qnum-letter"></div>
+                <a class="nt-qanchor" name="Qundefined"></a>
+                <!-- NOT isImg START -->
+                <!-- NOT isImg END -->
+
+                <!-- isImg START -->
+
+
+                <p align="center" class="nt-qimg-cont" style="display: block">
+                    <img src="/spec/resource/a15ee4311a3e4441a51f276ff1edc16f" style="width: 710px; height: 532px">
+                </p>
+
+                <div class="nt-qtext nt-qimg-desc " id="imgdesc_ed573d25460141a49b9107d3eeeced42">
+                    <p>Image</p>
+
+                </div>
+
+                <!-- isImg END -->
+
+
+                <div class="nt-qanscont nt-sortable"></div>
+
+
+                <div class="nt-qfoot">
+
+
+                    <div class="nt-qrep" style="display: none">
+                        <span>Correct:</span><span class="nt-crate"></span>
+                        <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="nt-footer" style="display: block;">
+        <div class="nt-footer-cont">
+            <div class="nt-resp-stat">
+                <div class="nt-resp-stat-desc">0 of 4 answered - 0% complete</div>
+                <div class="nt-resp-stat-bar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+                    <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="display: none; width: 0%;"></div>
+                </div>
+            </div>
+            <button class="nt-btn-submit nt-submit">Submit</button>
+            <div class="nt-footer-right">
+                <div class="nt-time-remaining" id="c427">
+                    <div class="nt-time-remaining-text">Time remaining:</div>
+                    <div class="nt-time-remaining-value nt-full">
+                        <div class="nt-time-digits">1</div>
+                        <div class="nt-hour">hour</div>
+                        <div class="nt-time-digits">46</div>
+                        <div class="nt-minute">minutes</div>
+                    </div>
+                    <div class="nt-time-remaining-value nt-abbr">
+                        <div class="nt-time-digits">1</div>
+                        <div class="nt-hour">hr</div>
+                        <div class="nt-time-digits">46</div>
+                        <div class="nt-minute">mins</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

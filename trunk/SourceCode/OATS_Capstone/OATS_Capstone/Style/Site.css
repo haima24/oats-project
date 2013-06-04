@@ -2766,3 +2766,776 @@ user agent stylesheeti, cite, em, var, address, dfn {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
+
+#container:not(.nt-mobile) {
+}
+#container.nt-de-cont {
+overflow: visible;
+margin-bottom: 70px;
+padding-bottom: 5px;
+}
+#container.nt-mobile, #container.nt-de-cont, #container.nt-signup {
+width: auto;
+}
+#container.nt-well {
+position: relative;
+background: rgba(255, 255, 255, 0.3);
+padding: 20px 20px 1px 20px;
+-webkit-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 2px;
+-moz-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 2px;
+box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 2px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+-ms-border-radius: 10px;
+-o-border-radius: 10px;
+border-radius: 10px;
+}
+#container {
+width: 960px;
+max-width: 960px;
+margin-top: 60px;
+margin-bottom: 20px;
+overflow: hidden;
+}
+.container {
+margin-right: auto;
+margin-left: auto;
+}
+.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+width: 940px;
+}
+
+#container.nt-de-cont .nt-header {
+position: fixed;
+overflow: hidden;
+text-overflow: ellipsis;
+top: 0;
+left: 19%;
+right: 19%;
+margin-left: auto;
+margin-right: auto;
+z-index: 1040;
+color: white;
+text-align: center;
+white-space: nowrap;
+font-size: 16px;
+line-height: 40px;
+max-width: 700px;
+}
+
+#container.nt-de-cont .nt-checklist-cont {
+max-width: 978px;
+}
+
+#container.nt-de-cont .nt-checklist-cont .nt-msg {
+text-align: center;
+margin-right: 20px;
+font-size: 14px;
+}
+
+#container.nt-de-cont .nt-checklist-cont .nt-username {
+max-width: 732px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+text-align: right;
+right: 0;
+margin: 0 auto;
+font-weight: bold;
+}
+
+#container.nt-de-cont .nt-checklist-cont .nt-asm-title {
+display: none;
+font-size: 16px;
+margin-bottom: 10px;
+padding: 5px;
+}
+
+#container.nt-de-cont .nt-checklist-cont #checklist {
+width: auto;
+max-width: 732px;
+margin: 0 auto;
+}
+#checklist {
+width: 749px;
+position: relative;
+overflow-x: hidden;
+overflow-y: auto;
+}
+
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem {
+width: auto;
+max-width: 730px;
+}
+#checklist .nt-qitem:first-child {
+border-top: 1px solid #c7c7c7;
+-moz-border-radius-topleft: 5px;
+-webkit-border-top-left-radius: 5px;
+border-top-left-radius: 5px;
+-moz-border-radius-topright: 5px;
+-webkit-border-top-right-radius: 5px;
+border-top-right-radius: 5px;
+}
+#checklist .nt-qitem {
+width: 730px;
+position: relative;
+overflow: hidden;
+background-color: white;
+border: 1px solid #c7c7c7;
+border-top: 1px solid #ececec;
+border-bottom: 0;
+}
+
+#checklist .nt-qitem .nt-qnum {
+position: absolute;
+font-size: 16px;
+line-height: 22px;
+width: 29px;
+top: 10px;
+left: 1px;
+text-align: right;
+padding-top: 5px;
+}
+
+a, a:hover {
+text-decoration: none;
+cursor: pointer;
+}
+a {
+color: #0088cc;
+text-decoration: none;
+}
+
+#checklist .nt-qitem .nt-qmaxpts {
+position: absolute;
+top: 10px;
+right: 10px;
+}
+#checklist .nt-qitem .nt-qpts, #checklist .nt-qitem .nt-qmaxpts {
+font-size: 10px;
+background-color: #f8f8f8;
+padding: 3px;
+width: 45px;
+text-align: center;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+}
+
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qtext {
+width: auto;
+max-width: 605px;
+}
+#checklist .nt-qitem .nt-qtext {
+font-size: 16px;
+line-height: 22px;
+margin: 10px 0 7px 35px;
+width: 605px;
+min-height: 22px;
+padding: 5px;
+}
+
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qans {
+position: static;
+}
+#checklist .nt-qitem .nt-qans {
+position: relative;
+overflow: hidden;
+padding: 6px 10px 5px 17px;
+font-size: 14px;
+min-height: 28px;
+border-bottom: 1px solid white;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qans-label {
+font-size: 14px;
+padding: 0;
+margin: 0;
+vertical-align: middle;
+}
+.radio, .checkbox {
+min-height: 18px;
+padding-left: 18px;
+}
+label {
+display: block;
+margin-bottom: 5px;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
+margin: 7px 0 0 0;
+padding: 0;
+}
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+float: left;
+margin-left: -18px;
+}
+input[type="file"], input[type="image"], input[type="submit"], input[type="reset"], input[type="button"], input[type="radio"], input[type="checkbox"] {
+width: auto;
+}
+input[type="radio"], input[type="checkbox"] {
+margin: 4px 0 0;
+margin-top: 1px 9;
+line-height: normal;
+cursor: pointer;
+}
+input, textarea {
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, textarea, .uneditable-input {
+margin-left: 0;
+}
+input, textarea {
+width: 210px;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qans .nt-qansdesc {
+width: auto;
+max-width: 633px;
+margin-left: 17px;
+}
+#checklist .nt-qitem .nt-qans .nt-qansdesc {
+min-height: 18px;
+margin-left: 5px;
+padding: 5px;
+width: 633px;
+}
+
+#checklist .nt-qitem .nt-qfoot {
+position: relative;
+padding: 8px 44px 8px 10px;
+height: 24px;
+}
+
+#checklist .nt-qitem .nt-qfoot .nt-qrep {
+position: absolute;
+top: 11px;
+right: 15px;
+font-size: 11px;
+text-transform: uppercase;
+}
+
+#checklist .nt-qitem .nt-qfoot .nt-qrep .nt-crate, #checklist .nt-qitem .nt-qfoot .nt-qrep .nt-pbs {
+font-weight: bold;
+margin-left: 5px;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qrep span {
+margin-left: 20px;
+}
+
+#checklist .nt-qitem .nt-qfoot .nt-qrep .nt-crate, #checklist .nt-qitem .nt-qfoot .nt-qrep .nt-pbs {
+font-weight: bold;
+margin-left: 5px;
+}
+#checklist .nt-qitem .nt-qfoot .nt-qrep span {
+margin-left: 20px;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qans-label {
+font-size: 14px;
+padding: 0;
+margin: 0;
+vertical-align: middle;
+}
+.radio, .checkbox {
+min-height: 18px;
+padding-left: 18px;
+}
+label {
+display: block;
+margin-bottom: 5px;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+
+#checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
+margin: 7px 0 0 0;
+padding: 0;
+}
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+float: left;
+margin-left: -18px;
+}
+input[type="file"], input[type="image"], input[type="submit"], input[type="reset"], input[type="button"], input[type="radio"], input[type="checkbox"] {
+width: auto;
+}
+input[type="radio"], input[type="checkbox"] {
+margin: 4px 0 0;
+margin-top: 1px 9;
+line-height: normal;
+cursor: pointer;
+}
+input, textarea {
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, textarea, .uneditable-input {
+margin-left: 0;
+}
+input, textarea {
+width: 210px;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+
+#checklist .nt-qitem .nt-qmiddle {
+position: relative;
+padding: 10px 10px 0 10px;
+}
+
+#checklist .nt-qitem .nt-qmiddle .nt-format-hint {
+position: absolute;
+top: -10px;
+left: 10px;
+font-size: 11px;
+color: #afafaf;
+text-align: right;
+}
+
+.redactor_box textarea {
+font-family: Menlo, Monaco, monospace, sans-serif;
+font-size: 13px;
+overflow: auto;
+resize: none;
+margin: 0;
+padding: 0;
+display: block;
+position: relative;
+z-index: 1004;
+outline: none;
+border: none;
+width: 100%;
+}
+input, textarea {
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, textarea, .uneditable-input {
+margin-left: 0;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+background-color: #ffffff;
+border: 1px solid #cccccc;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border linear .2s, box-shadow linear .2s;
+-moz-transition: border linear .2s, box-shadow linear .2s;
+-o-transition: border linear .2s, box-shadow linear .2s;
+transition: border linear .2s, box-shadow linear .2s;
+}
+textarea {
+height: auto;
+}
+input, textarea {
+width: 210px;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+display: inline-block;
+height: 18px;
+padding: 4px 6px;
+margin-bottom: 9px;
+font-size: 13px;
+line-height: 18px;
+color: #555555;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+textarea {
+overflow: auto;
+vertical-align: top;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+
+#checklist .nt-qitem .nt-qmiddle div.nt-qrespinput {
+min-height: 18px;
+width: 696px;
+}
+.nt-mockinput, #checklist .nt-qitem .nt-qtext .nt-fitb > span, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput {
+outline: none;
+padding: 4px 6px;
+border: 1px solid #cccccc;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+-ms-border-radius: 3px;
+-o-border-radius: 3px;
+border-radius: 3px;
+-webkit-transition: border 0.2s linear, box-shadow 0.2s linear;
+-webkit-transition-delay: 0s, 0s;
+-moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+-o-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+#checklist .nt-qitem .nt-qmiddle .nt-qrespinput {
+margin-bottom: 16px;
+}
+.redactor_editor {
+overflow: hidden;
+}
+div[Attributes Style] {
+-webkit-user-modify: read-write;
+word-wrap: break-word;
+-webkit-nbsp-mode: space;
+-webkit-line-break: after-white-space;
+direction: ltr;
+unicode-bidi: embed;
+}
+
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .redactor_toolbar {
+display: none;
+position: absolute;
+left: 10px;
+top: -16px;
+}
+.redactor_toolbar {
+font-family: Helvetica, Arial, Verdana, Tahoma, sans-serif !important;
+position: relative;
+left: 0;
+top: 0;
+margin: 0 !important;
+padding: 0 !important;
+padding-left: 2px !important;
+line-height: 0 !important;
+list-style: none !important;
+font-size: 0;
+background: #f1f1f1;
+background: -moz-linear-gradient(top, #f1f1f1 0%, #e2e2e2 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f1f1f1), color-stop(100%,#e2e2e2));
+background: -webkit-linear-gradient(top, #f1f1f1 0%,#e2e2e2 100%);
+background: -o-linear-gradient(top, #f1f1f1 0%,#e2e2e2 100%);
+background: -ms-linear-gradient(top, #f1f1f1 0%,#e2e2e2 100%);
+background: linear-gradient(to bottom, #f1f1f1 0%,#e2e2e2 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1f1f1', endColorstr='#e2e2e2',GradientType=0 );
+overflow: hidden !important;
+height: 32px !important;
+border-bottom: 1px solid #bbb;
+}
+
+.redactor_toolbar li.redactor_separator {
+float: left;
+height: 34px;
+border-left: 1px solid #d3d3d3;
+border-right: 1px solid #f1f1f1;
+padding: 0;
+margin: 0 2px 0 3px !important;
+}
+.redactor_toolbar li {
+float: left !important;
+margin: 0 !important;
+padding: 3px 1px;
+padding-right: 0;
+list-style: none !important;
+outline: none;
+}
+li {
+line-height: 18px;
+}
+user agent stylesheetli {
+display: list-item;
+text-align: -webkit-match-parent;
+}
+
+.nt-simple-resp, #checklist .nt-qitem .nt-qtext .nt-fitb > span, #checklist .nt-qitem .nt-qtext .nt-fitb > input, #checklist .nt-qitem .nt-qmiddle input.nt-qrespinput {
+font-weight: bold;
+font-size: 14px;
+}
+#checklist .nt-qitem .nt-qmiddle .nt-qrespinput {
+margin-bottom: 16px;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+background-color: #ffffff;
+border: 1px solid #cccccc;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border linear .2s, box-shadow linear .2s;
+-moz-transition: border linear .2s, box-shadow linear .2s;
+-o-transition: border linear .2s, box-shadow linear .2s;
+transition: border linear .2s, box-shadow linear .2s;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+display: inline-block;
+height: 18px;
+padding: 4px 6px;
+margin-bottom: 9px;
+font-size: 13px;
+line-height: 18px;
+color: #555555;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
+input, textarea {
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, textarea, .uneditable-input {
+margin-left: 0;
+}
+input, textarea {
+width: 210px;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+
+#checklist .nt-qitem .nt-qnum-letter {
+display: none;
+}
+#checklist .nt-qitem .nt-qnum {
+position: absolute;
+font-size: 16px;
+line-height: 22px;
+width: 29px;
+top: 10px;
+left: 1px;
+text-align: right;
+padding-top: 5px;
+}
+
+#checklist .nt-qitem .nt-qimg-cont {
+position: relative;
+display: none;
+margin: 40px 10px 0 10px;
+}
+
+
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qtext.nt-qimg-desc {
+max-width: none;
+}
+#container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qtext {
+width: auto;
+max-width: 605px;
+}
+#checklist .nt-qitem .nt-qtext.nt-qimg-desc {
+font-size: 12px;
+line-height: 16px;
+margin: 10px;
+text-align: center;
+width: auto;
+}
+#checklist .nt-qitem .nt-qtext {
+font-size: 16px;
+line-height: 22px;
+margin: 10px 0 7px 35px;
+width: 605px;
+min-height: 22px;
+padding: 5px;
+}
+
+#container.nt-de-cont .nt-footer {
+display: none;
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 60px;
+text-align: center;
+background: url(../img/bg.png?v=195);
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont {
+position: relative;
+max-width: 960px;
+margin: 0 auto;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-resp-stat {
+left: 5%;
+}
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-resp-stat {
+position: absolute;
+top: 10px;
+left: 12%;
+width: 220px;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-resp-stat .nt-resp-stat-bar {
+margin-top: 5px;
+height: 8px;
+border: 1px solid #c7c7c7;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+}
+.ui-progressbar {
+height: 2em;
+text-align: left;
+overflow: hidden;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-btn-submit {
+margin-top: 10px;
+}
+.nt-btn-submit {
+font-size: 13px;
+font-weight: bold;
+text-transform: uppercase;
+padding: 10px 20px;
+background-color: #030303;
+color: #fff;
+border: 1px solid #519b41;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+text-shadow: 0 -1px 0 #27631a;
+-webkit-box-shadow: 0 2px 0 #e3e3e3;
+-moz-box-shadow: 0 2px 0 #e3e3e3;
+box-shadow: 0 2px 0 #e3e3e3;
+background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #80c570), color-stop(100%, #59ab46));
+background-image: -webkit-linear-gradient(top, #80c570, #59ab46);
+background-image: -moz-linear-gradient(top, #80c570, #59ab46);
+background-image: -o-linear-gradient(top, #80c570, #59ab46);
+background-image: linear-gradient(top, #80c570, #59ab46);
+}
+input, button, select, textarea {
+font-family: "Open Sans", sans-serif;
+}
+input, button, select, textarea {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+label, input, button, select, textarea {
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+}
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+cursor: pointer;
+-webkit-appearance: button;
+}
+button, input {
+line-height: normal;
+}
+button, input, select, textarea {
+margin: 0;
+font-size: 100%;
+vertical-align: middle;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right {
+position: absolute;
+top: 0;
+right: 7%;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining {
+margin-top: 10px;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-time-digits {
+width: 16px;
+padding-right: 2px;
+text-align: right;
+}
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
+display: inline-block;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-hour {
+width: 35px;
+}
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
+display: inline-block;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-time-digits {
+width: 16px;
+padding-right: 2px;
+text-align: right;
+}
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
+display: inline-block;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-minute {
+width: 50px;
+}
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
+display: inline-block;
+}
+
+#container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value.nt-abbr {
+display: none;
+}
+
+
