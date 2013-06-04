@@ -81,14 +81,15 @@ namespace OATS_Capstone.Controllers
             var success = false;
             var message = Constants.DefaultProblemMessage;
             var renderedHtmlList = new List<String>();
+            var termLower = term.ToLower();
             try
             {
                 var db = SingletonDb.Instance();
                 var questions = db.Questions.ToList();
                 var matchQuestions = questions.Where(delegate(Question question)
                 {
-                    return question.QuestionTitle.Contains(term)
-                        || question.Answers.Any(k => k.AnswerContent.Contains(term));
+                    return question.QuestionTitle.ToLower().Contains(termLower)
+                        || question.Answers.Any(k => k.AnswerContent.ToLower().Contains(termLower));
                 });
                 var matches = matchQuestions.Take(maxrows).ToList();
                 matches.ForEach(delegate(Question question)

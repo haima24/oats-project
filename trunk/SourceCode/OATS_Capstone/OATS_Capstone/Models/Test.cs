@@ -19,7 +19,6 @@ namespace OATS_Capstone.Models
             this.FeedBacks = new HashSet<FeedBack>();
             this.Invitations = new HashSet<Invitation>();
             this.Questions = new HashSet<Question>();
-            this.TestSettings = new HashSet<TestSetting>();
             this.UserInTests = new HashSet<UserInTest>();
             this.Tags = new HashSet<Tag>();
         }
@@ -31,12 +30,13 @@ namespace OATS_Capstone.Models
         public System.DateTime StartDateTime { get; set; }
         public Nullable<System.DateTime> EndDateTime { get; set; }
         public Nullable<int> Duration { get; set; }
+        public Nullable<int> SettingConfigID { get; set; }
     
         public virtual ICollection<FeedBack> FeedBacks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
+        public virtual SettingConfig SettingConfig { get; set; }
         public virtual User User { get; set; }
-        public virtual ICollection<TestSetting> TestSettings { get; set; }
         public virtual ICollection<UserInTest> UserInTests { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
     }

@@ -16,13 +16,13 @@ namespace OATS_Capstone.Models
     {
         public SettingType()
         {
-            this.TestSettings = new HashSet<TestSetting>();
+            this.SettingConfigs = new HashSet<SettingConfig>();
         }
     
         public int SettingTypeID { get; set; }
         public string SettingTypeKey { get; set; }
         public string SettingTypeDescription { get; set; }
     
-        public virtual ICollection<TestSetting> TestSettings { get; set; }
+        public virtual ICollection<SettingConfig> SettingConfigs { get; set; }
     }
 }

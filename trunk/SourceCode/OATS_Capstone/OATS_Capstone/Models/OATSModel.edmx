@@ -12,12 +12,13 @@
           <EntitySet Name="Question" EntityType="OATSDBModel.Store.Question" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="QuestionType" EntityType="OATSDBModel.Store.QuestionType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Role" EntityType="OATSDBModel.Store.Role" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SettingConfig" EntityType="OATSDBModel.Store.SettingConfig" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SettingConfigDetail" EntityType="OATSDBModel.Store.SettingConfigDetail" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SettingTypes" EntityType="OATSDBModel.Store.SettingTypes" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Tag" EntityType="OATSDBModel.Store.Tag" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TagInQuestion" EntityType="OATSDBModel.Store.TagInQuestion" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TagInTest" EntityType="OATSDBModel.Store.TagInTest" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Test" EntityType="OATSDBModel.Store.Test" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="TestSettings" EntityType="OATSDBModel.Store.TestSettings" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="User" EntityType="OATSDBModel.Store.User" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTest" EntityType="OATSDBModel.Store.UserInTest" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTestDetail" EntityType="OATSDBModel.Store.UserInTestDetail" store:Type="Tables" Schema="dbo" />
@@ -49,6 +50,14 @@
             <End Role="Test" EntitySet="Test" />
             <End Role="Question" EntitySet="Question" />
           </AssociationSet>
+          <AssociationSet Name="FK_SettingConfigDetail_SettingConfig" Association="OATSDBModel.Store.FK_SettingConfigDetail_SettingConfig">
+            <End Role="SettingConfig" EntitySet="SettingConfig" />
+            <End Role="SettingConfigDetail" EntitySet="SettingConfigDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SettingConfigDetail_SettingTypes" Association="OATSDBModel.Store.FK_SettingConfigDetail_SettingTypes">
+            <End Role="SettingTypes" EntitySet="SettingTypes" />
+            <End Role="SettingConfigDetail" EntitySet="SettingConfigDetail" />
+          </AssociationSet>
           <AssociationSet Name="FK_TagInQuestion_Question" Association="OATSDBModel.Store.FK_TagInQuestion_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="TagInQuestion" EntitySet="TagInQuestion" />
@@ -65,17 +74,13 @@
             <End Role="Test" EntitySet="Test" />
             <End Role="TagInTest" EntitySet="TagInTest" />
           </AssociationSet>
+          <AssociationSet Name="FK_Test_SettingConfig" Association="OATSDBModel.Store.FK_Test_SettingConfig">
+            <End Role="SettingConfig" EntitySet="SettingConfig" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
           <AssociationSet Name="FK_Test_User" Association="OATSDBModel.Store.FK_Test_User">
             <End Role="User" EntitySet="User" />
             <End Role="Test" EntitySet="Test" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TestSettings_SettingTypes" Association="OATSDBModel.Store.FK_TestSettings_SettingTypes">
-            <End Role="SettingTypes" EntitySet="SettingTypes" />
-            <End Role="TestSettings" EntitySet="TestSettings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TestSettings_Test" Association="OATSDBModel.Store.FK_TestSettings_Test">
-            <End Role="Test" EntitySet="Test" />
-            <End Role="TestSettings" EntitySet="TestSettings" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="OATSDBModel.Store.FK_User_Role">
             <End Role="Role" EntitySet="Role" />
@@ -157,6 +162,21 @@
           <Property Name="RoleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="RoleDescription" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
+        <EntityType Name="SettingConfig">
+          <Key>
+            <PropertyRef Name="SettingConfigID" />
+          </Key>
+          <Property Name="SettingConfigID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SettingConfigDetail">
+          <Key>
+            <PropertyRef Name="SettingConfigID" />
+            <PropertyRef Name="SettingTypeID" />
+          </Key>
+          <Property Name="SettingConfigID" Type="int" Nullable="false" />
+          <Property Name="SettingTypeID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="SettingTypes">
           <Key>
             <PropertyRef Name="SettingTypeID" />
@@ -199,15 +219,7 @@
           <Property Name="StartDateTime" Type="datetime" Nullable="false" />
           <Property Name="EndDateTime" Type="datetime" />
           <Property Name="Duration" Type="int" />
-        </EntityType>
-        <EntityType Name="TestSettings">
-          <Key>
-            <PropertyRef Name="TestSettingID" />
-          </Key>
-          <Property Name="TestSettingID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="TestID" Type="int" />
-          <Property Name="SettingTypeID" Type="int" Nullable="false" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SettingConfigID" Type="int" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -328,6 +340,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SettingConfigDetail_SettingConfig">
+          <End Role="SettingConfig" Type="OATSDBModel.Store.SettingConfig" Multiplicity="1" />
+          <End Role="SettingConfigDetail" Type="OATSDBModel.Store.SettingConfigDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingConfig">
+              <PropertyRef Name="SettingConfigID" />
+            </Principal>
+            <Dependent Role="SettingConfigDetail">
+              <PropertyRef Name="SettingConfigID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SettingConfigDetail_SettingTypes">
+          <End Role="SettingTypes" Type="OATSDBModel.Store.SettingTypes" Multiplicity="1" />
+          <End Role="SettingConfigDetail" Type="OATSDBModel.Store.SettingConfigDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingTypes">
+              <PropertyRef Name="SettingTypeID" />
+            </Principal>
+            <Dependent Role="SettingConfigDetail">
+              <PropertyRef Name="SettingTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TagInQuestion_Question">
           <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="1" />
           <End Role="TagInQuestion" Type="OATSDBModel.Store.TagInQuestion" Multiplicity="*" />
@@ -376,6 +412,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Test_SettingConfig">
+          <End Role="SettingConfig" Type="OATSDBModel.Store.SettingConfig" Multiplicity="0..1" />
+          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingConfig">
+              <PropertyRef Name="SettingConfigID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="SettingConfigID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Test_User">
           <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
           <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="*" />
@@ -385,30 +433,6 @@
             </Principal>
             <Dependent Role="Test">
               <PropertyRef Name="CreatedUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TestSettings_SettingTypes">
-          <End Role="SettingTypes" Type="OATSDBModel.Store.SettingTypes" Multiplicity="1" />
-          <End Role="TestSettings" Type="OATSDBModel.Store.TestSettings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SettingTypes">
-              <PropertyRef Name="SettingTypeID" />
-            </Principal>
-            <Dependent Role="TestSettings">
-              <PropertyRef Name="SettingTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TestSettings_Test">
-          <End Role="Test" Type="OATSDBModel.Store.Test" Multiplicity="0..1" />
-          <End Role="TestSettings" Type="OATSDBModel.Store.TestSettings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test">
-              <PropertyRef Name="TestID" />
-            </Principal>
-            <Dependent Role="TestSettings">
-              <PropertyRef Name="TestID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -484,10 +508,10 @@
           <EntitySet Name="Questions" EntityType="OATSDBModel.Question" />
           <EntitySet Name="QuestionTypes" EntityType="OATSDBModel.QuestionType" />
           <EntitySet Name="Roles" EntityType="OATSDBModel.Role" />
+          <EntitySet Name="SettingConfigs" EntityType="OATSDBModel.SettingConfig" />
           <EntitySet Name="SettingTypes" EntityType="OATSDBModel.SettingType" />
           <EntitySet Name="Tags" EntityType="OATSDBModel.Tag" />
           <EntitySet Name="Tests" EntityType="OATSDBModel.Test" />
-          <EntitySet Name="TestSettings" EntityType="OATSDBModel.TestSetting" />
           <EntitySet Name="Users" EntityType="OATSDBModel.User" />
           <EntitySet Name="UserInTests" EntityType="OATSDBModel.UserInTest" />
           <EntitySet Name="UserInTestDetails" EntityType="OATSDBModel.UserInTestDetail" />
@@ -527,17 +551,13 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="FK_TestSettings_SettingTypes" Association="OATSDBModel.FK_TestSettings_SettingTypes">
-            <End Role="SettingTypes" EntitySet="SettingTypes" />
-            <End Role="TestSettings" EntitySet="TestSettings" />
+          <AssociationSet Name="FK_Test_SettingConfig" Association="OATSDBModel.FK_Test_SettingConfig">
+            <End Role="SettingConfig" EntitySet="SettingConfigs" />
+            <End Role="Test" EntitySet="Tests" />
           </AssociationSet>
           <AssociationSet Name="FK_Test_User" Association="OATSDBModel.FK_Test_User">
             <End Role="User" EntitySet="Users" />
             <End Role="Test" EntitySet="Tests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TestSettings_Test" Association="OATSDBModel.FK_TestSettings_Test">
-            <End Role="Test" EntitySet="Tests" />
-            <End Role="TestSettings" EntitySet="TestSettings" />
           </AssociationSet>
           <AssociationSet Name="FK_UserInTest_Test" Association="OATSDBModel.FK_UserInTest_Test">
             <End Role="Test" EntitySet="Tests" />
@@ -550,6 +570,10 @@
           <AssociationSet Name="FK_UserInTestDetail_UserInTest" Association="OATSDBModel.FK_UserInTestDetail_UserInTest">
             <End Role="UserInTest" EntitySet="UserInTests" />
             <End Role="UserInTestDetail" EntitySet="UserInTestDetails" />
+          </AssociationSet>
+          <AssociationSet Name="SettingConfigDetail" Association="OATSDBModel.SettingConfigDetail">
+            <End Role="SettingConfig" EntitySet="SettingConfigs" />
+            <End Role="SettingTypes" EntitySet="SettingTypes" />
           </AssociationSet>
           <AssociationSet Name="TagInQuestion" Association="OATSDBModel.TagInQuestion">
             <End Role="Question" EntitySet="Questions" />
@@ -631,6 +655,15 @@
           <Property Name="RoleDescription" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Users" Relationship="OATSDBModel.FK_User_Role" FromRole="Role" ToRole="User" />
         </EntityType>
+        <EntityType Name="SettingConfig">
+          <Key>
+            <PropertyRef Name="SettingConfigID" />
+          </Key>
+          <Property Name="SettingConfigID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Tests" Relationship="OATSDBModel.FK_Test_SettingConfig" FromRole="SettingConfig" ToRole="Test" />
+          <NavigationProperty Name="SettingTypes" Relationship="OATSDBModel.SettingConfigDetail" FromRole="SettingConfig" ToRole="SettingTypes" />
+        </EntityType>
         <EntityType Name="SettingType">
           <Key>
             <PropertyRef Name="SettingTypeID" />
@@ -638,7 +671,7 @@
           <Property Name="SettingTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="SettingTypeKey" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="SettingTypeDescription" Type="String" MaxLength="128" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="TestSettings" Relationship="OATSDBModel.FK_TestSettings_SettingTypes" FromRole="SettingTypes" ToRole="TestSettings" />
+          <NavigationProperty Name="SettingConfigs" Relationship="OATSDBModel.SettingConfigDetail" FromRole="SettingTypes" ToRole="SettingConfig" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -660,24 +693,14 @@
           <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndDateTime" Type="DateTime" Precision="3" />
           <Property Name="Duration" Type="Int32" />
+          <Property Name="SettingConfigID" Type="Int32" />
           <NavigationProperty Name="FeedBacks" Relationship="OATSDBModel.FK_FeedBack_Test" FromRole="Test" ToRole="FeedBack" />
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Test" ToRole="Invitation" />
           <NavigationProperty Name="Questions" Relationship="OATSDBModel.FK_Question_Test" FromRole="Test" ToRole="Question" />
+          <NavigationProperty Name="SettingConfig" Relationship="OATSDBModel.FK_Test_SettingConfig" FromRole="Test" ToRole="SettingConfig" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Test_User" FromRole="Test" ToRole="User" />
-          <NavigationProperty Name="TestSettings" Relationship="OATSDBModel.FK_TestSettings_Test" FromRole="Test" ToRole="TestSettings" />
           <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="Test" ToRole="UserInTest" />
           <NavigationProperty Name="Tags" Relationship="OATSDBModel.TagInTest" FromRole="Test" ToRole="Tag" />
-        </EntityType>
-        <EntityType Name="TestSetting">
-          <Key>
-            <PropertyRef Name="TestSettingID" />
-          </Key>
-          <Property Name="TestSettingID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="TestID" Type="Int32" />
-          <Property Name="SettingTypeID" Type="Int32" Nullable="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="SettingType" Relationship="OATSDBModel.FK_TestSettings_SettingTypes" FromRole="TestSettings" ToRole="SettingTypes" />
-          <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_TestSettings_Test" FromRole="TestSettings" ToRole="Test" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -832,15 +855,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TestSettings_SettingTypes">
-          <End Role="SettingTypes" Type="OATSDBModel.SettingType" Multiplicity="1" />
-          <End Role="TestSettings" Type="OATSDBModel.TestSetting" Multiplicity="*" />
+        <Association Name="FK_Test_SettingConfig">
+          <End Role="SettingConfig" Type="OATSDBModel.SettingConfig" Multiplicity="0..1" />
+          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SettingTypes">
-              <PropertyRef Name="SettingTypeID" />
+            <Principal Role="SettingConfig">
+              <PropertyRef Name="SettingConfigID" />
             </Principal>
-            <Dependent Role="TestSettings">
-              <PropertyRef Name="SettingTypeID" />
+            <Dependent Role="Test">
+              <PropertyRef Name="SettingConfigID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -853,18 +876,6 @@
             </Principal>
             <Dependent Role="Test">
               <PropertyRef Name="CreatedUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TestSettings_Test">
-          <End Role="Test" Type="OATSDBModel.Test" Multiplicity="0..1" />
-          <End Role="TestSettings" Type="OATSDBModel.TestSetting" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test">
-              <PropertyRef Name="TestID" />
-            </Principal>
-            <Dependent Role="TestSettings">
-              <PropertyRef Name="TestID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -903,6 +914,10 @@
               <PropertyRef Name="UserInTestID" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="SettingConfigDetail">
+          <End Role="SettingConfig" Type="OATSDBModel.SettingConfig" Multiplicity="*" />
+          <End Role="SettingTypes" Type="OATSDBModel.SettingType" Multiplicity="*" />
         </Association>
         <Association Name="TagInQuestion">
           <End Role="Question" Type="OATSDBModel.Question" Multiplicity="*" />
@@ -983,6 +998,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SettingConfigs">
+            <EntityTypeMapping TypeName="OATSDBModel.SettingConfig">
+              <MappingFragment StoreEntitySet="SettingConfig">
+                <ScalarProperty Name="SettingConfigID" ColumnName="SettingConfigID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="SettingTypes">
             <EntityTypeMapping TypeName="OATSDBModel.SettingType">
               <MappingFragment StoreEntitySet="SettingTypes">
@@ -1010,16 +1033,7 @@
                 <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
                 <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TestSettings">
-            <EntityTypeMapping TypeName="OATSDBModel.TestSetting">
-              <MappingFragment StoreEntitySet="TestSettings">
-                <ScalarProperty Name="TestSettingID" ColumnName="TestSettingID" />
-                <ScalarProperty Name="TestID" ColumnName="TestID" />
-                <ScalarProperty Name="SettingTypeID" ColumnName="SettingTypeID" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SettingConfigID" ColumnName="SettingConfigID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1060,6 +1074,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="SettingConfigDetail" TypeName="OATSDBModel.SettingConfigDetail" StoreEntitySet="SettingConfigDetail">
+            <EndProperty Name="SettingConfig">
+              <ScalarProperty Name="SettingConfigID" ColumnName="SettingConfigID" />
+            </EndProperty>
+            <EndProperty Name="SettingTypes">
+              <ScalarProperty Name="SettingTypeID" ColumnName="SettingTypeID" />
+            </EndProperty>
+          </AssociationSetMapping>
           <AssociationSetMapping Name="TagInQuestion" TypeName="OATSDBModel.TagInQuestion" StoreEntitySet="TagInQuestion">
             <EndProperty Name="Question">
               <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />

@@ -31,10 +31,10 @@ namespace OATS_Capstone.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionType> QuestionTypes { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<SettingConfig> SettingConfigs { get; set; }
         public DbSet<SettingType> SettingTypes { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Test> Tests { get; set; }
-        public DbSet<TestSetting> TestSettings { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserInTest> UserInTests { get; set; }
         public DbSet<UserInTestDetail> UserInTestDetails { get; set; }
