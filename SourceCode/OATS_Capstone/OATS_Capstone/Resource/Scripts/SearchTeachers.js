@@ -2,9 +2,11 @@
 $(function () {
     $.post("/Teachers/TeachersSearch", function (res) {
         if (res) {
-            var source = res.map(function (obj, index) {
-                return { label: obj.FirstName, value: obj.FirstName };
-            });
+            var source = $(res.listTeachersSearch).map(function (index, obj) {
+                if (obj.FirstName && obj.LastName && (obj.FirstName != "" || obj.LastName != "")) {
+                    return { label: obj.FirstName + " " + obj.LastName, value: obj.FirstName + " " + obj.LastName };
+                }
+            }).convertJqueryArrayToJSArray();
             $(".navbar-search .nt-search-input").autocomplete({
                 minLength: 0,
                 source: source,

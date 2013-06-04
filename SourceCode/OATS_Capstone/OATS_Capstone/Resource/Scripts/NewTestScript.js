@@ -72,6 +72,7 @@ function initDragAndDrop() {
                 var answers = $(".nt-qans", obj).map(function (iAns, ans) {
                     var answer = new Object();
                     answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
+                    answer.SerialOrder = $(ans).index();
                     return answer;
                 }).convertJqueryArrayToJSArray();
                 addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder, function () {
@@ -84,8 +85,19 @@ function initDragAndDrop() {
             }
         }
     });
-    //separator
 
+    //separator
+    $("#checklist .nt-sortable").sortable({
+        revert: true,
+        tolerance: 'pointer',
+        revert: 50,
+        distance: 5,
+        items: '>.nt-qans',
+        placeholder: 'highlight',
+        stop: function (ev, ui) {
+            updateAnswer($(ui.item).closest(".nt-qans"));
+        }
+    });
 
 }
 function initEditable() {
@@ -170,20 +182,152 @@ function updateQuestionType(questionidString, type) {
         showMessage("error", "Error when validating question.");
     }
 }
+function initSearchTests() {
+    $.post("/Tests/TestsSearch", function (res) {
+        if (res.success) {
+            var source = $(res.listTestsSearch).map(function (index, obj) {
+                if (obj.TestTitle && obj.TestTitle != "") {
+                    return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
+                }
+            }).convertJqueryArrayToJSArray();
+            $(".navbar-search .nt-search-input").autocomplete({
+                minLength: 0,
+                source: source,
+                focus: function (ev, ui) {
+                    $(".navbar-search .nt-search-input").val(ui.item.label);
+                    return false;
+                },
+                select: function (ev, ui) {
+                    $(".navbar-search .nt-search-input").val(ui.item.label);
+                    window.location.href = "/Tests/NewTest/" + ui.item.id;
+                    return false;
+                }
+            }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+                var li = $("<li>").append("<a>" + item.label + "</a>");
+                if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+                li.appendTo(ul);
+                return li;
+            };
+        } else {
+            showMessage("error", res.message);
+        }
+    });
+}
+function checkConstraintStartEnd(start,end,onsuccessvalidate) {
+    if (start.getTime() > end.getTime()) {
+        showMessage("error", "Invalid start time to end time.")
+    } else {
+        if (onsuccessvalidate && typeof (onsuccessvalidate) === "function") {
+            onsuccessvalidate();
+        }
+    }
+}
+var dFromObj;
+var dToObj;
+function initDateTimePicker() {
+    
+    var dFString=$("#eventDateFrom").attr("current-date");
+    var dTString=$("#eventDateTo").attr("current-date");
+    var dF = !isNaN(parseInt(dFString)) ? new Date(parseInt(dFString)) : new Date();
+    dF.setUTCHours(dF.getHours());
+    var dT = !isNaN(parseInt(dTString)) ? new Date(parseInt(dTString)) : new Date();
+    dT.setUTCHours(dT.getHours())
+
+    dFromObj = dF;
+    dToObj = dT;
+
+    $("#eventDateFrom").datetimepicker({
+      language: 'en',
+      pick12HourFormat: true,
+      pickSeconds: false
+    }).datetimepicker('setDate',dT).on('changeDate', function (ev) {
+        dFromObj = ev.date;
+        checkConstraintStartEnd(dFromObj, dToObj, function () {
+            updateStartEndDate(testid, dFromObj, dToObj);
+        });
+    });
+    $("#eventDateTo").datetimepicker({
+        language: 'en',
+        pick12HourFormat: true,
+        pickSeconds: false
+    }).datetimepicker('setDate', dF).on('changeDate', function (ev) {
+        dToObj = ev.date;
+        checkConstraintStartEnd(dFromObj, dToObj, function () {
+            updateStartEndDate(testid, dFromObj, dToObj);
+        });
+    });
+}
+
+function updateStartEndDate(testid,start, end) {
+    statusSaving();
+    var iStart = new Date(start);
+    var iEnd = new Date(end);
+    iStart.setHours(iStart.getUTCHours());
+    iEnd.setHours(iEnd.getUTCHours());
+
+    $.ajax({
+        type: "POST",
+        url: "/Tests/UpdateStartEnd",
+        data: JSON.stringify({ testid: testid, start: iStart, end: iEnd }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if (!res.success) {
+                showMessage("error", res.message);
+            } else {
+                statusSaved();
+            }
+        }
+
+    });
+}
 
 //test facility
-function updateAnswer(lineElement) {
-    var answerid = parseInt($(lineElement).attr("answer-id"));
-    var answerContent = $(".nt-qansdesc", lineElement).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", lineElement).html();
-    var isright = $(".nt-qanselem input[type=radio],[type=checkbox]", lineElement).attr("checked") ? true : false;
-    var type = lineElement.closest(".nt-qitem").attr("question-type");
+function updateAnswer(lineElement, target) {
+    var parentContainer = lineElement.closest(".nt-qanscont");
+    if (target&&target.type&&target.type == "radio") {
+        $(".nt-qans", parentContainer).each(function (index, obj) {
+            if (!$(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked")) {
+                $(".nt-qansscore input[type=text]", obj).val(0);
+            }
+        });
+    }
+    
+    var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
+        var answer = new Object();
+        answer.AnswerID = parseInt($(obj).attr("answer-id"));
+        answer.AnswerContent = $(".nt-qansdesc", obj).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", obj).html();
+        answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked") ? true : false;
+        var scoreString = $(".nt-qansscore input[type=text]", obj).val();
+        if (scoreString == "" || scoreString == "0") {
+            if (answer.IsRight == true) { $(".nt-qansscore input[type=text]", obj).val(1);}
+        } else if (scoreString == "1") {
+            if (answer.IsRight == false) { $(".nt-qansscore input[type=text]", obj).val(0); }
+        } else if (parseInt(scoreString))
+        scoreString = $(".nt-qansscore input[type=text]", obj).val();
+        var nScore = parseInt(scoreString);
+        answer.Score = isNaN(nScore) ? 0 : nScore;
+        answer.SerialOrder = index;
+        return answer;
+    }).convertJqueryArrayToJSArray();
+
     statusSaving();
-    $.post("/Tests/UpdateAnswer", { answerid: answerid, answerContent: answerContent, isright: isright, type: type }, function (res) {
-        if (!res.success) {
-            showMessage("error", res.message);
-        } else {
-            statusSaved();
+    $.ajax({
+        type: "POST",
+        url: "/Tests/UpdateAnswer",
+        data: JSON.stringify({ answers: answers }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if (!res.success) {
+                showMessage("error", res.message);
+            } else {
+                answers
+                statusSaved();
+            }
         }
+
     });
 }
 function resortInDb() {
@@ -221,7 +365,7 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         questiontitle: type == "Image" ? "" : questiontitle,
         serialorder: serialorder,
         labelorder: labelorder,
-        textdescription:textdescription,
+        textdescription: textdescription,
         answers: answers
     };
     statusSaving();
@@ -234,7 +378,11 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         async: false,
         success: function (res) {
             if (res && res.success && res.questionHtml != "") {
-                $(element).replaceWith($(res.questionHtml));
+                var newElement = $(res.questionHtml);
+                $(element).replaceWith(newElement);
+                if (onaddquestion && typeof (onaddquestion) === "function") {
+                    onaddquestion(newElement);
+                }
                 statusSaved();
             } else {
                 showMessage("error", res.message);
@@ -242,9 +390,7 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         }
 
     });
-    if (onaddquestion && typeof (onaddquestion) === "function") {
-        onaddquestion();
-    }
+
 }
 function addListQuestion(list, onAfterAddListQuestion) {
     statusSaving();
@@ -354,11 +500,13 @@ $(function () {
 
     initDragAndDrop();
     initEditable();
+    initDateTimePicker();
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
 
     //separator
     initPopover();
+    initSearchTests();
     //separator
     $("#sidebar .nt-ctrl-search input[type=text]").autocomplete({
         minLength: 0,
@@ -426,8 +574,10 @@ $(function () {
 
                 tabcontent.html(res.tab);
 
-                //rebind accordition
                 $("#sidebar").accordion();
+                initEditable();
+                initImageUploadFacility();
+                initDragAndDrop();
             }
         });
     });
@@ -444,12 +594,13 @@ $(function () {
         var etab = $("#checklist");
         if (questions && etab) {
             var type = "";
-            if (cur.hasClass("t-question-type-radio")) { type = "Radio"; var obj = $(questions.radio); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-multiple")) { type = "Multiple"; var obj = $(questions.multiple); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-essay")) { type = "Essay"; var obj = $(questions.essay); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-short")) { type = "ShortAnswer"; var obj = $(questions.shortanswer); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-text")) { type = "Text"; var obj = $(questions.text); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-img")) { type = "Image"; var obj = $(questions.image); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
+            var obj;
+            if (cur.hasClass("t-question-type-radio")) { type = "Radio"; obj = $(questions.radio); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
+            if (cur.hasClass("t-question-type-multiple")) { type = "Multiple"; obj = $(questions.multiple); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
+            if (cur.hasClass("t-question-type-essay")) { type = "Essay"; obj = $(questions.essay); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
+            if (cur.hasClass("t-question-type-short")) { type = "ShortAnswer"; obj = $(questions.shortanswer); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
+            if (cur.hasClass("t-question-type-text")) { type = "Text"; obj = $(questions.text); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
+            if (cur.hasClass("t-question-type-img")) { type = "Image"; obj = $(questions.image); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
             sortByNumberOrLetters();
 
             var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" || "<i>Enter Text</i>" ? "" : $(".nt-qtext", obj).html();
@@ -458,13 +609,17 @@ $(function () {
             var answers = $(".nt-qans", obj).map(function (iAns, ans) {
                 var answer = new Object();
                 answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
+                answer.SerialOrder = $(ans).index();
                 return answer;
             }).convertJqueryArrayToJSArray();
-            addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder);
-            sortByNumberOrLetters();
+            addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
+                sortByNumberOrLetters();
+                initEditable();
+                initImageUploadFacility();
+                etab.scrollToElement(newelement);
+            });
 
-            initEditable();
-            initImageUploadFacility();
+
         }
     });
     //separator
@@ -484,17 +639,21 @@ $(function () {
             var type = duplicated.attr("question-type");
             var serialorder = duplicated.index();
             var labelorder = $(".nt-qnum", duplicated).html();
-            var questiontitle = $(".nt-qtext", duplicated).html();
+            var questiontitle = $(".nt-qtext", duplicated).html() == "<i>Enter Question</i>" ? "" : $(".nt-qtext", duplicated).html();
             var answers = $(".nt-qans", duplicated).map(function (iAns, ans) {
                 var answer = new Object();
                 answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
-                answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
+                answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", ans).html();
+                var scoreString=$("input[type=text].nt-on-score", ans).val();
+                var nScore=parseInt(scoreString);
+                answer.Score = isNaN(nScore) ? 0 : nScore;
                 return answer;
             }).convertJqueryArrayToJSArray();
-            var textdes=$(".nt-qrespinput",duplicated).val();
-            addQuestion(duplicated, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+            var textdes = $(".nt-qrespinput", duplicated).val();
+            addQuestion(duplicated, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
+                etab.scrollToElement(newelement);
                 resortInDb();
-            },textdes);
+            }, textdes);
 
             initImageUploadFacility();
             initEditable();
@@ -521,7 +680,7 @@ $(function () {
         var parent = $(ev.target).closest(".nt-qitem");
 
         addAnswer(parent, parent.attr("question-id"), function () {
-            sortByNumberOrLetters();
+            //sortByNumberOrLetters();
             showOrHideDeleteLineAnswer();
             initEditable();
         });
@@ -662,10 +821,6 @@ $(function () {
 
     });
     //separator
-    $(".nt-qanselem input[type=checkbox],[type=radio]").live("change", function (ev) {
-        updateAnswer($(this).closest(".nt-qans"));
-    });
-    //separator
     $("#qpaste textarea").live("paste", function (ev) {
         setTimeout(function () {
             var textarea = $("#qpaste textarea");
@@ -729,6 +884,7 @@ $(function () {
                     $("#qpaste .nt-loader-large").hide();
                     textarea.removeClass("blur");
                     //end effect
+                    $("#checklist").animate({ scrollTop: $('#checklist')[0].scrollHeight }, 1000);
                 });
 
             }
@@ -767,13 +923,12 @@ $(function () {
         var questionidString = $(this).attr("question-id");
         var questionid = parseInt(questionidString);
         var templateQuestion;
-        if (!isNaN(questionid))
-        {
+        if (!isNaN(questionid)) {
             statusSaving();
             $.post("/Tests/ReuseQuestionTemplate", { questionid: questionid }, function (res) {
                 if (res && res.success && res.questionHtml) {
                     var newItem = $(res.questionHtml);
-                    var type=newItem.attr("question-type");
+                    var type = newItem.attr("question-type");
                     newItem.removeAttr("id");//if exist
                     newItem.removeAttr("question-id");
                     $(".nt-qans", newItem).removeAttr("answer-id");
@@ -794,10 +949,14 @@ $(function () {
                         var answer = new Object();
                         answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
                         answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
+                        var scoreString = $("input[type=text].nt-on-score", ans).val();
+                        var nScore = parseInt(scoreString);
+                        answer.Score = isNaN(nScore) ? 0 : nScore;
                         return answer;
                     }).convertJqueryArrayToJSArray();
                     var textdes = $(".nt-qrespinput", newItem).val();
-                    addQuestion(newItem, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+                    addQuestion(newItem, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
+                        clist.scrollToElement(newelement);
                         resortInDb();
                     }, textdes);
                     statusSaved();
@@ -845,6 +1004,10 @@ $(function () {
         });
         $("#myModal").modal('hide');
 
+    });
+    //separator
+    $(".nt-qitem .nt-qans").live("change", function (ev) {
+        updateAnswer($(this).closest(".nt-qans"), ev.target);
     });
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();

@@ -14,19 +14,33 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult TeachersSearch()
         {
-            var db = SingletonDb.Instance();
-            var teachers = db.Users.Where(i => i.Role.RoleID == 3).ToList();
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
             var listTeachersSearch = new List<SearchingTeachers>();
-            teachers.ForEach(delegate(User teacher)
+
+            try
             {
-                var teacherTemplate = new SearchingTeachers();
-                teacherTemplate.UserID = teacher.UserID;
-                teacherTemplate.RoleID = teacher.RoleID;
-                teacherTemplate.LastName = teacher.LastName;
-                teacherTemplate.FirstName = teacher.FirstName;
-                listTeachersSearch.Add(teacherTemplate);
-            });
-            return Json(listTeachersSearch, JsonRequestBehavior.DenyGet);
+                var db = SingletonDb.Instance();
+                var teachers = db.Users.Where(i => i.Role.RoleID == 3).ToList();
+                teachers.ForEach(delegate(User teacher)
+                {
+                    var teacherTemplate = new SearchingTeachers();
+                    teacherTemplate.UserID = teacher.UserID;
+                    teacherTemplate.RoleID = teacher.RoleID;
+                    teacherTemplate.LastName = teacher.LastName;
+                    teacherTemplate.FirstName = teacher.FirstName;
+                    listTeachersSearch.Add(teacherTemplate);
+                });
+                success = true;
+                message = String.Empty;
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+
+            return Json(new { listTeachersSearch,success,message});
         }
 
         public ActionResult Index()

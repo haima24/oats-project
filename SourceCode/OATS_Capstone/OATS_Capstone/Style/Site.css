@@ -397,8 +397,8 @@ i, cite, em, var, address, dfn {
     }
 
         #test-header > div.test-date-time {
-            width: 74px;
-            max-width: 74px;
+            width: 150px;
+            max-width: 150px;
             margin-top: 8px;
             padding: 3px;
             text-align: center;

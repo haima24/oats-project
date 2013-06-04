@@ -7,17 +7,21 @@
         var er = $(ev.currentTarget).find('[contenteditable=true]')[0];
         $(er).removeClass("nt-contedhover");
     });
-    $(':not(.nt-qitem)').click(function (ev) {
-        var all = $(".nt-qitem");
-        all.removeClass('nt-qitem-edit-act');
-        all.removeClass('nt-qitem-edit-inact');
-        all.addClass('nt-qitem-edit-inact');
-        if (!$(ev.target).is('select')) {
-            all.find('.nt-qctrls').hide();
+    $(':not(.nt-qitem)').live("click", function (ev) {
+        if (!($(ev.target).parents('.nt-qitem').length || $(ev.target).is('#main'))) {
+            var all = $(".nt-qitem");
+            all.removeClass('nt-qitem-edit-act');
+            all.removeClass('nt-qitem-edit-inact');
+            all.addClass('nt-qitem-edit-inact');
+            $(".nt-qansscore").hide();
+            $(".nt-scrbtn").removeClass("active");
+            if (!$(ev.target).is('select')) {
+                all.find('.nt-qctrls').hide();
+            }
+            all.find('.nt-qtagcont').show();
+            all.find('.nt-tag-adder').show();
+            all.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle').hide();
         }
-        all.find('.nt-qtagcont').show();
-        all.find('.nt-tag-adder').show();
-        all.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle').hide();
     });
     $(".nt-qitem").live('click', function (ev) {
         if($(this).parent().length!=0){

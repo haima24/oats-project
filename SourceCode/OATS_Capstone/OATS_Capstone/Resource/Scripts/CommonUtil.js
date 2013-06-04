@@ -38,6 +38,12 @@ function convertJsonDatetoDate(jsondate)
     }
 }
 $.fn.extend({
+    scrollToElement: function (item) {
+        var offset = item.position().top + this.scrollTop();
+            this.animate({ scrollTop: offset }, 1000);
+    }
+});
+$.fn.extend({
     convertJqueryArrayToJSArray: function () {
         var arr = [];
         for (var i = 0; i < this.length; i++) {

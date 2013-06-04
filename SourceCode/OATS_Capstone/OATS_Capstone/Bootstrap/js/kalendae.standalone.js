@@ -767,7 +767,7 @@ Kalendae.Input = function (targetElement, options) {
 		overwriteInput,
 		$closeButton;
 
-	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
+	if (!$input || ($input.tagName !== 'INPUT' && !($input.tagName === 'DIV' && $input.attributes["contenteditable"]))) throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
 
 	var self = this,
 		classes = self.classes,
@@ -2395,7 +2395,7 @@ today = Kalendae.moment().stripTime();
 if (typeof jQuery !== 'undefined' && (typeof document.addEventListener === 'function' || util.isIE8())) {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
-			if (e.tagName === 'INPUT') {
+		    if (e.tagName === 'INPUT' || (e.tagName === "DIV" && e.attributes["contenteditable"])) {
 				//if element is an input, bind a popup calendar to the input.
 				$(e).data('kalendae', new Kalendae.Input(e, options));
 			} else {

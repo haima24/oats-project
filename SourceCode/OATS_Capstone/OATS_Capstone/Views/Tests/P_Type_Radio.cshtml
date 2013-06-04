@@ -1,4 +1,7 @@
 ﻿@model OATS_Capstone.Models.Question
+@{
+    var sortedAns = Model.Answers.OrderBy(i => i.SerialOrder);
+}
 <div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Radio" question-id="@Model.QuestionID">
     <div class="nt-qnum ">@Model.LabelOrder</div>
     <a class="nt-qanchor"></a>
@@ -23,7 +26,8 @@
     </div>
 
     <div class="nt-qanscont nt-sortable">
-        @foreach(var ans in Model.Answers){
+        @foreach (var ans in sortedAns)
+        {
             
         <div class="nt-qans nt-qans-edit nt-qans-hover" answer-id="@ans.AnswerID">
             <div class="nt-qanselem">
@@ -40,7 +44,7 @@
                 </div>
             </div>
             <div class="nt-qansscore">
-                <input type="text" class="nt-on-score" placeholder="Point Value" value="0" />
+                <input type="text" class="nt-on-score" placeholder="Point Value" value="@ans.Score" />
                 @*<button class="nt-btn-sqr nt-not_scored">N/A</button>*@
                 <!-- NOTE: bonus button disabled -->
                 @*<button style="display: none" class="nt-btn-sqr nt-bonus"><i class="t-icon gift"></i></button>*@

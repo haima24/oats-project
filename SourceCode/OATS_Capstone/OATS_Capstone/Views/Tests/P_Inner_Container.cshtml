@@ -1,0 +1,29 @@
+﻿@model OATS_Capstone.Models.Test  
+@using OATS_Capstone.Models
+<div id="test-header">
+        <div contenteditable="true" id="test-title">@if(Model!=null){@Model.TestTitle}</div>
+        <div id="eventDateFrom" class="test-date-time" contenteditable="true" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}",Model.StartDateTime)</div>
+        <div class="spacer">_</div>
+        <div id="eventDateTo" class="test-date-time" contenteditable="true" current-date="@((Model.EndDateTime.HasValue?Model.EndDateTime.Value:Model.StartDateTime).ToJavaScriptMilliseconds())" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}",Model.EndDateTime.HasValue?Model.EndDateTime.Value:Model.StartDateTime)</div>
+    </div>
+    <div class="test-outer-tags">
+        <div class="test-tags">
+            <input type="text" class="input-small ac_input" placeholder="Add Tag..." autocomplete="off"/>
+        </div>
+    </div>
+    <div class="tabs-wrapper">
+        <div class="navbar">
+            <div class="navbar-inner test-larger-custom">
+                <ul class="nav">
+                    <li class="active"><a class="tab-event" href="@Url.Action("NewTest_ContentTab")">Content</a></li>
+                    <li><a class="tab-event" href="@Url.Action("NewTest_SettingTab")">Settings</a></li>
+                    <li><a class="tab-event" href="@Url.Action("NewTest_InvitationTab")">Invitation</a></li>
+                    <li><a class="tab-event" href="@Url.Action("NewTest_ResponseTab")">Response</a></li>
+                    <li><a class="tab-event" href="@Url.Action("NewTest_ScoreTab")">Score</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="eventTab">
+            @Html.Partial("P_ContentTab",Model)
+        </div>
+    </div>
