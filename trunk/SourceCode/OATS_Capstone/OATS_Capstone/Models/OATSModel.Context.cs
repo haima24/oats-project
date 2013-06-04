@@ -32,6 +32,7 @@ namespace OATS_Capstone.Models
         public DbSet<QuestionType> QuestionTypes { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<SettingConfig> SettingConfigs { get; set; }
+        public DbSet<SettingConfigDetail> SettingConfigDetails { get; set; }
         public DbSet<SettingType> SettingTypes { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Test> Tests { get; set; }
