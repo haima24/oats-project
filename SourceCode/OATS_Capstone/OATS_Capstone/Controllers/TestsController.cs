@@ -223,6 +223,12 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
             return Json(new { tab = this.RenderPartialViewToString("P_ContentTab", test) });
         }
+        public ActionResult DoTest(int testid)
+        {
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+            return View(test);
+        }
         public JsonResult TestCalendarObjectResult()
         {
             var success = false;
