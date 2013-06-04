@@ -12,18 +12,16 @@ namespace OATS_Capstone.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SettingConfig
+    public partial class SettingConfigDetail
     {
-        public SettingConfig()
-        {
-            this.SettingConfigDetails = new HashSet<SettingConfigDetail>();
-            this.Tests = new HashSet<Test>();
-        }
-    
+        public int SettingConfigDetailID { get; set; }
         public int SettingConfigID { get; set; }
-        public string Description { get; set; }
+        public int SettingTypeID { get; set; }
+        public Nullable<int> NumberValue { get; set; }
+        public string TextValue { get; set; }
+        public bool IsActive { get; set; }
     
-        public virtual ICollection<SettingConfigDetail> SettingConfigDetails { get; set; }
-        public virtual ICollection<Test> Tests { get; set; }
+        public virtual SettingConfig SettingConfig { get; set; }
+        public virtual SettingType SettingType { get; set; }
     }
 }

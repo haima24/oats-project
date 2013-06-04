@@ -4,20 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="dd26ec6289114eeb80589e2bcc86ac30" Name="Diagram1">
-        <EntityTypeShape EntityType="OATSDBModel.Answer" Width="1.5" PointX="13.5" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.FeedBack" Width="1.5" PointX="8.25" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.Invitation" Width="1.5" PointX="8.25" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.Question" Width="1.5" PointX="11.25" PointY="9.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.QuestionType" Width="1.5" PointX="9" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.Role" Width="1.5" PointX="1.5" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.SettingConfig" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.SettingType" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.Tag" Width="1.5" PointX="13.5" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.Test" Width="1.5" PointX="6" PointY="9.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.User" Width="1.5" PointX="3.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.UserInTest" Width="1.5" PointX="8.25" PointY="14.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.UserInTestDetail" Width="1.5" PointX="13.5" PointY="15.375" IsExpanded="true" />
+      <Diagram DiagramId="8f4d609422fe4639a9ff046a74ab36c6" Name="Diagram1">
+        <EntityTypeShape EntityType="OATSDBModel.Answer" Width="1.5" PointX="13.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.FeedBack" Width="1.5" PointX="8.25" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Invitation" Width="1.5" PointX="8.25" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Question" Width="1.5" PointX="11.25" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.QuestionType" Width="1.5" PointX="9" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Role" Width="1.5" PointX="1.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.SettingConfig" Width="1.5" PointX="0.75" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.SettingConfigDetail" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.SettingType" Width="1.5" PointX="0.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Tag" Width="1.5" PointX="13.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Test" Width="1.5" PointX="6" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.User" Width="1.5" PointX="3.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.UserInTest" Width="1.5" PointX="8.25" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.UserInTestDetail" Width="1.5" PointX="13.5" PointY="15.875" IsExpanded="true" />
         <AssociationConnector Association="OATSDBModel.FK_Answer_Question" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_FeedBack_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_FeedBack_User" ManuallyRouted="false" />
@@ -27,12 +28,13 @@
         <AssociationConnector Association="OATSDBModel.FK_Question_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTestDetail_Question" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_User_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="OATSDBModel.FK_SettingConfigDetail_SettingConfig" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_Test_SettingConfig" ManuallyRouted="false" />
+        <AssociationConnector Association="OATSDBModel.FK_SettingConfigDetail_SettingTypes" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_Test_User" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTest_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTest_User" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTestDetail_UserInTest" ManuallyRouted="false" />
-        <AssociationConnector Association="OATSDBModel.SettingConfigDetail" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.TagInQuestion" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.TagInTest" ManuallyRouted="false" />
       </Diagram>
