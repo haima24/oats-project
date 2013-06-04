@@ -304,8 +304,8 @@ function updateAnswer(lineElement, target) {
             if (answer.IsRight == true) { $(".nt-qansscore input[type=text]", obj).val(1); }
         } else if (scoreString == "1") {
             if (answer.IsRight == false) { $(".nt-qansscore input[type=text]", obj).val(0); }
-        } else if (parseInt(scoreString))
-            scoreString = $(".nt-qansscore input[type=text]", obj).val();
+        }
+        scoreString = $(".nt-qansscore input[type=text]", obj).val();
         var nScore = parseInt(scoreString);
         answer.Score = isNaN(nScore) ? 0 : nScore;
         answer.SerialOrder = index;
@@ -682,7 +682,7 @@ $(function () {
         var parent = $(ev.target).closest(".nt-qitem");
 
         addAnswer(parent, parent.attr("question-id"), function () {
-            //sortByNumberOrLetters();
+            sortByNumberOrLetters();
             showOrHideDeleteLineAnswer();
             initEditable();
         });
