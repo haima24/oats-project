@@ -269,9 +269,11 @@ namespace OATS_Capstone.Controllers
         {
             return Json(new { tab = this.RenderPartialViewToString("P_ScoreTab") });
         }
-        public JsonResult NewTest_SettingTab()
+        public JsonResult NewTest_SettingTab(int testid)
         {
-            return Json(new { tab = this.RenderPartialViewToString("P_SettingTab") });
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+            return Json(new { tab = this.RenderPartialViewToString("P_SettingTab", test) });
         }
         public JsonResult NewTest_InvitationTab(int testid)
         {

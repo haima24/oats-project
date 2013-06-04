@@ -20,6 +20,8 @@ namespace OATS_Capstone.Models
         }
     
         public int SettingTypeID { get; set; }
+        public string SettingGroupName { get; set; }
+        public Nullable<int> SettingInGroupOrder { get; set; }
         public string SettingTypeKey { get; set; }
         public string SettingTypeDescription { get; set; }
     
