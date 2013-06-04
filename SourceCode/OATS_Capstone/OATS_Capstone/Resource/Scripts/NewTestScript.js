@@ -214,7 +214,7 @@ function initSearchTests() {
         }
     });
 }
-function checkConstraintStartEnd(start,end,onsuccessvalidate) {
+function checkConstraintStartEnd(start, end, onsuccessvalidate) {
     if (start.getTime() > end.getTime()) {
         showMessage("error", "Invalid start time to end time.")
     } else {
@@ -226,9 +226,9 @@ function checkConstraintStartEnd(start,end,onsuccessvalidate) {
 var dFromObj;
 var dToObj;
 function initDateTimePicker() {
-    
-    var dFString=$("#eventDateFrom").attr("current-date");
-    var dTString=$("#eventDateTo").attr("current-date");
+
+    var dFString = $("#eventDateFrom").attr("current-date");
+    var dTString = $("#eventDateTo").attr("current-date");
     var dF = !isNaN(parseInt(dFString)) ? new Date(parseInt(dFString)) : new Date();
     dF.setUTCHours(dF.getHours());
     var dT = !isNaN(parseInt(dTString)) ? new Date(parseInt(dTString)) : new Date();
@@ -238,10 +238,10 @@ function initDateTimePicker() {
     dToObj = dT;
 
     $("#eventDateFrom").datetimepicker({
-      language: 'en',
-      pick12HourFormat: true,
-      pickSeconds: false
-    }).datetimepicker('setDate',dT).on('changeDate', function (ev) {
+        language: 'en',
+        pick12HourFormat: true,
+        pickSeconds: false
+    }).datetimepicker('setDate', dT).on('changeDate', function (ev) {
         dFromObj = ev.date;
         checkConstraintStartEnd(dFromObj, dToObj, function () {
             updateStartEndDate(testid, dFromObj, dToObj);
@@ -259,7 +259,7 @@ function initDateTimePicker() {
     });
 }
 
-function updateStartEndDate(testid,start, end) {
+function updateStartEndDate(testid, start, end) {
     statusSaving();
     var iStart = new Date(start);
     var iEnd = new Date(end);
@@ -286,14 +286,14 @@ function updateStartEndDate(testid,start, end) {
 //test facility
 function updateAnswer(lineElement, target) {
     var parentContainer = lineElement.closest(".nt-qanscont");
-    if (target&&target.type&&target.type == "radio") {
+    if (target && target.type && target.type == "radio") {
         $(".nt-qans", parentContainer).each(function (index, obj) {
             if (!$(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked")) {
                 $(".nt-qansscore input[type=text]", obj).val(0);
             }
         });
     }
-    
+
     var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
         var answer = new Object();
         answer.AnswerID = parseInt($(obj).attr("answer-id"));
@@ -301,11 +301,11 @@ function updateAnswer(lineElement, target) {
         answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked") ? true : false;
         var scoreString = $(".nt-qansscore input[type=text]", obj).val();
         if (scoreString == "" || scoreString == "0") {
-            if (answer.IsRight == true) { $(".nt-qansscore input[type=text]", obj).val(1);}
+            if (answer.IsRight == true) { $(".nt-qansscore input[type=text]", obj).val(1); }
         } else if (scoreString == "1") {
             if (answer.IsRight == false) { $(".nt-qansscore input[type=text]", obj).val(0); }
         } else if (parseInt(scoreString))
-        scoreString = $(".nt-qansscore input[type=text]", obj).val();
+            scoreString = $(".nt-qansscore input[type=text]", obj).val();
         var nScore = parseInt(scoreString);
         answer.Score = isNaN(nScore) ? 0 : nScore;
         answer.SerialOrder = index;
@@ -461,7 +461,7 @@ function deleteAnswer(answeridString, onsuccess) {
         }
     });
 }
-function addAnswer(element, qid, onsuccess) {
+function addAnswer(element, qid, onsuccess, noreload) {
     var questionid = parseInt(qid);
     var data = { questionid: questionid };
     statusSaving();
@@ -473,7 +473,9 @@ function addAnswer(element, qid, onsuccess) {
         contentType: "application/json; charset=utf-8",
         success: function (res) {
             if (res && res.success && res.questionHtml != "") {
-                $(element).replaceWith($(res.questionHtml));
+                if (!noreload) {
+                    $(element).replaceWith($(res.questionHtml));
+                }
                 if (onsuccess && typeof (onsuccess) === "function") {
                     onsuccess();
                 }
@@ -644,8 +646,8 @@ $(function () {
                 var answer = new Object();
                 answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
                 answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", ans).html();
-                var scoreString=$("input[type=text].nt-on-score", ans).val();
-                var nScore=parseInt(scoreString);
+                var scoreString = $("input[type=text].nt-on-score", ans).val();
+                var nScore = parseInt(scoreString);
                 answer.Score = isNaN(nScore) ? 0 : nScore;
                 return answer;
             }).convertJqueryArrayToJSArray();
@@ -709,7 +711,7 @@ $(function () {
                 var question = $(".nt-qtext.nt-qedit", itemParent).html();
                 var answers = $(".nt-qans", itemParent).map(function (index, ans) {
                     var answer = $(".nt-qansdesc", ans).html();
-                    var isright = $(".nt-qanselem input[type=radio]", ans).attr("checked") ? true : false;
+                    var isright = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
                     return { answer: answer, isright: isright }
                 });
                 return { itemid: itemid, question: question, answers: answers };
@@ -720,27 +722,36 @@ $(function () {
         switch (questiontype) {
             case "Radio":
                 var ques = $(questions.radio);
-
-                var savedObj = question_holder[itemid];
-                //question
-                $(".nt-qtext.nt-qedit", ques).html(savedObj.attr("question"));
                 //answers
                 var ansholder = $(".nt-qanscont", ques);
-                while ($(".nt-qans.nt-qans-edit", ansholder).length < savedObj.attr("answers").length) {
-                    var anstemplate = $(".nt-qans.nt-qans-edit", ansholder).clone().get(0);
-                    ansholder.append(anstemplate);
+
+                var savedObj = question_holder[itemid];
+                if (savedObj) {
+                    //question
+                    $(".nt-qtext.nt-qedit", ques).html(savedObj.attr("question"));
+                    while ($(".nt-qans.nt-qans-edit", ansholder).length < savedObj.attr("answers").length) {
+                        var anstemplate = $(".nt-qans.nt-qans-edit", ansholder).clone().get(0);
+                        ansholder.append(anstemplate);
+                    }
+                    savedObj.attr("answers").each(function (index, o) {
+                        var ele = $(".nt-qans.nt-qans-edit", ansholder).get(index);
+                        if (ele) {
+                            $(".nt-qansdesc", ele).html(o.answer)
+                            if (o.isright) {
+                                $(".nt-qanselem input[type=radio]", ele).attr("checked", "checked");
+                            }
+
+                        };
+                    });
+                } else {
+                    $(".nt-qans", ques).each(function () {
+                        addAnswer(ques, itemParent.attr("question-id"), function () {
+                            showOrHideDeleteLineAnswer();
+                            initEditable();
+                        }, true);
+                    });
+
                 }
-                savedObj.attr("answers").each(function (index, o) {
-                    var ele = $(".nt-qans.nt-qans-edit", ansholder).get(index);
-                    if (ele) {
-                        $(".nt-qansdesc", ele).html(o.answer)
-                        if (o.isright) {
-                            $(".nt-qanselem input[type=radio]", ele).attr("checked", "checked");
-                        }
-
-                    };
-                });
-
                 var quesid = itemParent.attr("id");
                 if (quesid) { ques.attr("id", quesid); }
                 var questionid = itemParent.attr("question-id");
@@ -749,26 +760,36 @@ $(function () {
                 break;
             case "Multiple":
                 var ques = $(questions.multiple);
-
-                var savedObj = question_holder[itemid];
-                //question
-                $(".nt-qtext.nt-qedit", ques).html(savedObj.attr("question"));
                 //answers
                 var ansholder = $(".nt-qanscont", ques);
-                while ($(".nt-qans.nt-qans-edit", ansholder).length < savedObj.attr("answers").length) {
-                    var anstemplate = $(".nt-qans.nt-qans-edit", ansholder).clone().get(0);
-                    ansholder.append(anstemplate);
-                }
-                savedObj.attr("answers").each(function (index, o) {
-                    var ele = $(".nt-qans.nt-qans-edit", ansholder).get(index);
-                    if (ele) {
-                        $(".nt-qansdesc.nt-qedit", ele).html(o.answer)
-                        if (o.isright) {
-                            $(".nt-qanselem input[type=checkbox]", ele).attr("checked", "checked");
-                        }
-                    };
-                });
 
+                var savedObj = question_holder[itemid];
+
+                if (savedObj) {
+                    //question
+                    $(".nt-qtext.nt-qedit", ques).html(savedObj.attr("question"));
+
+                    while ($(".nt-qans.nt-qans-edit", ansholder).length < savedObj.attr("answers").length) {
+                        var anstemplate = $(".nt-qans.nt-qans-edit", ansholder).clone().get(0);
+                        ansholder.append(anstemplate);
+                    }
+                    savedObj.attr("answers").each(function (index, o) {
+                        var ele = $(".nt-qans.nt-qans-edit", ansholder).get(index);
+                        if (ele) {
+                            $(".nt-qansdesc.nt-qedit", ele).html(o.answer)
+                            if (o.isright) {
+                                $(".nt-qanselem input[type=checkbox]", ele).attr("checked", "checked");
+                            }
+                        };
+                    });
+                } else {
+                    $(".nt-qans", ques).each(function () {
+                        addAnswer(ques, itemParent.attr("question-id"), function () {
+                            showOrHideDeleteLineAnswer();
+                            initEditable();
+                        }, true);
+                    });
+                }
                 var quesid = itemParent.attr("id");
                 if (quesid) { ques.attr("id", quesid); }
                 var questionid = itemParent.attr("question-id");
