@@ -1,6 +1,6 @@
 ﻿@model OATS_Capstone.Models.Test
 @{
-    var templateQuestions=Model.Questions.Where(i=>i.Tags.Any(k=>k.TagName=="Template")).Take(2);
+    var templateQuestions=OATS_Capstone.Models.SingletonDb.Instance().Questions.Where(i=>i.Tags.Any(k=>k.TagName=="Template")).Take(2);
 }
 <div id="sidebar" role="tablist">
     <div class="t-accord-header">New Question<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
