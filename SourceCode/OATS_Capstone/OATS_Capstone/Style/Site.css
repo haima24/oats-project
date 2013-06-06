@@ -806,11 +806,6 @@ i, cite, em, var, address, dfn {
     float: left;
 }
 
-#checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
-    margin: 7px 0 0 0;
-    padding: 0;
-}
-
 .nt-ph {
     font-style: italic;
     color: grey;
@@ -966,7 +961,11 @@ i, cite, em, var, address, dfn {
     -o-border-radius: 4px;
     border-radius: 4px;
 }
-
+#checklist .nt-qitem .nt-qmaxpts {
+position: absolute;
+top: 10px;
+right: 10px;
+}
 #checklist .nt-qitem .nt-qans .nt-qansrep .nt-qansrep-color {
     width: 18px;
     height: 100%;
@@ -1211,15 +1210,6 @@ color: #444444;
     margin: 2px 2px 0 0;
 }
 
-
-#asmsList .accordion-group:first-child {
-    border-bottom: 0;
-    -webkit-border-radius: 4px 4px 0 0;
-    -moz-border-radius: 4px 4px 0 0;
-    -ms-border-radius: 4px 4px 0 0;
-    -o-border-radius: 4px 4px 0 0;
-    border-radius: 4px 4px 0 0;
-}
 
 #asmsList .accordion-group {
     background-color: #FFF;
@@ -2551,6 +2541,7 @@ height: 22px;
 }
 
 #asmsList .accordion-group:first-child .accordion-heading {
+    border-bottom:0px;
     -webkit-border-radius: 4px 4px 0 0;
     -moz-border-radius: 4px 4px 0 0;
     -ms-border-radius: 4px 4px 0 0;
@@ -2586,29 +2577,7 @@ height: 22px;
     cursor: pointer;
 }
 
-a, a:hover {
-    text-decoration: none;
-    cursor: pointer;
-}
-
-a {
-    color: #0088cc;
-    text-decoration: none;
-}
-
-user agent stylesheeta:-webkit-any-link {
-    color: -webkit-link;
-    text-decoration: underline;
-    cursor: auto;
-}
-
-Inherited from div.accordion-heading.nt-guide #asmsList .accordion-heading {
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
 .nt-led.on {
-    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
     background-size: 100%;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
     background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
@@ -2628,27 +2597,6 @@ Inherited from div.accordion-heading.nt-guide #asmsList .accordion-heading {
     border-radius: 9px;
 }
 
-#asmsList .accordion-heading .accordion-toggle i {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-}
-
-i.nt-icon.arrow-up {
-    background-position: 0 -100px;
-}
-
-i.nt-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    background: url(../img/sprites.png?v=177) no-repeat;
-}
-
-user agent stylesheeti, cite, em, var, address, dfn {
-    font-style: italic;
-}
 
 #asmsList .accordion-heading .accordion-toggle .nt-desc {
     margin-left: 4px;
@@ -2680,62 +2628,10 @@ user agent stylesheeti, cite, em, var, address, dfn {
     border-bottom: 1px solid #ececec;
 }
 
-.nt-title, .nt-clb-header, .nt-asms-list .nt-list-head, .nt-user-details .nt-asms-unrelated .nt-asms-unrelated-label, #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table th, .nt-scores-cont .nt-scores-table-cont .nt-scores-table.nt-scores-table-header .nt-scores-table-title, .nt-scores-cont .nt-scores-footer .notreptags .nt-tag-ph {
-    text-transform: uppercase;
-    color: #8e5e19;
-    font-weight: bold;
-    font-size: 11px;
-}
 
-.nt-asms-list .nt-list-row:first-child {
-    border-top: 0;
-}
-
-.nt-asms-list .nt-list-row {
-    border-top: 1px solid #ececec;
-    font-size: 12px;
-}
-
-    .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
-        position: relative;
-        padding-left: 15px;
-        padding-right: 25px;
-        text-align: left;
-        width: 31%;
-    }
-
-    .nt-asms-list .nt-list-row .nt-name {
-        text-overflow: ellipsis;
-        font-size: 14px;
-    }
-
-    .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
-        width: 13%;
-    }
-
-
-.nt-date, .nt-time {
-    overflow: hidden;
-    white-space: nowrap;
-}
 
 .nt-asms-list .nt-list-head > div.nt-rate, .nt-asms-list .nt-list-row > div.nt-rate {
     width: 16%;
-}
-
-.nt-asms-list .nt-list-head > div.nt-perc, .nt-asms-list .nt-list-row > div.nt-perc {
-    width: 7%;
-}
-
-.nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
-    display: inline-block;
-    padding: 10px 2px;
-    text-align: center;
-    vertical-align: top;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
 }
 
     .nt-asms-list .nt-list-head > div.nt-ctrl-wide, .nt-asms-list .nt-list-row > div.nt-ctrl-wide {
@@ -2747,10 +2643,6 @@ user agent stylesheeti, cite, em, var, address, dfn {
         text-align: right;
     }
 
-    .nt-ctrl-foot, .nt-asms-list .nt-list-head > div.nt-ctrl-wide, .nt-asms-list .nt-list-row > div.nt-ctrl-wide {
-        padding: 5px 0 7px 0;
-    }
-
 
 #asmsList .accordion-group.nt-acc-hl {
     margin: 0 -15px;
@@ -2758,17 +2650,6 @@ user agent stylesheeti, cite, em, var, address, dfn {
     border-width: 5px;
 }
 
-
-.accordion-group {
-    margin-bottom: 2px;
-    border: 1px solid #e5e5e5;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-
-#container:not(.nt-mobile) {
-}
 #container.nt-de-cont {
 overflow: visible;
 margin-bottom: 70px;
@@ -2776,33 +2657,6 @@ padding-bottom: 5px;
 }
 #container.nt-mobile, #container.nt-de-cont, #container.nt-signup {
 width: auto;
-}
-#container.nt-well {
-position: relative;
-background: rgba(255, 255, 255, 0.3);
-padding: 20px 20px 1px 20px;
--webkit-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 2px;
--moz-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 2px;
-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 2px;
--webkit-border-radius: 10px;
--moz-border-radius: 10px;
--ms-border-radius: 10px;
--o-border-radius: 10px;
-border-radius: 10px;
-}
-#container {
-width: 960px;
-max-width: 960px;
-margin-top: 60px;
-margin-bottom: 20px;
-overflow: hidden;
-}
-.container {
-margin-right: auto;
-margin-left: auto;
-}
-.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
-width: 940px;
 }
 
 #container.nt-de-cont .nt-header {
@@ -2857,7 +2711,7 @@ max-width: 732px;
 margin: 0 auto;
 }
 #checklist {
-width: 749px;
+width: 725px;
 position: relative;
 overflow-x: hidden;
 overflow-y: auto;
@@ -2867,264 +2721,26 @@ overflow-y: auto;
 width: auto;
 max-width: 730px;
 }
-#checklist .nt-qitem:first-child {
-border-top: 1px solid #c7c7c7;
--moz-border-radius-topleft: 5px;
--webkit-border-top-left-radius: 5px;
-border-top-left-radius: 5px;
--moz-border-radius-topright: 5px;
--webkit-border-top-right-radius: 5px;
-border-top-right-radius: 5px;
-}
-#checklist .nt-qitem {
-width: 730px;
-position: relative;
-overflow: hidden;
-background-color: white;
-border: 1px solid #c7c7c7;
-border-top: 1px solid #ececec;
-border-bottom: 0;
-}
 
-#checklist .nt-qitem .nt-qnum {
-position: absolute;
-font-size: 16px;
-line-height: 22px;
-width: 29px;
-top: 10px;
-left: 1px;
-text-align: right;
-padding-top: 5px;
-}
 
-a, a:hover {
-text-decoration: none;
-cursor: pointer;
-}
-a {
-color: #0088cc;
-text-decoration: none;
-}
-
-#checklist .nt-qitem .nt-qmaxpts {
-position: absolute;
-top: 10px;
-right: 10px;
-}
-#checklist .nt-qitem .nt-qpts, #checklist .nt-qitem .nt-qmaxpts {
-font-size: 10px;
-background-color: #f8f8f8;
-padding: 3px;
-width: 45px;
-text-align: center;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
--ms-border-radius: 4px;
--o-border-radius: 4px;
-border-radius: 4px;
-}
 
 #container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qtext {
 width: auto;
 max-width: 605px;
 }
-#checklist .nt-qitem .nt-qtext {
-font-size: 16px;
-line-height: 22px;
-margin: 10px 0 7px 35px;
-width: 605px;
-min-height: 22px;
-padding: 5px;
-}
 
 #container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qans {
 position: static;
 }
-#checklist .nt-qitem .nt-qans {
-position: relative;
-overflow: hidden;
-padding: 6px 10px 5px 17px;
-font-size: 14px;
-min-height: 28px;
-border-bottom: 1px solid white;
-}
 
-#checklist .nt-qitem .nt-qans .nt-qans-label {
-font-size: 14px;
-padding: 0;
-margin: 0;
-vertical-align: middle;
-}
-.radio, .checkbox {
-min-height: 18px;
-padding-left: 18px;
-}
-label {
-display: block;
-margin-bottom: 5px;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-
-#checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
-margin: 7px 0 0 0;
-padding: 0;
-}
-.radio input[type="radio"], .checkbox input[type="checkbox"] {
-float: left;
-margin-left: -18px;
-}
-input[type="file"], input[type="image"], input[type="submit"], input[type="reset"], input[type="button"], input[type="radio"], input[type="checkbox"] {
-width: auto;
-}
-input[type="radio"], input[type="checkbox"] {
-margin: 4px 0 0;
-margin-top: 1px 9;
-line-height: normal;
-cursor: pointer;
-}
-input, textarea {
-}
-input, button, select, textarea {
-font-family: "Open Sans", sans-serif;
-}
-input, textarea, .uneditable-input {
-margin-left: 0;
-}
-input, textarea {
-width: 210px;
-}
-input, button, select, textarea {
-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-button, input {
-line-height: normal;
-}
-button, input, select, textarea {
-margin: 0;
-font-size: 100%;
-vertical-align: middle;
-}
 
 #container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qans .nt-qansdesc {
 width: auto;
 max-width: 633px;
 margin-left: 17px;
 }
-#checklist .nt-qitem .nt-qans .nt-qansdesc {
-min-height: 18px;
-margin-left: 5px;
-padding: 5px;
-width: 633px;
-}
 
-#checklist .nt-qitem .nt-qfoot {
-position: relative;
-padding: 8px 44px 8px 10px;
-height: 24px;
-}
 
-#checklist .nt-qitem .nt-qfoot .nt-qrep {
-position: absolute;
-top: 11px;
-right: 15px;
-font-size: 11px;
-text-transform: uppercase;
-}
-
-#checklist .nt-qitem .nt-qfoot .nt-qrep .nt-crate, #checklist .nt-qitem .nt-qfoot .nt-qrep .nt-pbs {
-font-weight: bold;
-margin-left: 5px;
-}
-#checklist .nt-qitem .nt-qfoot .nt-qrep span {
-margin-left: 20px;
-}
-
-#checklist .nt-qitem .nt-qfoot .nt-qrep .nt-crate, #checklist .nt-qitem .nt-qfoot .nt-qrep .nt-pbs {
-font-weight: bold;
-margin-left: 5px;
-}
-#checklist .nt-qitem .nt-qfoot .nt-qrep span {
-margin-left: 20px;
-}
-
-#checklist .nt-qitem .nt-qans .nt-qans-label {
-font-size: 14px;
-padding: 0;
-margin: 0;
-vertical-align: middle;
-}
-.radio, .checkbox {
-min-height: 18px;
-padding-left: 18px;
-}
-label {
-display: block;
-margin-bottom: 5px;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-
-#checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
-margin: 7px 0 0 0;
-padding: 0;
-}
-.radio input[type="radio"], .checkbox input[type="checkbox"] {
-float: left;
-margin-left: -18px;
-}
-input[type="file"], input[type="image"], input[type="submit"], input[type="reset"], input[type="button"], input[type="radio"], input[type="checkbox"] {
-width: auto;
-}
-input[type="radio"], input[type="checkbox"] {
-margin: 4px 0 0;
-margin-top: 1px 9;
-line-height: normal;
-cursor: pointer;
-}
-input, textarea {
-}
-input, button, select, textarea {
-font-family: "Open Sans", sans-serif;
-}
-input, textarea, .uneditable-input {
-margin-left: 0;
-}
-input, textarea {
-width: 210px;
-}
-input, button, select, textarea {
-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-button, input {
-line-height: normal;
-}
-button, input, select, textarea {
-margin: 0;
-font-size: 100%;
-vertical-align: middle;
-}
-
-#checklist .nt-qitem .nt-qmiddle {
-position: relative;
-padding: 10px 10px 0 10px;
-}
 
 #checklist .nt-qitem .nt-qmiddle .nt-format-hint {
 position: absolute;
@@ -3135,74 +2751,6 @@ color: #afafaf;
 text-align: right;
 }
 
-.redactor_box textarea {
-font-family: Menlo, Monaco, monospace, sans-serif;
-font-size: 13px;
-overflow: auto;
-resize: none;
-margin: 0;
-padding: 0;
-display: block;
-position: relative;
-z-index: 1004;
-outline: none;
-border: none;
-width: 100%;
-}
-input, textarea {
-}
-input, button, select, textarea {
-font-family: "Open Sans", sans-serif;
-}
-input, textarea, .uneditable-input {
-margin-left: 0;
-}
-textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-background-color: #ffffff;
-border: 1px solid #cccccc;
--webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
--moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
--webkit-transition: border linear .2s, box-shadow linear .2s;
--moz-transition: border linear .2s, box-shadow linear .2s;
--o-transition: border linear .2s, box-shadow linear .2s;
-transition: border linear .2s, box-shadow linear .2s;
-}
-textarea {
-height: auto;
-}
-input, textarea {
-width: 210px;
-}
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-display: inline-block;
-height: 18px;
-padding: 4px 6px;
-margin-bottom: 9px;
-font-size: 13px;
-line-height: 18px;
-color: #555555;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
-}
-input, button, select, textarea {
-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-textarea {
-overflow: auto;
-vertical-align: top;
-}
-button, input, select, textarea {
-margin: 0;
-font-size: 100%;
-vertical-align: middle;
-}
 
 #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput {
 min-height: 18px;
@@ -3225,20 +2773,6 @@ transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-#checklist .nt-qitem .nt-qmiddle .nt-qrespinput {
-margin-bottom: 16px;
-}
-.redactor_editor {
-overflow: hidden;
-}
-div[Attributes Style] {
--webkit-user-modify: read-write;
-word-wrap: break-word;
--webkit-nbsp-mode: space;
--webkit-line-break: after-white-space;
-direction: ltr;
-unicode-bidi: embed;
 }
 
 #container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .redactor_toolbar {
@@ -3287,90 +2821,12 @@ padding-right: 0;
 list-style: none !important;
 outline: none;
 }
-li {
-line-height: 18px;
-}
-user agent stylesheetli {
-display: list-item;
-text-align: -webkit-match-parent;
-}
-
 .nt-simple-resp, #checklist .nt-qitem .nt-qtext .nt-fitb > span, #checklist .nt-qitem .nt-qtext .nt-fitb > input, #checklist .nt-qitem .nt-qmiddle input.nt-qrespinput {
 font-weight: bold;
 font-size: 14px;
 }
 #checklist .nt-qitem .nt-qmiddle .nt-qrespinput {
 margin-bottom: 16px;
-}
-textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-background-color: #ffffff;
-border: 1px solid #cccccc;
--webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
--moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
--webkit-transition: border linear .2s, box-shadow linear .2s;
--moz-transition: border linear .2s, box-shadow linear .2s;
--o-transition: border linear .2s, box-shadow linear .2s;
-transition: border linear .2s, box-shadow linear .2s;
-}
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-display: inline-block;
-height: 18px;
-padding: 4px 6px;
-margin-bottom: 9px;
-font-size: 13px;
-line-height: 18px;
-color: #555555;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
-}
-input, textarea {
-}
-input, button, select, textarea {
-font-family: "Open Sans", sans-serif;
-}
-input, textarea, .uneditable-input {
-margin-left: 0;
-}
-input, textarea {
-width: 210px;
-}
-input, button, select, textarea {
-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-button, input {
-line-height: normal;
-}
-button, input, select, textarea {
-margin: 0;
-font-size: 100%;
-vertical-align: middle;
-}
-
-#checklist .nt-qitem .nt-qnum-letter {
-display: none;
-}
-#checklist .nt-qitem .nt-qnum {
-position: absolute;
-font-size: 16px;
-line-height: 22px;
-width: 29px;
-top: 10px;
-left: 1px;
-text-align: right;
-padding-top: 5px;
-}
-
-#checklist .nt-qitem .nt-qimg-cont {
-position: relative;
-display: none;
-margin: 40px 10px 0 10px;
 }
 
 
@@ -3388,14 +2844,6 @@ margin: 10px;
 text-align: center;
 width: auto;
 }
-#checklist .nt-qitem .nt-qtext {
-font-size: 16px;
-line-height: 22px;
-margin: 10px 0 7px 35px;
-width: 605px;
-min-height: 22px;
-padding: 5px;
-}
 
 #container.nt-de-cont .nt-footer {
 display: none;
@@ -3405,7 +2853,7 @@ left: 0;
 width: 100%;
 height: 60px;
 text-align: center;
-background: url(../img/bg.png?v=195);
+/*background: url(../img/bg.png?v=195);*/
 }
 
 #container.nt-de-cont .nt-footer .nt-footer-cont {
@@ -3442,54 +2890,6 @@ overflow: hidden;
 
 #container.nt-de-cont .nt-footer .nt-footer-cont .nt-btn-submit {
 margin-top: 10px;
-}
-.nt-btn-submit {
-font-size: 13px;
-font-weight: bold;
-text-transform: uppercase;
-padding: 10px 20px;
-background-color: #030303;
-color: #fff;
-border: 1px solid #519b41;
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
--ms-border-radius: 5px;
--o-border-radius: 5px;
-border-radius: 5px;
-text-shadow: 0 -1px 0 #27631a;
--webkit-box-shadow: 0 2px 0 #e3e3e3;
--moz-box-shadow: 0 2px 0 #e3e3e3;
-box-shadow: 0 2px 0 #e3e3e3;
-background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
-background-size: 100%;
-background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #80c570), color-stop(100%, #59ab46));
-background-image: -webkit-linear-gradient(top, #80c570, #59ab46);
-background-image: -moz-linear-gradient(top, #80c570, #59ab46);
-background-image: -o-linear-gradient(top, #80c570, #59ab46);
-background-image: linear-gradient(top, #80c570, #59ab46);
-}
-input, button, select, textarea {
-font-family: "Open Sans", sans-serif;
-}
-input, button, select, textarea {
-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 18px;
-}
-button, input[type="button"], input[type="reset"], input[type="submit"] {
-cursor: pointer;
--webkit-appearance: button;
-}
-button, input {
-line-height: normal;
-}
-button, input, select, textarea {
-margin: 0;
-font-size: 100%;
-vertical-align: middle;
 }
 
 #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right {
