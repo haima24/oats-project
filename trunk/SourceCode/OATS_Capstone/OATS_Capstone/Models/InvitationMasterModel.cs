@@ -7,7 +7,19 @@ namespace OATS_Capstone.Models
 {
     public class InvitationMasterModel
     {
-        public List<Invitation> InvitationList { get; set; }
-        public List<User> UserList { get; set; }
+        private List<Invitation> invitationList = null;
+
+        public List<Invitation> InvitationList
+        {
+            get { return invitationList; }
+            set { invitationList = value; }
+        }
+        private List<User> userList = null;
+
+        public List<User> UserList
+        {
+            get { return userList; }
+            set { userList = value; }
+        }
     }
 }
