@@ -38,14 +38,14 @@
           <i class="icon-envelope"></i>
           Invite More Students
         </a>
-        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="remove" data-guide="inv_remove">
+        <a href="#myModalRemoveStudent" role="button" style="visibility: visible; display: inline-block;" class="btn" data-action="remove" data-guide="inv_remove" data-toggle="modal">
           <i class="icon-remove"></i>
           Remove
-        </button>
-        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="re_invite" data-guide="inv_reinv">
+        </a>
+        <a href="#myModalReInviteStudent" role="button" style="visibility: visible; display: inline-block;" class="btn" data-action="re_invite" data-toggle="modal" data-guide="inv_reinv">
           <i class="icon-repeat"></i>
           Re-invite
-        </button>
+        </a>
       </td>
     </tr>
   </tfoot>
@@ -82,14 +82,14 @@
           <i class="icon-envelope"></i>
           Invite More Educators
         </a>
-        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="remove" data-guide="inv_remove">
+        <a href="#myModalRemoveTeacher" role="button" style="visibility: visible; display: inline-block;" class="btn" data-action="remove" data-guide="inv_remove" data-toggle="modal">
           <i class="icon-remove"></i>
           Remove
-        </button>
-        <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="re_invite" data-guide="inv_reinv">
+        </a>
+        <a href="#myModalReInviteTeacher" role="button" style="visibility: visible; display: inline-block;" class="btn" data-action="re_invite" data-toggle="modal" data-guide="inv_reinv">
           <i class="icon-repeat"></i>
           Re-invite
-        </button>
+        </a>
       </td>
     </tr>
   </tfoot>
@@ -243,6 +243,288 @@ Email Invitations
 </label>
 </div>
 </div>
+
+<div id="myModalReInviteStudent" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <div class="modal-title">Re-invite Students</div>
+    </div>
+
+<div class="modal-body"><div class="nt-ctrl-search ui-droppable"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear " tabindex="-1">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist nt-tags"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="search_tag" placeholder="Search Tag...">
+</div></div>
+</div>
+<div class="nt-ctrl-list"><div class="nt-ctrl-line"></div>
+<div class="nt-clb-header">
+  <div class="nt-clb-header-control">
+    <input type="checkbox" class="nt-ctrl-all">
+  </div>
+  <div class="nt-clb-header-content">
+    <div class="nt-clb-header-label">
+      <span>Name</span>
+    </div>
+    <div class="nt-clb-header-desc">
+      <span>Email Address</span>
+    </div>
+  </div>
+  <div class="nt-loader" style="display: none;"></div>
+</div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-clb-empty"></div>
+<div class="nt-clb-list"><div class="nt-clb-item nt-clb-item-multi" id="ae3b2920781a4ea1921ebf5b02928497"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{A}</span></div>
+  <div class="nt-clb-item-desc">a@nomail.terascore.com</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="e7225cd8545b454586575e11c69b65da"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{B}</span></div>
+  <div class="nt-clb-item-desc">b@nomail.terascore.com</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="df212103afbe4751a4de4913025905a3"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{C}</span></div>
+  <div class="nt-clb-item-desc">c@nomail.terascore.com</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="62dc5f252b94427ebff77835f5f9c646"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Student <span class="nt-hl-sort">{D}</span></div>
+  <div class="nt-clb-item-desc">d@nomail.terascore.com</div>
+</div>
+</div></div>
+</div>
+<div class="nt-ctrl-foot">
+  <div class="nt-title">Tags on selection:</div>
+  <div class="nt-tags" style="display: none;"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="add_tag" placeholder="Add Tag...">
+</div></div>
+</div>
+
+</div>
+
+<div class="modal-footer">
+  <button class="nt-btn-ok nt-btn-light nt-icon-left">
+    <i class="icon-repeat"></i>
+    Re-invite
+  </button>
+  <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+</div>
+
+</div>
+
+<div id="myModalReInviteTeacher" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <div class="modal-title">Re-invite Educators</div>
+    </div>
+
+<div class="modal-body"><div class="nt-ctrl-search ui-droppable"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear " tabindex="-1">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist nt-tags"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="search_tag" placeholder="Search Tag...">
+</div></div>
+</div>
+<div class="nt-ctrl-list"><div class="nt-ctrl-line"></div>
+<div class="nt-clb-header">
+  <div class="nt-clb-header-control">
+    <input type="checkbox" class="nt-ctrl-all">
+  </div>
+  <div class="nt-clb-header-content">
+    <div class="nt-clb-header-label">
+      <span>Name</span>
+    </div>
+    <div class="nt-clb-header-desc">
+      <span>Email Address</span>
+    </div>
+  </div>
+  <div class="nt-loader" style="display: none;"></div>
+</div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-clb-empty"></div>
+<div class="nt-clb-list"><div class="nt-clb-item nt-clb-item-multi" id="f997d00b04ca4525bc478a1a8f3aee0b"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Admin <span class="nt-hl-sort">User</span></div>
+  <div class="nt-clb-item-desc">admin@nomail.terascore.com</div>
+</div>
+</div></div>
+</div>
+<div class="nt-ctrl-foot">
+  <div class="nt-title">Tags on selection:</div>
+  <div class="nt-tags" style="display: none;"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="add_tag" placeholder="Add Tag...">
+</div></div>
+</div>
+
+</div>
+
+<div class="modal-footer">
+  <button class="nt-btn-ok nt-btn-light nt-icon-left">
+    <i class="icon-repeat"></i>
+    Re-invite
+  </button>
+  <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+</div>
+
+</div>
+
+<div id="myModalRemoveTeacher" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+  <div class="modal-title">Remove Educators</div>
+</div>
+
+<div class="modal-body"><div class="nt-ctrl-search ui-droppable"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear " tabindex="-1">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist nt-tags"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="search_tag" placeholder="Search Tag...">
+</div></div>
+</div>
+<div class="nt-ctrl-list"><div class="nt-ctrl-line"></div>
+<div class="nt-clb-header">
+  <div class="nt-clb-header-control">
+    <input type="checkbox" class="nt-ctrl-all">
+  </div>
+  <div class="nt-clb-header-content">
+    <div class="nt-clb-header-label">
+      <span>Name</span>
+    </div>
+    <div class="nt-clb-header-desc">
+      <span>Email Address</span>
+    </div>
+  </div>
+  <div class="nt-loader" style="display: none;"></div>
+</div>
+<div class="nt-ctrl-line"></div>
+<div class="nt-clb-empty"></div>
+<div class="nt-clb-list"><div class="nt-clb-item nt-clb-item-multi" id="83a9f61e30204be4b502fb70a8e53109"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{1}</span></div>
+  <div class="nt-clb-item-desc">t1@nomail.terascore.com</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="122d042fe9874052a40da0b20b56bcbf"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{2}</span></div>
+  <div class="nt-clb-item-desc">t2@nomail.terascore.com</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="158e4e42f1dd42dda962e0e7c6c64ed9"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Sample Teacher <span class="nt-hl-sort">{3}</span></div>
+  <div class="nt-clb-item-desc">t3@nomail.terascore.com</div>
+</div>
+</div><div class="nt-clb-item nt-clb-item-multi" id="b2068a2b5b4d42a1858fa2d7c9d0b9aa"><div class="nt-clb-item-control " "="">
+  <input type="checkbox">
+</div>
+<div class="nt-clb-item-content " "="">
+  <div class="nt-clb-item-label">Terascore <span class="nt-hl-sort">{Support}</span></div>
+  <div class="nt-clb-item-desc">support@terascore.com</div>
+</div>
+</div></div>
+</div>
+<div class="nt-ctrl-foot">
+  <div class="nt-title">Tags on selection:</div>
+  <div class="nt-tags" style="display: none;"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="add_tag" placeholder="Add Tag...">
+</div></div>
+</div>
+
+</div>
+
+<div class="modal-footer">
+  <button class="nt-btn-ok nt-btn-light nt-icon-left">
+    <i class="icon-remove"></i>
+    Remove
+  </button>
+  <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+</div>
+
+</div>
+
+<div id="myModalRemoveStudent" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+  <div class="modal-title">Invite More Students</div>
+</div>
+
+<div class="modal-body"><div class="nt-ctrl-search ui-droppable"><div class="nt-search-box">
+  <input type="text" placeholder="Search" class="nt-search-input ">
+  <i class="nt-icon search"></i>
+
+
+  <button class="nt-btn-icon nt-btn-clear " tabindex="-1">
+    <i class="icon-remove-sign"></i>
+  </button>
+</div>
+<div class="nt-ctrl-search-tags nt-taglist nt-tags"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="search_tag" placeholder="Search Tag...">
+</div></div>
+</div>
+<div class="nt-ctrl-list"><div class="nt-ctrl-line" style="display: none;"></div>
+<div class="nt-clb-header" style="display: none;">
+  <div class="nt-clb-header-control">
+    <input type="checkbox" class="nt-ctrl-all">
+  </div>
+  <div class="nt-clb-header-content">
+    <div class="nt-clb-header-label">
+      <span>Name</span>
+    </div>
+    <div class="nt-clb-header-desc">
+      <span>Email Address</span>
+    </div>
+  </div>
+  <div class="nt-loader" style="display: none;"></div>
+</div>
+<div class="nt-ctrl-line" style="display: none;"></div>
+<div class="nt-clb-empty"><div class="nt-empty-list-ph"><p>Start typing a student name, email address or a tag.</p></div></div>
+<div class="nt-clb-list"></div>
+</div>
+<div class="nt-ctrl-foot" style="display: none;">
+  <div class="nt-title">Tags on selection:</div>
+  <div class="nt-tags" style="display: none;"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="add_tag" placeholder="Add Tag...">
+</div></div>
+</div>
+
+</div>
+
+<div class="modal-footer">
+  <button class="nt-btn-ok nt-btn-submit ">
+    Invite
+  </button>
+  <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+  <label class="checkbox">
+    <input type="checkbox" class="nt-email-inv" checked="checked">Email Invitations
+  </label>
+</div>
+
+</div>
+
   </div>
 </div>
 
