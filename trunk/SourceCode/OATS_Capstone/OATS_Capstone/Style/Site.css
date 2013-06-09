@@ -497,7 +497,6 @@ i, cite, em, var, address, dfn {
 
     .test-larger-custom > .nav > li:not(.active) > a:hover {
         color: #444444;
-        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
         background-size: 100%;
         background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eaeffa), color-stop(100%, #dee4ed));
         background-image: -webkit-linear-gradient(top, #eaeffa, #dee4ed);

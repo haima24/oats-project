@@ -1,0 +1,85 @@
+﻿@model IEnumerable< OATS_Capstone.Models.User>
+@{
+    var roleName = Model.FirstOrDefault().Role.RoleDescription;
+    }
+        <div id="modalPopupUser" class="modal hide fade">
+            <div class="modal-header">
+                <div class="modal-title">Invite More @roleName</div>
+            </div>
+            <div class="modal-body">
+                <div class="nt-ctrl-search ui-droppable">
+                    <div class="nt-search-box">
+                        <input type="text" placeholder="Search" class="nt-search-input ">
+                        <i class="nt-icon search"></i>
+                        <button class="nt-btn-icon nt-btn-clear " style="display: none;">
+                            <i class="icon-remove-sign"></i>
+                        </button>
+                    </div>
+                    <div class="nt-ctrl-search-tags nt-taglist"></div>
+                </div>
+                <div class="nt-ctrl-list">
+                    <div class="nt-ctrl-line"></div>
+                    <div class="nt-clb-header">
+                        <div class="nt-clb-header-control">
+                            <input type="checkbox" class="nt-ctrl-all">
+                        </div>
+                        <div class="nt-clb-header-content">
+                            <div class="nt-clb-header-label">
+                                <span>Name</span>
+                            </div>
+                            <div class="nt-clb-header-desc">
+                                <span>Email Address</span>
+                            </div>
+                        </div>
+                        <div class="nt-loader" style="display: none;"></div>
+                    </div>
+                    <div class="nt-ctrl-line"></div>
+                    <div class="nt-clb-empty"></div>
+                    <div class="nt-clb-list">
+
+                        @foreach (var user in Model)
+                        {
+                            <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
+                                <div class="nt-clb-item-control">
+                                    <input type="checkbox" user-id="@user.UserID">
+                                </div>
+                                <div class="nt-clb-item-content ">
+                                    <div class="nt-clb-item-label">@user.FirstName <span class="nt-hl-sort">{A}</span></div>
+                                    <div class="nt-clb-item-desc">@user.UserMail</div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+                <div class="nt-ctrl-foot" style="">
+                    <div class="nt-title">Tags on selection:</div>
+                    <div class="nt-tags" style="">
+                        <div class="nt-tag nt-guide nt-pale" id="46da78cedc6f41e19082e2be86cac711">
+                            <span>Class of 2015</span>
+                            <i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide nt-pale" id="4c5e83472320482c856279d89b1cdd91">
+                            <span>Class of 2016</span>
+                            <i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag nt-guide" id="5fec84cac3524d71aef64d1afffafce7">
+                            <span>SAMPLE</span>
+                            <i class="icon-remove-sign icon-white nt-tag-remove" data-original-title="Remove Tag"></i>
+                        </div>
+                        <div class="nt-tag-adder">
+                            <input type="text" class="input-small nt-guide ac_input" data-guide="add_tag" placeholder="Add Tag..." autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="nt-btn-ok nt-btn-submit nt-icon-left">
+                    <i class="icon-envelope"></i>
+                    Invite
+                </button>
+                <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
