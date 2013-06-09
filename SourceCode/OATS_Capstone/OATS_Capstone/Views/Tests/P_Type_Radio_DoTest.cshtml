@@ -1,0 +1,37 @@
+﻿@model OATS_Capstone.Models.Question
+@{
+    var sortedAns = Model.Answers.OrderBy(i => i.SerialOrder);
+}
+
+<div class="nt-qitem" question-type="Radio" question-id="@Model.QuestionID">
+    <div class="nt-qnum "></div>
+    <a class="nt-qanchor" name="Qundefined"></a>
+    <div class="nt-qmaxpts">@Model.QuestionScore</div>
+
+    <div class="nt-qtext ">
+        <p>@Model.QuestionTitle</p>
+    </div>
+
+    <div class="nt-qanscont nt-sortable">
+        @foreach (var ans in sortedAns)
+        {
+            <div class="nt-qans nt-qans-hover">
+                <!-- TODO: consistent editable / fillable display -->
+                <label class="radio nt-qans-label ">
+                    <input type="radio" id=@ans.AnswerID>
+                    <div class="nt-qansdesc">
+                        <p>@ans.AnswerContent</p>
+                    </div>
+                </label>
+            </div>
+        }
+    </div>
+
+    <div class="nt-qfoot">
+        <div class="nt-qrep" style="display: none">
+            <span>Correct:</span><span class="nt-crate"></span>
+            <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+        </div>
+    </div>
+
+</div>

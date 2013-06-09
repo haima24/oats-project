@@ -384,6 +384,13 @@
     <Content Include="Views\Tests\P_Inner_Container.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Tests\P_Type_Radio_DoTest.cshtml" />
+    <Content Include="Views\Tests\P_Type_Multiple_DoTest.cshtml" />
+    <Content Include="Views\Tests\P_Type_Essay_DoTest.cshtml" />
+    <Content Include="Views\Tests\P_Type_ShortAnswer_DoTest.cshtml" />
+    <Content Include="Views\Tests\P_Type_Text_DoTest.cshtml" />
+    <Content Include="Views\Tests\P_Type_Image_DoTest.cshtml" />
+    <Content Include="Views\Tests\P_Question_Instance_DoTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
