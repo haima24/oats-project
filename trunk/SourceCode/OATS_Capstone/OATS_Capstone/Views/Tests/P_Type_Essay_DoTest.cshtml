@@ -1,0 +1,44 @@
+﻿@model OATS_Capstone.Models.Question
+
+<div class="nt-qitem" question-type="Essay" question-id="@Model.QuestionID">
+    <div class="nt-qnum "></div>
+    <a class="nt-qanchor" name="Qundefined"></a>
+    <div class="nt-qmaxpts">@Model.QuestionScore</div>
+
+    <div class="nt-qtext ">
+        <p>@Model.QuestionTitle</p>
+    </div>
+
+    <div class="nt-qanscont nt-sortable"></div>
+    <div class="nt-qmiddle">
+        <div class="nt-format-hint" style="width: 710px;">(select text to format)</div>
+        <div class="redactor_box">
+            <textarea name="qresp_481df2fda8a744f3abad6e2a2822b312" style="height: 18px; display: none;"></textarea><div class="nt-qrespinput nt-delayedblur redactor_editor" id="qresp_481df2fda8a744f3abad6e2a2822b312" contenteditable="true" dir="ltr" style="width: 696px; min-height: 92px;">
+                <p>
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="nt-qfoot">
+        <ul class="redactor_toolbar" style="width: 708px; display: block;">
+            <li><a href="javascript:void(null);" title="Bold" class="redactor_btn_bold" tabindex="-1"></a></li>
+            <li><a href="javascript:void(null);" title="Italic" class="redactor_btn_italic" tabindex="-1"></a></li>
+            <li class="redactor_separator"></li>
+            <li><a href="javascript:void(null);" title="• Unordered List" class="redactor_btn_unorderedlist" tabindex="-1"></a></li>
+            <li><a href="javascript:void(null);" title="1. Ordered List" class="redactor_btn_orderedlist" tabindex="-1"></a></li>
+            <li class="redactor_separator"></li>
+            <li><a href="javascript:void(null);" title="&lt; Outdent" class="redactor_btn_outdent" tabindex="-1"></a></li>
+            <li><a href="javascript:void(null);" title="&gt; Indent" class="redactor_btn_indent" tabindex="-1"></a></li>
+            <li class="redactor_separator"></li>
+            <li><a href="javascript:void(null);" title="Align text to the left" class="redactor_btn_alignleft" tabindex="-1"></a></li>
+            <li><a href="javascript:void(null);" title="Center text" class="redactor_btn_aligncenter" tabindex="-1"></a></li>
+            <li><a href="javascript:void(null);" title="Align text to the right" class="redactor_btn_alignright" tabindex="-1"></a></li>
+            <li><a href="javascript:void(null);" title="Justify text" class="redactor_btn_justify" tabindex="-1"></a></li>
+            <li class="redactor_separator"></li>
+            <li><a href="javascript:void(null);" title="Insert Image" class="redactor_btn_image" tabindex="-1"></a></li>
+        </ul>
+    </div>
+
+</div>

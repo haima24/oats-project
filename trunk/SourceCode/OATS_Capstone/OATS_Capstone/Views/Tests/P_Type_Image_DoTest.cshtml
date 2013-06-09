@@ -1,0 +1,21 @@
+﻿@model OATS_Capstone.Models.Question
+
+<div class="nt-qitem" question-type="Image" question-id="@Model.QuestionID">
+    <div class="nt-qnum nt-qnum-letter"></div>
+    <a class="nt-qanchor" name="Qundefined"></a>
+    <p align="center" class="nt-qimg-cont" style="display: block">
+        <img data-dz-thumbnail="" width="300" height="300" alt="@Path.GetFileName(Model.ImageUrl.Trim())" src="@Url.Content(Model.ImageUrl.Trim())">
+    </p>
+
+    <div class="nt-qtext nt-qimg-desc">
+        <p>@Model.QuestionTitle</p>
+    </div>
+
+    <div class="nt-qanscont nt-sortable"></div>
+    <div class="nt-qfoot">
+        <div class="nt-qrep" style="display: none">
+            <span>Correct:</span><span class="nt-crate"></span>
+            <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+        </div>
+    </div>
+</div>
