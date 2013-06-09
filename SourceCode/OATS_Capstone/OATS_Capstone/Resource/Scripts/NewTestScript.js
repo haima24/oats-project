@@ -278,6 +278,8 @@ function updateStartEndDate(testid, start, end) {
 }
 
 //test facility
+function onUpdateSettingSuccess(res) {
+}
 function updateAnswer(lineElement, target) {
     var parentContainer = lineElement.closest(".nt-qanscont");
     if (target && target.type && target.type == "radio") {
@@ -995,56 +997,31 @@ $(function () {
         }
     });
     //separator
-    $("#myModal button.nt-btn-ok").live("click", function (ev) {
-        var container = $("#myModal .nt-clb-list");
+    $("#modalPopupUser button.nt-btn-ok").live("click", function (ev) {
+        var container = $("#modalPopupUser .nt-clb-list");
         var checkedCheckbox = $("input[type=checkbox]:checked", container);
         var chekcedIds = checkedCheckbox.map(function (index, element) {
             return parseInt($(element).attr("user-id"));
 
         }).convertJqueryArrayToJSArray();
-
-        //ajax call to controller here $.post
-        //$.post("/Tests/AddUserToInivtationTest", { testid: testid, userids: chekcedIds }, function (response) {
-        //});
+        statusSaving();
         $.ajax({
             type: "POST",
             url: "/Tests/AddUserToInivtationTest",
-            data: JSON.stringify({ testid: testid, userids: chekcedIds }),
+            data: JSON.stringify({ testid: testid,count:chekcedIds.length, userids: chekcedIds }),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
-                $("#eventTab").html($(res));
+                if (res.success) {
+                    $("#eventTab").html($(res.generatedHtml));
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
             }
 
         });
-        $("#myModal").modal('hide');
-
-    });
-
-    //separator
-    $("#myModal1 button.nt-btn-ok").live("click", function (ev) {
-        var container = $("#myModal1 .nt-clb-list");
-        var checkedCheckbox = $("input[type=checkbox]:checked", container);
-        var chekcedIds = checkedCheckbox.map(function (index, element) {
-            return parseInt($(element).attr("user-id"));
-
-        }).convertJqueryArrayToJSArray();
-
-        //ajax call to controller here $.post
-        //$.post("/Tests/AddUserToInivtationTest", { testid: testid, userids: chekcedIds }, function (response) {
-        //});
-        $.ajax({
-            type: "POST",
-            url: "/Tests/AddUserToInivtationTest",
-            data: JSON.stringify({ testid: testid, userids: chekcedIds }),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (res) {
-                $("#eventTab").html($(res));
-            }
-
-        });
-        $("#myModal1").modal('hide');
+        $("#modalPopupUser").modal('hide');
 
     });
 
@@ -1055,6 +1032,33 @@ $(function () {
     //separator
     $("#eventDel").live("click", function (ev) {
 
+    });
+    //separator
+    $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("click", function (ev) {
+        var settingKey = $(this).attr("setting-key");
+        var isactive = $(this).attr("checked") ? true : false;
+        $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive }, function (res) {
+            if (!res.success) {
+                showMessage("error", res.message);
+            }
+        });
+    });
+    //separator
+    $("#btn-invite-more-student").live("click", function (ev) {
+        $.post("/Tests/ModalPopupUser", {testid:testid, role: "Student" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+                if (!$("#modalPopupUser").length>0) {
+                    $(html).modal();
+                } else {
+                    $("#modalPopupUser").replaceWith($(html));
+                }
+                $("#modalPopupUser").modal("show");
+                
+            } else {
+                showMessage("error", res.message);
+            }
+        });
     });
     //separator
     showOrHideDeleteLineAnswer();

@@ -55,6 +55,40 @@ namespace OATS_Capstone.Controllers
             }
         }
 
+        public JsonResult ModalPopupUser(int testid,string role)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var popupHtml = String.Empty;
+            try
+            {
+                var db=SingletonDb.Instance();
+                var users = new List<User>();
+                switch (role)
+                {
+                    case "Student":
+                        users = db.Users.Where(i => i.Role.RoleDescription == "Student").ToList();
+                        break;
+                    default:
+                        break;
+                }
+                //filter users
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var invitedUsers = test.Invitations.Select(i => i.User);
+                    users= users.Where(k => !invitedUsers.Contains(k)).ToList();
+                }
+                popupHtml = this.RenderPartialViewToString("P_Modal_Assign_Tests_For_Users", users);
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success,message,popupHtml});
+        }
         public JsonResult ReuseQuestionTemplate(int questionid)
         {
             var success = false;
@@ -75,7 +109,6 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message, questionHtml });
         }
-       
         public JsonResult ReuseSearchQuestionTemplate(int maxrows, string term)
         {
             var success = false;
@@ -182,25 +215,42 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
-        public JsonResult AddUserToInivtationTest(int testid, List<int> userids)
+        public JsonResult AddUserToInivtationTest(int testid,int count, List<int> userids)
         {
-            var db = SingletonDb.Instance();
-            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-
-            userids.ForEach(delegate(int id)
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var master = new InvitationMasterModel();
+            var generatedHtml = String.Empty;
+            try
             {
-                var user = db.Users.FirstOrDefault(k => k.UserID == id);
-                if (user != null)
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (count > 0)
                 {
-                    var invitation = new Invitation();
-                    invitation.User = user;
-                    test.Invitations.Add(invitation);
+                    userids.ForEach(delegate(int id)
+                    {
+                        var user = db.Users.FirstOrDefault(k => k.UserID == id);
+                        if (user != null)
+                        {
+                            var invitation = new Invitation();
+                            invitation.User = user;
+                            test.Invitations.Add(invitation);
+                        }
+                    });
                 }
-            });
-            db.SaveChanges();
-            var master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
-            var generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
-            return Json(generatedHtml);
+                if (db.SaveChanges() >= 0)
+                {
+                    master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
+                    generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { generatedHtml, success, message });
         }
         public JsonResult QuestionTypes()
         {
@@ -640,7 +690,7 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message });
         }
-        public JsonResult UpdateStartEnd(int testid,DateTime start,DateTime end)
+        public JsonResult UpdateStartEnd(int testid, DateTime start, DateTime end)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -648,10 +698,12 @@ namespace OATS_Capstone.Controllers
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null) {
+                if (test != null)
+                {
                     test.StartDateTime = start;
                     test.EndDateTime = end;
-                    if (db.SaveChanges() >= 0) {
+                    if (db.SaveChanges() >= 0)
+                    {
                         success = true;
                     }
                 }
@@ -661,7 +713,55 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message});
+            return Json(new { success, message });
+        }
+        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                var settingConfig = test.SettingConfig;
+                if (settingConfig.SettingConfigID == 1)//1 is default
+                {
+                    var settings = settingConfig.SettingConfigDetails.ToList();
+                    //clone default setting
+                    var newSettingConfig = new SettingConfig();
+                    settings.ForEach(delegate(SettingConfigDetail settingDetail)
+                    {
+                        var newSettingDetail = new SettingConfigDetail();
+                        newSettingDetail.IsActive = settingDetail.IsActive;
+                        newSettingDetail.NumberValue = settingDetail.NumberValue;
+                        newSettingDetail.SettingType = settingDetail.SettingType;
+                        newSettingDetail.TextValue = settingDetail.TextValue;
+                        newSettingConfig.SettingConfigDetails.Add(newSettingDetail);
+                    });
+                    newSettingConfig.Description = "SettingForTest_" + test.TestID;
+                    test.SettingConfig = newSettingConfig;
+                }
+                var currentSetting = test.SettingConfig;
+                var sets = currentSetting.SettingConfigDetails.ToList();
+                sets.ForEach(delegate(SettingConfigDetail detail)
+                {
+                    if (detail.SettingType.SettingTypeKey == settingKey)
+                    {
+                        detail.IsActive = isactive;
+                    }
+                });
+                if (db.SaveChanges() >= 0)
+                {
+                    success = true;
+                    message = String.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message });
         }
     }
 }

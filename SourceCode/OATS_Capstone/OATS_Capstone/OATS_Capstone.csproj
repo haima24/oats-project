@@ -384,6 +384,7 @@
     <Content Include="Views\Tests\P_Inner_Container.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Tests\P_Modal_Assign_Tests_For_Users.cshtml" />
     <Content Include="Views\Tests\P_Type_Radio_DoTest.cshtml" />
     <Content Include="Views\Tests\P_Type_Multiple_DoTest.cshtml" />
     <Content Include="Views\Tests\P_Type_Essay_DoTest.cshtml" />
