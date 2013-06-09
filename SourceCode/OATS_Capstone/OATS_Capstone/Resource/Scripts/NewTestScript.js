@@ -1024,7 +1024,11 @@ $(function () {
         $("#modalPopupUser").modal('hide');
 
     });
-
+    $("#modalPopupUser .nt-clb-list input[type=checkbox]").live("click", function (ev) {
+        var pr = $(this).closest(".nt-clb-item");
+        if ($(this).attr("checked")) { pr.addClass("nt-clb-item-sel"); }
+        else { pr.removeClass("nt-clb-item-sel"); }
+    });
     //separator
     $(".nt-qitem .nt-qans").live("change", function (ev) {
         updateAnswer($(this).closest(".nt-qans"), ev.target);
