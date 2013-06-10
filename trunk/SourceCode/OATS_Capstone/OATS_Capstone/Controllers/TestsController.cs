@@ -138,28 +138,42 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message, renderedHtmlList });
         }
-        public JsonResult TestsAssignStudentSearch(int userid)
+        public JsonResult TestsAssignStudentSearch(int userid, string letter)
         {
-
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(p => p.UserID == userid);
-            var testsInInivation = user.Invitations.Select(i => i.Test);
-
-            var tests = db.Tests.ToList();
-            var listTestsSearch = new List<SearchingTests>();
-            tests.ForEach(delegate(Test test)
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var listTests = new List<SearchingTests>();
+            try
             {
-                if (!testsInInivation.Contains(test))
+                var db = SingletonDb.Instance();
+                var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                var testsInInvitation = user.Invitations.Select(i=>i.Test);
+                var tests = db.Tests.ToList();
+                var filteredTest = tests.Where(i=>!testsInInvitation.Contains(i));
+                var finalResult = filteredTest.Where(i=>i.TestTitle.ToLower().Contains(letter.ToLower()));
+                foreach (var item in finalResult)
                 {
-                    var testTemplate = new SearchingTests();
-                    testTemplate.Id = test.TestID;
-                    testTemplate.TestTitle = test.TestTitle;
-                    testTemplate.StartDate = test.StartDateTime;
-                    testTemplate.EndDate = test.EndDateTime;
-                    listTestsSearch.Add(testTemplate);
+                    var search = new SearchingTests();
+                    search.TestTitle = item.TestTitle;
+                    search.Id = item.TestID;
+                    search.StartDate = item.StartDateTime;
+                    search.EndDate = item.EndDateTime;
+                    listTests.Add(search);
                 }
-            });
-            return Json(listTestsSearch, JsonRequestBehavior.DenyGet);
+                success = true;
+                message = string.Empty;
+                
+            } 
+           
+            catch (Exception ex)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+               
+                
+            }
+            return Json(new  { listTests,success, message});
         }
         public JsonResult TestsSearch()
         {

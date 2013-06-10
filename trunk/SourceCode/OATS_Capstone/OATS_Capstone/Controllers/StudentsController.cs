@@ -131,6 +131,35 @@ namespace OATS_Capstone.Controllers
            
         }
 
+        public JsonResult UnassignTest(int userId, int testId)
+        {
+            var success = false;
+            var generatedHtml = string.Empty;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var user = db.Users.FirstOrDefault(i => i.UserID == userId);                
+                var unassignedInvitation = user.Invitations.FirstOrDefault(i => i.TestID == testId);
+                user.Invitations.Remove(unassignedInvitation);
+
+                //var test = db.Tests.FirstOrDefault(i => i.TestID == testId);
+                //test.Invitations.Remove(unassignedInvitation);
+                db.Invitations.Remove(unassignedInvitation);
+                if (db.SaveChanges() > 0)
+                {
+                    success = true;
+                    generatedHtml = this.RenderPartialViewToString("P_Assign_Test_To_Student", user);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message, generatedHtml});
+        }
      
 
     }

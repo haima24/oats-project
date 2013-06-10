@@ -19,7 +19,7 @@
                     <div class="nt-list-cont" style="height: 200px;">
                         @foreach(var invitation in Model.Invitations)
                         {
-                        <div class="nt-list-row nt-guide" id="999d6cb639f34989a9e00c519e929b3d">
+                        <div class="nt-list-row nt-guide" test-id ="@invitation.Test.TestID">
                             <div class="nt-name">
                                 <span data-original-title="Take this test">@invitation.Test.TestTitle
                                     
