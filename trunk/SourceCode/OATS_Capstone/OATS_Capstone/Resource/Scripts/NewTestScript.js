@@ -1064,6 +1064,52 @@ $(function () {
             }
         });
     });
+
+    //separator
+    $("#btn-reinvite-student").live("click", function (ev) {
+        $.post("/Tests/ModalPopupReinviteUser", { testid: testid, role: "Student" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+            }
+        });
+    });
+
+    //separator
+    $(".nt-btn-rm").live("click", function (ev) {
+        var userid = parseInt($(this).closest("tr").attr("user-id"));
+        $.post("/Tests/RemoveUser", { testid: testid, userid: userid }, function (res) {
+            if (res.success) {
+                $("#eventTab").html($(res.generatedHTML));
+                statusSaved();
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
+    //separator
+    $(".nt-guide").live("click", function (ev) {
+
+    });
+
+    //separator
+    $("#btn-invite-more-teacher").live("click", function (ev) {
+        $.post("/Tests/ModalPopupUser", { testid: testid, role: "Teacher" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+                if (!$("#modalPopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalPopupUser").replaceWith($(html));
+                }
+                $("#modalPopupUser").modal("show");
+
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
     //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();

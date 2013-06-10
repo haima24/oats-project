@@ -55,6 +55,35 @@ namespace OATS_Capstone.Controllers
             }
         }
 
+        public JsonResult RemoveUser(int testid, int userid)
+        {
+            var success = false;
+            var meassage = Constants.DefaultProblemMessage;
+            var master = new InvitationMasterModel();
+            var generatedHTML = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                //var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                var inv = test.Invitations.FirstOrDefault(k => k.UserID == userid);
+                test.Invitations.Remove(inv);
+                db.Invitations.Remove(inv);
+                if (db.SaveChanges() >= 0)
+                {
+                     master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
+                     generatedHTML = this.RenderPartialViewToString("P_InvitationTab",master);
+                     success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                meassage = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { generatedHTML,success,meassage});
+        }
+
         public JsonResult ModalPopupUser(int testid,string role)
         {
             var success = false;
@@ -64,10 +93,14 @@ namespace OATS_Capstone.Controllers
             {
                 var db=SingletonDb.Instance();
                 var users = new List<User>();
+                //Test test;test.Invitations.Select(i=>i.User).Where(k=>k.Role.)
                 switch (role)
                 {
                     case "Student":
                         users = db.Users.Where(i => i.Role.RoleDescription == "Student").ToList();
+                        break;
+                    case "Teacher":
+                        users = db.Users.Where(i => i.Role.RoleDescription == "Teacher").ToList();
                         break;
                     default:
                         break;
