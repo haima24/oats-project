@@ -22,7 +22,7 @@
                 <tbody>
                     @foreach (var invitations in studentsInvited)
                     {
-                        <tr>
+                        <tr user-id="@invitations.UserID">
                             <td class="nt-desc nt-name">@invitations.User.LastName<span class="nt-hl-sort">-@invitations.User.FirstName</span></td>
                             <td class="nt-desc nt-email">@invitations.User.UserMail</td>
                             <td class="nt-ctrl">
@@ -44,7 +44,7 @@
                                 <i class="icon-remove"></i>
                                 Remove
                             </button>
-                            <button style="display: block;" class="nt-btn-light nt-icon-left">
+                            <button id="btn-reinvite-student" style="display: block;" class="nt-btn-light nt-icon-left">
                                 <i class="icon-repeat"></i>
                                 Re-invite
                             </button>
@@ -69,11 +69,11 @@
                 <tbody>
                     @foreach (var invitation in teachersInvited)
                     {
-                        <tr>
+                        <tr user-id="@invitation.UserID">
                             <td class="nt-desc nt-name"><span class="nt-hl-sort">@invitation.User.FirstName</span></td>
                             <td class="nt-desc nt-email">@invitation.User.UserMail</td>
                             <td class="nt-ctrl">
-                                <button class="nt-btn-icon nt-btn-rm nt-guide" data-guide="inv_educator_remove" data-original-title="Remove">
+                                <button class="nt-btn-icon nt-btn-rm">
                                     <i class="icon-remove"></i>
                                 </button>
                             </td>
@@ -83,11 +83,11 @@
                 <tfoot>
                     <tr>
                         <td colspan="3">
-                            <button style="visibility: visible; display: inline-block;" class="nt-btn-submit nt-icon-left nt-guide" data-action="invite" data-guide="inv_educator_more">
+                            <button id="btn-invite-more-teacher" style="visibility: visible; display: inline-block;" class="nt-btn-submit nt-icon-left nt-guide" data-action="invite" data-guide="inv_educator_more">
                                 <i class="icon-envelope"></i>
                                 Invite More Educators
                             </button>
-                            <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="remove" data-guide="inv_remove">
+                            <button id style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left" >
                                 <i class="icon-remove"></i>
                                 Remove
                             </button>
