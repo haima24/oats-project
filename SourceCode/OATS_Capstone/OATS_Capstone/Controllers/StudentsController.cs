@@ -131,6 +131,23 @@ namespace OATS_Capstone.Controllers
            
         }
 
+        public JsonResult UpdateUserName(int userId, string userName)
+        {
+            var success = false;
+            var db = SingletonDb.Instance();
+            var user = db.Users.FirstOrDefault(i => i.UserID == userId);
+            if (user != null)
+            {
+                user.FirstName = userName;
+                if (db.SaveChanges() > 0)
+                {
+                    success = true;
+                }
+            }
+            return Json(new { success });
+        }
+
+
         public JsonResult UnassignTest(int userId, int testId)
         {
             var success = false;
