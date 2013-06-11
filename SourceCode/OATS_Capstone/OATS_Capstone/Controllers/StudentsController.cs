@@ -5,17 +5,12 @@ using System.Web;
 using System.Web.Mvc;
 using OATS_Capstone.Models;
 using TugberkUg.MVC.Helpers;
-
-
-
-
 namespace OATS_Capstone.Controllers
 {
     public class StudentsController : Controller
     {
         //
         // GET: /Students/
-
         public JsonResult StudentsSearch()
         {
             var success = false;
@@ -45,12 +40,10 @@ namespace OATS_Capstone.Controllers
 
             return Json(new {listStudentsSearch,message,success });
         }
-
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult MakeStudent()
         {
 
@@ -63,15 +56,12 @@ namespace OATS_Capstone.Controllers
             var generateId = user.UserID;
             return RedirectToAction("NewStudent", new {id = generateId});
         }
-
-
         public ActionResult NewStudent(int id)
         {
             var db = SingletonDb.Instance();
             var user = db.Users.FirstOrDefault(i=>i.UserID == id);
             return View(user);
         }
-
         public JsonResult AssignTestToStudent(int userId, int testId)
         {
             var success = false;
@@ -107,12 +97,6 @@ namespace OATS_Capstone.Controllers
             return Json(new {success=success,generatedHtml=generatedHtml});
 
         }
-            
-
-
-
-
-
         public JsonResult UpdateUserEmail(int userId, string userEmail)
         {
             var success = false;
@@ -130,7 +114,6 @@ namespace OATS_Capstone.Controllers
             return Json(new {success });
            
         }
-
         public JsonResult UpdateUserName(int userId, string userName)
         {
             var success = false;
@@ -146,8 +129,6 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success });
         }
-
-
         public JsonResult UnassignTest(int userId, int testId)
         {
             var success = false;
@@ -177,7 +158,5 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message, generatedHtml});
         }
-     
-
     }
 }

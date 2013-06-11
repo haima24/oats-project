@@ -11,7 +11,6 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Teachers/
-
         public JsonResult TeachersSearch()
         {
             var success = false;
@@ -42,12 +41,10 @@ namespace OATS_Capstone.Controllers
 
             return Json(new { listTeachersSearch,success,message});
         }
-
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult NewTeacher()
         {
             return View();
@@ -81,7 +78,5 @@ namespace OATS_Capstone.Controllers
             };
             return Json(result);
         }
-
-
     }
 }
