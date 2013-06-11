@@ -916,7 +916,8 @@ $(function () {
     //separator
     $(".nt-ctrl-all").live("change", function (ev) {
         //$(".nt-clb-list input[type=checkbox]").checked = false;//not work
-        $(".nt-clb-list input[type=checkbox]").each(function () {
+        var modal = $(this).closest(".modal");
+        $(".nt-clb-list input[type=checkbox]",modal).each(function () {
             if (ev.target.checked) {
                 $(this).attr("checked", true);
             } else {
@@ -926,7 +927,8 @@ $(function () {
     });
     //separator
     $(".nt-clb-list input[type=checkbox]").live("change", function () {
-        var isOneUncheck = $('.nt-clb-list input[type=checkbox]').is(function (index) {
+        var modal = $(this).closest(".modal");
+        var isOneUncheck = $('.nt-clb-list input[type=checkbox]',modal).is(function (index) {
             return !this.checked;
         });
         if (isOneUncheck) {
@@ -1007,7 +1009,7 @@ $(function () {
         statusSaving();
         $.ajax({
             type: "POST",
-            url: "/Tests/AddUserToInivtationTest",
+            url: "/Tests/AddUserToInvitationTest",
             data: JSON.stringify({ testid: testid,count:chekcedIds.length, userids: chekcedIds }),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
@@ -1066,13 +1068,13 @@ $(function () {
     });
 
     //separator
-    $("#btn-reinvite-student").live("click", function (ev) {
-        $.post("/Tests/ModalPopupReinviteUser", { testid: testid, role: "Student" }, function (res) {
-            if (res.success) {
-                var html = res.popupHtml;
-            }
-        });
-    });
+    //$("#btn-reinvite-student").live("click", function (ev) {
+    //    $.post("/Tests/ModalPopupReinviteUser", { testid: testid, role: "Student" }, function (res) {
+    //        if (res.success) {
+    //            var html = res.popupHtml;
+    //        }
+    //    });
+    //});
 
     //separator
     $(".nt-btn-rm").live("click", function (ev) {
@@ -1088,7 +1090,67 @@ $(function () {
     });
 
     //separator
-    $(".nt-guide").live("click", function (ev) {
+    $("#btn-remove-student").live("click", function (ev) {
+        $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Student" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+                if (!$("#modalRemovePopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalRemovePopupUser").replaceWith($(html));
+                }
+                $("#modalRemovePopupUser").modal("show");
+
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
+    //Separator
+    $("#btn-remove-teacher").live("click", function (ev) {
+        $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Teacher" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+                if (!$("#modalRemovePopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalRemovePopupUser").replaceWith($(html));
+                }
+                $("#modalRemovePopupUser").modal("show");
+
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
+    //Separator
+    $("#modalRemovePopupUser button.nt-btn-ok").live("click", function (ev) {
+        var container = $("#modalRemovePopupUser .nt-clb-list");
+        var checkedCheckbox = $("input[type=checkbox]:checked", container);
+        var chekcedIds = checkedCheckbox.map(function (index, element) {
+            return parseInt($(element).attr("user-id"));
+
+        }).convertJqueryArrayToJSArray();
+        statusSaving();
+        $.ajax({
+            type: "POST",
+            url: "/Tests/RemoveUserToInvitationTest",
+            data: JSON.stringify({ testid: testid, count: chekcedIds.length, userids: chekcedIds }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.success) {
+                    $("#eventTab").html($(res.generatedHtml));
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            }
+
+        });
+        $("#modalRemovePopupUser").modal('hide');
 
     });
 
@@ -1103,6 +1165,47 @@ $(function () {
                     $("#modalPopupUser").replaceWith($(html));
                 }
                 $("#modalPopupUser").modal("show");
+
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
+    //Separator
+    $("#btn-reinvite-student").live("click", function (ev) {
+        $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Student" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+                if (!$("#modalReinvitePopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalReinvitePopupUser").replaceWith($(html));
+                }
+                $("#modalReinvitePopupUser").modal("show");
+
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
+    //Separator
+    $("#modalReinvitePopupUser button.nt-btn-ok").live("click", function (ev) {
+        $("#modalReinvitePopupUser").modal('hide');
+    });
+
+    //Separator
+    $("#btn-reinvite-teacher").live("click", function (ev) {
+        $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Teacher" }, function (res) {
+            if (res.success) {
+                var html = res.popupHtml;
+                if (!$("#modalReinvitePopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalReinvitePopupUser").replaceWith($(html));
+                }
+                $("#modalReinvitePopupUser").modal("show");
 
             } else {
                 showMessage("error", res.message);

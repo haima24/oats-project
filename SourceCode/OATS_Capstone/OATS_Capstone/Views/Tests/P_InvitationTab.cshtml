@@ -9,7 +9,7 @@
     <div class="nt-asm-inv-cont" style="height: 440px; overflow-y: auto;">
         <div class="nt-asm-inv-table-cont nt-learner">
             <div class="nt-asm-inv-head">
-                <div class="nt-asm-inv-title"><span>Invited Students</span><span class="nt-cnt">(2)</span></div>
+                <div class="nt-asm-inv-title"><span>Invited Students</span><span class="nt-cnt">(@studentsInvited.Count())</span></div>
             </div>
             <table>
                 <thead>
@@ -40,7 +40,7 @@
                                 <i class="icon-envelope"></i>
                                 Invite More Students
                             </button>
-                            <button style="display: block;" class="nt-btn-light nt-icon-left">
+                            <button id="btn-remove-student" style="display: block;" class="nt-btn-light nt-icon-left">
                                 <i class="icon-remove"></i>
                                 Remove
                             </button>
@@ -56,7 +56,7 @@
         </div>
         <div class="nt-asm-inv-table-cont nt-educator">
             <div class="nt-asm-inv-head">
-                <div class="nt-asm-inv-title"><span>Invited Educators</span><span class="nt-cnt">(4)</span></div>
+                <div class="nt-asm-inv-title"><span>Invited Educators</span><span class="nt-cnt">(@teachersInvited.Count())</span></div>
             </div>
             <table>
                 <thead>
@@ -87,11 +87,11 @@
                                 <i class="icon-envelope"></i>
                                 Invite More Educators
                             </button>
-                            <button id style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left" >
+                            <button id="btn-remove-teacher" style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left" >
                                 <i class="icon-remove"></i>
                                 Remove
                             </button>
-                            <button style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="re_invite" data-guide="inv_reinv">
+                            <button id="btn-reinvite-teacher" style="visibility: visible; display: block;" class="nt-btn-light nt-icon-left nt-guide" data-action="re_invite" data-guide="inv_reinv">
                                 <i class="icon-repeat"></i>
                                 Re-invite
                             </button>

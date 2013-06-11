@@ -122,6 +122,85 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success,message,popupHtml});
         }
+
+        public JsonResult ModalRemovePopupUser(int testid, string role)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var popupHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var users = new List<User>();
+                //Test test;test.Invitations.Select(i=>i.User).Where(k=>k.Role.)
+               
+                //filter users
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    users = test.Invitations.Select(i => i.User).ToList();
+                    switch (role)
+                    {
+                        case "Student":
+                            users = users.Where(i => i.Role.RoleDescription == "Student").ToList();
+                            break;
+                        case "Teacher":
+                            users = users.Where(i => i.Role.RoleDescription == "Teacher").ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                popupHtml = this.RenderPartialViewToString("P_Modal_Remove_Tests_For_User", users);
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message, popupHtml });
+        }
+
+        public JsonResult ModalReinvitePopupUser(int testid, string role)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var popupHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var users = new List<User>();
+                //Test test;test.Invitations.Select(i=>i.User).Where(k=>k.Role.)
+               
+                //filter users
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    users = test.Invitations.Select(i => i.User).ToList();
+                    switch (role)
+                    {
+                        case "Student":
+                            users = users.Where(i => i.Role.RoleDescription == "Student").ToList();
+                            break;
+                        case "Teacher":
+                            users = users.Where(i => i.Role.RoleDescription == "Teacher").ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                popupHtml = this.RenderPartialViewToString("P_Modal_Reinvite_Tests_For_Users", users);
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message, popupHtml });
+        }
+
         public JsonResult ReuseQuestionTemplate(int questionid)
         {
             var success = false;
@@ -262,7 +341,7 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
-        public JsonResult AddUserToInivtationTest(int testid,int count, List<int> userids)
+        public JsonResult AddUserToInvitationTest(int testid,int count, List<int> userids)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -299,6 +378,49 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { generatedHtml, success, message });
         }
+
+        public JsonResult RemoveUserToInvitationTest(int testid, int count, List<int> userids)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var master = new InvitationMasterModel();
+            var generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (count > 0)
+                {
+                    userids.ForEach(delegate(int id)
+                    {
+                        var user = db.Users.FirstOrDefault(k => k.UserID == id);
+                        if (user != null)
+                        {
+                            //var invitation = new Invitation();
+                            //invitation.User = user;
+                            //test.Invitations.Remove(invitation);
+
+                            var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
+                            test.Invitations.Remove(inv);
+                            db.Invitations.Remove(inv);
+                        }
+                    });
+                }
+                if (db.SaveChanges() >= 0)
+                {
+                    master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
+                    generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { generatedHtml, success, message });
+        }
+
         public JsonResult QuestionTypes()
         {
             var obj = new
