@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@section additionheader{
+    <link href="~/Bootstrap/css/register.css" rel="stylesheet" />
+    <script src="~/Resource/Scripts/AccountScript.js"></script>
+}
+<div class="header">
+    <a id="logo" class="logo" href="#">OATS</a>
+</div>
+<div id="signup-login-container">
+    <div id="signup-container">
+        <h3 class="signup-title">Signup</h3>
+
+        <label for="reg-firstname">First name :</label>
+        <input id="reg-firstname" class="register-input" type="text"><br>
+        <label for="reg-lastname">Last name :</label>
+        <input id="reg-lastname" class="register-input" type="text"><br>
+
+        <label><span class="required">*</span>Email :</label>
+        <input id="reg-email" class="register-input" type="email" placeholder="*" required=""><br>
+
+        <label><span class="required">*</span>Password :</label>
+        <input id="reg-password" class="register-input" type="password" placeholder="*" required=""><br>
+        <label><span class="required">*</span>Re-password :</label>
+        <input id="reg-repassword" class="register-input" type="password" placeholder="*" required="" onfocus="validatePass(document.getElementById('reg-password'), this);" oninput="validatePass(document.getElementById('reg-password'), this);"><br>
+
+
+        <label>Phone number :</label>
+        <input id="reg-phone" class="register-input" type="tel"><br>
+        <label>Country :</label>
+        <input id="reg-county" class="register-input" type="text"><br>
+        <br>
+
+        <input id="reg-understand" class="register-checkbox" type="checkbox" unchecked="">
+        <span class="reg-understand-text">i have read and understand the policy.</span>
+
+        <input id="submit-btn" class="submit-btn btn" type="button" value="CREATE ACCOUNT">
+    </div>
+    <div id="login-container">
+        <h3 class="login-title"><span>Already a member? </span>Login</h3>
+        <div class="border">
+            <input type="text" id="email" class="login-textbox" placeholder="Email Address" required="">
+            <input type="checkbox" id="remember-checkbox" class="remember-checkbox">
+            <span>Remember</span>
+            <br>
+            <input type="password" id="password" class="login-textbox" placeholder="Password" required="">
+            <input type="button" id="login-btn" class="login-btn btn" value="LOGIN">
+        </div>
+    </div>
+</div>

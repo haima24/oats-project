@@ -1,10 +1,14 @@
-﻿@section additionheader{
+﻿@using OATS_Capstone.Models
+@section additionheader{
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 }
 
 @{
     ViewBag.Title = "Index";
 }
+@{
+    var user = AuthenticationSessionModel.Instance().User;
+    }
 <script src="~/Resource/Scripts/NewTest_IndexScript.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
@@ -32,7 +36,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-header">Name</li>
+                            <li class="nav-header">@(user.FirstName??user.LastName??user.UserMail)</li>
                             <li class="divider"></li>
                             <li><a href="#">My Account</a></li>
                             <li><a href="#">Logout</a></li>

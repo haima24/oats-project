@@ -330,6 +330,7 @@ namespace OATS_Capstone.Controllers
             test.CreatedUserID = 1;//must be fix, this is for test purpose
             test.CreatedDateTime = DateTime.Now;
             test.StartDateTime = DateTime.Now;
+            test.SettingConfigID = 1;
             db.Tests.Add(test);
             db.SaveChanges();
             var generatedId = test.TestID;
@@ -509,10 +510,7 @@ namespace OATS_Capstone.Controllers
             var master = new InvitationMasterModel() { InvitationList = invitations, UserList = users };
             return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", master) });
         }
-        public ActionResult TakeTest()
-        {
-            return View();
-        }
+        
         public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder, string textdescription)
         {
             var db = SingletonDb.Instance();
