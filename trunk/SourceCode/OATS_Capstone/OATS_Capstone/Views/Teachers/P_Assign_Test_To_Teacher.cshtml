@@ -1,0 +1,84 @@
+﻿@model OATS_Capstone.Models.User
+
+            <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">
+                <div class="nt-asms-list nt-guide">
+                    <a>
+                        <div class="nt-list-head">
+
+                            <div class="nt-name">
+                                Running And Upcoming Tests
+                            </div>
+                            <div class="nt-date">Start</div>
+                            <div class="nt-date">End</div>
+
+                            <i class="nt-icon arrow-up"></i>
+                            <div>&nbsp;</div>
+                        </div>
+                    </a>
+
+                    <div class="nt-list-cont" style="height: 200px;">
+                        @foreach(var invitation in Model.Invitations)
+                        {
+                        <div class="nt-list-row nt-guide" test-id ="@invitation.Test.TestID">
+                            <div class="nt-name">
+                                <span data-original-title="Take this test">@invitation.Test.TestTitle
+                                    
+                                </span>
+
+                                <button class="nt-btn-icon nt-openbtn nt-guide" data-guide="tests_take" data-original-title="Take this test">
+                                    <i class="nt-icon pencilpaper"></i>
+                                </button>
+
+                            </div>
+
+
+                            <div class="nt-date">
+                                13 May 2013
+                            </div>
+                            <div class="nt-date">
+                                28 May 2013
+                            </div>
+
+
+                            <div class="nt-ctrl nt-ctrl-wide">
+                                <button class="nt-btn-dark static nt-btn-sqr text nt-unassignbtn nt-guide" data-guide="students_unassign">
+                                    <i class="nt-icon unassign pushable white"></i>
+                                    Unassign
+                                </button>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
+                <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
+                <div class="nt-asms-list nt-guide
+                    ">
+                        <div class="nt-list-head">
+
+                            <div class="nt-name">
+                                Tests
+                            </div>
+                            <div class="nt-date">Start</div>
+                            <div class="nt-date">End</div>
+
+
+                            <div class="nt-rate">Resp. Rate</div>
+
+                            <div class="nt-perc">Avg.</div>
+                            <div class="nt-perc">St.Dev.</div>
+                            <i class="nt-icon arrow-up"></i>
+                            <div>&nbsp;</div>
+                        </div>
+
+                    <div class="nt-list-cont" style="height: 200px;">
+                        <div class="nt-empty-list-ph">
+                            <p>No past tests available.</p>
+                        </div>
+                    </div>
+                </div>
+            
+                
+            </div>
+       
