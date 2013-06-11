@@ -1,0 +1,281 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/* MIDDLE CONTENT */
+#signup-login-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px 20px 1px 20px;
+    -webkit-box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
+    -moz-box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
+    box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    width: 960px;
+    max-width: 960px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#signup-container {
+    height: 100%;
+    width: 500px;
+    float: left;
+    border-bottom: 5px solid #2b95bc;
+    margin: 20px 30px 10px 40px;
+    padding: 0px 0px 15px 0px;
+    box-shadow: 0px 0px 10px black;
+}
+
+.signup-success {
+    width: 880px !important;
+}
+
+    .signup-success p {
+        margin: auto;
+        padding: 0px 0px 20px 0px;
+        width: 500px;
+        text-align: center;
+        color: #2b95bc;
+        font-style: italic;
+        font-size: 18px;
+    }
+
+h3.signup-title {
+    font-size: 35px;
+    color: white;
+    font-weight: 100;
+    font-style: italic;
+    margin: 0px 0px 3px 0px;
+    padding: 5px 30px 5px 0px;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    text-align: right;
+}
+
+.signup-part-title {
+    font-size: 20px;
+    color: white;
+    text-transform: lowercase;
+    font-weight: 100;
+    font-style: italic;
+    margin: 10px 0px 5px 0px;
+    padding: 5px 0px 5px 30px;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+}
+
+#signup-container label {
+    display: inline-block;
+    width: 125px;
+    text-align: right;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px 0px 0px 20px;
+}
+
+    #signup-container label span.required {
+        position: relative;
+        top: 10px;
+        padding-right: 5px;
+        font-weight: 600;
+        font-size: 25px;
+        color: red;
+    }
+
+.register-input {
+    width: 250px;
+    padding: 5px;
+    margin: 2px 0px 10px 20px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    font-size: 12px;
+    text-align: left;
+}
+
+.validation-text {
+    font-size: 12px;
+    text-transform: lowercase;
+    padding: 0px 5px 0px 5px;
+    width: 240px;
+    margin: -10px 0px 5px 170px;
+    text-align: right;
+    font-style: italic;
+}
+
+#signup-container > p {
+    font-size: 12px;
+    text-transform: lowercase;
+    padding: 0px 5px 0px 5px;
+    width: 240px;
+    margin: -10px 0px 5px 170px;
+    text-align: right;
+    font-style: italic;
+}
+
+#reg-understandValidation {
+    font-size: 12px;
+    text-transform: lowercase;
+    padding: 0px 5px 0px 5px;
+    width: 240px;
+    margin: 0px 0px 5px 80px !important;
+    text-align: left !important;
+    font-style: italic;
+}
+/* webkit solution */
+::-webkit-input-placeholder {
+    text-align: right;
+}
+/* mozilla solution */
+input:-moz-placeholder {
+    text-align: right;
+}
+
+
+select.register-input {
+    width: 262px;
+    padding: 6px 5px 6px 5px;
+}
+
+.reg-capcha-img {
+    width: 150px;
+    height: 70px;
+    margin: 0px 0px 0px 145px;
+}
+
+.register-input:focus {
+    box-shadow: 0px 0px 2px #2b95bc;
+}
+
+#reg-understand {
+    margin: 0px 0px 0px 60px;
+}
+
+span.reg-understand-text {
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.submit-btn {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    left: 300px;
+    top: 10px;
+    margin-bottom: 20px;
+}
+
+.login-btn {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px;
+    text-decoration: none;
+}
+
+#why-signup-container {
+    height: 250px;
+    width: 420px;
+    float: left;
+    border-bottom: 2px solid #2b95bc;
+    margin: 30px 0px 0px 20px;
+    padding: 0px 0px 10px 0px;
+}
+
+    #why-signup-container ul {
+        font-size: 16px;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+h3.why-signup-title {
+    float: right;
+    font-size: 25px;
+    color: white;
+    text-transform: lowercase;
+    font-weight: 100;
+    font-style: italic;
+    text-align: right;
+    width: 200px;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    margin: 0px;
+    padding: 0px 15px 5px 0px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#why-signup-container ul {
+    margin: 50px 0px 0px 30px;
+    color: #2b95bc;
+}
+
+#login-container {
+    height: 150px;
+    width: 360px;
+    float: left;
+    margin: 20px 0px 0px 20px;
+    padding: 0px 0px 10px 0px;
+}
+
+    #login-container .border {
+        border: 1px solid #CCC;
+        margin: 40px 0px 0px 0px;
+        padding: 5px 0px 5px 40px;
+    }
+
+    #login-container span {
+        font-style: italic;
+        font-size: 14px;
+    }
+
+h3.login-title {
+    float: right;
+    width: 250px;
+    font-size: 25px;
+    color: white;
+    font-weight: 100;
+    font-style: italic;
+    text-align: right;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    margin: 0px;
+    padding: 0px 15px 5px 0px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+    h3.login-title span {
+        font-size: 14px;
+        padding: 0px 5px 0px 0px;
+    }
+
+.login-textbox {
+    width: 170px;
+    padding: 0px 5px 0px 5px;
+    margin: 10px 0px 0px 20px;
+    text-align: right;
+    border: 1px solid #CCC;
+    height: 30px;
+    text-align: right;
+    color: #2b95bc;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+    .login-textbox:focus {
+        box-shadow: 0px 0px 2px #2b95bc;
+    }
+
+.remember-checkbox {
+    margin: 0px 0px 0px 10px;
+}
+
+
+/* END MIDDLE CONTENT */
+

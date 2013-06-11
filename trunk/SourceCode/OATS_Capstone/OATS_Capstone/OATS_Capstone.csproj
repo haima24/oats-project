@@ -127,6 +127,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\TestsController.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Models\Answer.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthenticationSessionModel.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DateTimeJavaScript.cs" />
     <Compile Include="Models\FeedBack.cs">
@@ -206,7 +208,9 @@
     <Content Include="Bootstrap\css\bootstrap.min.css" />
     <Content Include="Bootstrap\css\fullcalendar.print.css" />
     <Content Include="Bootstrap\css\fullcalendar.css" />
+    <Content Include="Bootstrap\css\jquery.validity.css" />
     <Content Include="Bootstrap\css\kalendae.css" />
+    <Content Include="Bootstrap\css\register.css" />
     <Content Include="Bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Bootstrap\js\bootstrap-datetimepicker.js" />
@@ -219,6 +223,7 @@
     <Content Include="Bootstrap\js\jquery.filedrop.js" />
     <Content Include="Bootstrap\js\jquery.sparkline.js" />
     <Content Include="Bootstrap\js\kalendae.standalone.js" />
+    <Content Include="Bootstrap\js\validity.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -274,6 +279,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Resource\Scripts\AccountScript.js" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
     <Content Include="Resource\Scripts\ImageUploadScript.js" />
     <Content Include="Resource\Scripts\NewTeacherScript.js" />
@@ -350,7 +356,6 @@
     <Content Include="Views\Tests\NewTest.cshtml" />
     <Content Include="Views\Students\NewStudent.cshtml" />
     <Content Include="Views\Teachers\NewTeacher.cshtml" />
-    <Content Include="Views\Tests\TakeTest.cshtml" />
     <Content Include="Views\Tests\P_ContentTab.cshtml" />
     <Content Include="Views\Tests\P_ResponseTab.cshtml" />
     <Content Include="Views\Tests\P_ScoreTab.cshtml" />
@@ -394,6 +399,9 @@
     <Content Include="Views\Tests\P_Type_Image_DoTest.cshtml" />
     <Content Include="Views\Tests\P_Question_Instance_DoTest.cshtml" />
     <Content Include="Views\Teachers\P_Assign_Test_To_Teacher.cshtml" />
+    <Content Include="Views\Tests\P_Modal_Remove_Tests_For_User.cshtml" />
+    <Content Include="Views\Tests\P_Modal_Reinvite_Tests_For_Users.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
