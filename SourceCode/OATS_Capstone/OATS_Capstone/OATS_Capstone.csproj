@@ -276,6 +276,7 @@
     <Content Include="Global.asax" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
     <Content Include="Resource\Scripts\ImageUploadScript.js" />
+    <Content Include="Resource\Scripts\NewTeacherScript.js" />
     <Content Include="Resource\Scripts\NewTest_IndexScript.js" />
     <Content Include="Resource\Scripts\SearchTeachers.js" />
     <Content Include="Resource\Scripts\NewStudentScript.js" />
@@ -392,8 +393,7 @@
     <Content Include="Views\Tests\P_Type_Text_DoTest.cshtml" />
     <Content Include="Views\Tests\P_Type_Image_DoTest.cshtml" />
     <Content Include="Views\Tests\P_Question_Instance_DoTest.cshtml" />
-	<Content Include="Views\Tests\P_Modal_Remove_Tests_For_User.cshtml" />
-    <Content Include="Views\Tests\P_Modal_Reinvite_Tests_For_Users.cshtml" />
+    <Content Include="Views\Teachers\P_Assign_Test_To_Teacher.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
