@@ -12,10 +12,6 @@ namespace OATS_Capstone.Models
         public DateTime startDateTime;
         public DateTime? endDateTime;
     }
-    public class TestTemplate {
-        public string TestID { get; set; }
-        public string TestTitle { get; set; }
-    }
 
     /// <summary>
     /// use for add list of question purpose

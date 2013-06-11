@@ -2431,7 +2431,7 @@ height: 22px;
     }
 
         #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont {
-            width: 960px;
+            width: 950px;
             padding: 20px;
             border: 1px solid #c7c7c7;
             background-color: white;
@@ -2483,7 +2483,35 @@ height: 22px;
                     float: right;
                     margin-left: 10px;
                 }
-
+.nt-btn-light.nt-icon-left, .nt-login-header .nt-provider-btns > button.nt-icon-left {
+position: relative;
+padding-left: 35px;
+}
+.nt-btn-light, .nt-login-header .nt-provider-btns > button {
+font-size: 13px;
+font-weight: bold;
+text-transform: uppercase;
+padding: 10px 20px;
+background-color: #030303;
+color: #fff;
+border: 1px solid #c7c7c7;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+text-shadow: 0 -1px 0 lightgrey;
+-webkit-box-shadow: 0 2px 0 #e3e3e3;
+-moz-box-shadow: 0 2px 0 #e3e3e3;
+box-shadow: 0 2px 0 #e3e3e3;
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #e9e9e9));
+background-image: -webkit-linear-gradient(top, #fcfcfc, #e9e9e9);
+background-image: -moz-linear-gradient(top, #fcfcfc, #e9e9e9);
+background-image: -o-linear-gradient(top, #fcfcfc, #e9e9e9);
+background-image: linear-gradient(top, #fcfcfc, #e9e9e9);
+color: #444444;
+}
 .highlight {
     height: 15px;
     background: url(./img/arrow-right.png) no-repeat;
@@ -2708,12 +2736,6 @@ padding: 5px;
 width: auto;
 max-width: 732px;
 margin: 0 auto;
-}
-#checklist {
-width: 725px;
-position: relative;
-overflow-x: hidden;
-overflow-y: auto;
 }
 
 #container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem {
