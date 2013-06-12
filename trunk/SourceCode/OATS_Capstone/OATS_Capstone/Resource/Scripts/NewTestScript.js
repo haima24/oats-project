@@ -1049,32 +1049,7 @@ $(function () {
             }
         });
     });
-    //separator
-    $("#btn-invite-more-student").live("click", function (ev) {
-        $.post("/Tests/ModalPopupUser", {testid:testid, role: "Student" }, function (res) {
-            if (res.success) {
-                var html = res.popupHtml;
-                if (!$("#modalPopupUser").length>0) {
-                    $(html).modal();
-                } else {
-                    $("#modalPopupUser").replaceWith($(html));
-                }
-                $("#modalPopupUser").modal("show");
-                
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
-
-    //separator
-    //$("#btn-reinvite-student").live("click", function (ev) {
-    //    $.post("/Tests/ModalPopupReinviteUser", { testid: testid, role: "Student" }, function (res) {
-    //        if (res.success) {
-    //            var html = res.popupHtml;
-    //        }
-    //    });
-    //});
+   
 
     //separator
     $(".nt-btn-rm").live("click", function (ev) {
@@ -1153,10 +1128,9 @@ $(function () {
         $("#modalRemovePopupUser").modal('hide');
 
     });
-
     //separator
-    $("#btn-invite-more-teacher").live("click", function (ev) {
-        $.post("/Tests/ModalPopupUser", { testid: testid, role: "Teacher" }, function (res) {
+    $("#btn-invite-more-teacher,#btn-invite-more-student").live("click", function (ev) {
+        $.post("/Tests/ModalPopupUser", { testid: testid }, function (res) {
             if (res.success) {
                 var html = res.popupHtml;
                 if (!$("#modalPopupUser").length > 0) {

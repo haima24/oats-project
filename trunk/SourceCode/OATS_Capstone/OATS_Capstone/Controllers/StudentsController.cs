@@ -19,7 +19,7 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var db = SingletonDb.Instance();
-                var students = db.Users.Where(i => i.Role.RoleID == 2).ToList();
+                var students = AccessDomainSessionModel.Instance().StudentsInThisDomain;
                 students.ForEach(delegate(User student)
                 {
                     var studentTemplate = new SearchingStudents();
@@ -40,8 +40,9 @@ namespace OATS_Capstone.Controllers
 
             return Json(new {listStudentsSearch,message,success });
         }
-        public ActionResult Index()
+        public ActionResult Index(string subdomain)
         {
+            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View();
         }
         public ActionResult MakeStudent()
@@ -54,12 +55,13 @@ namespace OATS_Capstone.Controllers
             db.Users.Add(user);
             db.SaveChanges();
             var generateId = user.UserID;
-            return RedirectToAction("NewStudent", new {id = generateId});
+            return RedirectToAction("NewStudent", new { id = generateId, subdomain = AccessDomainSessionModel.Instance().CurrentSubdomain });
         }
-        public ActionResult NewStudent(int id)
+        public ActionResult NewStudent(int id,string subdomain)
         {
             var db = SingletonDb.Instance();
             var user = db.Users.FirstOrDefault(i=>i.UserID == id);
+            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(user);
         }
         public JsonResult AssignTestToStudent(int userId, int testId)

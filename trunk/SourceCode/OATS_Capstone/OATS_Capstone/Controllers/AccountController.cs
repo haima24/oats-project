@@ -50,5 +50,33 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message });
         }
+        public JsonResult SignUp(User user) 
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var newUser = new User();
+                newUser.FirstName = user.FirstName;
+                newUser.LastName = user.LastName;
+                newUser.Password = user.Password;
+                newUser.UserMail = user.UserMail;
+                newUser.UserPhone = user.UserPhone;
+                newUser.UserCountry = user.UserCountry;
+                if (db.SaveChanges() > 0) {
+                    success = true;
+                    message = String.Empty;
+                    var authen = AuthenticationSessionModel.Instance();
+                    authen.UserId = newUser.UserID;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message });
+        }
     }
 }

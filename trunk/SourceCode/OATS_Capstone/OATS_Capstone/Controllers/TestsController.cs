@@ -84,7 +84,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { generatedHTML,success,meassage});
         }
 
-        public JsonResult ModalPopupUser(int testid,string role)
+        public JsonResult ModalPopupUser(int testid)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -93,18 +93,6 @@ namespace OATS_Capstone.Controllers
             {
                 var db=SingletonDb.Instance();
                 var users = new List<User>();
-                //Test test;test.Invitations.Select(i=>i.User).Where(k=>k.Role.)
-                switch (role)
-                {
-                    case "Student":
-                        users = db.Users.Where(i => i.Role.RoleDescription == "Student").ToList();
-                        break;
-                    case "Teacher":
-                        users = db.Users.Where(i => i.Role.RoleDescription == "Teacher").ToList();
-                        break;
-                    default:
-                        break;
-                }
                 //filter users
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
@@ -131,21 +119,20 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var db = SingletonDb.Instance();
-                var users = new List<User>();
-                //Test test;test.Invitations.Select(i=>i.User).Where(k=>k.Role.)
-               
                 //filter users
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                var roleMapping = new List<UserRoleMapping>();
+                var users = new List<User>();
                 if (test != null)
                 {
-                    users = test.Invitations.Select(i => i.User).ToList();
+                    var domainInstance = AccessDomainSessionModel.Instance();
                     switch (role)
                     {
                         case "Student":
-                            users = users.Where(i => i.Role.RoleDescription == "Student").ToList();
+                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.StudentsInThisDomain.Contains(k)).ToList();
                             break;
                         case "Teacher":
-                            users = users.Where(i => i.Role.RoleDescription == "Teacher").ToList();
+                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.TeachersInThisDomain.Contains(k)).ToList();
                             break;
                         default:
                             break;
@@ -170,26 +157,26 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var db = SingletonDb.Instance();
-                var users = new List<User>();
-                //Test test;test.Invitations.Select(i=>i.User).Where(k=>k.Role.)
-               
                 //filter users
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                var roleMapping = new List<UserRoleMapping>();
+                var users = new List<User>();
                 if (test != null)
                 {
-                    users = test.Invitations.Select(i => i.User).ToList();
+                    var domainInstance = AccessDomainSessionModel.Instance();
                     switch (role)
                     {
                         case "Student":
-                            users = users.Where(i => i.Role.RoleDescription == "Student").ToList();
+                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.StudentsInThisDomain.Contains(k)).ToList();
                             break;
                         case "Teacher":
-                            users = users.Where(i => i.Role.RoleDescription == "Teacher").ToList();
+                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.TeachersInThisDomain.Contains(k)).ToList();
                             break;
                         default:
                             break;
                     }
                 }
+                
                 popupHtml = this.RenderPartialViewToString("P_Modal_Reinvite_Tests_For_Users", users);
                 success = true;
             }
@@ -320,6 +307,7 @@ namespace OATS_Capstone.Controllers
         }
         public ActionResult Index()
         {
+            //AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View();
         }
         public ActionResult MakeTest()
@@ -334,12 +322,13 @@ namespace OATS_Capstone.Controllers
             db.Tests.Add(test);
             db.SaveChanges();
             var generatedId = test.TestID;
-            return RedirectToAction("NewTest", new { id = generatedId });
+            return RedirectToAction("NewTest", new { id = generatedId, subdomain=AccessDomainSessionModel.Instance().CurrentSubdomain });
         }
-        public ActionResult NewTest(int id)
+        public ActionResult NewTest(int id,string subdomain)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
+            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(test);
         }
         public JsonResult AddUserToInvitationTest(int testid,int count, List<int> userids)
@@ -443,10 +432,11 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
             return Json(new { tab = this.RenderPartialViewToString("P_ContentTab", test) });
         }
-        public ActionResult DoTest(int id)
+        public ActionResult DoTest(int id, string subdomain)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
+            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(test);
         }
         public JsonResult TestCalendarObjectResult()

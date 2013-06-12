@@ -35,8 +35,6 @@ function checkLogin(email, pass, onsuccess) {
 }
 $(function () {
     $("#submit-btn").live("click", function (ev) {
-        if (ValidateSignupFields()) {
-        }
     });
     $("#login-btn").live("click", function (ev) {
         var email = $("#email").val();

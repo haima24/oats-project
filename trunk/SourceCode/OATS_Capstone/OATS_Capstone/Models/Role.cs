@@ -16,12 +16,12 @@ namespace OATS_Capstone.Models
     {
         public Role()
         {
-            this.Users = new HashSet<User>();
+            this.UserRoleMappings = new HashSet<UserRoleMapping>();
         }
     
         public int RoleID { get; set; }
         public string RoleDescription { get; set; }
     
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; }
     }
 }
