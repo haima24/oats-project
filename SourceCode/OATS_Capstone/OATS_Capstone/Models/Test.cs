@@ -31,6 +31,7 @@ namespace OATS_Capstone.Models
         public Nullable<System.DateTime> EndDateTime { get; set; }
         public Nullable<int> Duration { get; set; }
         public Nullable<int> SettingConfigID { get; set; }
+        public bool IsActive { get; set; }
     
         public virtual ICollection<FeedBack> FeedBacks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }

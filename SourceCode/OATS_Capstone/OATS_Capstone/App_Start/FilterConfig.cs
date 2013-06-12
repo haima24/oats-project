@@ -21,10 +21,25 @@ namespace OATS_Capstone
         {
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToLower();
             var actionName = filterContext.ActionDescriptor.ActionName.ToLower();
-            if (!(controllerName.Contains("account") && (actionName.Contains("index")||actionName.Contains("login"))))
+            if (!(controllerName.Contains("account") && (actionName.Contains("index") || actionName.Contains("login") || actionName.Contains("signup"))))
             {
-                var authen=AuthenticationSessionModel.Instance();
-                if (authen.IsNewSession||!authen.IsAuthentication)
+                var authen = AuthenticationSessionModel.Instance();
+
+                if (filterContext.RouteData.Values.ContainsKey("subdomain"))
+                {
+                    var subdomain = filterContext.RouteData.Values["subdomain"].ToString();
+                    if (!AccessDomainSessionModel.IsValidSubDomain(subdomain))
+                    {
+                        //in this case, check valid domain
+                        var url = new UrlHelper(filterContext.RequestContext);
+                        var loginUrl = url.Content("~/Account/Index");
+                        filterContext.HttpContext.Response.Redirect(loginUrl, true);
+                        filterContext.Result = new EmptyResult();
+                        return;
+                    }
+                }
+
+                if (authen.IsNewSession || !authen.IsAuthentication)
                 {
                     //send them off to the login page
                     var url = new UrlHelper(filterContext.RequestContext);

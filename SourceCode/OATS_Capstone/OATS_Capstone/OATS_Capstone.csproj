@@ -138,6 +138,7 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationSessionModel.cs" />
+    <Compile Include="Models\AccessDomainSessionModel.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DateTimeJavaScript.cs" />
     <Compile Include="Models\FeedBack.cs">
@@ -196,6 +197,9 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserInTestDetail.cs">
+      <DependentUpon>OATSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRoleMapping.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
