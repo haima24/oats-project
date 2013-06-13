@@ -1,6 +1,13 @@
-﻿@{
+﻿@using OATS_Capstone.Models
+@{
     ViewBag.Title = "Index";
 }
+@{
+    var authen=AuthenticationSessionModel.Instance();
+    var user = authen.User;
+    var owner = authen.OwnerUser;
+    }
+<script src="~/Resource/Scripts/SearchUsers.js"></script>
 <script src="~/Resource/Scripts/SearchStudents.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
@@ -21,17 +28,25 @@
                 <ul class="nav pull-right">
                     <li>
                         <div class="navbar-search pull-left">
-                            <input type="text" class="nt-search-input search-query" placeholder="Search Students">
+                            <input type="text" class="nt-search-input search-query" placeholder="Search Users" />
                         </div>
                     </li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-header">Name</li>
+                            @if (authen.IsCurrentUserAlsoOwner) { 
+                                <li class="nav-header">Welcome: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
                             <li class="divider"></li>
                             <li><a href="#">My Account</a></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a id="logout-link" href="#">Logout</a></li>
+                            }else{
+                            <li class="nav-header">Tests Holder: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
+                            <li class="nav-header">@(user.FirstName??user.LastName??user.UserMail)</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a id="logout-link" href="#">Logout</a></li>
+                                }
                         </ul>
                     </li>
                 </ul>

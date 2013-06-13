@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TugberkUg.MVC.Helpers;
 
 namespace OATS_Capstone.Controllers
 {
@@ -35,6 +36,8 @@ namespace OATS_Capstone.Controllers
                 {
                     var authen = AuthenticationSessionModel.Instance();
                     authen.UserId = user.UserID;
+                    //test
+                    authen.OwnerUserId = user.UserID;
                     success = true;
                     message = String.Empty;
                 }
@@ -54,6 +57,7 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
+            var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
@@ -64,11 +68,14 @@ namespace OATS_Capstone.Controllers
                 newUser.UserMail = user.UserMail;
                 newUser.UserPhone = user.UserPhone;
                 newUser.UserCountry = user.UserCountry;
+                db.Users.Add(newUser);
                 if (db.SaveChanges() > 0) {
                     success = true;
-                    message = String.Empty;
+                    message = Constants.DefaultSignUpSuccessMessage;
                     var authen = AuthenticationSessionModel.Instance();
                     authen.UserId = newUser.UserID;
+                    authen.OwnerUserId = newUser.UserID;
+                    generatedHtml = this.RenderPartialViewToString("P_SignUp_Container");
                 }
             }
             catch (Exception)
@@ -76,7 +83,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message });
+            return Json(new { success, message,generatedHtml });
         }
     }
 }

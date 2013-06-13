@@ -21,7 +21,19 @@ namespace OATS_Capstone.Models
         {
             HttpContext.Current.Session.Remove("uid");
         }
-
+        public int OwnerUserId
+        {
+            get
+            {
+                var uid = 0;
+                if (HttpContext.Current.Session["owner"] != null)
+                {
+                    uid = (int)HttpContext.Current.Session["owner"];
+                }
+                return uid;
+            }
+            set { HttpContext.Current.Session["owner"] = value; }
+        }
         public int UserId
         {
             get
@@ -54,6 +66,58 @@ namespace OATS_Capstone.Models
                     user = obj;
                 }
                 return user;
+            }
+        }
+        public User OwnerUser
+        {
+            get
+            {
+                User user = null;
+                var obj = SingletonDb.Instance().Users.FirstOrDefault(i => i.UserID == OwnerUserId);
+                if (obj != null)
+                {
+                    user = obj;
+                }
+                return user;
+            }
+        }
+        public bool IsCurrentUserAlsoOwner
+        {
+            get { return (UserId != 0 && OwnerUserId != 0 && UserId == OwnerUserId); }
+        }
+        public List<User> StudentsInThisOwner
+        {
+            get {
+                var students = new List<User>();
+                if (OwnerUser != null) {
+                    var list=OwnerUser.OwnerUser_UserRoleMappings.Where(k => k.Role.RoleDescription == "Student").Select(i => i.ClientUser);
+                    students = list.ToList();
+                }
+                return students;
+            }
+        }
+        public List<User> TeachersInThisOwner
+        {
+            get
+            {
+                var students = new List<User>();
+                if (OwnerUser != null)
+                {
+                    var list = OwnerUser.OwnerUser_UserRoleMappings.Where(k => k.Role.RoleDescription == "Teacher").Select(i => i.ClientUser);
+                    students = list.ToList();
+                }
+                return students;
+            }
+        }
+        public List<Test> TestsInThisOwner {
+            get
+            {
+                var tests = new List<Test>();
+                if (OwnerUser != null)
+                {
+                    tests=OwnerUser.Tests.ToList();
+                }
+                return tests;
             }
         }
     }

@@ -13,19 +13,13 @@ namespace OATS_Capstone.Models
         public DateTime? EndDate;
     }
 
-    public class SearchingStudents
+    public class SearchingUsers
     {
         public int UserID;
         public int? RoleID;
         public string LastName;
         public string FirstName;
+        public string RoleName=String.Empty;
     }
 
-    public class SearchingTeachers
-    {
-        public int UserID;
-        public int? RoleID;
-        public string LastName;
-        public string FirstName;
-    }
 }
