@@ -1,9 +1,9 @@
-﻿@model OATS_Capstone.Models.InvitationMasterModel
+﻿@using OATS_Capstone.Models
+@model IEnumerable<OATS_Capstone.Models.Invitation>
 @{
-    var studentsInvited = Model.InvitationList.Where(i => i.User.Role.RoleID == 2);
-    var teachersInvited = Model.InvitationList.Where(i => i.User.Role.RoleID == 3);
-    var studentList = Model.UserList.Where(i => i.RoleID==2);
-    var teacherList = Model.UserList.Where(i => i.RoleID == 3);
+    var studentsInvited = Model.ToStudents();
+    var teachersInvited = Model.ToTeachers();
+    
     }
 <div class="nt-asm-inv">
     <div class="nt-asm-inv-cont" style="height: 500px; overflow-y: auto;">
@@ -23,8 +23,8 @@
                     @foreach (var invitations in studentsInvited)
                     {
                         <tr user-id="@invitations.UserID">
-                            <td class="nt-desc nt-name">@invitations.User.LastName<span class="nt-hl-sort">-@invitations.User.FirstName</span></td>
-                            <td class="nt-desc nt-email">@invitations.User.UserMail</td>
+                            <td class="nt-desc nt-name">@invitations.LastName<span class="nt-hl-sort">-@invitations.FirstName</span></td>
+                            <td class="nt-desc nt-email">@invitations.UserMail</td>
                             <td class="nt-ctrl">
                                 <button class="nt-btn-icon nt-btn-rm">
                                     <i class="icon-remove"></i>
@@ -70,8 +70,8 @@
                     @foreach (var invitation in teachersInvited)
                     {
                         <tr user-id="@invitation.UserID">
-                            <td class="nt-desc nt-name"><span class="nt-hl-sort">@invitation.User.FirstName</span></td>
-                            <td class="nt-desc nt-email">@invitation.User.UserMail</td>
+                            <td class="nt-desc nt-name"><span class="nt-hl-sort">@invitation.FirstName</span></td>
+                            <td class="nt-desc nt-email">@invitation.UserMail</td>
                             <td class="nt-ctrl">
                                 <button class="nt-btn-icon nt-btn-rm">
                                     <i class="icon-remove"></i>

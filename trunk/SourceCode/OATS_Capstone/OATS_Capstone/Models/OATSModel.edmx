@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="OATSDBModelStoreContainer">
           <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeedBack" EntityType="OATSDBModel.Store.FeedBack" store:Type="Tables" Schema="dbo" />
@@ -247,9 +247,7 @@
           <Property Name="LastName" Type="nvarchar" MaxLength="50" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
           <Property Name="UserCountry" Type="nvarchar" MaxLength="50" />
-          <Property Name="RoleID" Type="int" />
           <Property Name="LastLogin" Type="datetime" />
-          <Property Name="Subdomain" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="UserInTest">
           <Key>
@@ -545,8 +543,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OATSDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -792,9 +789,7 @@
           <Property Name="LastName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="FirstName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="UserCountry" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="RoleID" Type="Int32" />
           <Property Name="LastLogin" Type="DateTime" Precision="3" />
-          <Property Name="Subdomain" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="FeedBacks" Relationship="OATSDBModel.FK_FeedBack_User" FromRole="User" ToRole="FeedBack" />
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_User" FromRole="User" ToRole="Invitation" />
           <NavigationProperty Name="Tests" Relationship="OATSDBModel.FK_Test_User" FromRole="User" ToRole="Test" />
@@ -1199,9 +1194,7 @@
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserCountry" ColumnName="UserCountry" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
-                <ScalarProperty Name="Subdomain" ColumnName="Subdomain" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

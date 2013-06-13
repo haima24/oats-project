@@ -5,14 +5,7 @@ var events;
 var question_holder = new Array();
 var testid;
 
-function statusSaving() {
-    $("#savestatus .nt-desc").html("Saving...");
-    $("#savestatus").fadeIn("slow");
-}
-function statusSaved() {
-    $("#savestatus .nt-desc").html("All changes saved.");
-    $("#savestatus").fadeOut("slow");
-}
+
 function sortByNumberOrLetters() {
     $("#checklist .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
         $(this).html((i + 1) + ". ");
@@ -573,6 +566,7 @@ $(function () {
                 tabcontent.html(res.tab);
 
                 $("#sidebar").accordion();
+                sortByNumberOrLetters();
                 initEditable();
                 initImageUploadFacility();
                 initDragAndDrop();
@@ -1001,6 +995,7 @@ $(function () {
     //separator
     $("#modalPopupUser button.nt-btn-ok").live("click", function (ev) {
         var container = $("#modalPopupUser .nt-clb-list");
+        var role = $("#modalPopupUser").attr("role");
         var checkedCheckbox = $("input[type=checkbox]:checked", container);
         var chekcedIds = checkedCheckbox.map(function (index, element) {
             return parseInt($(element).attr("user-id"));
@@ -1010,7 +1005,7 @@ $(function () {
         $.ajax({
             type: "POST",
             url: "/Tests/AddUserToInvitationTest",
-            data: JSON.stringify({ testid: testid,count:chekcedIds.length, userids: chekcedIds }),
+            data: JSON.stringify({ testid: testid,count:chekcedIds.length, userids: chekcedIds,role:role }),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
@@ -1049,8 +1044,6 @@ $(function () {
             }
         });
     });
-   
-
     //separator
     $(".nt-btn-rm").live("click", function (ev) {
         var userid = parseInt($(this).closest("tr").attr("user-id"));
@@ -1063,7 +1056,6 @@ $(function () {
             }
         });
     });
-
     //separator
     $("#btn-remove-student").live("click", function (ev) {
         $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Student" }, function (res) {
@@ -1081,7 +1073,6 @@ $(function () {
             }
         });
     });
-
     //Separator
     $("#btn-remove-teacher").live("click", function (ev) {
         $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Teacher" }, function (res) {
@@ -1099,7 +1090,6 @@ $(function () {
             }
         });
     });
-
     //Separator
     $("#modalRemovePopupUser button.nt-btn-ok").live("click", function (ev) {
         var container = $("#modalRemovePopupUser .nt-clb-list");
@@ -1130,7 +1120,9 @@ $(function () {
     });
     //separator
     $("#btn-invite-more-teacher,#btn-invite-more-student").live("click", function (ev) {
-        $.post("/Tests/ModalPopupUser", { testid: testid }, function (res) {
+        var role = "";
+        if ($(this).attr("id") == "btn-invite-more-teacher") { role = "Teacher"; } else { role = "Student"; }
+        $.post("/Tests/ModalPopupUser", { testid: testid, role: role }, function (res) {
             if (res.success) {
                 var html = res.popupHtml;
                 if (!$("#modalPopupUser").length > 0) {
@@ -1145,7 +1137,6 @@ $(function () {
             }
         });
     });
-
     //Separator
     $("#btn-reinvite-student").live("click", function (ev) {
         $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Student" }, function (res) {
@@ -1163,12 +1154,10 @@ $(function () {
             }
         });
     });
-
     //Separator
     $("#modalReinvitePopupUser button.nt-btn-ok").live("click", function (ev) {
         $("#modalReinvitePopupUser").modal('hide');
     });
-
     //Separator
     $("#btn-reinvite-teacher").live("click", function (ev) {
         $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Teacher" }, function (res) {
@@ -1186,13 +1175,47 @@ $(function () {
             }
         });
     });
-
+    //separator
+    $("#eventActiveTest").live("click", function (ev) {
+        $.post("/Tests/EnableTest", { testid: testid }, function (res) {
+            if (res.success && res.generatedHtml) {
+                var container = $("#container");
+                container.html(res.generatedHtml);
+                container.removeClass("test-disable");
+                $("#eventActiveTest").hide("slide", { direction: "up" });
+                initDateTimePicker();
+                initDragAndDrop();
+                initEditable();
+                initImageUploadFacility();
+                sortByNumberOrLetters();
+                initPopover();
+                $("#sidebar").accordion();
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
     //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
 
 
-
-
-
+    var hub = $.connection.generalHub;
+    hub.client.R_deactivetest = function (id,mail) {
+        if (id && id == testid) {
+            showCountDownMessage("info", "User with email:" + mail + " disabled this test", function () {
+                window.location = "/Tests";
+            });
+        }
+    }
+    $.connection.hub.start().done(function () {
+        $("#eventDel").live("click", function () {
+            $.post("/Tests/DeActiveTest", { testid: testid }, function (res) {
+                if (!res.success) { showMessage("error", res.message); }
+                else {
+                    showMessage("success", res.message);
+                }
+            });
+        });
+    });
 });

@@ -1589,18 +1589,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     vertical-align: middle;
 }
 
-i.nt-icon.arrow-up {
-    background-position: 0 -100px;
-}
-
-i.nt-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    background: url(../img/sprites.png?v=174) no-repeat;
-}
-
 .nt-user-details .nt-list-cont {
     overflow: auto;
 }
@@ -2562,6 +2550,7 @@ i.nt-icon {
     -o-border-radius: 5px;
     border-radius: 5px;
     padding-right: 5px;
+    z-index: 2;
 }
 
 .search-autocomplete-hover-item {
@@ -3008,3 +2997,73 @@ i.nt-icon {
         #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value.nt-abbr {
             display: none;
         }
+
+.test-disable-mask {
+    width: 960px;
+    height: 650px;
+    position: absolute;
+    z-index: 2;
+}
+
+#container.test-disable {
+    -webkit-filter: blur(3px);
+}
+
+#test-enable-header {
+    background-color: rgb(51, 102, 204);
+    color: white;
+    overflow: hidden;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+}
+
+.nt-message-info {
+    position: fixed;
+    overflow: hidden;
+    z-index: 3;
+    width: 1000px;
+    margin-left: -600px;
+    left: 50%;
+    top: 40px;
+    padding-bottom: 2px;
+}
+
+    .nt-message-info .nt-message-info-cont {
+        font-family: "ProximaNova", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        float: right;
+        margin-right: 20px;
+        padding: 5px 10px;
+        max-width: 300px;
+        background-color: #f8d366;
+        cursor: pointer;
+        -webkit-box-shadow: 0 2px gainsboro;
+        -moz-box-shadow: 0 2px gainsboro;
+        box-shadow: 0 2px gainsboro;
+    }
+
+        .nt-message-info .nt-message-info-cont > div {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+            .nt-message-info .nt-message-info-cont > div.nt-enable {
+                text-transform: uppercase;
+                color: white;
+            }
+
+        .nt-message-info .nt-message-info-cont > i {
+            float: right;
+        }
+
+.nt-uc {
+    display: inline;
+    text-transform: uppercase;
+}

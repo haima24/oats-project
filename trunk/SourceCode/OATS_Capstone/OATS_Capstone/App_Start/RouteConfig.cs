@@ -15,8 +15,8 @@ namespace OATS_Capstone
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{subdomain}/{id}",
-                defaults: new { controller = "Tests", action = "Index",subdomain=UrlParameter.Optional, id = UrlParameter.Optional }
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Tests", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

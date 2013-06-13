@@ -11,38 +11,9 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Students/
-        public JsonResult StudentsSearch()
+        
+        public ActionResult Index()
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            var listStudentsSearch = new List<SearchingStudents>();
-            try
-            {
-                var db = SingletonDb.Instance();
-                var students = AccessDomainSessionModel.Instance().StudentsInThisDomain;
-                students.ForEach(delegate(User student)
-                {
-                    var studentTemplate = new SearchingStudents();
-                    studentTemplate.UserID = student.UserID;
-                    studentTemplate.RoleID = student.RoleID;
-                    studentTemplate.LastName = student.LastName;
-                    studentTemplate.FirstName = student.FirstName;
-                    listStudentsSearch.Add(studentTemplate);
-                });
-                success = true;
-                message = String.Empty;
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;   
-            }
-
-            return Json(new {listStudentsSearch,message,success });
-        }
-        public ActionResult Index(string subdomain)
-        {
-            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View();
         }
         public ActionResult MakeStudent()
@@ -51,17 +22,23 @@ namespace OATS_Capstone.Controllers
             var db = SingletonDb.Instance();
             var user = new User();            
             user.UserMail = string.Empty;
-            user.RoleID = 2;
+            
             db.Users.Add(user);
-            db.SaveChanges();
+            if (db.SaveChanges() > 0) {
+                var roleMapping = new UserRoleMapping();
+                roleMapping.ClientUserID = user.UserID;
+                roleMapping.RoleID = 2;
+                var owner = AuthenticationSessionModel.Instance().OwnerUser;
+                owner.OwnerUser_UserRoleMappings.Add(roleMapping);
+                db.SaveChanges();
+            }
             var generateId = user.UserID;
-            return RedirectToAction("NewStudent", new { id = generateId, subdomain = AccessDomainSessionModel.Instance().CurrentSubdomain });
+            return RedirectToAction("NewStudent", new { id = generateId});
         }
-        public ActionResult NewStudent(int id,string subdomain)
+        public ActionResult NewStudent(int id)
         {
             var db = SingletonDb.Instance();
             var user = db.Users.FirstOrDefault(i=>i.UserID == id);
-            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(user);
         }
         public JsonResult AssignTestToStudent(int userId, int testId)
@@ -99,38 +76,7 @@ namespace OATS_Capstone.Controllers
             return Json(new {success=success,generatedHtml=generatedHtml});
 
         }
-        public JsonResult UpdateUserEmail(int userId, string userEmail)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);//may be null
-            if (user != null)
-            {
-                user.UserMail = userEmail;
-                if (db.SaveChanges() > 0) //SaveChanges return affected rows
-                {
-                    success = true;
-                }
-            }
-
-            return Json(new {success });
-           
-        }
-        public JsonResult UpdateUserName(int userId, string userName)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);
-            if (user != null)
-            {
-                user.FirstName = userName;
-                if (db.SaveChanges() > 0)
-                {
-                    success = true;
-                }
-            }
-            return Json(new { success });
-        }
+      
         public JsonResult UnassignTest(int userId, int testId)
         {
             var success = false;

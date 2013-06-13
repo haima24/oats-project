@@ -7,7 +7,7 @@
             var email = element.content;
             var userIdString = $("#user-id").val();
             var userId = parseInt(userIdString);
-            $.post("/Students/UpdateUserEmail", {  userId : userId, userEmail: email }, function (response) {
+            $.post("/Users/UpdateUserEmail", { userId: userId, userEmail: email }, function (response) {
                 // do something with response
               
             });
@@ -20,7 +20,7 @@
             var username = element.content;
             var userIdString = $("#user-id").val();
             var userId = parseInt(userIdString);
-            $.post("/Students/UpdateUserName/", { userId: userId, userName: username }, function (response) {
+            $.post("/Users/UpdateUserName/", { userId: userId, userName: username }, function (response) {
 
             });
         },

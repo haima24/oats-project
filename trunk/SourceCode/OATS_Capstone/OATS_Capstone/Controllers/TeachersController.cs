@@ -13,39 +13,8 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Teachers/
-        public JsonResult TeachersSearch()
+        public ActionResult Index()
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            var listTeachersSearch = new List<SearchingTeachers>();
-
-            try
-            {
-                var db = SingletonDb.Instance();
-                var teachers = AccessDomainSessionModel.Instance().TeachersInThisDomain;
-                teachers.ForEach(delegate(User teacher)
-                {
-                    var teacherTemplate = new SearchingTeachers();
-                    teacherTemplate.UserID = teacher.UserID;
-                    teacherTemplate.RoleID = teacher.RoleID;
-                    teacherTemplate.LastName = teacher.LastName;
-                    teacherTemplate.FirstName = teacher.FirstName;
-                    listTeachersSearch.Add(teacherTemplate);
-                });
-                success = true;
-                message = String.Empty;
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-
-            return Json(new { listTeachersSearch,success,message});
-        }
-        public ActionResult Index(string subdomain)
-        {
-            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View();
         }
         public ActionResult MakeTeacher()
@@ -54,83 +23,25 @@ namespace OATS_Capstone.Controllers
             var db = SingletonDb.Instance();
             var user = new User();
             user.UserMail = string.Empty;
-            user.RoleID = 3;
             db.Users.Add(user);
-            db.SaveChanges();
+            if (db.SaveChanges() > 0)
+            {
+                var roleMapping = new UserRoleMapping();
+                roleMapping.ClientUserID = user.UserID;
+                roleMapping.RoleID = 3;
+                var owner = AuthenticationSessionModel.Instance().OwnerUser;
+                owner.OwnerUser_UserRoleMappings.Add(roleMapping);
+                db.SaveChanges();
+            }
             var generateId = user.UserID;
-            return RedirectToAction("NewTeacher", new { id = generateId, subdomain = AccessDomainSessionModel.Instance().CurrentSubdomain });
+            return RedirectToAction("NewTeacher", new { id = generateId});
         }
 
-        public ActionResult NewTeacher(int id,string subdomain)
+        public ActionResult NewTeacher(int id)
         {
             var db = SingletonDb.Instance();
             var user = db.Users.FirstOrDefault(i => i.UserID == id);
-            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(user);
-        }
-
-        public JsonResult NewTeacherByEmail(string email)
-        {
-            var error = string.Empty;
-            var iserror = false;
-            var db = SingletonDb.Instance();
-            var emailsInDb = db.Users.Select(i => i.UserMail);
-            if (!emailsInDb.Contains(email.Trim())) //not exist in db
-            {
-                var newUser = new User();
-                newUser.UserMail = email;
-
-                //She or he is a Teacher
-                newUser.RoleID = 3;
-                db.Users.Add(newUser);
-                var affectedRow = db.SaveChanges();
-                if (affectedRow <= 0)
-                {
-                    //error
-                    error = "There was an unhandle problem in server.";
-                    iserror = true;
-                }
-            }
-            var result = new
-            {
-                iserror,
-                error
-            };
-            return Json(result);
-        }
-        public JsonResult UpdateUserEmail(int userId, string userEmail)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);//may be null
-            if (user != null)
-            {
-                user.UserMail = userEmail;
-                if (db.SaveChanges() > 0) //SaveChanges return affected rows
-                {
-                    success = true;
-                }
-            }
-
-            return Json(new { success });
-
-        }
-
-
-        public JsonResult UpdateUserName(int userId, string userName)
-        {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);
-            if (user != null)
-            {
-                user.FirstName = userName;
-                if (db.SaveChanges() > 0)
-                {
-                    success = true;
-                }
-            }
-            return Json(new { success });
         }
 
         public JsonResult AssignTestToTeacher(int userId, int testId)
@@ -168,8 +79,6 @@ namespace OATS_Capstone.Controllers
             return Json(new { success = success, generatedHtml = generatedHtml });
 
         }
-
-
         public JsonResult UnassignTest(int userId, int testId)
         {
             var success = false;

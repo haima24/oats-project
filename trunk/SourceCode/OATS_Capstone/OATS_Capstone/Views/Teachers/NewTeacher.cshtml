@@ -1,8 +1,15 @@
-﻿@{
+﻿@using OATS_Capstone.Models
+@{
     ViewBag.Title = "NewTeacher";
 }
+@{
+    var authen=AuthenticationSessionModel.Instance();
+    var user = authen.User;
+    var owner = authen.OwnerUser;
+    }
 @model OATS_Capstone.Models.User  
 <script src="~/Resource/Scripts/Tests_Layout.js"></script>
+<script src="~/Resource/Scripts/SearchUsers.js"></script>
 <script src="~/Resource/Scripts/SearchTeachers.js"></script>
 <script src="~/Resource/Scripts/NewTeacherScript.js"></script>
 <input type="hidden" id="user-id" value="@Model.UserID" />
@@ -15,8 +22,8 @@
             <a id="logo" class="brand" href="#">OATS</a>
             <div class="nav-collapse collapse navbar-responsive-collapse">
                 <ul class="nav">
-                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
-                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
+                    <li><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
+                    <li class="active"><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
                     <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
                     <li>
                         <button class="btn oval" onclick="window.location='@Url.Action("MakeTeacher")'">New</button></li>
@@ -25,17 +32,25 @@
                 <ul class="nav pull-right">
                     <li>
                         <div class="navbar-search pull-left">
-                            <input type="text" class="nt-search-input search-query" placeholder="Search Teachers">
+                            <input type="text" class="nt-search-input search-query" placeholder="Search Users" />
                         </div>
                     </li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-header">Name</li>
+                            @if (authen.IsCurrentUserAlsoOwner) { 
+                                <li class="nav-header">Welcome: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
                             <li class="divider"></li>
                             <li><a href="#">My Account</a></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a id="logout-link" href="#">Logout</a></li>
+                            }else{
+                            <li class="nav-header">Tests Holder: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
+                            <li class="nav-header">@(user.FirstName??user.LastName??user.UserMail)</li>
+                            <li class="divider"></li>
+                            <li><a href="#">My Account</a></li>
+                            <li><a id="logout-link" href="#">Logout</a></li>
+                                }
                         </ul>
                     </li>
                 </ul>

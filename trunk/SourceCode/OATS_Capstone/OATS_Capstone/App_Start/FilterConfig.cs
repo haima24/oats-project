@@ -25,20 +25,6 @@ namespace OATS_Capstone
             {
                 var authen = AuthenticationSessionModel.Instance();
 
-                if (filterContext.RouteData.Values.ContainsKey("subdomain"))
-                {
-                    var subdomain = filterContext.RouteData.Values["subdomain"].ToString();
-                    if (!AccessDomainSessionModel.IsValidSubDomain(subdomain))
-                    {
-                        //in this case, check valid domain
-                        var url = new UrlHelper(filterContext.RequestContext);
-                        var loginUrl = url.Content("~/Account/Index");
-                        filterContext.HttpContext.Response.Redirect(loginUrl, true);
-                        filterContext.Result = new EmptyResult();
-                        return;
-                    }
-                }
-
                 if (authen.IsNewSession || !authen.IsAuthentication)
                 {
                     //send them off to the login page

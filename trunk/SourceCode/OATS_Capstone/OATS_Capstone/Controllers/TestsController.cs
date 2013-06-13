@@ -1,4 +1,6 @@
-﻿using OATS_Capstone.Models;
+﻿using Microsoft.AspNet.SignalR;
+using OATS_Capstone.Hubs;
+using OATS_Capstone.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,7 +61,6 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var meassage = Constants.DefaultProblemMessage;
-            var master = new InvitationMasterModel();
             var generatedHTML = String.Empty;
             try
             {
@@ -69,10 +70,13 @@ namespace OATS_Capstone.Controllers
                 var inv = test.Invitations.FirstOrDefault(k => k.UserID == userid);
                 test.Invitations.Remove(inv);
                 db.Invitations.Remove(inv);
+                var authen = AuthenticationSessionModel.Instance();
+                var ownerid = authen.OwnerUserId;
+                var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == userid);
+                if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
                 if (db.SaveChanges() >= 0)
                 {
-                     master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
-                     generatedHTML = this.RenderPartialViewToString("P_InvitationTab",master);
+                     generatedHTML = this.RenderPartialViewToString("P_InvitationTab",test.Invitations);
                      success = true;
                 }
             }
@@ -84,7 +88,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { generatedHTML,success,meassage});
         }
 
-        public JsonResult ModalPopupUser(int testid)
+        public JsonResult ModalPopupUser(int testid,string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -98,8 +102,9 @@ namespace OATS_Capstone.Controllers
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User);
-                    users= users.Where(k => !invitedUsers.Contains(k)).ToList();
+                    users= db.Users.ToList().Where(k => !invitedUsers.Contains(k)).ToList();
                 }
+                ViewBag.Role = role;
                 popupHtml = this.RenderPartialViewToString("P_Modal_Assign_Tests_For_Users", users);
                 success = true;
             }
@@ -123,21 +128,22 @@ namespace OATS_Capstone.Controllers
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 var roleMapping = new List<UserRoleMapping>();
                 var users = new List<User>();
+                var authen = AuthenticationSessionModel.Instance();
                 if (test != null)
                 {
-                    var domainInstance = AccessDomainSessionModel.Instance();
                     switch (role)
                     {
                         case "Student":
-                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.StudentsInThisDomain.Contains(k)).ToList();
+                            users = test.Invitations.ToStudents();
                             break;
                         case "Teacher":
-                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.TeachersInThisDomain.Contains(k)).ToList();
+                            users = test.Invitations.ToTeachers();
                             break;
                         default:
                             break;
                     }
                 }
+                ViewBag.Role = role;
                 popupHtml = this.RenderPartialViewToString("P_Modal_Remove_Tests_For_User", users);
                 success = true;
             }
@@ -161,22 +167,22 @@ namespace OATS_Capstone.Controllers
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 var roleMapping = new List<UserRoleMapping>();
                 var users = new List<User>();
+                var authen = AuthenticationSessionModel.Instance();
                 if (test != null)
                 {
-                    var domainInstance = AccessDomainSessionModel.Instance();
                     switch (role)
                     {
                         case "Student":
-                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.StudentsInThisDomain.Contains(k)).ToList();
+                            users = test.Invitations.ToStudents();
                             break;
                         case "Teacher":
-                            users = test.Invitations.Select(i => i.User).Where(k => domainInstance.TeachersInThisDomain.Contains(k)).ToList();
+                            users = test.Invitations.ToTeachers();
                             break;
                         default:
                             break;
                     }
                 }
-                
+                ViewBag.Role = role;
                 popupHtml = this.RenderPartialViewToString("P_Modal_Reinvite_Tests_For_Users", users);
                 success = true;
             }
@@ -237,7 +243,7 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message, renderedHtmlList });
         }
-        public JsonResult TestsAssignStudentSearch(int userid, string letter)
+        public JsonResult TestsAssignUserSearch(int userid, string letter)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -283,7 +289,8 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var db = SingletonDb.Instance();
-                var tests = db.Tests.ToList();
+                var authen = AuthenticationSessionModel.Instance();
+                var tests = authen.TestsInThisOwner;
                 tests.ForEach(delegate(Test test)
                 {
                     var testTemplate = new SearchingTests();
@@ -307,7 +314,6 @@ namespace OATS_Capstone.Controllers
         }
         public ActionResult Index()
         {
-            //AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View();
         }
         public ActionResult MakeTest()
@@ -322,25 +328,25 @@ namespace OATS_Capstone.Controllers
             db.Tests.Add(test);
             db.SaveChanges();
             var generatedId = test.TestID;
-            return RedirectToAction("NewTest", new { id = generatedId, subdomain=AccessDomainSessionModel.Instance().CurrentSubdomain });
+            return RedirectToAction("NewTest", new { id = generatedId});
         }
-        public ActionResult NewTest(int id,string subdomain)
+        public ActionResult NewTest(int id)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
-            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(test);
         }
-        public JsonResult AddUserToInvitationTest(int testid,int count, List<int> userids)
+        public JsonResult AddUserToInvitationTest(int testid,int count, List<int> userids,string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var master = new InvitationMasterModel();
             var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                var ownerUser = AuthenticationSessionModel.Instance().OwnerUser;
+                var userRole = db.Roles.FirstOrDefault(k => k.RoleDescription == role);
                 if (count > 0)
                 {
                     userids.ForEach(delegate(int id)
@@ -351,17 +357,26 @@ namespace OATS_Capstone.Controllers
                             var invitation = new Invitation();
                             invitation.User = user;
                             test.Invitations.Add(invitation);
+                            if (userRole != null)
+                            {
+                                var roleMap = new UserRoleMapping();
+                                roleMap.Role = userRole;
+                                roleMap.ClientUser = user;
+                                roleMap.OwnerDomainUserID = ownerUser.UserID;
+                                db.UserRoleMappings.Add(roleMap);
+                            }
+
+
                         }
                     });
                 }
                 if (db.SaveChanges() >= 0)
                 {
-                    master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
-                    generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
+                    generatedHtml = this.RenderPartialViewToString("P_InvitationTab", test.Invitations);
                     success = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 success = false;
                 message = Constants.DefaultExceptionMessage;
@@ -373,34 +388,39 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var master = new InvitationMasterModel();
             var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (count > 0)
+                var authen = AuthenticationSessionModel.Instance();
+                if (test != null)
                 {
-                    userids.ForEach(delegate(int id)
+                    if (count > 0)
                     {
-                        var user = db.Users.FirstOrDefault(k => k.UserID == id);
-                        if (user != null)
+                        userids.ForEach(delegate(int id)
                         {
-                            //var invitation = new Invitation();
-                            //invitation.User = user;
-                            //test.Invitations.Remove(invitation);
+                            var user = db.Users.FirstOrDefault(k => k.UserID == id);
+                            if (user != null)
+                            {
+                                //var invitation = new Invitation();
+                                //invitation.User = user;
+                                //test.Invitations.Remove(invitation);
 
-                            var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
-                            test.Invitations.Remove(inv);
-                            db.Invitations.Remove(inv);
-                        }
-                    });
-                }
-                if (db.SaveChanges() >= 0)
-                {
-                    master = new InvitationMasterModel() { UserList = db.Users.ToList(), InvitationList = test.Invitations.ToList() };
-                    generatedHtml = this.RenderPartialViewToString("P_InvitationTab", master);
-                    success = true;
+                                var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
+                                test.Invitations.Remove(inv);
+                                db.Invitations.Remove(inv);
+                                var ownerid = authen.OwnerUserId;
+                                var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == id);
+                                if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
+                            }
+                        });
+                    }
+                    if (db.SaveChanges() >= 0)
+                    {
+                        generatedHtml = this.RenderPartialViewToString("P_InvitationTab", test.Invitations);
+                        success = true;
+                    }
                 }
             }
             catch (Exception)
@@ -432,11 +452,10 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
             return Json(new { tab = this.RenderPartialViewToString("P_ContentTab", test) });
         }
-        public ActionResult DoTest(int id, string subdomain)
+        public ActionResult DoTest(int id)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
-            AccessDomainSessionModel.Instance().CurrentSubdomain = subdomain;
             return View(test);
         }
         public JsonResult TestCalendarObjectResult()
@@ -496,9 +515,7 @@ namespace OATS_Capstone.Controllers
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
             var invitations = test.Invitations.ToList();
-            var users = db.Users.ToList();
-            var master = new InvitationMasterModel() { InvitationList = invitations, UserList = users };
-            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", master) });
+            return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", invitations) });
         }
         
         public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder, string textdescription)
@@ -919,6 +936,61 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
             return Json(new { success, message });
+        }
+        public JsonResult DeActiveTest(int testid)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(k => k.TestID == testid);
+                if (test != null)
+                {
+                    test.IsActive = false;
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        message = "Successful de-active this test";
+                        var owner=AuthenticationSessionModel.Instance().OwnerUser;
+                        var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                        context.Clients.All.R_deactivetest(test.TestID,owner.UserMail);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message });
+        }
+        public JsonResult EnableTest(int testid)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(k => k.TestID == testid);
+                if (test != null)
+                {
+                    test.IsActive = true;
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        message = "Successful active this test";
+                        generatedHtml = this.RenderPartialViewToString("P_Inner_Container", test);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message, generatedHtml });
         }
     }
 }
