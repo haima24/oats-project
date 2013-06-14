@@ -329,7 +329,12 @@ i.t-icon.i-setting {
 i.t-icon.i-tag {
     background: url(./img/tag.png) no-repeat;
 }
-
+i.t-icon.i-user {
+    background: url(./img/user.png) no-repeat;
+}
+i.t-icon.i-yourself {
+    background: url(./img/yourself.png) no-repeat;
+}
 i.t-icon {
     display: inline-block;
     width: 20px;
@@ -1745,8 +1750,8 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
 .nt-search-box .t-icon.icon-search {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 6px;
+    left: 10px;
 }
 
 .nt-search-box .nt-search-input.add {
@@ -1939,6 +1944,26 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     -o-border-radius: 10px;
     border-radius: 10px;
 }
+
+    .nt-tag i {
+        display: none;
+        background: #b1a797;
+        position: absolute;
+        right: 3px;
+        top: 1px;
+        height: 17px;
+        width: auto;
+        font-size: 17px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+        border-radius: 8px;
+    }
+
+    .nt-tag:hover .nt-tag-remove {
+        display: block;
+    }
 
 #sidebar #qpaste .nt-loader-large {
     z-index: 1;
@@ -3122,8 +3147,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 .modal-body {
     padding: 20px;
     overflow: hidden;
-    height: 430px;
-    max-height: 430px;
+    max-height: 450px;
     padding-bottom: 0;
 }
 
@@ -3150,6 +3174,12 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         .modal-body .nt-clb-list .nt-clb-item.nt-clb-item-sel:hover .nt-clb-item-content .nt-clb-item-desc {
             color: #444444;
         }
+
+.form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
 
 .form-search .hide, .form-inline .hide, .form-horizontal .hide {
     display: none;
@@ -3178,11 +3208,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     display: none;
 }
 
-.form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {
-    display: inline-block;
-    margin-bottom: 0;
-    vertical-align: middle;
-}
+
 
 .help-inline {
     display: inline-block;
@@ -3211,6 +3237,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 .nt-modal .modal-body .nt-pwdchange .control-group, .nt-modal .modal-body .nt-payment .control-group {
     margin-bottom: 10px;
 }
+
 #userTags {
-margin-top: 5px;
+    margin-top: 5px;
 }

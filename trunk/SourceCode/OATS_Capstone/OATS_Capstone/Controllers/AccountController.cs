@@ -18,7 +18,7 @@ namespace OATS_Capstone.Controllers
             return View();
         }
 
-        public JsonResult Login(string email, string password)
+        public JsonResult Login(string email, string password, int ownerid, bool remembered)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -36,9 +36,16 @@ namespace OATS_Capstone.Controllers
                 if (user != null)
                 {
                     var authen = AuthenticationSessionModel.Instance();
+                    authen.IsCookieEnable = remembered;
                     authen.UserId = user.UserID;
                     //test
-                    authen.OwnerUserId = user.UserID;
+                    var ownerId = user.UserID;
+                    var owner = db.Users.FirstOrDefault(k => k.UserID == ownerid);
+                    if (owner!=null)
+                    {
+                        ownerId = ownerid;
+                    }
+                    authen.OwnerUserId = ownerId;
                     success = true;
                     message = String.Empty;
                 }
@@ -90,8 +97,37 @@ namespace OATS_Capstone.Controllers
         }
         public ActionResult LogOut()
         {
-            AuthenticationSessionModel.ClearSession();
+            AuthenticationSessionModel.TerminateAuthentication();
             return View("Index");
+        }
+        public JsonResult TestsHolderSearch(string term)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var generatedHtml = String.Empty;
+            var termLower = term.ToLower();
+            try
+            {
+                var db = SingletonDb.Instance();
+                var users = db.Users;
+                var matchUsers = users.Where(delegate(User user)
+                {
+                    var fist = false;
+                    var second = false;
+                    var third = false;
+                    if (user.FirstName != null) { fist = user.FirstName.ToLower().Contains(term); }
+                    if (user.LastName != null) { second = user.LastName.ToLower().Contains(term); }
+                    if (user.UserMail != null) { third = user.UserMail.ToLower().Contains(term); }
+                    return fist || second || third;
+                });
+                generatedHtml = this.RenderPartialViewToString("P_Tests_Holder_Searching_Template", matchUsers);
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
+            return Json(new { success, message, generatedHtml });
         }
     }
 }

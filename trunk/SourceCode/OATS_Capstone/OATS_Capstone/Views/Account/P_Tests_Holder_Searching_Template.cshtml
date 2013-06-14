@@ -1,0 +1,51 @@
+﻿@model IEnumerable<OATS_Capstone.Models.User>
+@if (Model != null)
+{
+    foreach (var user in Model)
+    {
+    <div class="nt-qsearch">
+        <div>
+            <i class="t-icon i-user"></i>
+        </div>
+        <div class="nt-qsearch-content">
+            <div class="nt-qsearch-title">@(user.FirstName ?? user.LastName ?? user.UserMail)</div>
+            <div class="nt-qsearch-desc">@user.UserMail</div>
+        </div>
+        <div>
+            <input type="radio" holder-id="@user.UserID" name="test_holder_radio" />
+        </div>
+        <div class="nt-qsearch-popover-cont">
+            <div class="nt-qsearch-popover">
+                <div class="nt-qtext nt-phrase">
+                    Demo radio 1
+                </div>
+                <div class="nt-qanscont">
+                    <div class="nt-qans">
+                        <label class="radio nt-qans-label nt-qans-label-rep">
+                            <input type="radio" disabled="disabled">
+                            <div class="nt-qansdesc">Ans Radio 12</div>
+                        </label>
+                        <div class="nt-qansrep">
+                            <div class="nt-qpts" style="display: none;">0 pts</div>
+                        </div>
+
+                    </div>
+                    <div class="nt-qans">
+                        <label class="radio nt-qans-label nt-qans-label-rep">
+                            <input type="radio" checked="checked" disabled="disabled">
+                            <div class="nt-qansdesc">Ans Radio 2</div>
+                        </label>
+                        <div class="nt-qansrep">
+                            <div class="nt-qpts">1 pts</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="nt-taglist">
+                    <div class="nt-tag nt-tag-hl"><span>Template<span></span></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+}

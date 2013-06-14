@@ -54,10 +54,10 @@ h3.signup-title {
     margin: 0px 0px 3px 0px;
     padding: 5px 30px 5px 0px;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
-        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
-        background-image: linear-gradient(top, #5993e7, #3365cb);
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
     text-align: right;
 }
 
@@ -69,11 +69,11 @@ h3.signup-title {
     font-style: italic;
     margin: 10px 0px 5px 0px;
     padding: 5px 0px 5px 30px;
-     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
-        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
-        background-image: linear-gradient(top, #5993e7, #3365cb);
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
 }
 
 #signup-container label {
@@ -212,11 +212,11 @@ h3.why-signup-title {
     font-style: italic;
     text-align: right;
     width: 200px;
-     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
-        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
-        background-image: linear-gradient(top, #5993e7, #3365cb);
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
     margin: 0px;
     padding: 0px 15px 5px 0px;
     border-top-left-radius: 20px;
@@ -229,7 +229,6 @@ h3.why-signup-title {
 }
 
 #login-container {
-    height: 150px;
     width: 360px;
     float: left;
     margin: 20px 0px 0px 20px;
@@ -256,10 +255,10 @@ h3.login-title {
     font-style: italic;
     text-align: right;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
-        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
-        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
-        background-image: linear-gradient(top, #5993e7, #3365cb);
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
     margin: 0px;
     padding: 0px 15px 5px 0px;
     border-top-left-radius: 20px;
@@ -292,6 +291,25 @@ h3.login-title {
     margin: 0px 0px 0px 10px;
 }
 
+#test-holder {
+    border-top: 1px solid #CCC;
+    margin: 10px 0px 0px 0px;
+    padding: 15px 0px 5px 10px;
+    width: 235px;
+}
 
+    #test-holder .nt-search-input {
+        width: 185px;
+    }
+
+
+    #test-holder .nt-ctrl-list {
+        max-height: 300px;
+        min-height: 30px;
+        overflow-y: auto;
+    }
+    #test-holder .nt-qsearch .nt-qsearch-content {
+width: 80%;
+}
 /* END MIDDLE CONTENT */
 

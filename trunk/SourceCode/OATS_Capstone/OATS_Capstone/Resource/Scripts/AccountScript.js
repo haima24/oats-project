@@ -21,8 +21,8 @@
     // Return whether it's okay to proceed with the Ajax:
     return result.valid;
 }
-function checkLogin(email, pass, onsuccess) {
-    $.post("/Account/Login", { email: email, password: pass }, function (res) {
+function checkLogin(email, pass,ownerid,remembered, onsuccess) {
+    $.post("/Account/Login", { email: email, password: pass, ownerid: ownerid, remembered: remembered }, function (res) {
         if (res.success) {
             if (onsuccess && typeof (onsuccess) === "function") {
                 onsuccess();
@@ -33,7 +33,22 @@ function checkLogin(email, pass, onsuccess) {
     });
 
 }
+function login() {
+    var email = $("#email").val();
+    var pass = $("#password").val();
+    var checkedElement = $("#test-holder input[type=radio][name=test_holder_radio]:checked");
+    var checkedIdString = checkedElement.attr("holder-id");
+    var checkedId = parseInt(checkedIdString);
+    var remembered = $("#remember-checkbox").attr("checked") ? true : false;
+    checkLogin(email, pass,checkedId,remembered, function () {
+        window.location.href = "/Tests";
+    });
+}
 $(function () {
+    $("#test-holder .nt-ctrl-search .nt-btn-clear").live("click", function (ev) {
+        var box = $(this).closest(".nt-ctrl-search");
+        var text = $("input[type=text]", box).val("");
+    });
     $("#submit-btn").live("click", function (ev) {
         if (ValidateSignupFields()) {
             var obj = new Object();
@@ -61,10 +76,36 @@ $(function () {
         }
     });
     $("#login-btn").live("click", function (ev) {
-        var email = $("#email").val();
-        var pass = $("#password").val();
-        checkLogin(email, pass, function () {
-            window.location.href = "/Tests";
-        });
+        login();
+    });
+    $("#login-container").live("keypress", function (ev) {
+        if (ev.keyCode == 13) {
+            login();
+        }
+    });
+    $("#test-holder .nt-qsearch").live("click", function (ev) {
+        $("input[type=radio]", this).attr("checked", "checked");
+    });
+    $("#test-holder .nt-ctrl-search input[type=text]").autocomplete({
+        minLength: 0,
+        source: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Account/TestsHolderSearch",
+                data: JSON.stringify({ term: req.term }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        $("#another-holder").html(r.generatedHtml);
+                        //initPopover();
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+
+            });
+            //res([{ label: 'Example', value: 'ex' }]);
+        }
     });
 });
