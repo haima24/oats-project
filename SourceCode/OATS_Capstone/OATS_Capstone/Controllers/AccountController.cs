@@ -25,8 +25,9 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var db = SingletonDb.Instance();
-                var user = db.Users.FirstOrDefault(delegate(User u) {
-                    var uEmail = String.IsNullOrEmpty(u.UserMail)?String.Empty: u.UserMail.Trim();
+                var user = db.Users.FirstOrDefault(delegate(User u)
+                {
+                    var uEmail = String.IsNullOrEmpty(u.UserMail) ? String.Empty : u.UserMail.Trim();
                     var uPass = String.IsNullOrEmpty(u.Password) ? String.Empty : u.Password.Trim();
                     var iEmail = email.Trim();
                     var iPass = password.Trim();
@@ -41,7 +42,8 @@ namespace OATS_Capstone.Controllers
                     success = true;
                     message = String.Empty;
                 }
-                else {
+                else
+                {
                     success = false;
                     message = "Login failed, invalid email or password, pleasy try again.";
                 }
@@ -53,7 +55,7 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message });
         }
-        public JsonResult SignUp(User user) 
+        public JsonResult SignUp(User user)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -69,7 +71,8 @@ namespace OATS_Capstone.Controllers
                 newUser.UserPhone = user.UserPhone;
                 newUser.UserCountry = user.UserCountry;
                 db.Users.Add(newUser);
-                if (db.SaveChanges() > 0) {
+                if (db.SaveChanges() > 0)
+                {
                     success = true;
                     message = Constants.DefaultSignUpSuccessMessage;
                     var authen = AuthenticationSessionModel.Instance();
@@ -83,7 +86,12 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message,generatedHtml });
+            return Json(new { success, message, generatedHtml });
+        }
+        public ActionResult LogOut()
+        {
+            AuthenticationSessionModel.ClearSession();
+            return View("Index");
         }
     }
 }

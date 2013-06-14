@@ -1,0 +1,125 @@
+﻿@model OATS_Capstone.Models.AuthenticationSessionModel
+<div class="modal hide fade in">
+    <div class="modal-header">
+  <div class="modal-title">My Profile</div>
+  <div class="nt-modal-message alert alert-info nt-hidden"></div>
+</div>
+
+<div class="modal-body"><div class="form-horizontal nt-form-horizontal nt-form-horizontal-narrow">
+  <!-- TODO: Providers Update -->
+  <div class="nt-useredit-providers hide">
+    <div>Update my credentials from</div>
+    <a class="nt-btn-facebook"></a>
+    <span>or</span>
+    <a class="nt-btn-google"></a>
+  </div>
+
+  <!-- TODO: control-groups to separate views or partials! -->
+
+  <!-- User Name -->
+  <div class="control-group">
+    <label class="control-label nt-title">Name</label>
+    <div class="controls">
+      <input type="text" name="name" id="userName" value="Admin User" class="nt-input-inspect">
+      <p id="userNameMsg" class="help-inline hide">
+        <i class="icon-ok"></i>
+        <span></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- User Email -->
+  <div class="control-group">
+    <label class="control-label nt-title">Email Address</label>
+    <div class="controls">
+      <input type="text" name="email" id="userEmail" class="nt-input-inspect" value="admin@nomail.terascore.com" disabled="disabled">
+      <p id="userEmailMsg" class="help-inline hide">
+        <i class="icon-ok"></i>
+        <span></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Login method checkboxes -->
+
+  <!-- Passwords -->
+  <div class="nt-control-group-cont-float nt-pwdchange">
+    <div class="control-group">
+      <label class="control-label nt-title">Current Password</label>
+      <div class="controls">
+        <input type="password" id="userOldPwd" class="nt-input-inspect">
+        <p id="userOldPwdMsg" class="help-inline hide">
+          <i class="icon-ok"></i>
+          <span></span>
+        </p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label nt-title">New Password</label>
+      <div class="controls">
+        <input type="password" id="userPwd" class="nt-input-inspect">
+        <p id="userPwdMsg" class="help-inline hide">
+          <i class="icon-ok"></i>
+          <span></span>
+        </p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label nt-title">Repeat Password</label>
+      <div class="controls">
+        <input type="password" id="userConfPwd" class="nt-input-inspect">
+        <p id="userConfPwdMsg" class="help-inline hide">
+          <i class="icon-ok"></i>
+          <span></span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+  <!-- Privileges -->
+  <div class="control-group">
+    <label class="control-label nt-title">Privilege</label>
+    <div class="controls">
+      <div class="nt-desc">
+          <label class="checkbox">
+            <input type="checkbox" name="nt-privs" class="nt-privs" value="learner" disabled="">Student
+          <p id="learnerPrivMsg" class="help-inline hide">
+            <i class="icon-ok"></i>
+            <span></span>
+          </p>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="nt-privs" class="nt-privs" value="educator" checked="checked" disabled="disabled">Educator
+          <p id="educatorPrivMsg" class="help-inline hide">
+            <i class="icon-ok"></i>
+            <span></span>
+          </p>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="nt-privs" class="nt-privs" value="admin" checked="" disabled="">Administrator
+          <p id="adminPrivMsg" class="help-inline hide">
+            <i class="icon-ok"></i>
+            <span></span>
+          </p>
+          </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tags -->
+  <div class="control-group nt-control-group-cont-float">
+    <label class="control-label nt-title">Tags</label>
+    <div class="controls">
+      <div id="userTags" class="nt-tags"><div class="nt-tag-adder"><input type="text" class="input-small nt-guide nt-as-input" data-guide="add_tag" placeholder="Add Tag...">
+</div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="modal-footer"><button class="nt-btn-danger nt-del-btn hide">Delete</button>
+<button class="nt-btn-submit nt-add-btn hide">Add</button>
+<button class="nt-btn-submit nt-save-btn">Save</button>
+<button class="nt-btn-dark nt-cancel-btn " data-dismiss="modal">Cancel</button>
+</div>
+</div>

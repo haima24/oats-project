@@ -14,12 +14,12 @@ namespace OATS_Capstone.Hubs
         //    Clients.All.R_deactivetest("Tu", "akai777@gmail.com");
         //}
     }
-    //public class ChatHub : Hub
-    //{
-    //    public void Send(string name, string message)
-    //    {
-    //        // Call the addNewMessageToPage method to update clients.
-    //        Clients.All.addNewMessageToPage(name, message);
-    //    }
-    //}
+    public class ChatHub : Hub
+    {
+        public void Send(string name, string message)
+        {
+            // Call the addNewMessageToPage method to update clients.
+            Clients.All.addNewMessageToPage(name, message);
+        }
+    }
 }

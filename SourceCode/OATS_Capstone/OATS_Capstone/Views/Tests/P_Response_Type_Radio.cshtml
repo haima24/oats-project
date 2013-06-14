@@ -1,0 +1,96 @@
+﻿@model OATS_Capstone.Models.Question
+<div class="nt-qitem nt-qitem-review">
+    <div class="nt-qnum ">1.</div>
+    <div class="nt-qtext">
+        <p>Demo Radio</p>
+    </div>
+    <div class="nt-qhctrls">
+        <label class="checkbox">
+            <input class="nt-scored" type="checkbox" checked="checked"/>Scored</label>
+    </div>
+    <div class="nt-qanscont nt-sortable">
+        <div class="nt-qans nt-qans-hover">
+            <label class="radio nt-qans-label ">
+                <input type="radio" value="0"/>
+                <div class="nt-qansdesc">
+                    <p>Answer Radio 1</p>
+                </div>
+            </label>
+            <div class="nt-qansrep">
+                <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
+                <div class="nt-qpts">1 pt</div>
+                <div class="nt-qansrep-color nt-guide" style="background-color: green; opacity: 1"></div>
+                <div class="nt-qansrep-pct" style="visibility: visible;">50%</div>
+            </div>
+        </div>
+        <div class="nt-qans nt-qans-hover">
+            <!-- TODO: consistent editable / fillable display -->
+            <label class="radio nt-qans-label ">
+                <input type="radio" value="1">
+                <div class="nt-qansdesc">
+                    <p>
+                        Answer Radio 2<br/>
+                    </p>
+                </div>
+            </label>
+
+            <div class="nt-qansrep">
+                <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
+                <div class="nt-qpts nt-guide" style="visibility: hidden">0 pts</div>
+                <div class="nt-qansrep-color"></div>
+                <div class="nt-qansrep-pct" style="visibility: visible;">0%</div>
+            </div>
+
+
+
+        </div>
+        <div class="nt-qans nt-qans-hover">
+            <!-- TODO: consistent editable / fillable display -->
+            <label class="radio nt-qans-label ">
+                <input type="radio" value="2"/>
+                <div class="nt-qansdesc">
+                    <p>
+                        Answer Radio 3<br/>
+                    </p>
+                </div>
+            </label>
+
+            <div class="nt-qansrep">
+                <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
+                <div class="nt-qpts nt-guide" style="visibility: hidden">0 pts</div>
+                <div class="nt-qansrep-color"></div>
+                <div class="nt-qansrep-pct" style="visibility: visible;">50%</div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="nt-qfoot">
+
+
+        <div class="nt-qrep" style="">
+            <span>Correct:</span><span class="nt-crate">50% ( 1 / 2 )</span>
+            <span>Pbs:</span><span class="nt-pbs">+1.00</span>
+        </div>
+
+        <button class="nt-btn-text nt-qcomm-toggle" style="display: none;">Comment</button>
+
+        <div class="nt-qoepts" style="display: none;">
+            <span>Points:</span>
+            <span class="nt-pts"></span>
+            <span>out of 1 pt</span>
+            <span class="nt-ok"><i class="icon-ok"></i></span>
+            <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
+        </div>
+
+
+
+    </div>
+
+    <div class="nt-qcomm" style="display: none;">
+        <textarea class="nt-comm" placeholder="Comment for the student about this response"></textarea>
+    </div>
+</div>

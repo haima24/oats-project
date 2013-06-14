@@ -2,7 +2,8 @@
 <script>
     $(function () {
         $("#asmsList").accordion({
-            header: ".accordion-heading"
+            header: ".accordion-heading",
+            heightStyle: "content"
         });
     });
 </script>
@@ -25,9 +26,9 @@
         background: red;
     }
 </style>
-    <div id="asmsList" style="height: 700px; overflow-y: visible; float: left; width: 740px;" class="nt-flex-acc" >
-        <div class="accordion-group nt-acc-group   nt-acc-open">
-            <div class="accordion-heading nt-guide" data-guide="tests_recent">
+    <div id="asmsList" style="height: 600px; overflow-y: visible; float: left; width: 740px;" class="nt-flex-acc" >
+        <div class="accordion-group nt-acc-group nt-acc-open">
+            <div class="accordion-heading">
 
                 <a class="accordion-toggle" href="#">
                     <div class="nt-led on"></div>
@@ -37,7 +38,7 @@
                     <div class="nt-desc">Recent Tests</div>
                 </a>
             </div>
-            <div id="recent" class="accordion-body" style="height: 200px;">
+            <div id="recent" class="accordion-body" style="max-height:400px">
                 <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                     <a>
                         <div class="nt-list-head">
@@ -84,7 +85,7 @@
             </div>
         </div>
         <div class="accordion-group nt-acc-group">
-            <div class="accordion-heading nt-guide" data-guide="tests_recent">
+            <div class="accordion-heading">
 
                 <a class="accordion-toggle" href="#">
                     <div class="nt-led "></div>
@@ -94,7 +95,7 @@
                     <div class="nt-desc">Running Tests</div>
                 </a>
             </div>
-            <div class="accordion-body" style="height: 200px;">
+            <div class="accordion-body" style="max-height:400px">
                 <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                     <a>
                         <div class="nt-list-head">

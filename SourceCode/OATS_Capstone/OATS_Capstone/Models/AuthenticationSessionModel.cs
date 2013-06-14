@@ -20,6 +20,7 @@ namespace OATS_Capstone.Models
         public static void ClearSession()
         {
             HttpContext.Current.Session.Remove("uid");
+            HttpContext.Current.Session.Remove("owner");
         }
         public int OwnerUserId
         {

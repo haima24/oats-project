@@ -95,6 +95,35 @@ $.fn.extend({
         this.animate({ scrollTop: offset }, 1000);
     }
 });
+(function ($) {
+    $.initCheckboxAllSub =  function (param) {
+        if (param && param.container && param.all && param.sub) {
+            //separator
+            $(param.all).live("change", function (ev) {
+                var modal = $(this).closest(param.container);
+                $(param.sub, modal).each(function () {
+                    if (ev.target.checked) {
+                        $(this).attr("checked", true);
+                    } else {
+                        $(this).attr("checked", false);
+                    }
+                });
+            });
+            //separator
+            $(param.sub).live("change", function () {
+                var modal = $(this).closest(param.container);
+                var isOneUncheck = $(param.sub, modal).is(function (index) {
+                    return !this.checked;
+                });
+                if (isOneUncheck) {
+                    $(param.all).attr("checked", false);
+                } else {
+                    $(param.all).attr("checked", true);
+                }
+            });
+        }
+    };
+}(jQuery));
 $.fn.extend({
     convertToUnsign: function () {
         var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
