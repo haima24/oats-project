@@ -1232,10 +1232,6 @@ div.hoverscroll {
         vertical-align: top;
     }
 
-.nt-tags div {
-    float: left;
-    margin: 2px 2px 0 0;
-}
 
 
 #asmsList .accordion-group {
@@ -2005,12 +2001,28 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     padding-right: 0;
 }
 
-.nt-clb-item:hover .nt-clb-item-content .nt-clb-item-label {
-    color: #444444;
-}
-
 .nt-clb-item.nt-clb-item-sel .nt-clb-item-content .nt-clb-item-label {
     color: white;
+}
+
+
+
+.nt-clb-item.nt-clb-item-multi .nt-clb-item-content .nt-clb-item-desc {
+    width: 20%;
+    text-align: center;
+    color: #999999;
+}
+
+.nt-clb-item.nt-clb-item-sel .nt-clb-item-content .nt-clb-item-desc {
+    color: #BCD4F8;
+}
+
+.nt-clb-item:hover .nt-clb-item-content .nt-clb-item-desc {
+    color: #999999;
+}
+
+.nt-clb-item:hover .nt-clb-item-content .nt-clb-item-label {
+    color: #444444;
 }
 
 .nt-clb-item.nt-clb-item-multi .nt-clb-item-content .nt-clb-item-label {
@@ -2027,10 +2039,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     box-sizing: border-box;
 }
 
-.nt-clb-item.nt-clb-item-multi .nt-clb-item-content .nt-clb-item-desc {
-    width: 20%;
-    text-align: center;
-    color: #999999;
+
+.nt-clb-item > div.nt-clb-item-content > div {
+    float: left;
 }
 
 .nt-itemhover, .nt-clb-item:hover, #checklist .nt-qitem .nt-qtext .nt-fitb > span .nt-qcorr-hl, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput .nt-qcorr-hl, .t-question-type:hover, .nt-qsearch:hover, .nt-ctrl-search-tag-popup li.nt-tag-selected, .ac_results li.ac_over, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item:hover, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item.nt-item-selected, .nt-modalwelcome.nt-modalwelcome-dashboard .modal-body table td:hover {
@@ -2149,24 +2160,21 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
                 padding-left: 18px;
             }
 
-.hide {
-    display: none;
-}
 
-#settings .nt-panel .nt-border {
-    position: absolute;
-    left: 249px;
-    top: 0;
-    height: 100%;
-    border-left: 1px solid #ececec;
-}
+        #settings .nt-panel .nt-border {
+            position: absolute;
+            left: 249px;
+            top: 0;
+            height: 100%;
+            border-left: 1px solid #ececec;
+        }
 
-#settings .nt-panel .nt-section.nt-last {
-    -moz-border-radius-bottomleft: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom: 0;
-}
+        #settings .nt-panel .nt-section.nt-last {
+            -moz-border-radius-bottomleft: 5px;
+            -webkit-border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom: 0;
+        }
 
 #assignments {
     position: absolute;
@@ -3066,4 +3074,143 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 .nt-uc {
     display: inline;
     text-transform: uppercase;
+}
+
+.modal-header {
+    color: white;
+    padding: 10px 20px;
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
+    -moz-border-radius-topleft: 6px;
+    -webkit-border-top-left-radius: 6px;
+    border-top-left-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    -webkit-border-top-right-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+    .modal-header .modal-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 20px;
+        padding: 12px 0;
+    }
+
+    .modal-header > div {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0;
+    }
+
+    .modal-header .nt-modal-message {
+        max-width: 340px;
+        font-size: 12px;
+        line-height: 15px;
+        padding: 5px 10px;
+    }
+
+.nt-hidden {
+    display: none !important;
+}
+
+.modal-body {
+    padding: 20px;
+    overflow: hidden;
+    height: 430px;
+    max-height: 430px;
+    padding-bottom: 0;
+}
+
+    .modal-body .nt-clb-list {
+        overflow: auto;
+        height: 250px;
+    }
+
+        .modal-body .nt-clb-list .nt-clb-item.nt-clb-item-sel .nt-clb-item-content .nt-clb-item-desc {
+            color: white;
+        }
+
+        .modal-body .nt-clb-list .nt-clb-item .nt-clb-item-content .nt-clb-item-desc {
+            text-align: left;
+            color: #444444;
+        }
+
+        .modal-body .nt-clb-list .nt-clb-item .nt-clb-item-content .nt-clb-item-label, .nt-modal-invite-users .nt-clb-list .nt-clb-item .nt-clb-item-content .nt-clb-item-desc {
+            width: 50%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .modal-body .nt-clb-list .nt-clb-item.nt-clb-item-sel:hover .nt-clb-item-content .nt-clb-item-desc {
+            color: #444444;
+        }
+
+.form-search .hide, .form-inline .hide, .form-horizontal .hide {
+    display: none;
+}
+
+.form-horizontal .control-group {
+    margin-bottom: 18px;
+}
+
+.nt-form-horizontal.nt-form-horizontal-narrow .controls {
+    margin-left: 130px;
+}
+
+.nt-form-horizontal.nt-form-horizontal-narrow .control-label {
+    width: 115px;
+}
+
+.form-horizontal .control-label {
+    float: left;
+    width: 140px;
+    padding-top: 5px;
+    text-align: right;
+}
+
+.hide {
+    display: none;
+}
+
+.form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.help-inline {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 5px;
+}
+
+.controls .nt-desc {
+    padding-top: 5px;
+    display: inline-block;
+}
+
+.nt-form-horizontal .controls .help-inline {
+    position: relative;
+}
+
+    .nt-form-horizontal .controls .help-inline i {
+        margin: 3px 3px 0 0;
+    }
+
+.nt-form-horizontal.nt-form-horizontal-narrow .nt-control-group-cont-float {
+    min-width: 410px;
+    float: left;
+}
+
+.nt-modal .modal-body .nt-pwdchange .control-group, .nt-modal .modal-body .nt-payment .control-group {
+    margin-bottom: 10px;
+}
+#userTags {
+margin-top: 5px;
 }

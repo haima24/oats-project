@@ -429,6 +429,13 @@
     <Content Include="Views\Tests\P_Modal_Reinvite_Tests_For_Users.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\P_SignUp_Container.cshtml" />
+    <Content Include="Views\Tests\P_Response_Type_Radio.cshtml" />
+    <Content Include="Views\Tests\P_Response_Type_Multiple.cshtml" />
+    <Content Include="Views\Tests\P_Response_Type_Essay.cshtml" />
+    <Content Include="Views\Tests\P_Response_Type_ShortAnswer.cshtml" />
+    <Content Include="Views\Tests\P_Response_Type_Text.cshtml" />
+    <Content Include="Views\Tests\P_Response_Type_Image.cshtml" />
+    <Content Include="Views\Tests\P_Response_Instance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

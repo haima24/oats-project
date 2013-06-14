@@ -29,11 +29,11 @@ function showOrHideDeleteLineAnswer() {
 }
 function initDragAndDrop() {
     $(".t-question-type").draggable({
-        connectToSortable: "#checklist",
+        connectToSortable: "#checklist[content-tab=true]",
         helper: "clone",
         revert: "invalid"
     });
-    $("#checklist").sortable({
+    $("#checklist[content-tab=true]").sortable({
         revert: true,
         tolerance: 'pointer',
         revert: 50,
@@ -80,7 +80,7 @@ function initDragAndDrop() {
     });
 
     //separator
-    $("#checklist .nt-sortable").sortable({
+    $("#checklist[content-tab=true] .nt-sortable").sortable({
         revert: true,
         tolerance: 'pointer',
         revert: 50,
@@ -95,13 +95,13 @@ function initDragAndDrop() {
 }
 function initEditable() {
 
-    $(".nt-qans .nt-qansdesc").contentEditable({
+    $("#checklist[content-tab=true] .nt-qans .nt-qansdesc").contentEditable({
         "placeholder": "<i>Enter Answer</i>",
         "onBlur": function (element) {
             updateAnswer($(element).closest(".nt-qans"));
         },
     });
-    $("div.nt-qitem[question-type=Text] .nt-qtext").contentEditable({
+    $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext").contentEditable({
         "placeholder": "<i>Enter Text</i>",
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
@@ -110,7 +110,7 @@ function initEditable() {
             updateQuestionTitle(quesid, content);
         },
     });
-    $("div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit").contentEditable({
+    $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit").contentEditable({
         "placeholder": "<i>Enter Question</i>",
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
@@ -494,7 +494,7 @@ $(function () {
     initDateTimePicker();
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
-
+    
     //separator
     initPopover();
     initSearchTests();
@@ -565,7 +565,7 @@ $(function () {
 
                 tabcontent.html(res.tab);
 
-                $("#sidebar").accordion();
+                $("#sidebar[content-tab=true]").accordion();
                 sortByNumberOrLetters();
                 initEditable();
                 initImageUploadFacility();
@@ -615,7 +615,7 @@ $(function () {
         }
     });
     //separator
-    $(".bt-duplicate").live("click", function (ev) {
+    $("#checklist[content-tab=true] .bt-duplicate").live("click", function (ev) {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         var etab = $("#checklist");
         if (content && etab) {
@@ -653,7 +653,7 @@ $(function () {
         }
     });
     //separator
-    $(".nt-qhctrls .bt-delete").live("click", function (ev) {
+    $("#checklist[content-tab=true] .nt-qhctrls .bt-delete").live("click", function (ev) {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         deleteQuestion($(content).attr("question-id"), function () {
             content.remove()
@@ -668,7 +668,7 @@ $(function () {
 
     });
     //separator
-    $(".nt-btn-text.nt-qansadd").live("click", function (ev) {
+    $("#checklist[content-tab=true] .nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
 
         addAnswer(parent, parent.attr("question-id"), function () {
@@ -681,7 +681,7 @@ $(function () {
 
     });
     //separator
-    $(".nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
+    $("#checklist[content-tab=true] .nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
         var parent = $(this).closest(".nt-qitem");
         var ansline = $(this).closest(".nt-qans.nt-qans-edit");
         var ansid = ansline.attr("answer-id");
@@ -691,7 +691,7 @@ $(function () {
 
     });
     //separator
-    $(".nt-qtype-sel-predef,.nt-qtype-sel").live("change", function (ev) {
+    $("#checklist[content-tab=true] .nt-qtype-sel-predef,.nt-qtype-sel").live("change", function (ev) {
         var questiontype = $(this).val();
         var itemParent = $(this).closest(".nt-qitem.nt-qitem-edit");
         var itemid = itemParent.attr("id");
@@ -907,30 +907,19 @@ $(function () {
         var quesidString = pItem.attr("question-id");
         saveTextDescription(quesidString, $(this).val());
     });
-    //separator
-    $(".nt-ctrl-all").live("change", function (ev) {
-        //$(".nt-clb-list input[type=checkbox]").checked = false;//not work
-        var modal = $(this).closest(".modal");
-        $(".nt-clb-list input[type=checkbox]",modal).each(function () {
-            if (ev.target.checked) {
-                $(this).attr("checked", true);
-            } else {
-                $(this).attr("checked", false);
-            }
-        });
+    $.initCheckboxAllSub({
+        container: ".modal",
+        all: ".nt-ctrl-all",
+        sub: ".nt-clb-list input[type=checkbox]"
+
     });
-    //separator
-    $(".nt-clb-list input[type=checkbox]").live("change", function () {
-        var modal = $(this).closest(".modal");
-        var isOneUncheck = $('.nt-clb-list input[type=checkbox]',modal).is(function (index) {
-            return !this.checked;
-        });
-        if (isOneUncheck) {
-            $(".nt-ctrl-all").attr("checked", false);
-        } else {
-            $(".nt-ctrl-all").attr("checked", true);
-        }
+    $.initCheckboxAllSub({
+        container: "#sidebar .nt-ctrl-list",
+        all: "#sidebar .nt-clb-header-control input[type=checkbox]",
+        sub: "#respUsers .nt-clb-item input[type=checkbox]"
+
     });
+   
     //separator
     $("#sidebar .nt-ctrl-list .nt-qsearch").live("click", function (ev) {
         var questionidString = $(this).attr("question-id");
@@ -980,7 +969,7 @@ $(function () {
         }
     });
     //separator
-    $(".nt-qitem .nt-scrbtn").live("click", function (ev) {
+    $("#checklist[content-tab=true] .nt-qitem .nt-scrbtn").live("click", function (ev) {
         var item = $(this).closest(".nt-qitem");
         var pointPanels = $(".nt-qansscore", item);
 
@@ -1198,7 +1187,6 @@ $(function () {
     //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
-
 
     var hub = $.connection.generalHub;
     hub.client.R_deactivetest = function (id,mail) {

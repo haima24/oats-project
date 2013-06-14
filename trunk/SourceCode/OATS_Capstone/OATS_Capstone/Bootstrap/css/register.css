@@ -54,6 +54,10 @@ h3.signup-title {
     margin: 0px 0px 3px 0px;
     padding: 5px 30px 5px 0px;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+        background-image: linear-gradient(top, #5993e7, #3365cb);
     text-align: right;
 }
 
@@ -65,7 +69,11 @@ h3.signup-title {
     font-style: italic;
     margin: 10px 0px 5px 0px;
     padding: 5px 0px 5px 30px;
-    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+        background-image: linear-gradient(top, #5993e7, #3365cb);
 }
 
 #signup-container label {
@@ -164,7 +172,7 @@ span.reg-understand-text {
 .submit-btn {
     font-size: 14px;
     font-weight: 600;
-    padding: 5px;
+    padding: 10px;
     text-decoration: none;
     display: inline-block;
     position: relative;
@@ -204,7 +212,11 @@ h3.why-signup-title {
     font-style: italic;
     text-align: right;
     width: 200px;
-    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+        background-image: linear-gradient(top, #5993e7, #3365cb);
     margin: 0px;
     padding: 0px 15px 5px 0px;
     border-top-left-radius: 20px;
@@ -244,6 +256,10 @@ h3.login-title {
     font-style: italic;
     text-align: right;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+        background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+        background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+        background-image: linear-gradient(top, #5993e7, #3365cb);
     margin: 0px;
     padding: 0px 15px 5px 0px;
     border-top-left-radius: 20px;

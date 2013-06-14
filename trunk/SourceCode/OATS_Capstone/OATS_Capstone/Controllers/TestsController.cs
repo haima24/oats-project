@@ -72,12 +72,20 @@ namespace OATS_Capstone.Controllers
                 db.Invitations.Remove(inv);
                 var authen = AuthenticationSessionModel.Instance();
                 var ownerid = authen.OwnerUserId;
-                var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == userid);
-                if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
+
+                var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                if (user != null)
+                {
+                    if (user.Invitations.Count == 0)
+                    {
+                        var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == userid);
+                        if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
+                    }
+                }
                 if (db.SaveChanges() >= 0)
                 {
-                     generatedHTML = this.RenderPartialViewToString("P_InvitationTab",test.Invitations);
-                     success = true;
+                    generatedHTML = this.RenderPartialViewToString("P_InvitationTab", test.Invitations);
+                    success = true;
                 }
             }
             catch (Exception ex)
@@ -85,24 +93,40 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 meassage = Constants.DefaultExceptionMessage;
             }
-            return Json(new { generatedHTML,success,meassage});
+            return Json(new { generatedHTML, success, meassage });
         }
 
-        public JsonResult ModalPopupUser(int testid,string role)
+        public JsonResult ModalPopupUser(int testid, string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
             var popupHtml = String.Empty;
             try
             {
-                var db=SingletonDb.Instance();
+                var db = SingletonDb.Instance();
                 var users = new List<User>();
+                var authen = AuthenticationSessionModel.Instance();
                 //filter users
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User);
-                    users= db.Users.ToList().Where(k => !invitedUsers.Contains(k)).ToList();
+                    users = db.Users.ToList().Where(k => !invitedUsers.Contains(k)&&k.UserID!=authen.OwnerUserId).ToList();
+                    
+                    if (authen.OwnerUser != null)
+                    {
+                        users = users.Where(u =>
+                        {
+                            var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == authen.OwnerUserId && i.ClientUserID == u.UserID);
+                            if (roleMap != null)
+                            {
+                                return roleMap.Role.RoleDescription == role;
+                            }
+                            else {
+                                return true;
+                            }
+                        }).ToList();
+                    }
                 }
                 ViewBag.Role = role;
                 popupHtml = this.RenderPartialViewToString("P_Modal_Assign_Tests_For_Users", users);
@@ -113,7 +137,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success,message,popupHtml});
+            return Json(new { success, message, popupHtml });
         }
 
         public JsonResult ModalRemovePopupUser(int testid, string role)
@@ -252,10 +276,10 @@ namespace OATS_Capstone.Controllers
             {
                 var db = SingletonDb.Instance();
                 var user = db.Users.FirstOrDefault(i => i.UserID == userid);
-                var testsInInvitation = user.Invitations.Select(i=>i.Test);
+                var testsInInvitation = user.Invitations.Select(i => i.Test);
                 var tests = db.Tests.ToList();
-                var filteredTest = tests.Where(i=>!testsInInvitation.Contains(i));
-                var finalResult = filteredTest.Where(i=>i.TestTitle.ToLower().Contains(letter.ToLower()));
+                var filteredTest = tests.Where(i => !testsInInvitation.Contains(i));
+                var finalResult = filteredTest.Where(i => i.TestTitle.ToLower().Contains(letter.ToLower()));
                 foreach (var item in finalResult)
                 {
                     var search = new SearchingTests();
@@ -267,18 +291,18 @@ namespace OATS_Capstone.Controllers
                 }
                 success = true;
                 message = string.Empty;
-                
-            } 
-           
+
+            }
+
             catch (Exception ex)
             {
 
                 success = false;
                 message = Constants.DefaultExceptionMessage;
-               
-                
+
+
             }
-            return Json(new  { listTests,success, message});
+            return Json(new { listTests, success, message });
         }
         public JsonResult TestsSearch()
         {
@@ -328,7 +352,7 @@ namespace OATS_Capstone.Controllers
             db.Tests.Add(test);
             db.SaveChanges();
             var generatedId = test.TestID;
-            return RedirectToAction("NewTest", new { id = generatedId});
+            return RedirectToAction("NewTest", new { id = generatedId });
         }
         public ActionResult NewTest(int id)
         {
@@ -336,7 +360,7 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
-        public JsonResult AddUserToInvitationTest(int testid,int count, List<int> userids,string role)
+        public JsonResult AddUserToInvitationTest(int testid, int count, List<int> userids, string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
@@ -359,11 +383,15 @@ namespace OATS_Capstone.Controllers
                             test.Invitations.Add(invitation);
                             if (userRole != null)
                             {
-                                var roleMap = new UserRoleMapping();
-                                roleMap.Role = userRole;
-                                roleMap.ClientUser = user;
-                                roleMap.OwnerDomainUserID = ownerUser.UserID;
-                                db.UserRoleMappings.Add(roleMap);
+                                var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerUser.UserID && i.ClientUserID == user.UserID);
+                                if (roleMap == null)
+                                {
+                                    roleMap = new UserRoleMapping();
+                                    roleMap.Role = userRole;
+                                    roleMap.ClientUser = user;
+                                    roleMap.OwnerDomainUserID = ownerUser.UserID;
+                                    db.UserRoleMappings.Add(roleMap);
+                                }
                             }
 
 
@@ -411,8 +439,11 @@ namespace OATS_Capstone.Controllers
                                 test.Invitations.Remove(inv);
                                 db.Invitations.Remove(inv);
                                 var ownerid = authen.OwnerUserId;
-                                var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == id);
-                                if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
+
+                                if (user.Invitations.Count == 0) {
+                                    var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == id);
+                                    if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
+                                }
                             }
                         });
                     }
@@ -496,9 +527,11 @@ namespace OATS_Capstone.Controllers
             var db = SingletonDb.Instance();
             return Json(new { tab = this.RenderPartialViewToString("P_TestListTab", db.Tests) });
         }
-        public JsonResult NewTest_ResponseTab()
+        public JsonResult NewTest_ResponseTab(int testid)
         {
-            return Json(new { tab = this.RenderPartialViewToString("P_ResponseTab") });
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+            return Json(new { tab = this.RenderPartialViewToString("P_ResponseTab",test) });
         }
         public JsonResult NewTest_ScoreTab()
         {
@@ -517,7 +550,7 @@ namespace OATS_Capstone.Controllers
             var invitations = test.Invitations.ToList();
             return Json(new { tab = this.RenderPartialViewToString("P_InvitationTab", invitations) });
         }
-        
+
         public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder, string textdescription)
         {
             var db = SingletonDb.Instance();
@@ -952,9 +985,9 @@ namespace OATS_Capstone.Controllers
                     {
                         success = true;
                         message = "Successful de-active this test";
-                        var owner=AuthenticationSessionModel.Instance().OwnerUser;
+                        var owner = AuthenticationSessionModel.Instance().OwnerUser;
                         var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
-                        context.Clients.All.R_deactivetest(test.TestID,owner.UserMail);
+                        context.Clients.All.R_deactivetest(test.TestID, owner.UserMail);
                     }
                 }
             }

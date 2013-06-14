@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TugberkUg.MVC.Helpers;
 
 namespace OATS_Capstone.Controllers
 {
@@ -11,7 +12,23 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Users/
-
+        public JsonResult ProfilePopup()
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var generatedHtml = String.Empty;
+            try
+            {
+                var authen=AuthenticationSessionModel.Instance();
+                generatedHtml = this.RenderPartialViewToString("P_Profile_Popup", authen);
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message,generatedHtml });
+        }
         public JsonResult UsersSearch()
         {
             var success = false;
@@ -21,7 +38,7 @@ namespace OATS_Capstone.Controllers
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
-                var ownerId=authen.OwnerUserId;
+                var ownerId = authen.OwnerUserId;
                 var users = db.Users.ToList();
                 users.ForEach(delegate(User user)
                 {
