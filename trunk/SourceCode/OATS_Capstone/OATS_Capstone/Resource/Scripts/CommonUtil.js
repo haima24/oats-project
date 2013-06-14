@@ -1,18 +1,12 @@
 ﻿$.fn.disable = function () {
-    return this.each(function () {
-        if (typeof this.disabled != "undefined") {
-            $(this).data('jquery.disabled', this.disabled);
-
-            this.disabled = true;
-        }
+    this.each(function () {
+        $(this).attr("disabled", "disabled");
     });
 };
 
 $.fn.enable = function () {
-    return this.each(function () {
-        if (typeof this.disabled != "undefined") {
-            this.disabled = $(this).data('jquery.disabled');
-        }
+    this.each(function () {
+        $(this).removeAttr("disabled")
     });
 };
 function showMessage(type, message, heading) {

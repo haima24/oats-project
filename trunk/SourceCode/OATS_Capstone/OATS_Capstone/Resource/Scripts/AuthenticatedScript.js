@@ -1,4 +1,4 @@
-﻿function ProfileFields() {
+﻿function IsValidProfileFields() {
     // Start validation:
     $.validity.start();
 
@@ -30,24 +30,50 @@ $(function () {
         });
     });
     $("#userOldPwd").live("blur", function (ev) {
+        var mesEle = $("#userOldPwdMsg");
         var text = $(this).val().trim();
         var isMatchOldPass = false;
         var twoText=$("#userPwd,#userConfPwd");
         if (text) {
             $.post("/Users/IsMatchOldPass", { pass: text }, function (res) {
                 if (res.success) {
-                    twoText.enable();
+                    if (res.ismatch) {
+                        twoText.enable();
+                        mesEle.removeClass("hide");
+                    } else {
+                        twoText.disable();
+                        twoText.val("");
+                        mesEle.addClass("hide");
+                    }
                 }
                 else {
                     showMessage("error", res.message);
                     twoText.disable();
+                    twoText.val("");
+                    mesEle.addClass("hide");
                 }
             });
         } else {
             twoText.disable();
+            twoText.val("");
+            mesEle.addClass("hide");
         }
     });
     $("#popup-profile .nt-save-btn").live("click", function (ev) {
-
+        if (IsValidProfileFields()) {
+            var profile = new Object();
+            profile.FirstName = $("#userFirstName").val();
+            profile.LastName = $("#userLastName").val();
+            profile.UserMail = $("#userEmail").val();
+            profile.Password = $("#userPwd").val();
+            $.post("/Users/UpdateProfile", profile, function (res) {
+                if (res.success) {
+                    showMessage("success", res.message);
+                } else {
+                    showMessage("error", res.message);
+                }
+                $("#popup-profile").modal("hide");
+            });
+        }
     });
 });
