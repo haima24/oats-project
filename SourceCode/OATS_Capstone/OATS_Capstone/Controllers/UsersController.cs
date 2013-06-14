@@ -105,7 +105,7 @@ namespace OATS_Capstone.Controllers
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
-                var user = authen.User;
+                var user = db.Users.FirstOrDefault(i => i.UserID == authen.UserId);
                 if (user != null)
                 {
                     user.FirstName = profile.FirstName;

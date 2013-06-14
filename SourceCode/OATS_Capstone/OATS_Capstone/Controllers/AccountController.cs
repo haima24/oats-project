@@ -36,18 +36,26 @@ namespace OATS_Capstone.Controllers
                 if (user != null)
                 {
                     var authen = AuthenticationSessionModel.Instance();
-                    authen.IsCookieEnable = remembered;
-                    authen.UserId = user.UserID;
-                    //test
-                    var ownerId = user.UserID;
-                    var owner = db.Users.FirstOrDefault(k => k.UserID == ownerid);
-                    if (owner!=null)
+                    var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.ClientUserID == user.UserID&&i.OwnerDomainUserID==ownerid);
+                    if (roleMap != null||(ownerid==0))
                     {
-                        ownerId = ownerid;
+                        authen.IsCookieEnable = remembered;
+                        authen.UserId = user.UserID;
+                        //test
+                        var ownerId = user.UserID;
+                        var owner = db.Users.FirstOrDefault(k => k.UserID == ownerid);
+                        if (owner != null)
+                        {
+                            ownerId = ownerid;
+                        }
+                        authen.OwnerUserId = ownerId;
+                        success = true;
+                        message = String.Empty;
                     }
-                    authen.OwnerUserId = ownerId;
-                    success = true;
-                    message = String.Empty;
+                    else {
+                        success = false;
+                        message = "Sorry, you have no role to access this tests holder, please choose another.";
+                    }
                 }
                 else
                 {
