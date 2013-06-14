@@ -436,6 +436,8 @@
     <Content Include="Views\Tests\P_Response_Type_Text.cshtml" />
     <Content Include="Views\Tests\P_Response_Type_Image.cshtml" />
     <Content Include="Views\Tests\P_Response_Instance.cshtml" />
+    <Content Include="Views\Users\P_Profile_Popup.cshtml" />
+    <Content Include="Views\Account\P_Tests_Holder_Searching_Template.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

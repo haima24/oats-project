@@ -41,13 +41,13 @@
                             @if (authen.IsCurrentUserAlsoOwner) { 
                                 <li class="nav-header">Welcome: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
                             <li class="divider"></li>
-                            <li><a href="#">My Account</a></li>
+                            <li><a href="#" id="profile-link">My Profile</a></li>
                             <li><a href="@Url.Action("LogOut","Account")">Logout</a></li>
                             }else{
                             <li class="nav-header">Tests Holder: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
                             <li class="nav-header">@(user.FirstName??user.LastName??user.UserMail)</li>
                             <li class="divider"></li>
-                            <li><a href="#">My Account</a></li>
+                            <li><a href="#" id="profile-link">My Profile</a></li>
                             <li><a href="@Url.Action("LogOut","Account")">Logout</a></li>
                                 }
                         </ul>

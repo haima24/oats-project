@@ -21,11 +21,11 @@ namespace OATS_Capstone
         {
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToLower();
             var actionName = filterContext.ActionDescriptor.ActionName.ToLower();
-            if (!(controllerName.Contains("account") && (actionName.Contains("index") || actionName.Contains("login") || actionName.Contains("signup"))))
+            if (!(controllerName.Contains("account") ))
             {
                 var authen = AuthenticationSessionModel.Instance();
 
-                if (authen.IsNewSession || !authen.IsAuthentication)
+                if (!authen.IsAuthentication)
                 {
                     //send them off to the login page
                     var url = new UrlHelper(filterContext.RequestContext);

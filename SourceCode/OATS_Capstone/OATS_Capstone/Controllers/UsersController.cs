@@ -21,6 +21,7 @@ namespace OATS_Capstone.Controllers
             {
                 var authen=AuthenticationSessionModel.Instance();
                 generatedHtml = this.RenderPartialViewToString("P_Profile_Popup", authen);
+                success = true;
             }
             catch (Exception)
             {
@@ -95,6 +96,61 @@ namespace OATS_Capstone.Controllers
                 }
             }
             return Json(new { success });
+        }
+        public JsonResult UpdateProfile(User profile)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var authen = AuthenticationSessionModel.Instance();
+                var user = authen.User;
+                if (user != null)
+                {
+                    user.FirstName = profile.FirstName;
+                    user.LastName = profile.LastName;
+                    user.UserMail = profile.UserMail;
+                    user.Password = profile.Password;
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        message = "Success on save your profile.";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message });
+        }
+        public JsonResult IsMatchOldPass(string pass)
+        {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            var ismatch = false;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var authen=AuthenticationSessionModel.Instance();
+                var user = authen.User;
+                if (user != null)
+                {
+                    if(!String.IsNullOrEmpty(pass)&&!string.IsNullOrEmpty(user.Password))
+                    {
+                        ismatch= pass.Trim() == user.Password.Trim();
+                    }
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return Json(new { success, message, ismatch });
         }
     }
 }

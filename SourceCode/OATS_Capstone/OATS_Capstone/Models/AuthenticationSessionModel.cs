@@ -7,6 +7,13 @@ namespace OATS_Capstone.Models
 {
     public class AuthenticationSessionModel
     {
+        private bool _isCookieEnable = false;
+
+        public bool IsCookieEnable
+        {
+            get { return _isCookieEnable; }
+            set { _isCookieEnable = value; }
+        }
         private static AuthenticationSessionModel _authenticationSessionModel = null;
         public static AuthenticationSessionModel Instance()
         {
@@ -17,44 +24,135 @@ namespace OATS_Capstone.Models
 
             return _authenticationSessionModel;
         }
-        public static void ClearSession()
+        private static void ClearCookie(string key)
+        {
+            var httpContext = new HttpContextWrapper(HttpContext.Current);
+            var response = httpContext.Response;
+
+            HttpCookie cookie = new HttpCookie(key)
+            {
+                Expires = DateTime.Now.AddDays(-1) // or any other time in the past
+            };
+            response.Cookies.Set(cookie);
+        }
+        private static bool IsHaveCookie(String key)
+        {
+            var httpContext = new HttpContextWrapper(HttpContext.Current);
+            var request = httpContext.Request;
+            return request.Cookies.AllKeys.Contains(key);
+        }
+        private static String GetCookie(String key)
+        {
+            var result = String.Empty;
+            var httpContext = new HttpContextWrapper(HttpContext.Current);
+            if (httpContext.Request.Cookies.AllKeys.Contains(key))
+            {
+                result = httpContext.Request.Cookies[key].Value;
+            }
+            return result;
+        }
+        private static void AddCookie(string key, string value)
+        {
+            var httpContext = new HttpContextWrapper(HttpContext.Current);
+            var response = httpContext.Response;
+
+            HttpCookie cookie = new HttpCookie(key)
+            {
+                Value = value,
+                Expires = DateTime.Now.AddDays(7)
+            };
+            response.Cookies.Set(cookie);
+        }
+        private static void ClearSession()
         {
             HttpContext.Current.Session.Remove("uid");
-            HttpContext.Current.Session.Remove("owner");
+            HttpContext.Current.Session.Remove("ownerid");
+        }
+        private static void ClearCookieOfAuthentication()
+        {
+            ClearCookie("uid");
+            ClearCookie("ownerid");
+        }
+        public static void TerminateAuthentication()
+        {
+            ClearSession();
+            ClearCookieOfAuthentication();
         }
         public int OwnerUserId
         {
             get
             {
-                var uid = 0;
-                if (HttpContext.Current.Session["owner"] != null)
+                var ownerid = 0;
+                if (IsHaveCookie("ownerid"))
                 {
-                    uid = (int)HttpContext.Current.Session["owner"];
+                    var owneridString = GetCookie("ownerid");
+                    var tempid = 0;
+                    if (int.TryParse(owneridString, out tempid))
+                    {
+                        ownerid = tempid;
+                    }
                 }
-                return uid;
+                if (ownerid == 0)
+                {
+                    if (HttpContext.Current.Session["ownerid"] != null)
+                    {
+                        ownerid = (int)HttpContext.Current.Session["ownerid"];
+                    }
+                }
+                return ownerid;
             }
-            set { HttpContext.Current.Session["owner"] = value; }
+            set
+            {
+                HttpContext.Current.Session["ownerid"] = value;
+                if (_isCookieEnable)
+                {
+                    AddCookie("ownerid", value.ToString());
+                }
+                else
+                {
+                    ClearCookie("ownerid");
+                }
+            }
         }
         public int UserId
         {
             get
             {
                 var uid = 0;
-                if (HttpContext.Current.Session["uid"] != null)
+                if (IsHaveCookie("uid"))
                 {
-                    uid = (int)HttpContext.Current.Session["uid"];
+                    var uidString = GetCookie("uid");
+                    var tempid = 0;
+                    if (int.TryParse(uidString, out tempid))
+                    {
+                        uid = tempid;
+                    }
+                }
+                if (uid == 0)
+                {
+                    if (HttpContext.Current.Session["uid"] != null)
+                    {
+                        uid = (int)HttpContext.Current.Session["uid"];
+                    }
                 }
                 return uid;
             }
-            set { HttpContext.Current.Session["uid"] = value; }
+            set
+            {
+                HttpContext.Current.Session["uid"] = value;
+                if (_isCookieEnable)
+                {
+                    AddCookie("uid", value.ToString());
+                }
+                else
+                {
+                    ClearCookie("uid");
+                }
+            }
         }
         public Boolean IsAuthentication
         {
             get { return UserId != 0; }
-        }
-        public bool IsNewSession
-        {
-            get { return HttpContext.Current.Session.IsNewSession; }
         }
         public User User
         {
@@ -88,10 +186,12 @@ namespace OATS_Capstone.Models
         }
         public List<User> StudentsInThisOwner
         {
-            get {
+            get
+            {
                 var students = new List<User>();
-                if (OwnerUser != null) {
-                    var list=OwnerUser.OwnerUser_UserRoleMappings.Where(k => k.Role.RoleDescription == "Student").Select(i => i.ClientUser);
+                if (OwnerUser != null)
+                {
+                    var list = OwnerUser.OwnerUser_UserRoleMappings.Where(k => k.Role.RoleDescription == "Student").Select(i => i.ClientUser);
                     students = list.ToList();
                 }
                 return students;
@@ -110,15 +210,50 @@ namespace OATS_Capstone.Models
                 return students;
             }
         }
-        public List<Test> TestsInThisOwner {
+        public List<Test> TestsInThisOwner
+        {
             get
             {
                 var tests = new List<Test>();
                 if (OwnerUser != null)
                 {
-                    tests=OwnerUser.Tests.ToList();
+                    tests = OwnerUser.Tests.ToList();
                 }
                 return tests;
+            }
+        }
+        public bool IsStudent
+        {
+            get
+            {
+                var result = false;
+                if (!IsCurrentUserAlsoOwner)
+                {
+                    var db = SingletonDb.Instance();
+                    var roleMap = db.UserRoleMappings.FirstOrDefault(k => k.ClientUserID == UserId && k.OwnerDomainUserID == OwnerUserId);
+                    if (roleMap != null)
+                    {
+                        result = roleMap.Role.RoleDescription == "Student";
+                    }
+                }
+                return result;
+            }
+        }
+        public bool IsTeacher
+        {
+            get
+            {
+                var result = false;
+                if (!IsCurrentUserAlsoOwner)
+                {
+                    var db = SingletonDb.Instance();
+                    var roleMap = db.UserRoleMappings.FirstOrDefault(k => k.ClientUserID == UserId && k.OwnerDomainUserID == OwnerUserId);
+                    if (roleMap != null)
+                    {
+                        result = roleMap.Role.RoleDescription == "Teacher";
+                    }
+                }
+                return result;
             }
         }
     }
