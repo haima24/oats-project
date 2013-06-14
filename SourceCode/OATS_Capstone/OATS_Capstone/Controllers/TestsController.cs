@@ -349,6 +349,7 @@ namespace OATS_Capstone.Controllers
             test.CreatedDateTime = DateTime.Now;
             test.StartDateTime = DateTime.Now;
             test.SettingConfigID = 1;
+            test.IsActive = true;
             db.Tests.Add(test);
             db.SaveChanges();
             var generatedId = test.TestID;
