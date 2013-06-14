@@ -304,7 +304,7 @@ h3.login-title {
 
 
     #test-holder .nt-ctrl-list {
-        max-height: 300px;
+        max-height: 250px;
         min-height: 30px;
         overflow-y: auto;
     }

@@ -40,6 +40,7 @@ function initDragAndDrop() {
         distance: 5,
         items: '>.nt-qitem',
         placeholder: 'highlight',
+        cancel: "[contenteditable]",
         stop: function (ev, ui) {
             sortByNumberOrLetters();
             resortInDb();
@@ -80,13 +81,14 @@ function initDragAndDrop() {
     });
 
     //separator
-    $("#checklist[content-tab=true] .nt-sortable").sortable({
+    $("#checklist[content-tab=true] .nt-qanscont").sortable({
         revert: true,
         tolerance: 'pointer',
         revert: 50,
         distance: 5,
         items: '>.nt-qans',
         placeholder: 'highlight',
+        cancel: "[contenteditable]",
         stop: function (ev, ui) {
             updateAnswer($(ui.item).closest(".nt-qans"));
         }
@@ -94,7 +96,21 @@ function initDragAndDrop() {
 
 }
 function initEditable() {
-
+    //separator
+    $("#test-title").contentEditable({
+        "placeholder": "<i>Enter Test Title</i>",
+        "onBlur": function (element) {
+            statusSaving();
+            var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
+            $.post("/Tests/UpdateTestTitle", { testid: testid, text: text }, function (res) {
+                if (!res.success) {
+                    showMessage("error", res.message);
+                } else {
+                    statusSaved();
+                }
+            });
+        },
+    });
     $("#checklist[content-tab=true] .nt-qans .nt-qansdesc").contentEditable({
         "placeholder": "<i>Enter Answer</i>",
         "onBlur": function (element) {
@@ -488,7 +504,6 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
-
     initDragAndDrop();
     initEditable();
     initDateTimePicker();
@@ -526,28 +541,7 @@ $(function () {
         }
     });
     //separator
-    $(".nt-qans.nt-qans-edit .nt-qansdesc.nt-qedit").live("mousedown", function (ev) {
-        this.focus();
-    });
-    //separator
-    $(".nt-qtext.nt-qedit").live("mousedown", function (ev) {
-        this.focus();
-    });
-    //separator
-    $("#test-title").contentEditable({
-        "placeholder": "<i>Enter Test Title</i>",
-        "onBlur": function (element) {
-            statusSaving();
-            var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
-            $.post("/Tests/UpdateTestTitle", { testid: testid, text: text }, function (res) {
-                if (!res.success) {
-                    showMessage("error", res.message);
-                } else {
-                    statusSaved();
-                }
-            });
-        },
-    });
+    
     //separator
     $(".tab-event").live("click", function (e) {
         e.preventDefault();
@@ -1187,7 +1181,6 @@ $(function () {
     //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
-
     var hub = $.connection.generalHub;
     hub.client.R_deactivetest = function (id,mail) {
         if (id && id == testid) {
