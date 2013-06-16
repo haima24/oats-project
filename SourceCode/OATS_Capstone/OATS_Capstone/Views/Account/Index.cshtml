@@ -13,7 +13,7 @@
         @Html.Partial("P_SignUp_Container")
     </div>
     <div id="login-container">
-        <h3 class="login-title"><span>Already a member? </span>Login</h3>
+        <h3 class="login-title">Login</h3>
         <div class="border">
             <input type="text" id="email" class="login-textbox" placeholder="Email Address" required="">
             <input type="checkbox" id="remember-checkbox" class="remember-checkbox">
@@ -21,35 +21,6 @@
             <br>
             <input type="password" id="password" class="login-textbox" placeholder="Password" required="">
             <input type="button" id="login-btn" class="login-btn btn" value="LOGIN">
-            <div id="test-holder">
-                <div class="nt-ctrl-search">
-                    <div class="nt-search-box">
-                        <input type="text" placeholder="Search or pick a tests holder" class="nt-search-input" />
-                        <i class="t-icon icon-search"></i>
-                        <button class="nt-btn-icon nt-btn-clear ">
-                            <i class="icon-remove-sign"></i>
-                        </button>
-                    </div>
-                    <div class="nt-ctrl-search-tags nt-taglist"></div>
-                </div>
-                <div class="nt-ctrl-list">
-                    <div class="nt-qsearch">
-                        <div>
-                            <i class="t-icon i-yourself"></i>
-                        </div>
-                        <div class="nt-qsearch-content">
-                            <div class="nt-qsearch-title">Your Own Site</div>
-                            <div class="nt-qsearch-desc">To own site as administrator</div>
-                        </div>
-                        <div>
-                            <input type="radio" holder-id="0" name="test_holder_radio" checked="checked" />
-                        </div>
-                    </div>
-                    <div id="another-holder">
-                        @Html.Partial("P_Tests_Holder_Searching_Template")
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
