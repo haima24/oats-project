@@ -52,5 +52,21 @@ namespace OATS_Capstone.Models
             }
             return percent;
         }
+        public static String ToPercent(this decimal praction)
+        {
+            var percent = String.Empty;
+            if (praction == 0) { return "0%"; }
+            try
+            {
+                var per = praction * 100;
+                percent = String.Format("{0:##}%", per);
+            }
+            catch (Exception)
+            {
+                percent = "0%";
+            }
+            return percent;
+        }
     }
+
 }

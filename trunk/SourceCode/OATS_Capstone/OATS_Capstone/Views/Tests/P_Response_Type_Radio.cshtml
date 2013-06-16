@@ -1,70 +1,60 @@
-﻿@model OATS_Capstone.Models.Question
+﻿@using OATS_Capstone.Models
+@model OATS_Capstone.Models.Question
+@{
+    var inTestDetails = Model.UserInTestDetails;
+    var test = Model.Test;
+    var totalUsersInTest = test.UserInTests.Count;
+    var userAnswerIds = inTestDetails.Select(i =>
+    {
+        var idStrings = i.AnswerIDs.Split(new String[]{","}, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var Ids = new List<int>();
+        idStrings.ForEach(k => { 
+            var tempid=0;
+            if (int.TryParse(k, out tempid)) 
+            {
+                Ids.Add(tempid);
+            }
+        });
+        return new { i.UserInTest, Ids };
+    });
+    var rightAnsId = 0;
+    var rightAns = Model.Answers.FirstOrDefault(k => k.IsRight);
+    if (rightAns != null) { rightAnsId = rightAns.AnswerID; }
+    
+    var userRightCount=userAnswerIds.Count(k=>k.Ids.Contains(rightAnsId));
+    var correctPer = userRightCount / totalUsersInTest;
+}
 <div class="nt-qitem nt-qitem-review">
-    <div class="nt-qnum ">1.</div>
+    <div class="nt-qnum ">@Model.LabelOrder</div>
     <div class="nt-qtext">
-        <p>Demo Radio</p>
+        <p>@Model.QuestionTitle</p>
     </div>
     <div class="nt-qhctrls">
         <label class="checkbox">
-            <input class="nt-scored" type="checkbox" checked="checked"/>Scored</label>
+            <input class="nt-scored" type="checkbox" checked="checked" />Scored</label>
     </div>
     <div class="nt-qanscont nt-sortable">
-        <div class="nt-qans nt-qans-hover">
-            <label class="radio nt-qans-label ">
-                <input type="radio" value="0"/>
-                <div class="nt-qansdesc">
-                    <p>Answer Radio 1</p>
+        @foreach (var ans in Model.Answers)
+        { 
+            var countOfUserChooseThisAns=(userAnswerIds.Count(k=>k.Ids.Contains(ans.AnswerID)));
+            <div class="nt-qans nt-qans-hover">
+                <label class="radio nt-qans-label ">
+                    <input type="radio" value="0" />
+                    <div class="nt-qansdesc">
+                        <p>@ans.AnswerContent</p>
+                    </div>
+                </label>
+                <div class="nt-qansrep">
+                    <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
+                    @if (ans.IsRight)
+                    {
+                        <div class="nt-qpts">@ans.Score pt</div>
+                        <div class="nt-qansrep-color" style="background-color: green; opacity: 1"></div>
+                    }
+                    <div class="nt-qansrep-pct" style="visibility: visible;">@(((decimal)countOfUserChooseThisAns/totalUsersInTest).ToPercent())</div>
                 </div>
-            </label>
-            <div class="nt-qansrep">
-                <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
-                <div class="nt-qpts">1 pt</div>
-                <div class="nt-qansrep-color nt-guide" style="background-color: green; opacity: 1"></div>
-                <div class="nt-qansrep-pct" style="visibility: visible;">50%</div>
-            </div>
-        </div>
-        <div class="nt-qans nt-qans-hover">
-            <!-- TODO: consistent editable / fillable display -->
-            <label class="radio nt-qans-label ">
-                <input type="radio" value="1">
-                <div class="nt-qansdesc">
-                    <p>
-                        Answer Radio 2<br/>
-                    </p>
-                </div>
-            </label>
-
-            <div class="nt-qansrep">
-                <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
-                <div class="nt-qpts nt-guide" style="visibility: hidden">0 pts</div>
-                <div class="nt-qansrep-color"></div>
-                <div class="nt-qansrep-pct" style="visibility: visible;">0%</div>
-            </div>
-
-
-
-        </div>
-        <div class="nt-qans nt-qans-hover">
-            <!-- TODO: consistent editable / fillable display -->
-            <label class="radio nt-qans-label ">
-                <input type="radio" value="2"/>
-                <div class="nt-qansdesc">
-                    <p>
-                        Answer Radio 3<br/>
-                    </p>
-                </div>
-            </label>
-
-            <div class="nt-qansrep">
-                <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
-                <div class="nt-qpts nt-guide" style="visibility: hidden">0 pts</div>
-                <div class="nt-qansrep-color"></div>
-                <div class="nt-qansrep-pct" style="visibility: visible;">50%</div>
-            </div>
-
-
-
-        </div>
+            </div>  
+        }
     </div>
 
 
@@ -72,11 +62,9 @@
 
 
         <div class="nt-qrep" style="">
-            <span>Correct:</span><span class="nt-crate">50% ( 1 / 2 )</span>
-            <span>Pbs:</span><span class="nt-pbs">+1.00</span>
+            <span>Correct:</span><span class="nt-crate">@(((decimal)correctPer).ToPercent()) (@userRightCount / @totalUsersInTest )</span>
         </div>
 
-        <button class="nt-btn-text nt-qcomm-toggle" style="display: none;">Comment</button>
 
         <div class="nt-qoepts" style="display: none;">
             <span>Points:</span>
@@ -85,12 +73,5 @@
             <span class="nt-ok"><i class="icon-ok"></i></span>
             <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
         </div>
-
-
-
-    </div>
-
-    <div class="nt-qcomm" style="display: none;">
-        <textarea class="nt-comm" placeholder="Comment for the student about this response"></textarea>
     </div>
 </div>

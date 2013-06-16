@@ -5,6 +5,7 @@
     {
         return i.NoneChoiceScore + i.Answers.Sum(k => k.Score);
     });
+    var sortedQuestions=Model.Questions.OrderBy(i=>i.SerialOrder);
 }
 <div id="sidebar">
     <div style="" class="nt-acc-content" id="learners">
@@ -52,7 +53,7 @@
                         </div>
                         <div class="nt-clb-item-content">
                             <div class="nt-clb-item-label">@(user.FirstName ?? user.LastName ?? user.UserMail)</div>
-                            <div class="nt-clb-item-desc">@(((decimal)uInTest.Score/ totalScoreOfTest).ToPercent())</div>
+                            <div class="nt-clb-item-desc">@(((decimal)uInTest.Score / totalScoreOfTest).ToPercent())</div>
                         </div>
                     </div>
                     }
@@ -71,16 +72,21 @@
     }
     else
     {
+        if (Model.UserInTests.Count == 1)
+        {
+            var single=Model.UserInTests.FirstOrDefault();
         <div class="nt-checklist-ctrl">
-            <div class="nt-msg">Submitted on 13 May 2013 7:30 pm</div>
+            <div class="nt-msg">Submitted on @String.Format("{0:dd MMM yyyy HH:mm tt}",single.TestTakenDate)</div>
             <button id="btnEdit" class="nt-btn-dark" style="display: none;">Edit</button>
             <button id="btnDone" class="nt-btn-dark" style="display: none;">Done</button>
             <button id="btnDel" class="nt-btn-dark" data-guide="resp_remove_btn" style="display: inline-block;">Remove</button>
             <button id="btnSubmit" class="nt-btn-submit" data-guide="resp_submit_btn" style="display: none;">Submit</button>
         </div>
+        }
         <div id="checklist" style="height: 450px; overflow-y: auto;">
-            @foreach (var question in Model.Questions) { 
-                @Html.Partial("P_Response_Instance",question)
+            @foreach (var question in sortedQuestions)
+            { 
+                @Html.Partial("P_Response_Instance", question)
             }
         </div>
     }
