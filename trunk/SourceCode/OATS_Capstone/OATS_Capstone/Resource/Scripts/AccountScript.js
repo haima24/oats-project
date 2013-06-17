@@ -22,7 +22,7 @@
     return result.valid;
 }
 function checkLogin(email, pass,remembered, onsuccess) {
-    $.post("/Account/Login", { email: email, password: pass, ownerid: ownerid, remembered: remembered }, function (res) {
+    $.post("/Account/Login", { email: email, password: pass, remembered: remembered }, function (res) {
         if (res.success) {
             if (onsuccess && typeof (onsuccess) === "function") {
                 onsuccess();

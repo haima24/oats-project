@@ -166,6 +166,7 @@ function initImageUploadFacility() {
                         $(this.element).parent().find(".nt-qimg-upload").show();
                     },
                     success: function (file, res) {
+                        if (!res.success) { showMessage("error", res.message);}
                     },
                     complete: function (ev) {
                         $(this.element).parent().find(".nt-qimg-upload").hide();
@@ -194,7 +195,7 @@ function updateQuestionType(questionidString, type) {
 function initSearchTests() {
     $.post("/Tests/TestsSearch", function (res) {
         if (res.success) {
-            var source = $(res.listTestsSearch).map(function (index, obj) {
+            var source = $(res.resultlist).map(function (index, obj) {
                 if (obj.TestTitle && obj.TestTitle != "") {
                     return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
                 }
@@ -382,8 +383,8 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         contentType: "application/json; charset=utf-8",
         async: false,
         success: function (res) {
-            if (res && res.success && res.questionHtml != "") {
-                var newElement = $(res.questionHtml);
+            if (res && res.success) {
+                var newElement = $(res.generatedHtml);
                 $(element).replaceWith(newElement);
                 if (onaddquestion && typeof (onaddquestion) === "function") {
                     onaddquestion(newElement);
@@ -477,9 +478,9 @@ function addAnswer(element, qid, onsuccess, noreload) {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (res) {
-            if (res && res.success && res.questionHtml != "") {
+            if (res && res.success) {
                 if (!noreload) {
-                    $(element).replaceWith($(res.questionHtml));
+                    $(element).replaceWith($(res.generatedHtml));
                 }
                 if (onsuccess && typeof (onsuccess) === "function") {
                     onsuccess();
@@ -524,10 +525,10 @@ $(function () {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (r) {
-                    if (r.success && r.renderedHtmlList) {
+                    if (r.success) {
                         var list = $("#sidebar .nt-ctrl-list");
                         list.empty();
-                        $(r.renderedHtmlList).each(function (i, o) {
+                        $(r.resultlist).each(function (i, o) {
                             list.append(o);
                         });
                         initPopover();
@@ -569,9 +570,11 @@ $(function () {
     });
     //separator
     $.post("/Tests/QuestionTypes", function (res) {
-        if (res) {
-            questions = res;
+        if (res.success) {
+            questions = res.obj;
             initImageUploadFacility();
+        } else {
+            showMessage("error", res.message);
         }
     });
     //separator
@@ -922,8 +925,8 @@ $(function () {
         if (!isNaN(questionid)) {
             statusSaving();
             $.post("/Tests/ReuseQuestionTemplate", { questionid: questionid }, function (res) {
-                if (res && res.success && res.questionHtml) {
-                    var newItem = $(res.questionHtml);
+                if (res && res.success && res.generatedHtml) {
+                    var newItem = $(res.generatedHtml);
                     var type = newItem.attr("question-type");
                     newItem.removeAttr("id");//if exist
                     newItem.removeAttr("question-id");
@@ -1032,7 +1035,7 @@ $(function () {
         var userid = parseInt($(this).closest("tr").attr("user-id"));
         $.post("/Tests/RemoveUser", { testid: testid, userid: userid }, function (res) {
             if (res.success) {
-                $("#eventTab").html($(res.generatedHTML));
+                $("#eventTab").html($(res.generatedHtml));
                 statusSaved();
             } else {
                 showMessage("error", res.message);
@@ -1043,7 +1046,7 @@ $(function () {
     $("#btn-remove-student").live("click", function (ev) {
         $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Student" }, function (res) {
             if (res.success) {
-                var html = res.popupHtml;
+                var html = res.generatedHtml;
                 if (!$("#modalRemovePopupUser").length > 0) {
                     $(html).modal();
                 } else {
@@ -1107,7 +1110,7 @@ $(function () {
         if ($(this).attr("id") == "btn-invite-more-teacher") { role = "Teacher"; } else { role = "Student"; }
         $.post("/Tests/ModalPopupUser", { testid: testid, role: role }, function (res) {
             if (res.success) {
-                var html = res.popupHtml;
+                var html = res.generatedHtml;
                 if (!$("#modalPopupUser").length > 0) {
                     $(html).modal();
                 } else {
@@ -1124,7 +1127,7 @@ $(function () {
     $("#btn-reinvite-student").live("click", function (ev) {
         $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Student" }, function (res) {
             if (res.success) {
-                var html = res.popupHtml;
+                var html = res.generatedHtml;
                 if (!$("#modalReinvitePopupUser").length > 0) {
                     $(html).modal();
                 } else {

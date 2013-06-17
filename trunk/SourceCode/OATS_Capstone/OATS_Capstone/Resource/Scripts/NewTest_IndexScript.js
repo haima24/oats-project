@@ -57,7 +57,7 @@ $(function () {
     });
     $.post("/Tests/TestsSearch", function (res) {
         if (res.success) {
-            var source = $(res.listTestsSearch).map(function (index, obj) {
+            var source = $(res.resultlist).map(function (index, obj) {
                 if (obj.TestTitle && obj.TestTitle != "") {
                     return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
                 }

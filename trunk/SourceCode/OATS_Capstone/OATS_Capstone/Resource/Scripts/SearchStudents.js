@@ -19,8 +19,8 @@
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (r) {
-                        if (r.success && r.listTests) {
-                            var result = $(r.listTests).map(function (index, element) {
+                        if (r.success) {
+                            var result = $(r.resultlist).map(function (index, element) {
                                 if (element && element.TestTitle && element.Id) {
                                     return { label: element.TestTitle, value: element.TestTitle, id: element.Id };
                                 }
