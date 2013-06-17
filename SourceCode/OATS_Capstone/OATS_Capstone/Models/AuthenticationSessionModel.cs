@@ -78,42 +78,6 @@ namespace OATS_Capstone.Models
             ClearSession();
             ClearCookieOfAuthentication();
         }
-        public int OwnerUserId
-        {
-            get
-            {
-                var ownerid = 0;
-                if (IsHaveCookie("ownerid"))
-                {
-                    var owneridString = GetCookie("ownerid");
-                    var tempid = 0;
-                    if (int.TryParse(owneridString, out tempid))
-                    {
-                        ownerid = tempid;
-                    }
-                }
-                if (ownerid == 0)
-                {
-                    if (HttpContext.Current.Session["ownerid"] != null)
-                    {
-                        ownerid = (int)HttpContext.Current.Session["ownerid"];
-                    }
-                }
-                return ownerid;
-            }
-            set
-            {
-                HttpContext.Current.Session["ownerid"] = value;
-                if (_isCookieEnable)
-                {
-                    AddCookie("ownerid", value.ToString());
-                }
-                else
-                {
-                    ClearCookie("ownerid");
-                }
-            }
-        }
         public int UserId
         {
             get
@@ -165,95 +129,6 @@ namespace OATS_Capstone.Models
                     user = obj;
                 }
                 return user;
-            }
-        }
-        public User OwnerUser
-        {
-            get
-            {
-                User user = null;
-                var obj = SingletonDb.Instance().Users.FirstOrDefault(i => i.UserID == OwnerUserId);
-                if (obj != null)
-                {
-                    user = obj;
-                }
-                return user;
-            }
-        }
-        public bool IsCurrentUserAlsoOwner
-        {
-            get { return (UserId != 0 && OwnerUserId != 0 && UserId == OwnerUserId); }
-        }
-        public List<User> StudentsInThisOwner
-        {
-            get
-            {
-                var students = new List<User>();
-                if (OwnerUser != null)
-                {
-                    var list = OwnerUser.OwnerUser_UserRoleMappings.Where(k => k.Role.RoleDescription == "Student").Select(i => i.ClientUser);
-                    students = list.ToList();
-                }
-                return students;
-            }
-        }
-        public List<User> TeachersInThisOwner
-        {
-            get
-            {
-                var students = new List<User>();
-                if (OwnerUser != null)
-                {
-                    var list = OwnerUser.OwnerUser_UserRoleMappings.Where(k => k.Role.RoleDescription == "Teacher").Select(i => i.ClientUser);
-                    students = list.ToList();
-                }
-                return students;
-            }
-        }
-        public List<Test> TestsInThisOwner
-        {
-            get
-            {
-                var tests = new List<Test>();
-                if (OwnerUser != null)
-                {
-                    tests = OwnerUser.Tests.ToList();
-                }
-                return tests;
-            }
-        }
-        public bool IsStudent
-        {
-            get
-            {
-                var result = false;
-                if (!IsCurrentUserAlsoOwner)
-                {
-                    var db = SingletonDb.Instance();
-                    var roleMap = db.UserRoleMappings.FirstOrDefault(k => k.ClientUserID == UserId && k.OwnerDomainUserID == OwnerUserId);
-                    if (roleMap != null)
-                    {
-                        result = roleMap.Role.RoleDescription == "Student";
-                    }
-                }
-                return result;
-            }
-        }
-        public bool IsTeacher
-        {
-            get
-            {
-                var result = false;
-                if (!IsCurrentUserAlsoOwner)
-                {
-                    var db = SingletonDb.Instance();
-                    var roleMap = db.UserRoleMappings.FirstOrDefault(k => k.ClientUserID == UserId && k.OwnerDomainUserID == OwnerUserId);
-                    if (roleMap != null)
-                    {
-                        result = roleMap.Role.RoleDescription == "Teacher";
-                    }
-                }
-                return result;
             }
         }
     }

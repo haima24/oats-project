@@ -18,7 +18,7 @@ namespace OATS_Capstone.Controllers
             return View();
         }
 
-        public JsonResult Login(string email, string password, int ownerid, bool remembered)
+        public JsonResult Login(string email, string password, bool remembered)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;

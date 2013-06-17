@@ -36,32 +36,16 @@ namespace OATS_Capstone.Controllers
             var generateId = user.UserID;
             return RedirectToAction("NewTeacher", new { id = generateId});
         }
-
         public ActionResult NewTeacher(int id)
         {
             var db = SingletonDb.Instance();
             var user = db.Users.FirstOrDefault(i => i.UserID == id);
             return View(user);
         }
-
         public JsonResult AssignTestToTeacher(int userId, int testId)
         {
             var success = false;
             var db = SingletonDb.Instance();
-            //var invitation = new Invitation();
-            //invitation.UserID = userId;
-            //invitation.TestID = testId;
-
-            //var generatedHtml = string.Empty;
-
-
-            //if (userId !=0 && testId != 0)
-            //{
-            //    db.Invitations.Add(invitation);
-            //    db.SaveChanges();
-            //    success = true;
-            //    generatedHtml =  this.RenderPartialViewToString("P_Assign_Test_To_Student",invitation.User );
-            //}
             var generatedHtml = string.Empty;
             var user = db.Users.FirstOrDefault(i => i.UserID == userId);//find user in db
             var test = db.Tests.FirstOrDefault(k => k.TestID == testId);//find test in db

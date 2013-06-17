@@ -19,28 +19,39 @@ namespace OATS_Capstone.Controllers
         [HttpPost]
         public ActionResult UploadFiles(IEnumerable<HttpPostedFileBase> files, int questionid)
         {
-            var message = String.Empty;
-            foreach (HttpPostedFileBase file in files)
+            var message = Constants.DefaultProblemMessage;
+            var success = false;
+            try
             {
-                string filePath = Path.Combine(Server.MapPath("~/Resource/Images"), file.FileName);
-                System.IO.File.WriteAllBytes(filePath, this.ReadData(file.InputStream));
-                //write path to db
-                var db = SingletonDb.Instance();
-                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
-                if (question != null)
+                foreach (HttpPostedFileBase file in files)
                 {
-                    question.ImageUrl = "~/Resource/Images/" + file.FileName;
-                    if (db.SaveChanges() > 0)
+                    string filePath = Path.Combine(Server.MapPath("~/Resource/Images"), file.FileName);
+                    System.IO.File.WriteAllBytes(filePath, this.ReadData(file.InputStream));
+                    //write path to db
+                    var db = SingletonDb.Instance();
+                    var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                    if (question != null)
                     {
-                        message = "All files have been successfully stored.";
+                        question.ImageUrl = "~/Resource/Images/" + file.FileName;
+                        if (db.SaveChanges() > 0)
+                        {
+                            message = "All files have been successfully stored.";
+                        }
+                    }
+                    else
+                    {
+                        message = "Problem in storing images.";
                     }
                 }
-                else
-                {
-                    message = "Problem in storing images.";
-                }
+                success = true;
             }
-            return this.Json(message);
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+
+            return this.Json(new { message, success });
         }
 
         private byte[] ReadData(Stream stream)
@@ -61,7 +72,7 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var meassage = Constants.DefaultProblemMessage;
-            var generatedHTML = String.Empty;
+            var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
@@ -84,7 +95,7 @@ namespace OATS_Capstone.Controllers
                 }
                 if (db.SaveChanges() >= 0)
                 {
-                    generatedHTML = this.RenderPartialViewToString("P_InvitationTab", test.Invitations);
+                    generatedHtml = this.RenderPartialViewToString("P_InvitationTab", test.Invitations);
                     success = true;
                 }
             }
@@ -93,14 +104,14 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 meassage = Constants.DefaultExceptionMessage;
             }
-            return Json(new { generatedHTML, success, meassage });
+            return Json(new { generatedHtml, success, meassage });
         }
 
         public JsonResult ModalPopupUser(int testid, string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var popupHtml = String.Empty;
+            var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
@@ -111,8 +122,8 @@ namespace OATS_Capstone.Controllers
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User);
-                    users = db.Users.ToList().Where(k => !invitedUsers.Contains(k)&&k.UserID!=authen.OwnerUserId).ToList();
-                    
+                    users = db.Users.ToList().Where(k => !invitedUsers.Contains(k) && k.UserID != authen.OwnerUserId).ToList();
+
                     if (authen.OwnerUser != null)
                     {
                         users = users.Where(u =>
@@ -122,14 +133,15 @@ namespace OATS_Capstone.Controllers
                             {
                                 return roleMap.Role.RoleDescription == role;
                             }
-                            else {
+                            else
+                            {
                                 return true;
                             }
                         }).ToList();
                     }
                 }
                 ViewBag.Role = role;
-                popupHtml = this.RenderPartialViewToString("P_Modal_Assign_Tests_For_Users", users);
+                generatedHtml = this.RenderPartialViewToString("P_Modal_Assign_Tests_For_Users", users);
                 success = true;
             }
             catch (Exception)
@@ -137,14 +149,14 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message, popupHtml });
+            return Json(new { success, message, generatedHtml });
         }
 
         public JsonResult ModalRemovePopupUser(int testid, string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var popupHtml = String.Empty;
+            var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
@@ -168,7 +180,7 @@ namespace OATS_Capstone.Controllers
                     }
                 }
                 ViewBag.Role = role;
-                popupHtml = this.RenderPartialViewToString("P_Modal_Remove_Tests_For_User", users);
+                generatedHtml = this.RenderPartialViewToString("P_Modal_Remove_Tests_For_User", users);
                 success = true;
             }
             catch (Exception)
@@ -176,14 +188,14 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message, popupHtml });
+            return Json(new { success, message, generatedHtml });
         }
 
         public JsonResult ModalReinvitePopupUser(int testid, string role)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var popupHtml = String.Empty;
+            var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
@@ -207,7 +219,7 @@ namespace OATS_Capstone.Controllers
                     }
                 }
                 ViewBag.Role = role;
-                popupHtml = this.RenderPartialViewToString("P_Modal_Reinvite_Tests_For_Users", users);
+                generatedHtml = this.RenderPartialViewToString("P_Modal_Reinvite_Tests_For_Users", users);
                 success = true;
             }
             catch (Exception)
@@ -215,19 +227,19 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message, popupHtml });
+            return Json(new { success, message, generatedHtml });
         }
 
         public JsonResult ReuseQuestionTemplate(int questionid)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var questionHtml = String.Empty;
+            var generatedHtml = String.Empty;
             try
             {
                 var db = SingletonDb.Instance();
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
-                questionHtml = this.RenderPartialViewToString("P_Question_Instance", question);
+                generatedHtml = this.RenderPartialViewToString("P_Question_Instance", question);
                 success = true;
             }
             catch (Exception)
@@ -236,13 +248,13 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message, questionHtml });
+            return Json(new { success, message, generatedHtml });
         }
         public JsonResult ReuseSearchQuestionTemplate(int maxrows, string term)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var renderedHtmlList = new List<String>();
+            var resultlist = new List<String>();
             var termLower = term.ToLower();
             try
             {
@@ -257,7 +269,7 @@ namespace OATS_Capstone.Controllers
                 matches.ForEach(delegate(Question question)
                 {
                     var html = this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", question);
-                    renderedHtmlList.Add(html);
+                    resultlist.Add(html);
                 });
                 success = true;
             }
@@ -265,13 +277,13 @@ namespace OATS_Capstone.Controllers
             {
                 success = false;
             }
-            return Json(new { success, message, renderedHtmlList });
+            return Json(new { success, message, resultlist });
         }
         public JsonResult TestsAssignUserSearch(int userid, string letter)
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var listTests = new List<SearchingTests>();
+            var resultlist = new List<SearchingTests>();
             try
             {
                 var db = SingletonDb.Instance();
@@ -287,7 +299,7 @@ namespace OATS_Capstone.Controllers
                     search.Id = item.TestID;
                     search.StartDate = item.StartDateTime;
                     search.EndDate = item.EndDateTime;
-                    listTests.Add(search);
+                    resultlist.Add(search);
                 }
                 success = true;
                 message = string.Empty;
@@ -302,14 +314,14 @@ namespace OATS_Capstone.Controllers
 
 
             }
-            return Json(new { listTests, success, message });
+            return Json(new { resultlist, success, message });
         }
         public JsonResult TestsSearch()
         {
 
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var listTestsSearch = new List<SearchingTests>();
+            var resultlist = new List<SearchingTests>();
             try
             {
                 var db = SingletonDb.Instance();
@@ -322,7 +334,7 @@ namespace OATS_Capstone.Controllers
                     testTemplate.TestTitle = test.TestTitle;
                     testTemplate.StartDate = test.StartDateTime;
                     testTemplate.EndDate = test.EndDateTime;
-                    listTestsSearch.Add(testTemplate);
+                    resultlist.Add(testTemplate);
                 });
                 success = true;
                 message = String.Empty;
@@ -334,7 +346,7 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
 
-            return Json(new { listTestsSearch, success, message });
+            return Json(new { resultlist, success, message });
         }
         public ActionResult Index()
         {
@@ -441,7 +453,8 @@ namespace OATS_Capstone.Controllers
                                 db.Invitations.Remove(inv);
                                 var ownerid = authen.OwnerUserId;
 
-                                if (user.Invitations.Count == 0) {
+                                if (user.Invitations.Count == 0)
+                                {
                                     var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.OwnerDomainUserID == ownerid && i.ClientUserID == id);
                                     if (roleMap != null) { db.UserRoleMappings.Remove(roleMap); }
                                 }
@@ -465,24 +478,51 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult QuestionTypes()
         {
-            var obj = new
+            Object obj = null;
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
+            try
             {
-                radio = this.RenderPartialViewToString("P_Type_Radio_Template"),
-                multiple = this.RenderPartialViewToString("P_Type_Multiple_Template"),
-                essay = this.RenderPartialViewToString("P_Type_Essay_Template"),
-                shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer_Template"),
-                text = this.RenderPartialViewToString("P_Type_Text_Template"),
-                image = this.RenderPartialViewToString("P_Type_Image_Template"),
-                imagepreview = this.RenderPartialViewToString("P_RenderPreviewImage"),
-                empty = this.RenderPartialViewToString("P_Type_Empty_Template")
-            };
-            return Json(obj);
+                obj = new
+                {
+                    radio = this.RenderPartialViewToString("P_Type_Radio_Template"),
+                    multiple = this.RenderPartialViewToString("P_Type_Multiple_Template"),
+                    essay = this.RenderPartialViewToString("P_Type_Essay_Template"),
+                    shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer_Template"),
+                    text = this.RenderPartialViewToString("P_Type_Text_Template"),
+                    image = this.RenderPartialViewToString("P_Type_Image_Template"),
+                    imagepreview = this.RenderPartialViewToString("P_RenderPreviewImage"),
+                    empty = this.RenderPartialViewToString("P_Type_Empty_Template")
+                };
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+
+            return Json(new { obj, message, success });
         }
         public JsonResult NewTest_ContentTab(int testid)
         {
+            var success = false;
+            var message = Constants.DefaultProblemMessage;
             var db = SingletonDb.Instance();
-            var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-            return Json(new { tab = this.RenderPartialViewToString("P_ContentTab", test) });
+            var generatedHtml = String.Empty;
+            try
+            {
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                generatedHtml = this.RenderPartialViewToString("P_ContentTab", test);
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+
+            return Json(new { generatedHtml,success,message });
         }
         public ActionResult DoTest(int id)
         {
@@ -494,7 +534,7 @@ namespace OATS_Capstone.Controllers
         {
             var success = false;
             var message = Constants.DefaultProblemMessage;
-            var listTestCalendar = new List<TestCalendarObject>();
+            var resultlist = new List<TestCalendarObject>();
             try
             {
                 var db = SingletonDb.Instance();
@@ -508,7 +548,7 @@ namespace OATS_Capstone.Controllers
                     template.testTitle = test.TestTitle;
                     template.startDateTime = test.StartDateTime;
                     template.endDateTime = test.EndDateTime;
-                    listTestCalendar.Add(template);
+                    resultlist.Add(template);
                 });
                 success = true;
             }
@@ -517,7 +557,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
             }
 
-            return Json(new { listTestCalendar, success, message });
+            return Json(new { resultlist, success, message });
         }
         public JsonResult Index_CalendarTab()
         {
@@ -532,7 +572,7 @@ namespace OATS_Capstone.Controllers
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-            return Json(new { tab = this.RenderPartialViewToString("P_ResponseTab",test) });
+            return Json(new { tab = this.RenderPartialViewToString("P_ResponseTab", test) });
         }
         public JsonResult NewTest_ScoreTab()
         {
@@ -556,7 +596,7 @@ namespace OATS_Capstone.Controllers
         {
             var db = SingletonDb.Instance();
             var success = false;
-            var questionHtml = String.Empty;
+            var generatedHtml = String.Empty;
             var message = Constants.DefaultProblemMessage;
             try
             {
@@ -575,7 +615,7 @@ namespace OATS_Capstone.Controllers
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
-                        questionHtml = this.RenderPartialViewToString("P_Question_Instance", question);
+                        generatedHtml = this.RenderPartialViewToString("P_Question_Instance", question);
                     }
                 }
             }
@@ -585,7 +625,7 @@ namespace OATS_Capstone.Controllers
                 message = Constants.DefaultExceptionMessage;
             }
 
-            return Json(new { success, message, questionHtml });
+            return Json(new { success, message, generatedHtml });
         }
         public JsonResult AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
         {
@@ -631,7 +671,7 @@ namespace OATS_Capstone.Controllers
         public JsonResult AddAnswer(int questionid)
         {
             var db = SingletonDb.Instance();
-            var questionHtml = String.Empty;
+            var generatedHtml = String.Empty;
             var success = false;
             var ans = new Answer();
             ans.AnswerContent = String.Empty;
@@ -648,7 +688,7 @@ namespace OATS_Capstone.Controllers
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
-                        questionHtml = this.RenderPartialViewToString("P_Question_Instance", question);
+                        generatedHtml = this.RenderPartialViewToString("P_Question_Instance", question);
                     }
                 }
             }
@@ -658,7 +698,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
             }
 
-            return Json(new { success, questionHtml, message });
+            return Json(new { success, generatedHtml, message });
         }
 
         public JsonResult ResortQuestions(int count, List<Question> questions)
