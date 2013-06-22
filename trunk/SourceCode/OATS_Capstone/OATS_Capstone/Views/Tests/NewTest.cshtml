@@ -4,17 +4,17 @@
 }
 @model OATS_Capstone.Models.Test
 @{
-    var authen=AuthenticationSessionModel.Instance();
+    var authen = AuthenticationSessionModel.Instance();
     var user = authen.User;
-    var owner = authen.OwnerUser;
-    }
+}
 <script src="~/Resource/Scripts/NewTestScript.js"></script>
-@if(Model!=null){
-<input id="test-id" type="hidden" value="@Model.TestID" />
-    }
+@if (Model != null)
+{
+    <input id="test-id" type="hidden" value="@Model.TestID" />
+}
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
-        <div id="savestatus" style="display:none;">
+        <div id="savestatus" style="display: none;">
             <span class="nt-desc" style="display: inline;"></span>
         </div>
         <div class="container">
@@ -28,7 +28,7 @@
                         <button class="btn oval" onclick="window.location='@Url.Action("MakeTest")'">New</button></li>
                 </ul>
 
-               <ul class="nav pull-right">
+                <ul class="nav pull-right">
                     <li>
                         <div class="navbar-search pull-left">
                             <input type="text" class="nt-search-input search-query" placeholder="Search Tests" />
@@ -38,18 +38,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            @if (authen.IsCurrentUserAlsoOwner) { 
-                                <li class="nav-header">Welcome: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
+                            <li class="nav-header">Welcome: @(user.FirstName ?? user.LastName ?? user.UserMail)</li>
                             <li class="divider"></li>
                             <li><a href="#" id="profile-link">My Profile</a></li>
-                            <li><a href="@Url.Action("LogOut","Account")">Logout</a></li>
-                            }else{
-                            <li class="nav-header">Tests Holder: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
-                            <li class="nav-header">@(user.FirstName??user.LastName??user.UserMail)</li>
-                            <li class="divider"></li>
-                            <li><a href="#" id="profile-link">My Profile</a></li>
-                            <li><a href="@Url.Action("LogOut","Account")">Logout</a></li>
-                                }
+                            <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -59,20 +51,29 @@
     </div>
     <!-- /navbar-inner -->
 </div>
-@if(!Model.IsActive){
-<div id="eventActiveTest" class="nt-message-info"><div class="nt-message-info-cont nt-hover">
-  <div>This test is currently <p class="nt-uc">disable</p></div>
-  <div class="nt-enable">- Enable!</div>
-</div>
-</div>}else{
-    <div id="eventActiveTest" class="nt-message-info" style="display:none;"><div class="nt-message-info-cont nt-hover">
-  <div>This test is currently <p class="nt-uc">disable</p></div>
-  <div class="nt-enable">- Enable!</div>
-</div>
-</div>
+@if (!Model.IsActive)
+{
+    <div id="eventActiveTest" class="nt-message-info">
+        <div class="nt-message-info-cont nt-hover">
+            <div>This test is currently
+                <p class="nt-uc">disable</p>
+            </div>
+            <div class="nt-enable">- Enable!</div>
+        </div>
+    </div>}
+else
+{
+    <div id="eventActiveTest" class="nt-message-info" style="display: none;">
+        <div class="nt-message-info-cont nt-hover">
+            <div>This test is currently
+                <p class="nt-uc">disable</p>
+            </div>
+            <div class="nt-enable">- Enable!</div>
+        </div>
+    </div>
 }
 
 <div id="container" class="container wrapper">
-   @Html.Partial("P_Inner_Container",Model)
+    @Html.Partial("P_Inner_Container", Model)
 </div>
 <div></div>

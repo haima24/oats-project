@@ -39,6 +39,5 @@ namespace OATS_Capstone.Models
         public DbSet<User> Users { get; set; }
         public DbSet<UserInTest> UserInTests { get; set; }
         public DbSet<UserInTestDetail> UserInTestDetails { get; set; }
-        public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
     }
 }

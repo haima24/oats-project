@@ -66,12 +66,10 @@ namespace OATS_Capstone.Models
         private static void ClearSession()
         {
             HttpContext.Current.Session.Remove("uid");
-            HttpContext.Current.Session.Remove("ownerid");
         }
         private static void ClearCookieOfAuthentication()
         {
             ClearCookie("uid");
-            ClearCookie("ownerid");
         }
         public static void TerminateAuthentication()
         {

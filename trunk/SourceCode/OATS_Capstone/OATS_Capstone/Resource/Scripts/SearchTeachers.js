@@ -1,11 +1,6 @@
 ﻿$(function () {
     searchUsers(".navbar-search .nt-search-input", function (id) {
         window.location = "/Teachers/NewTeacher/" + id;
-    }, function (source) {
-        var newSource = $(source).filter(function () {
-            return this.rolename == "Teacher" || (!this.rolename);
-        });
-        return newSource.convertJqueryArrayToJSArray();
     });
     var userid = parseInt($('#user-id').val());
     if ($("#container .nt-search-input ").length > 0) {

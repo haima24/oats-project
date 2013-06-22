@@ -32,125 +32,34 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult UsersSearch()
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            var listuser = new List<SearchingUsers>();
-            try
-            {
-                var db = SingletonDb.Instance();
-                var authen = AuthenticationSessionModel.Instance();
-                var ownerId = authen.OwnerUserId;
-                var users = db.Users.ToList();
-                users.ForEach(delegate(User user)
-                {
-                    var userTemplate = new SearchingUsers();
-                    userTemplate.UserID = user.UserID;
-                    userTemplate.LastName = user.LastName;
-                    userTemplate.FirstName = user.FirstName;
-                    var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.ClientUserID == user.UserID && i.OwnerDomainUserID == ownerId);
-                    if (roleMap != null)
-                    {
-                        userTemplate.RoleName = roleMap.Role.RoleDescription;
-                    }
-                    listuser.Add(userTemplate);
-                });
-                success = true;
-                message = String.Empty;
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-
-            return Json(new { listuser, message, success });
+            var common = new CommonService();
+            common.UsersSearch();
+            return Json(new { common.resultlist, common.message, common.success });
         }
         public JsonResult UpdateUserEmail(int userId, string userEmail)
         {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);//may be null
-            if (user != null)
-            {
-                user.UserMail = userEmail;
-                if (db.SaveChanges() > 0) //SaveChanges return affected rows
-                {
-                    success = true;
-                }
-            }
-
-            return Json(new { success });
+            var common = new CommonService();
+            common.UpdateUserEmail(userId, userEmail);
+            return Json(new {common.success,common.message});
 
         }
         public JsonResult UpdateUserName(int userId, string userName)
         {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);
-            if (user != null)
-            {
-                user.FirstName = userName;
-                if (db.SaveChanges() > 0)
-                {
-                    success = true;
-                }
-            }
-            return Json(new { success });
+            var common = new CommonService();
+            common.UpdateUserName(userId, userName);
+            return Json(new { common.success, common.message });
         }
         public JsonResult UpdateProfile(User profile)
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var authen = AuthenticationSessionModel.Instance();
-                var user = db.Users.FirstOrDefault(i => i.UserID == authen.UserId);
-                if (user != null)
-                {
-                    user.FirstName = profile.FirstName;
-                    user.LastName = profile.LastName;
-                    user.UserMail = profile.UserMail;
-                    user.Password = profile.Password;
-                    if (db.SaveChanges() >= 0)
-                    {
-                        success = true;
-                        message = "Success on save your profile.";
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return Json(new { success, message });
+            var common = new CommonService();
+            common.UpdateProfile(profile);
+            return Json(new { common.message,common.success});
         }
         public JsonResult IsMatchOldPass(string pass)
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            var ismatch = false;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var authen=AuthenticationSessionModel.Instance();
-                var user = authen.User;
-                if (user != null)
-                {
-                    if(!String.IsNullOrEmpty(pass)&&!string.IsNullOrEmpty(user.Password))
-                    {
-                        ismatch= pass.Trim() == user.Password.Trim();
-                    }
-                    success = true;
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return Json(new { success, message, ismatch });
+            var common = new CommonService();
+            var ismatch = common.IsMatchOldPass(pass);
+            return Json(new { ismatch ,common.message,common.success});
         }
     }
 }

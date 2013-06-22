@@ -2,7 +2,7 @@
     $('#calendar').addClass("loading");
     $.post("/Tests/TestCalendarObjectResult", function (res) {
         if (res.success) {
-            events = $(res.listTestCalendar).map(function (index, obj) {
+            events = $(res.resultlist).map(function (index, obj) {
                     return {
                         id: obj.id,
                         title: obj.testTitle,
@@ -45,14 +45,16 @@ $(function () {
         nav.find("li").removeClass("active");
         li.addClass("active");
         $.post(action, function (res) {
-            var tabcontent = $("#eventTab");
-            if (tabcontent && res.tab) {
+            if (res.success) {
+                var tabcontent = $("#eventTab");
+                if (tabcontent && res.tab) {
 
-                tabcontent.html(res.tab);
+                    tabcontent.html(res.tab);
 
-                initCalendar();
+                    initCalendar();
 
-            }
+                }
+            } else { showMessage("error", res.message);}
         });
     });
     $.post("/Tests/TestsSearch", function (res) {

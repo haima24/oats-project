@@ -1,11 +1,6 @@
 ﻿$(function () {
     searchUsers(".navbar-search .nt-search-input", function (id) {
         window.location = "/Students/NewStudent/" + id;
-    }, function (source) {
-        var newSource= $(source).filter(function () {
-            return this.rolename=="Student"||(!this.rolename);
-        });
-        return newSource.convertJqueryArrayToJSArray();
     });
     var userid = parseInt($('#user-id').val());
     if ($("#container .nt-search-input ").length > 0) {
@@ -41,10 +36,12 @@
                     testID: parseInt(ui.item.id),
                     userID: userid
                 };
-                $.post('/Students/AssignTestToStudent', data, function (response) {
-                    if (response.generatedHtml) {
-                        $("#asmsList").html(response.generatedHtml);
-                    }
+                $.post('/Students/AssignTestToStudent', data, function (res) {
+                    if (res.success) {
+                        if (res.generatedHtml) {
+                            $("#asmsList").html(res.generatedHtml);
+                        }
+                    } else { showMessage("error", res.message);}
                 });
                 return false;
             }

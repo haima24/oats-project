@@ -7,9 +7,11 @@
             var email = element.content;
             var userIdString = $("#user-id").val();
             var userId = parseInt(userIdString);
-            $.post("/Users/UpdateUserEmail", { userId: userId, userEmail: email }, function (response) {
+            $.post("/Users/UpdateUserEmail", { userId: userId, userEmail: email }, function (res) {
                 // do something with response
-              
+                if (!res.success) {
+                    showMessage("error", res.message);
+                }
             });
         },
     });
@@ -20,8 +22,10 @@
             var username = element.content;
             var userIdString = $("#user-id").val();
             var userId = parseInt(userIdString);
-            $.post("/Users/UpdateUserName/", { userId: userId, userName: username }, function (response) {
-
+            $.post("/Users/UpdateUserName/", { userId: userId, userName: username }, function (res) {
+                if (!res.success) {
+                    showMessage("error", res.message);
+                }
             });
         },
     });

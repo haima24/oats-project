@@ -191,6 +191,7 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchingTemplate.cs" />
+    <Compile Include="Models\CommonService.cs" />
     <Compile Include="Models\SettingConfig.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -214,9 +215,6 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserInTestDetail.cs">
-      <DependentUpon>OATSModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserRoleMapping.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -303,7 +301,6 @@
     <Content Include="Resource\Scripts\AccountScript.js" />
     <Content Include="Resource\Scripts\AuthenticatedScript.js" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
-    <Content Include="Resource\Scripts\ImageUploadScript.js" />
     <Content Include="Resource\Scripts\NewTeacherScript.js" />
     <Content Include="Resource\Scripts\NewTest_IndexScript.js" />
     <Content Include="Resource\Scripts\SearchTeachers.js" />

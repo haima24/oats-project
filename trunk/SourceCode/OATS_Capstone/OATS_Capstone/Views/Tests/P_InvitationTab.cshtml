@@ -1,8 +1,8 @@
 ﻿@using OATS_Capstone.Models
 @model IEnumerable<OATS_Capstone.Models.Invitation>
 @{
-    var studentsInvited = Model.ToStudents();
-    var teachersInvited = Model.ToTeachers();
+    var studentsInvited = Model.Where(i => i.Role.RoleDescription == "Student").Select(k=>k.User);
+    var teachersInvited = Model.Where(i => i.Role.RoleDescription == "Teacher").Select(k=>k.User);
     
     }
 <div class="nt-asm-inv">
