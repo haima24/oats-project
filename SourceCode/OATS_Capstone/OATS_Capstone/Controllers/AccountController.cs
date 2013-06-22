@@ -20,88 +20,28 @@ namespace OATS_Capstone.Controllers
 
         public JsonResult Login(string email, string password, bool remembered)
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var user = db.Users.FirstOrDefault(delegate(User u)
-                {
-                    var uEmail = String.IsNullOrEmpty(u.UserMail) ? String.Empty : u.UserMail.Trim();
-                    var uPass = String.IsNullOrEmpty(u.Password) ? String.Empty : u.Password.Trim();
-                    var iEmail = email.Trim();
-                    var iPass = password.Trim();
-                    return uEmail.Equals(iEmail) && uPass.Equals(iPass);
-                });
-                if (user != null)
-                {
-                    var authen = AuthenticationSessionModel.Instance();
-                    var roleMap = db.UserRoleMappings.FirstOrDefault(i => i.ClientUserID == user.UserID&&i.OwnerDomainUserID==ownerid);
-                    if (roleMap != null||(ownerid==0))
-                    {
-                        authen.IsCookieEnable = remembered;
-                        authen.UserId = user.UserID;
-                        //test
-                        var ownerId = user.UserID;
-                        var owner = db.Users.FirstOrDefault(k => k.UserID == ownerid);
-                        if (owner != null)
-                        {
-                            ownerId = ownerid;
-                        }
-                        authen.OwnerUserId = ownerId;
-                        success = true;
-                        message = String.Empty;
-                    }
-                    else {
-                        success = false;
-                        message = "Sorry, you have no role to access this tests holder, please choose another.";
-                    }
-                }
-                else
-                {
-                    success = false;
-                    message = "Login failed, invalid email or password, pleasy try again.";
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return Json(new { success, message });
+            var common = new CommonService();
+            common.Login(email, password, remembered);
+            return Json(new { common.success, common.message });
         }
         public JsonResult SignUp(User user)
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            var generatedHtml = String.Empty;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var newUser = new User();
-                newUser.FirstName = user.FirstName;
-                newUser.LastName = user.LastName;
-                newUser.Password = user.Password;
-                newUser.UserMail = user.UserMail;
-                newUser.UserPhone = user.UserPhone;
-                newUser.UserCountry = user.UserCountry;
-                db.Users.Add(newUser);
-                if (db.SaveChanges() > 0)
+            var common = new CommonService();
+            common.OnRenderPartialViewToString+=(model)=>{
+                var result = string.Empty;
+                try
                 {
-                    success = true;
-                    message = Constants.DefaultSignUpSuccessMessage;
-                    var authen = AuthenticationSessionModel.Instance();
-                    authen.UserId = newUser.UserID;
-                    authen.OwnerUserId = newUser.UserID;
-                    generatedHtml = this.RenderPartialViewToString("P_SignUp_Container");
+                    result = this.RenderPartialViewToString("P_SignUp_Container");
                 }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return Json(new { success, message, generatedHtml });
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.SignUp(user);
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
         public ActionResult LogOut()
         {

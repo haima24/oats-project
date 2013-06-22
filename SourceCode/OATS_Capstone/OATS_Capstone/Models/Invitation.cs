@@ -17,8 +17,10 @@ namespace OATS_Capstone.Models
         public int InvitationID { get; set; }
         public int TestID { get; set; }
         public int UserID { get; set; }
+        public Nullable<int> RoleID { get; set; }
         public Nullable<System.DateTime> InvitationDateTime { get; set; }
     
+        public virtual Role Role { get; set; }
         public virtual Test Test { get; set; }
         public virtual User User { get; set; }
     }

@@ -1,7 +1,7 @@
 ﻿function searchUsers(selector,onselect,onvalidatesource){
     $.post("/Users/UsersSearch", function (res) {
         if (res) {
-            var source = $(res.listuser).map(function (index, obj) {
+            var source = $(res.resultlist).map(function (index, obj) {
                 if(obj.FirstName||obj.LastName)
                 {
                     var fName = obj.FirstName ? obj.FirstName : "";
@@ -9,9 +9,6 @@
                     return { label: fName + " " + lName, value: fName + " " + lName, id: obj.UserID,rolename:obj.RoleName };
                 }
             }).convertJqueryArrayToJSArray();
-            if (onvalidatesource && typeof (onvalidatesource) === "function") {
-                source = onvalidatesource(source);
-            }
             $(selector).autocomplete({
                 minLength: 0,
                 source: source,

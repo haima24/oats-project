@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="OATSDBModelStoreContainer">
           <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeedBack" EntityType="OATSDBModel.Store.FeedBack" store:Type="Tables" Schema="dbo" />
@@ -22,7 +22,6 @@
           <EntitySet Name="User" EntityType="OATSDBModel.Store.User" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTest" EntityType="OATSDBModel.Store.UserInTest" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTestDetail" EntityType="OATSDBModel.Store.UserInTestDetail" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="UserRoleMapping" EntityType="OATSDBModel.Store.UserRoleMapping" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.Store.FK_Answer_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="Answer" EntitySet="Answer" />
@@ -34,6 +33,10 @@
           <AssociationSet Name="FK_FeedBack_User" Association="OATSDBModel.Store.FK_FeedBack_User">
             <End Role="User" EntitySet="User" />
             <End Role="FeedBack" EntitySet="FeedBack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitation_Role" Association="OATSDBModel.Store.FK_Invitation_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Invitation" EntitySet="Invitation" />
           </AssociationSet>
           <AssociationSet Name="FK_Invitation_Test" Association="OATSDBModel.Store.FK_Invitation_Test">
             <End Role="Test" EntitySet="Test" />
@@ -99,18 +102,6 @@
             <End Role="UserInTest" EntitySet="UserInTest" />
             <End Role="UserInTestDetail" EntitySet="UserInTestDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserRoleMapping_ClientUser" Association="OATSDBModel.Store.FK_UserRoleMapping_ClientUser">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserRoleMapping" EntitySet="UserRoleMapping" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRoleMapping_OwnerUser" Association="OATSDBModel.Store.FK_UserRoleMapping_OwnerUser">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserRoleMapping" EntitySet="UserRoleMapping" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRoleMapping_Role" Association="OATSDBModel.Store.FK_UserRoleMapping_Role">
-            <End Role="Role" EntitySet="Role" />
-            <End Role="UserRoleMapping" EntitySet="UserRoleMapping" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Answer">
           <Key>
@@ -140,6 +131,7 @@
           <Property Name="InvitationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TestID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" />
           <Property Name="InvitationDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Question">
@@ -270,15 +262,6 @@
           <Property Name="AnswerContent" Type="nvarchar" MaxLength="1024" />
           <Property Name="AnswerIDs" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="UserRoleMapping">
-          <Key>
-            <PropertyRef Name="UserRoleMappingID" />
-          </Key>
-          <Property Name="UserRoleMappingID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="OwnerDomainUserID" Type="int" Nullable="false" />
-          <Property Name="ClientUserID" Type="int" Nullable="false" />
-          <Property Name="RoleID" Type="int" Nullable="false" />
-        </EntityType>
         <Association Name="FK_Answer_Question">
           <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="1" />
           <End Role="Answer" Type="OATSDBModel.Store.Answer" Multiplicity="*" />
@@ -312,6 +295,18 @@
             </Principal>
             <Dependent Role="FeedBack">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitation_Role">
+          <End Role="Role" Type="OATSDBModel.Store.Role" Multiplicity="0..1" />
+          <End Role="Invitation" Type="OATSDBModel.Store.Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Invitation">
+              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -507,43 +502,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserRoleMapping_ClientUser">
-          <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
-          <End Role="UserRoleMapping" Type="OATSDBModel.Store.UserRoleMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="UserRoleMapping">
-              <PropertyRef Name="ClientUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRoleMapping_OwnerUser">
-          <End Role="User" Type="OATSDBModel.Store.User" Multiplicity="1" />
-          <End Role="UserRoleMapping" Type="OATSDBModel.Store.UserRoleMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="UserRoleMapping">
-              <PropertyRef Name="OwnerDomainUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRoleMapping_Role">
-          <End Role="Role" Type="OATSDBModel.Store.Role" Multiplicity="1" />
-          <End Role="UserRoleMapping" Type="OATSDBModel.Store.UserRoleMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="UserRoleMapping">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OATSDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -562,7 +522,6 @@
           <EntitySet Name="Users" EntityType="OATSDBModel.User" />
           <EntitySet Name="UserInTests" EntityType="OATSDBModel.UserInTest" />
           <EntitySet Name="UserInTestDetails" EntityType="OATSDBModel.UserInTestDetail" />
-          <EntitySet Name="UserRoleMappings" EntityType="OATSDBModel.UserRoleMapping" />
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.FK_Answer_Question">
             <End Role="Question" EntitySet="Questions" />
             <End Role="Answer" EntitySet="Answers" />
@@ -574,6 +533,10 @@
           <AssociationSet Name="FK_FeedBack_User" Association="OATSDBModel.FK_FeedBack_User">
             <End Role="User" EntitySet="Users" />
             <End Role="FeedBack" EntitySet="FeedBacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitation_Role" Association="OATSDBModel.FK_Invitation_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Invitation" EntitySet="Invitations" />
           </AssociationSet>
           <AssociationSet Name="FK_Invitation_Test" Association="OATSDBModel.FK_Invitation_Test">
             <End Role="Test" EntitySet="Tests" />
@@ -594,10 +557,6 @@
           <AssociationSet Name="FK_UserInTestDetail_Question" Association="OATSDBModel.FK_UserInTestDetail_Question">
             <End Role="Question" EntitySet="Questions" />
             <End Role="UserInTestDetail" EntitySet="UserInTestDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRoleMapping_Role" Association="OATSDBModel.FK_UserRoleMapping_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="UserRoleMapping" EntitySet="UserRoleMappings" />
           </AssociationSet>
           <AssociationSet Name="FK_SettingConfigDetail_SettingConfig" Association="OATSDBModel.FK_SettingConfigDetail_SettingConfig">
             <End Role="SettingConfig" EntitySet="SettingConfigs" />
@@ -622,14 +581,6 @@
           <AssociationSet Name="FK_UserInTest_User" Association="OATSDBModel.FK_UserInTest_User">
             <End Role="User" EntitySet="Users" />
             <End Role="UserInTest" EntitySet="UserInTests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRoleMapping_ClientUser" Association="OATSDBModel.FK_UserRoleMapping_ClientUser">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserRoleMapping" EntitySet="UserRoleMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRoleMapping_OwnerUser" Association="OATSDBModel.FK_UserRoleMapping_OwnerUser">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserRoleMapping" EntitySet="UserRoleMappings" />
           </AssociationSet>
           <AssociationSet Name="FK_UserInTestDetail_UserInTest" Association="OATSDBModel.FK_UserInTestDetail_UserInTest">
             <End Role="UserInTest" EntitySet="UserInTests" />
@@ -675,7 +626,9 @@
           <Property Name="InvitationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="TestID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" />
           <Property Name="InvitationDateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Role" Relationship="OATSDBModel.FK_Invitation_Role" FromRole="Invitation" ToRole="Role" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Invitation" ToRole="Test" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Invitation_User" FromRole="Invitation" ToRole="User" />
         </EntityType>
@@ -713,7 +666,7 @@
           </Key>
           <Property Name="RoleID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="RoleDescription" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="UserRoleMappings" Relationship="OATSDBModel.FK_UserRoleMapping_Role" FromRole="Role" ToRole="UserRoleMapping" />
+          <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_Role" FromRole="Role" ToRole="Invitation" />
         </EntityType>
         <EntityType Name="SettingConfig">
           <Key>
@@ -794,8 +747,6 @@
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_User" FromRole="User" ToRole="Invitation" />
           <NavigationProperty Name="Tests" Relationship="OATSDBModel.FK_Test_User" FromRole="User" ToRole="Test" />
           <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_User" FromRole="User" ToRole="UserInTest" />
-          <NavigationProperty Name="ClientUser_UserRoleMappings" Relationship="OATSDBModel.FK_UserRoleMapping_ClientUser" FromRole="User" ToRole="UserRoleMapping" />
-          <NavigationProperty Name="OwnerUser_UserRoleMappings" Relationship="OATSDBModel.FK_UserRoleMapping_OwnerUser" FromRole="User" ToRole="UserRoleMapping" />
         </EntityType>
         <EntityType Name="UserInTest">
           <Key>
@@ -822,18 +773,6 @@
           <Property Name="AnswerIDs" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_UserInTestDetail_Question" FromRole="UserInTestDetail" ToRole="Question" />
           <NavigationProperty Name="UserInTest" Relationship="OATSDBModel.FK_UserInTestDetail_UserInTest" FromRole="UserInTestDetail" ToRole="UserInTest" />
-        </EntityType>
-        <EntityType Name="UserRoleMapping">
-          <Key>
-            <PropertyRef Name="UserRoleMappingID" />
-          </Key>
-          <Property Name="UserRoleMappingID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="OwnerDomainUserID" Type="Int32" Nullable="false" />
-          <Property Name="ClientUserID" Type="Int32" Nullable="false" />
-          <Property Name="RoleID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Role" Relationship="OATSDBModel.FK_UserRoleMapping_Role" FromRole="UserRoleMapping" ToRole="Role" />
-          <NavigationProperty Name="ClientUser" Relationship="OATSDBModel.FK_UserRoleMapping_ClientUser" FromRole="UserRoleMapping" ToRole="User" />
-          <NavigationProperty Name="OwnerUser" Relationship="OATSDBModel.FK_UserRoleMapping_OwnerUser" FromRole="UserRoleMapping" ToRole="User" />
         </EntityType>
         <Association Name="FK_Answer_Question">
           <End Role="Question" Type="OATSDBModel.Question" Multiplicity="1" />
@@ -868,6 +807,18 @@
             </Principal>
             <Dependent Role="FeedBack">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitation_Role">
+          <End Role="Role" Type="OATSDBModel.Role" Multiplicity="0..1" />
+          <End Role="Invitation" Type="OATSDBModel.Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Invitation">
+              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -928,18 +879,6 @@
             </Principal>
             <Dependent Role="UserInTestDetail">
               <PropertyRef Name="QuestionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRoleMapping_Role">
-          <End Role="Role" Type="OATSDBModel.Role" Multiplicity="1" />
-          <End Role="UserRoleMapping" Type="OATSDBModel.UserRoleMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="UserRoleMapping">
-              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1015,30 +954,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserRoleMapping_ClientUser">
-          <End Role="User" Type="OATSDBModel.User" Multiplicity="1" />
-          <End Role="UserRoleMapping" Type="OATSDBModel.UserRoleMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="UserRoleMapping">
-              <PropertyRef Name="ClientUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRoleMapping_OwnerUser">
-          <End Role="User" Type="OATSDBModel.User" Multiplicity="1" />
-          <End Role="UserRoleMapping" Type="OATSDBModel.UserRoleMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="UserRoleMapping">
-              <PropertyRef Name="OwnerDomainUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UserInTestDetail_UserInTest">
           <End Role="UserInTest" Type="OATSDBModel.UserInTest" Multiplicity="1" />
           <End Role="UserInTestDetail" Type="OATSDBModel.UserInTestDetail" Multiplicity="*" />
@@ -1094,6 +1009,7 @@
                 <ScalarProperty Name="InvitationID" ColumnName="InvitationID" />
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="InvitationDateTime" ColumnName="InvitationDateTime" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1217,16 +1133,6 @@
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
                 <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
                 <ScalarProperty Name="AnswerIDs" ColumnName="AnswerIDs" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserRoleMappings">
-            <EntityTypeMapping TypeName="OATSDBModel.UserRoleMapping">
-              <MappingFragment StoreEntitySet="UserRoleMapping">
-                <ScalarProperty Name="UserRoleMappingID" ColumnName="UserRoleMappingID" />
-                <ScalarProperty Name="OwnerDomainUserID" ColumnName="OwnerDomainUserID" />
-                <ScalarProperty Name="ClientUserID" ColumnName="ClientUserID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

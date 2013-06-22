@@ -21,19 +21,15 @@ namespace OATS_Capstone.Controllers
         {
 
             var db = SingletonDb.Instance();
+            var generateId=0;
             var user = new User();
             user.UserMail = string.Empty;
             db.Users.Add(user);
             if (db.SaveChanges() > 0)
             {
-                var roleMapping = new UserRoleMapping();
-                roleMapping.ClientUserID = user.UserID;
-                roleMapping.RoleID = 3;
-                var owner = AuthenticationSessionModel.Instance().OwnerUser;
-                owner.OwnerUser_UserRoleMappings.Add(roleMapping);
-                db.SaveChanges();
+                generateId = user.UserID;
             }
-            var generateId = user.UserID;
+            
             return RedirectToAction("NewTeacher", new { id = generateId});
         }
         public ActionResult NewTeacher(int id)
@@ -44,53 +40,42 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult AssignTestToTeacher(int userId, int testId)
         {
-            var success = false;
-            var db = SingletonDb.Instance();
-            var generatedHtml = string.Empty;
-            var user = db.Users.FirstOrDefault(i => i.UserID == userId);//find user in db
-            var test = db.Tests.FirstOrDefault(k => k.TestID == testId);//find test in db
-            if (user != null && test != null)
-            {
-                var invitation = new Invitation();
-                invitation.Test = test;
-                user.Invitations.Add(invitation);
-                if (db.SaveChanges() > 0)
+           var common = new CommonService();
+            common.OnRenderPartialViewToString+=(model)=>{
+                var result = string.Empty;
+                try
                 {
-                    success = true;
-                    generatedHtml = this.RenderPartialViewToString("P_Assign_Test_To_Teacher", user);
+                    result = this.RenderPartialViewToString("P_Assign_Test_To_Teacher", model);
                 }
-            }
-            return Json(new { success = success, generatedHtml = generatedHtml });
-
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.AssignTestToTeacher(userId, testId);
+            return Json(new { common.success, common.message,common.generatedHtml });
         }
         public JsonResult UnassignTest(int userId, int testId)
         {
-            var success = false;
-            var generatedHtml = string.Empty;
-            var message = Constants.DefaultProblemMessage;
-            try
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
             {
-                var db = SingletonDb.Instance();
-                var user = db.Users.FirstOrDefault(i => i.UserID == userId);
-                var unassignedInvitation = user.Invitations.FirstOrDefault(i => i.TestID == testId);
-                user.Invitations.Remove(unassignedInvitation);
-
-                //var test = db.Tests.FirstOrDefault(i => i.TestID == testId);
-                //test.Invitations.Remove(unassignedInvitation);
-                db.Invitations.Remove(unassignedInvitation);
-                if (db.SaveChanges() > 0)
+                var result = string.Empty;
+                try
                 {
-                    success = true;
-                    generatedHtml = this.RenderPartialViewToString("P_Assign_Test_To_Teacher", user);
+                    result = this.RenderPartialViewToString("P_Assign_Test_To_Teacher", model);
                 }
-            }
-            catch (Exception ex)
-            {
-
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return Json(new { success, message, generatedHtml });
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.UnassignTest(userId, testId);
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
 
     }

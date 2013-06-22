@@ -166,7 +166,7 @@ function initImageUploadFacility() {
                         $(this.element).parent().find(".nt-qimg-upload").show();
                     },
                     success: function (file, res) {
-                        if (!res.success) { showMessage("error", res.message);}
+                        if (!res.success) { showMessage("error", res.message); }
                     },
                     complete: function (ev) {
                         $(this.element).parent().find(".nt-qimg-upload").hide();
@@ -510,7 +510,7 @@ $(function () {
     initDateTimePicker();
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
-    
+
     //separator
     initPopover();
     initSearchTests();
@@ -542,7 +542,7 @@ $(function () {
         }
     });
     //separator
-    
+
     //separator
     $(".tab-event").live("click", function (e) {
         e.preventDefault();
@@ -553,19 +553,17 @@ $(function () {
         nav.find("li").removeClass("active");
         li.addClass("active");
         $.post(action, { testid: testid }, function (res) {
-            var i = 0;
-            var tabcontent = $("#eventTab");
-            if (tabcontent && res.tab) {
-
-
-                tabcontent.html(res.tab);
-
-                $("#sidebar[content-tab=true]").accordion();
-                sortByNumberOrLetters();
-                initEditable();
-                initImageUploadFacility();
-                initDragAndDrop();
-            }
+            if (res.success) {
+                var tabcontent = $("#eventTab");
+                if (tabcontent && res.generatedHtml) {
+                    tabcontent.html(res.generatedHtml);
+                    $("#sidebar[content-tab=true]").accordion();
+                    sortByNumberOrLetters();
+                    initEditable();
+                    initImageUploadFacility();
+                    initDragAndDrop();
+                }
+            } else { showMessage("error", res.message); }
         });
     });
     //separator
@@ -907,7 +905,18 @@ $(function () {
     $.initCheckboxAllSub({
         container: ".modal",
         all: ".nt-ctrl-all",
-        sub: ".nt-clb-list input[type=checkbox]"
+        sub: ".nt-clb-list input[type=checkbox]",
+        onchange: function (container) {
+            var boxes = $(".nt-clb-list input[type=checkbox]", container);
+            boxes.each(function (index, ele) {
+                var item = $(ele).closest(".nt-clb-item");
+                if ($(ele).attr("checked")) {
+                    item.addClass("nt-clb-item-sel");
+                } else {
+                    item.removeClass("nt-clb-item-sel");
+                }
+            });
+        }
 
     });
     $.initCheckboxAllSub({
@@ -916,7 +925,7 @@ $(function () {
         sub: "#respUsers .nt-clb-item input[type=checkbox]"
 
     });
-   
+
     //separator
     $("#sidebar .nt-ctrl-list .nt-qsearch").live("click", function (ev) {
         var questionidString = $(this).attr("question-id");
@@ -991,7 +1000,7 @@ $(function () {
         $.ajax({
             type: "POST",
             url: "/Tests/AddUserToInvitationTest",
-            data: JSON.stringify({ testid: testid,count:chekcedIds.length, userids: chekcedIds,role:role }),
+            data: JSON.stringify({ testid: testid, count: chekcedIds.length, userids: chekcedIds, role: role }),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
@@ -1063,7 +1072,7 @@ $(function () {
     $("#btn-remove-teacher").live("click", function (ev) {
         $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Teacher" }, function (res) {
             if (res.success) {
-                var html = res.popupHtml;
+                var html = res.generatedHtml;
                 if (!$("#modalRemovePopupUser").length > 0) {
                     $(html).modal();
                 } else {
@@ -1148,7 +1157,7 @@ $(function () {
     $("#btn-reinvite-teacher").live("click", function (ev) {
         $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Teacher" }, function (res) {
             if (res.success) {
-                var html = res.popupHtml;
+                var html = res.generatedHtml;
                 if (!$("#modalReinvitePopupUser").length > 0) {
                     $(html).modal();
                 } else {
@@ -1185,7 +1194,7 @@ $(function () {
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
     var hub = $.connection.generalHub;
-    hub.client.R_deactivetest = function (id,mail) {
+    hub.client.R_deactivetest = function (id, mail) {
         if (id && id == testid) {
             showCountDownMessage("info", "User with email:" + mail + " disabled this test", function () {
                 window.location = "/Tests";

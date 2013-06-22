@@ -5,7 +5,6 @@
 @{
     var authen=AuthenticationSessionModel.Instance();
     var user = authen.User;
-    var owner = authen.OwnerUser;
     }
 @model OATS_Capstone.Models.User
 <script src="~/Resource/Scripts/NewStudentScript.js"></script>
@@ -38,18 +37,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            @if (authen.IsCurrentUserAlsoOwner) { 
-                                <li class="nav-header">Welcome: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
+                            <li class="nav-header">Welcome: @(user.FirstName ?? user.LastName ?? user.UserMail)</li>
                             <li class="divider"></li>
                             <li><a href="#" id="profile-link">My Profile</a></li>
-                            <li><a href="@Url.Action("LogOut","Account")">Logout</a></li>
-                            }else{
-                            <li class="nav-header">Tests Holder: @(owner.FirstName??owner.LastName??owner.UserMail)</li>
-                            <li class="nav-header">@(user.FirstName??user.LastName??user.UserMail)</li>
-                            <li class="divider"></li>
-                            <li><a href="#" id="profile-link">My Profile</a></li>
-                            <li><a href="@Url.Action("LogOut","Account")">Logout</a></li>
-                                }
+                            <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
                         </ul>
                     </li>
                 </ul>

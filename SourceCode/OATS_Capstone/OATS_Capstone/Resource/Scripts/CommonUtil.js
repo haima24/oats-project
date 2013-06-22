@@ -91,7 +91,7 @@ $.fn.extend({
 });
 (function ($) {
     $.initCheckboxAllSub =  function (param) {
-        if (param && param.container && param.all && param.sub) {
+        if (param && param.container && param.all && param.sub&&param.onchange&& typeof(param.onchange)==="function") {
             //separator
             $(param.all).live("change", function (ev) {
                 var modal = $(this).closest(param.container);
@@ -102,6 +102,7 @@ $.fn.extend({
                         $(this).attr("checked", false);
                     }
                 });
+                param.onchange(modal);
             });
             //separator
             $(param.sub).live("change", function () {
@@ -114,6 +115,7 @@ $.fn.extend({
                 } else {
                     $(param.all).attr("checked", true);
                 }
+                param.onchange(modal);
             });
         }
     };
