@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using OATS_Capstone.Hubs;
+using OATS_Capstone.Mailers;
 using OATS_Capstone.Models;
 using System;
 using System.Collections;
@@ -14,6 +15,13 @@ namespace OATS_Capstone.Controllers
 {
     public class TestsController : Controller
     {
+        private IUserMailer _userMailer = new UserMailer();
+        public IUserMailer UserMailer
+        {
+            get { return _userMailer; }
+            set { _userMailer = value; }
+        }
+
         //
         // GET: /Tests/
         [HttpPost]
@@ -167,6 +175,7 @@ namespace OATS_Capstone.Controllers
         }
         public ActionResult Index()
         {
+            UserMailer.Welcome().Send();
             return View();
         }
         public ActionResult MakeTest()
