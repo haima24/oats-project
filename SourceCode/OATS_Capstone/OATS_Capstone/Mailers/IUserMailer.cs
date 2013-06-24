@@ -1,10 +1,10 @@
 using Mvc.Mailer;
+using System.Collections.Generic;
 
 namespace OATS_Capstone.Mailers
 { 
     public interface IUserMailer
     {
-			MvcMailMessage Welcome();
-			MvcMailMessage PasswordReset();
+			MvcMailMessage InviteUser(IEnumerable<string> list);
 	}
 }

@@ -8,27 +8,17 @@ namespace OATS_Capstone.Mailers
 		{
 			MasterName="_Layout";
 		}
-		
-		public virtual MvcMailMessage Welcome()
-		{
-			//ViewBag.Data = someObject;
-			return Populate(x =>
-			{
-				x.Subject = "Welcome";
-				x.ViewName = "Welcome";
-				x.To.Add("akai777@gmail.com");
-			});
-		}
- 
-		public virtual MvcMailMessage PasswordReset()
-		{
-			//ViewBag.Data = someObject;
-			return Populate(x =>
-			{
-				x.Subject = "PasswordReset";
-				x.ViewName = "PasswordReset";
-                x.To.Add("akai777@gmail.com");
-			});
-		}
- 	}
+        public virtual MvcMailMessage InviteUser(System.Collections.Generic.IEnumerable<string> list)
+        {
+            return Populate(x =>
+            {
+                x.Subject = "Welcome";
+                x.ViewName = "Welcome";
+                foreach (var item in list)
+                {
+                    x.To.Add(item);
+                }
+            });
+        }
+    }
 }
