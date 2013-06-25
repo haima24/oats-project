@@ -202,7 +202,7 @@ namespace OATS_Capstone.Models
             decimal? averagePoint = decimal.Zero;
             if (count != 0) { averagePoint = point / count; }
             var maxPoint = question.NoneChoiceScore;
-            _correctPraction = String.Format("{0} pt (of {1} pt)", averagePoint, maxPoint);
+            _correctPraction = String.Format("{0:0.00} pt (of {1} pt)", averagePoint, maxPoint);
             if (checkIds.Count == 1)
             {
                 var id = checkIds.FirstOrDefault();
@@ -269,7 +269,7 @@ namespace OATS_Capstone.Models
             decimal? averagePoint = decimal.Zero;
             if (count != 0) { averagePoint = point / count; }
             var maxPoint = question.NoneChoiceScore;
-            _correctPraction = String.Format("{0} pt (of {1} pt)", averagePoint, maxPoint);
+            _correctPraction = String.Format("{0:0.00} pt (of {1} pt)", averagePoint, maxPoint);
 
             if (checkIds.Count == 1)
             {
