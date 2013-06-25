@@ -32,10 +32,9 @@ namespace OATS_Capstone.Models
 
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string TextDescription { get; set; }
-        public decimal QuestionScore { get; set; }
         public Nullable<int> SerialOrder { get; set; }
         public string LabelOrder { get; set; }
-        public Nullable<int> NoneChoiceScore { get; set; }
+        public Nullable<decimal> NoneChoiceScore { get; set; }
     
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual QuestionType QuestionType { get; set; }

@@ -213,6 +213,7 @@
     <Compile Include="Models\Test.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TestResponseLogic.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -455,8 +456,8 @@
     <Content Include="Views\Tests\P_Response_Instance.cshtml" />
     <Content Include="Views\Users\P_Profile_Popup.cshtml" />
     <Content Include="Views\UserMailer\_Layout.cshtml" />
-    <Content Include="Views\UserMailer\Welcome.cshtml" />
-    <Content Include="Views\UserMailer\PasswordReset.cshtml" />
+    <Content Include="Views\UserMailer\InviteUser.cshtml" />
+    <Content Include="Views\Tests\P_ResponseTab_Inner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -144,7 +144,7 @@ namespace OATS_Capstone.Models
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User.UserID);
-                    users = db.Users.Where(i => !invitedUsers.Contains(i.UserID)).ToList();
+                    users = db.Users.Where(i => !invitedUsers.Contains(i.UserID)).Where(k=>k.UserID!=authen.UserId).ToList();
                 }
 
                 if (OnRenderPartialViewToString != null) {
@@ -550,7 +550,9 @@ namespace OATS_Capstone.Models
                 if (OnRenderPartialViewToString != null)
                 {
                     success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(test);
+                    var checkIds = new List<int>();
+                    var responseTest = new ResponseTest(test,checkIds);
+                    generatedHtml = OnRenderPartialViewToString.Invoke(responseTest);
                 }
             }
             catch (Exception)
@@ -560,6 +562,7 @@ namespace OATS_Capstone.Models
             }
 
         }
+        
         public void NewTest_ScoreTab(int testid)
         {
             success = false;
@@ -737,7 +740,7 @@ namespace OATS_Capstone.Models
                         if (OnRenderPartialViewToString != null)
                         {
                             success = true;
-                            OnRenderPartialViewToString.Invoke(question);
+                            generatedHtml= OnRenderPartialViewToString.Invoke(question);
                         }
                     }
                 }
@@ -1372,6 +1375,29 @@ namespace OATS_Capstone.Models
             catch (Exception ex)
             {
 
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void NewTest_ResponseTab_CheckUserIds(int testid,List<int> userids,int count)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (OnRenderPartialViewToString != null)
+                {
+                    success = true;
+                    if (count == 0) { userids = new List<int>(); }
+                    var responseTest = new ResponseTest(test, userids);
+                    generatedHtml = OnRenderPartialViewToString.Invoke(responseTest);
+                }
+            }
+            catch (Exception)
+            {
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
