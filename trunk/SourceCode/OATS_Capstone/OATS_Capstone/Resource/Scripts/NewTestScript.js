@@ -5,7 +5,22 @@ var events;
 var question_holder = new Array();
 var testid;
 
-
+function initPlot() {
+    $('.nt-scores-table-boxplot-container').sparkline('html', {
+        type: "box",
+        width: '200px',
+        spotRadius: 4,
+        medianWidth: 2,
+        showOutliers: !1,
+        cornerRadius: 4,
+        strikeThrough: !0,
+        tooltipFormat: '<span>{{field:fields}}</span><span style="float: right; padding-left: 5px">{{value}}</span>',
+        numberFormatter: function (e) { return parseInt(e) },
+        tooltipFormatFieldlist: ["lw", "lq", "med", "uq", "rw"],
+        tooltipFormatFieldlistKey: "field",
+        tooltipValueLookups: { fields: { lw: "Minimum", lq: "25th perc", med: "Median", uq: "75th perc", rw: "Maximum" } }
+    });
+}
 function sortByNumberOrLetters() {
     $("#checklist .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
         $(this).html((i + 1) + ". ");
@@ -562,6 +577,7 @@ $(function () {
                     initEditable();
                     initImageUploadFacility();
                     initDragAndDrop();
+                    initPlot();
                 }
             } else { showMessage("error", res.message); }
         });
