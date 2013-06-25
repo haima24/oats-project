@@ -433,10 +433,17 @@ namespace OATS_Capstone.Models
 
     public class ResponseTest
     {
+        private string testTakenDate = String.Empty;
+
+        public string TestTakenDate
+        {
+            get { return testTakenDate; }
+        }
         private OATSDBEntities db = null;
         public List<int> CheckedUserIds { get; set; }
         public decimal? TotalScoreOfTest { get; set; }
         public List<AbsResponseQuestion> Questions { get; set; }
+
         public int ResponseUserListCount { get { return ResponseUserList.Count; } }
         public int CheckedUserIdsCount { get { return CheckedUserIds.Count; } }
         public List<ResponseUserItem> ResponseUserList { get; set; }
@@ -448,6 +455,15 @@ namespace OATS_Capstone.Models
         {
             db = SingletonDb.Instance();
             CheckedUserIds = checkIds;
+            if (checkIds.Count == 1) { 
+                var id=checkIds.FirstOrDefault();
+                var inTest=test.UserInTests.FirstOrDefault(i=>i.UserID==id);
+                if(inTest!=null)
+                {
+                    testTakenDate = String.Format("{0:dd MMM yyyy HH:mm tt}",inTest.TestTakenDate );
+                }
+                
+            }
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
                 return i.NoneChoiceScore + i.Answers.Sum(k => k.Score);
