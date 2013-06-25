@@ -922,8 +922,36 @@ $(function () {
     $.initCheckboxAllSub({
         container: "#sidebar .nt-ctrl-list",
         all: "#sidebar .nt-clb-header-control input[type=checkbox]",
-        sub: "#respUsers .nt-clb-item input[type=checkbox]"
+        sub: "#respUsers .nt-clb-item input[type=checkbox]",
+        onchange: function (container) {
+            var boxes = $("#respUsers .nt-clb-item input[type=checkbox]", container);
+            boxes.each(function (index, ele) {
+                var item = $(ele).closest(".nt-clb-item");
+                if ($(ele).attr("checked")) {
+                    item.addClass("nt-clb-item-sel");
+                } else {
+                    item.removeClass("nt-clb-item-sel");
+                }
+            });
+            var checkIds = $("input[type=checkbox][user-id]:checked").map(function (i, e) {
+                return $(e).attr("user-id");
+            }).convertJqueryArrayToJSArray();
+            $.ajax({
+                type: "POST",
+                url: "/Tests/NewTest_ResponseTab_CheckUserIds",
+                data: JSON.stringify({ testid: testid, userids: checkIds,count:checkIds.length }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.success) {
+                        $("#response-container").html(res.generatedHtml);
+                    } else {
+                        showMessage("error", res.message);
+                    }
+                }
 
+            });
+        }
     });
 
     //separator

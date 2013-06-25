@@ -19,7 +19,7 @@ namespace OATS_Capstone.Controllers
             var generatedHtml = String.Empty;
             try
             {
-                var authen=AuthenticationSessionModel.Instance();
+                var authen = AuthenticationSessionModel.Instance();
                 generatedHtml = this.RenderPartialViewToString("P_Profile_Popup", authen);
                 success = true;
             }
@@ -28,7 +28,7 @@ namespace OATS_Capstone.Controllers
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            return Json(new { success, message,generatedHtml });
+            return Json(new { success, message, generatedHtml });
         }
         public JsonResult UsersSearch()
         {
@@ -40,7 +40,7 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.UpdateUserEmail(userId, userEmail);
-            return Json(new {common.success,common.message});
+            return Json(new { common.success, common.message });
 
         }
         public JsonResult UpdateUserName(int userId, string userName)
@@ -53,13 +53,14 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.UpdateProfile(profile);
-            return Json(new { common.message,common.success});
+            return Json(new { common.message, common.success });
         }
         public JsonResult IsMatchOldPass(string pass)
         {
             var common = new CommonService();
             var ismatch = common.IsMatchOldPass(pass);
-            return Json(new { ismatch ,common.message,common.success});
+            return Json(new { ismatch, common.message, common.success });
         }
+        
     }
 }

@@ -18,6 +18,8 @@ namespace OATS_Capstone.Models
         public int QuestionID { get; set; }
         public string AnswerContent { get; set; }
         public string AnswerIDs { get; set; }
+        public Nullable<decimal> ChoiceScore { get; set; }
+        public Nullable<decimal> NonChoiceScore { get; set; }
     
         public virtual Question Question { get; set; }
         public virtual UserInTest UserInTest { get; set; }

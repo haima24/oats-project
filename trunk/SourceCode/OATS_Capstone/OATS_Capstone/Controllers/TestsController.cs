@@ -175,7 +175,6 @@ namespace OATS_Capstone.Controllers
         }
         public ActionResult Index()
         {
-            UserMailer.Welcome().Send();
             return View();
         }
         public ActionResult MakeTest()
@@ -561,6 +560,26 @@ namespace OATS_Capstone.Controllers
             };
             common.EnableTest(testid);
             return Json(new { common.success,common.message,common.generatedHtml});
+        }
+        public JsonResult NewTest_ResponseTab_CheckUserIds(int testid, List<int> userids,int count)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_ResponseTab_Inner", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.NewTest_ResponseTab_CheckUserIds(testid, userids,count);
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
     }
 }

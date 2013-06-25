@@ -6,7 +6,7 @@
 <div class="nt-qitem" question-type="Radio" question-id="@Model.QuestionID">
     <div class="nt-qnum "></div>
     <a class="nt-qanchor" name="Qundefined"></a>
-    <div class="nt-qmaxpts">@Model.QuestionScore</div>
+    <div class="nt-qmaxpts">@Model.Answers.Sum(i=>i.Score)</div>
 
     <div class="nt-qtext ">
         <p>@Model.QuestionTitle</p>

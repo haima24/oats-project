@@ -1,5 +1,5 @@
-﻿@model OATS_Capstone.Models.Question
-@switch (Model.QuestionType.Type)
+﻿@model OATS_Capstone.Models.AbsResponseQuestion
+@switch (Model.Type)
 {
     case "Radio":
     @Html.Partial("P_Response_Type_Radio", Model)

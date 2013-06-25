@@ -1,29 +1,5 @@
 ﻿@using OATS_Capstone.Models
-@model OATS_Capstone.Models.Question
-@{
-    var inTestDetails = Model.UserInTestDetails;
-    var test = Model.Test;
-    var totalUsersInTest = test.UserInTests.Count;
-    var userAnswerIds = inTestDetails.Select(i =>
-    {
-        var idStrings = i.AnswerIDs.Split(new String[]{","}, StringSplitOptions.RemoveEmptyEntries).ToList();
-        var Ids = new List<int>();
-        idStrings.ForEach(k => { 
-            var tempid=0;
-            if (int.TryParse(k, out tempid)) 
-            {
-                Ids.Add(tempid);
-            }
-        });
-        return new { i.UserInTest, Ids };
-    });
-    var rightAnsId = 0;
-    var rightAns = Model.Answers.FirstOrDefault(k => k.IsRight);
-    if (rightAns != null) { rightAnsId = rightAns.AnswerID; }
-    
-    var userRightCount=userAnswerIds.Count(k=>k.Ids.Contains(rightAnsId));
-    var correctPer = userRightCount / totalUsersInTest;
-}
+@model OATS_Capstone.Models.AbsResponseQuestion
 <div class="nt-qitem nt-qitem-review">
     <div class="nt-qnum ">@Model.LabelOrder</div>
     <div class="nt-qtext">
@@ -34,24 +10,45 @@
             <input class="nt-scored" type="checkbox" checked="checked" />Scored</label>
     </div>
     <div class="nt-qanscont nt-sortable">
-        @foreach (var ans in Model.Answers)
+        @foreach (var ans in Model.ResponseAnswers)
         { 
-            var countOfUserChooseThisAns=(userAnswerIds.Count(k=>k.Ids.Contains(ans.AnswerID)));
             <div class="nt-qans nt-qans-hover">
                 <label class="radio nt-qans-label ">
-                    <input type="radio" value="0" />
+                    @if(Model.IsOneIdChecked&&ans.UserChooseThisAnswer){
+                    <input type="radio" disabled="disabled" checked="checked" />
+                    }else{
+                    <input type="radio" disabled="disabled" />
+                    }
                     <div class="nt-qansdesc">
                         <p>@ans.AnswerContent</p>
                     </div>
                 </label>
                 <div class="nt-qansrep">
-                    <div class="nt-qansrep-corr" style="display: none;"><i class="icon-remove-sign"></i></div>
+                    @if (Model.IsOneIdChecked && ans.UserChooseThisAnswer)
+                    {
+                        if (ans.IsRight)
+                        {
+                            <div class="nt-qansrep-corr"><i class="icon-ok-sign"></i></div>
+                        }
+                        else
+                        {
+                            <div class="nt-qansrep-corr"><i class="icon-remove-sign"></i></div> 
+                        } 
+                    }
+                    
                     @if (ans.IsRight)
                     {
                         <div class="nt-qpts">@ans.Score pt</div>
                         <div class="nt-qansrep-color" style="background-color: green; opacity: 1"></div>
+                    }else{
+                        <div class="nt-qpts"></div>
+                    <div class="nt-qansrep-color" style="background-color: green; opacity: 0"></div>
                     }
-                    <div class="nt-qansrep-pct" style="visibility: visible;">@(((decimal)countOfUserChooseThisAns/totalUsersInTest).ToPercent())</div>
+                    @if(Model.IsOneIdChecked){
+                    <div class="nt-qansrep-pct" style="visibility: hidden;"></div>
+                    }else{
+                    <div class="nt-qansrep-pct" style="visibility: visible;">@ans.AnswerPercent</div>
+                    }
                 </div>
             </div>  
         }
@@ -60,18 +57,19 @@
 
     <div class="nt-qfoot">
 
-
+        @if(!Model.IsOneIdChecked){
         <div class="nt-qrep" style="">
-            <span>Correct:</span><span class="nt-crate">@(((decimal)correctPer).ToPercent()) (@userRightCount / @totalUsersInTest )</span>
+            <span>Correct:</span><span class="nt-crate">@Model.CorrectPercent (@Model.CorrectPraction)</span>
         </div>
+        }else{
 
-
-        <div class="nt-qoepts" style="display: none;">
-            <span>Points:</span>
+        <div class="nt-qoepts">
+            <span>Points: @Model.UserScore</span>
             <span class="nt-pts"></span>
-            <span>out of 1 pt</span>
+            <span>out of @Model.ChoiceScore pt</span>
             <span class="nt-ok"><i class="icon-ok"></i></span>
             <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
         </div>
+        }
     </div>
 </div>

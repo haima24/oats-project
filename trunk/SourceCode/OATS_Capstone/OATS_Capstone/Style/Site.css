@@ -881,6 +881,7 @@ i, cite, em, var, address, dfn {
 }
 
 #checklist .nt-qitem .nt-qans .nt-qans-label {
+    cursor:default;
     font-size: 14px;
     padding: 0;
     margin: 0;

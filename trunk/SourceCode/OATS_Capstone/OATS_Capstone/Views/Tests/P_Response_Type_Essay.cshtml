@@ -1,4 +1,4 @@
-﻿@model OATS_Capstone.Models.Question
+﻿@model OATS_Capstone.Models.AbsResponseQuestion
 <div class="nt-qitem nt-qitem-review">
     <div class="nt-qnum ">3.</div>
     <div class="nt-qtext">
@@ -6,22 +6,33 @@
     </div>
     <div class="nt-qanscont nt-sortable"></div>
     <div class="nt-qmiddle">
-        <div class="nt-qrespinput"></div>
+        @if (Model.IsOneIdChecked)
+        { 
+            <div class="nt-qrespinput">@Model.NonChoiceText</div>
+        }
+        else
+        {
+            <div class="nt-qrespinput"></div>
+        }
+        
     </div>
     <div class="nt-qfoot">
+        @if(!Model.IsOneIdChecked){
         <div class="nt-qrep" style="">
-            <span>Correct:</span><span class="nt-crate">0% ( 0 / 2 )</span>
-            <span>Pbs:</span><span class="nt-pbs">0.00</span>
+            <span>Average Point:</span><span class="nt-crate">@Model.CorrectPraction</span>
         </div>
-        <button class="nt-btn-text nt-qcomm-toggle" style="display: none;">Comment</button>
+        }else{
+            <button class="nt-btn-text nt-qcomm-toggle" style="display: none;">Comment</button>
 
-        <div class="nt-qoepts" style="display: none;">
+        <div class="nt-qoepts">
             <span>Points:</span>
-            <span class="nt-pts"></span>
+            <span class="nt-pts">@Model.UserNonChoiceScore</span>
             <span></span>
             <span class="nt-ok"><i class="icon-ok"></i></span>
             <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
         </div>
+        }
+        
 
 
 

@@ -1,12 +1,5 @@
 ﻿@using OATS_Capstone.Models
-@model OATS_Capstone.Models.Test
-@{
-    var totalScoreOfTest = Model.Questions.Sum(i =>
-    {
-        return i.NoneChoiceScore + i.Answers.Sum(k => k.Score);
-    });
-    var sortedQuestions=Model.Questions.OrderBy(i=>i.SerialOrder);
-}
+@model OATS_Capstone.Models.ResponseTest
 <div id="sidebar">
     <div style="" class="nt-acc-content" id="learners">
         <div class="nt-ctrl-search">
@@ -25,7 +18,7 @@
             <div class="nt-ctrl-line"></div>
             <div class="nt-clb-header">
                 <div class="nt-clb-header-control">
-                    <input type="checkbox" class="nt-ctrl-all" checked="checked" />
+                    <input type="checkbox" class="nt-ctrl-all" />
                 </div>
                 <div class="nt-clb-header-content">
                     <div class="nt-clb-header-label">
@@ -42,53 +35,23 @@
             </div>
             <div class="nt-ctrl-line"></div>
             <div id="respUsers" style="max-height: 450px; overflow-y: auto;">
-                @foreach (var uInTest in Model.UserInTests)
+                @foreach (var uInTest in Model.ResponseUserList)
                 {
-                    var user = uInTest.User;
-                    if (user != null)
-                    {
-                    <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
+                    <div class="nt-clb-item nt-clb-item-multi">
                         <div class="nt-clb-item-control">
-                            <input type="checkbox" checked="checked" />
+                            <input type="checkbox" user-id="@uInTest.UserID" />
                         </div>
                         <div class="nt-clb-item-content">
-                            <div class="nt-clb-item-label">@(user.FirstName ?? user.LastName ?? user.UserMail)</div>
-                            <div class="nt-clb-item-desc">@(((decimal)uInTest.Score / totalScoreOfTest).ToPercent())</div>
+                            <div class="nt-clb-item-label">@uInTest.UserLabel</div>
+                            <div class="nt-clb-item-desc">@uInTest.UserPercent</div>
                         </div>
                     </div>
-                    }
                 }
 
             </div>
         </div>
     </div>
 </div>
-<div>
-    @if (Model.UserInTests.Count == 0)
-    {
-        <div class="nt-checklist-ctrl">
-            <div class="nt-msg">No responses found: No students assigned.</div>
-        </div>
-    }
-    else
-    {
-        if (Model.UserInTests.Count == 1)
-        {
-            var single=Model.UserInTests.FirstOrDefault();
-        <div class="nt-checklist-ctrl">
-            <div class="nt-msg">Submitted on @String.Format("{0:dd MMM yyyy HH:mm tt}",single.TestTakenDate)</div>
-            <button id="btnEdit" class="nt-btn-dark" style="display: none;">Edit</button>
-            <button id="btnDone" class="nt-btn-dark" style="display: none;">Done</button>
-            <button id="btnDel" class="nt-btn-dark" data-guide="resp_remove_btn" style="display: inline-block;">Remove</button>
-            <button id="btnSubmit" class="nt-btn-submit" data-guide="resp_submit_btn" style="display: none;">Submit</button>
-        </div>
-        }
-        <div id="checklist" style="height: 450px; overflow-y: auto;">
-            @foreach (var question in sortedQuestions)
-            { 
-                @Html.Partial("P_Response_Instance", question)
-            }
-        </div>
-    }
-
+<div id="response-container">
+    @Html.Partial("P_ResponseTab_Inner",Model)
 </div>
