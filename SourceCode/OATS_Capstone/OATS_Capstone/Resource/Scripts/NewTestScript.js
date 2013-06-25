@@ -1070,8 +1070,14 @@ $(function () {
         updateAnswer($(this).closest(".nt-qans"), ev.target);
     });
     //separator
-    $("#eventDel").live("click", function (ev) {
-
+    $("#eventDuplicate").live("click", function (ev) {
+        $.post("/Tests/DuplicateTest", { testid: testid }, function (res) {
+            if (res.success&&res.id) {
+                window.location = "/Tests/NewTest/"+res.id;
+            } else {
+                showMessage("error", res.message);
+            }
+        });
     });
     //separator
     $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("click", function (ev) {

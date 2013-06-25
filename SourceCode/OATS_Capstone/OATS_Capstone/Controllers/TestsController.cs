@@ -581,5 +581,11 @@ namespace OATS_Capstone.Controllers
             common.NewTest_ResponseTab_CheckUserIds(testid, userids,count);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
+        public JsonResult DuplicateTest(int testid)
+        {
+            var common = new CommonService();
+            var id=common.DuplicateTest(testid);
+            return Json(new { common.success,common.message,id});
+        }
     }
 }
