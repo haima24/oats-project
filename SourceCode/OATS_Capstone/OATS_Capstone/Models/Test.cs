@@ -19,8 +19,8 @@ namespace OATS_Capstone.Models
             this.FeedBacks = new HashSet<FeedBack>();
             this.Invitations = new HashSet<Invitation>();
             this.Questions = new HashSet<Question>();
+            this.TagInTests = new HashSet<TagInTest>();
             this.UserInTests = new HashSet<UserInTest>();
-            this.Tags = new HashSet<Tag>();
         }
     
         public int TestID { get; set; }
@@ -37,8 +37,8 @@ namespace OATS_Capstone.Models
         public virtual ICollection<Invitation> Invitations { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual SettingConfig SettingConfig { get; set; }
+        public virtual ICollection<TagInTest> TagInTests { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<UserInTest> UserInTests { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

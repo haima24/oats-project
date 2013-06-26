@@ -35,6 +35,8 @@ namespace OATS_Capstone.Models
         public DbSet<SettingConfigDetail> SettingConfigDetails { get; set; }
         public DbSet<SettingType> SettingTypes { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<TagInQuestion> TagInQuestions { get; set; }
+        public DbSet<TagInTest> TagInTests { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserInTest> UserInTests { get; set; }

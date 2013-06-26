@@ -818,8 +818,8 @@ namespace OATS_Capstone.Models
                     else
                     {
                         question.Answers.ToList().ForEach(k => db.Answers.Remove(k));
-                        var tags = question.Tags.ToList();
-                        tags.ForEach(k => question.Tags.Remove(k));
+                        var tags = question.TagInQuestions.ToList();
+                        tags.ForEach(k => question.TagInQuestions.Remove(k));
                         db.Questions.Remove(question);
                         if (db.SaveChanges() > 0)
                         {
@@ -1130,11 +1130,18 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var user = db.Users.FirstOrDefault(delegate(User u)
                 {
-                    var uEmail = String.IsNullOrEmpty(u.UserMail) ? String.Empty : u.UserMail.Trim();
-                    var uPass = String.IsNullOrEmpty(u.Password) ? String.Empty : u.Password.Trim();
-                    var iEmail = email.Trim();
-                    var iPass = password.Trim();
-                    return uEmail.Equals(iEmail) && uPass.Equals(iPass);
+                    if (!String.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(u.UserMail) && !string.IsNullOrEmpty(u.Password))
+                    {
+                        var uEmail = u.UserMail.Trim();
+                        var uPass = u.Password.Trim();
+                        var iEmail = email.Trim();
+                        var iPass = password.Trim();
+                        return uEmail.Equals(iEmail) && uPass.Equals(iPass);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 });
                 if (user != null)
                 {
@@ -1254,7 +1261,10 @@ namespace OATS_Capstone.Models
                     user.FirstName = profile.FirstName;
                     user.LastName = profile.LastName;
                     user.UserMail = profile.UserMail;
-                    user.Password = profile.Password;
+                    if (!string.IsNullOrEmpty(profile.Password))
+                    {
+                        user.Password = profile.Password;
+                    }
                     if (db.SaveChanges() >= 0)
                     {
                         success = true;
@@ -1434,7 +1444,16 @@ namespace OATS_Capstone.Models
                 newTest.StartDateTime = test.StartDateTime;
                 newTest.IsActive = true;
                 newTest.SettingConfig = test.SettingConfig;
-                newTest.Tags = test.Tags;
+                var tagsInTest = test.TagInTests.ToList();
+                newTest.TagInTests = new List<TagInTest>();
+                tagsInTest.ForEach(i =>
+                {
+                    var tagInTest = new TagInTest();
+                    tagInTest.Tag = i.Tag;
+                    tagInTest.SerialOrder = i.SerialOrder;
+                    newTest.TagInTests.Add(tagInTest);
+                });
+
                 var questions = test.Questions.ToList();
                 newTest.Questions = new List<Question>();
                 questions.ForEach(i =>
@@ -1446,7 +1465,15 @@ namespace OATS_Capstone.Models
                         question.QuestionTitle = i.QuestionTitle;
                         question.QuestionType = i.QuestionType;
                         question.SerialOrder = i.SerialOrder;
-                        question.Tags = i.Tags;
+                        var tagsInQuestion = question.TagInQuestions.ToList();
+                        question.TagInQuestions = new List<TagInQuestion>();
+                        tagsInQuestion.ForEach(k =>
+                        {
+                            var tagInquestion = new TagInQuestion();
+                            tagInquestion.Tag = k.Tag;
+                            tagInquestion.SerialOrder = k.SerialOrder;
+                            question.TagInQuestions.Add(tagInquestion);
+                        });
                         question.TextDescription = i.TextDescription;
                         var answers = i.Answers.ToList();
                         question.Answers = new List<Answer>();
@@ -1475,6 +1502,138 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
             return newId;
+        }
+        public void SearchTagsOnTest(int testid, string term)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            resultlist = new List<object>();
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var existTags = test.TagInTests.Select(k => k.Tag);
+                    var allTags = db.Tags.ToList();
+                    var filteredTags = allTags.Where(k => !existTags.Contains(k));
+                    var lowerTerm = term.ToLower();
+                    foreach (var item in filteredTags)
+                    {
+                        if (item.TagName.ToLower().Contains(lowerTerm))
+                        {
+                            resultlist.Add(new { id = item.TagID, tagname = item.TagName });
+                        }
+                    }
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void AddTagToTest(int testid, int tagid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var tag = db.Tags.FirstOrDefault(i => i.TagID == tagid);
+                    if (tag != null)
+                    {
+                        var tagsInTest = test.TagInTests;
+                        var order = 0;
+                        if (tagsInTest.Count != 0)
+                        {
+                            var max = tagsInTest.Max(k => k.SerialOrder);
+                            if (max.HasValue)
+                            {
+                                order = max.Value + 1;
+                            }
+                        }
+                        var newTagInTest = new TagInTest();
+                        newTagInTest.Tag = tag;
+                        newTagInTest.SerialOrder = order;
+                        test.TagInTests.Add(newTagInTest);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            if (OnRenderPartialViewToString != null)
+                            {
+                                generatedHtml = OnRenderPartialViewToString.Invoke(tag);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void RemoveTagToTest(int testid, int tagid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var tagInTest = db.TagInTests.FirstOrDefault(i => i.TestID == testid && i.TagID == tagid);
+                if (tagInTest != null)
+                {
+                    db.TagInTests.Remove(tagInTest);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                        message = string.Empty;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void SortTagToTest(int testid, List<int> ids)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var tagsInTest = test.TagInTests;
+                    for (int i = 0; i < ids.Count; i++)
+                    {
+                        var id=ids[i];
+                        var tagInTest = tagsInTest.FirstOrDefault(k => k.TagID == id);
+                        if (tagInTest != null)
+                        {
+                            tagInTest.SerialOrder = i;
+                        }
+                    }
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        message = string.Empty;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
         }
     }
 }
