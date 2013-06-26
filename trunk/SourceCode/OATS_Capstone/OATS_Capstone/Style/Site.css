@@ -1241,7 +1241,9 @@ div.hoverscroll {
     height: 24px;
     text-align: right;
 }
-
+.nt-tag:hover .nt-tag-remove {
+display: block;
+}
 #eventTags, #headerUserTags {
     margin: 5px 0;
 }
@@ -1963,12 +1965,10 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
     .nt-tag i {
         display: none;
-        background: #b1a797;
         position: absolute;
         right: 3px;
         top: 1px;
         height: 17px;
-        width: auto;
         font-size: 17px;
         -webkit-border-radius: 8px;
         -moz-border-radius: 8px;
@@ -2589,7 +2589,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     height: 15px;
     background: url(./img/arrow-right.png) no-repeat;
 }
-
 .search-autocomple {
     background-color: white;
     border: 1px solid #aaaaaa;

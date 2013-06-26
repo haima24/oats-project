@@ -587,5 +587,42 @@ namespace OATS_Capstone.Controllers
             var id=common.DuplicateTest(testid);
             return Json(new { common.success,common.message,id});
         }
+        public JsonResult SearchTagsOnTest(int testid,string term)
+        {
+            var common = new CommonService();
+            common.SearchTagsOnTest(testid,term);
+            return Json(new {common.success,common.message,common.resultlist });
+        }
+        public JsonResult AddTagToTest(int testid, int tagid)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Tag_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.AddTagToTest(testid, tagid);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
+        public JsonResult RemoveTagToTest(int testid, int tagid)
+        {
+            var common = new CommonService();
+            common.RemoveTagToTest(testid, tagid);
+            return Json(new { common.success,common.message});
+        }
+        public JsonResult SortTagToTest(int testid, List<int> ids)
+        {
+            var common = new CommonService();
+            common.SortTagToTest(testid, ids);
+            return Json(new { common.success,common.message});
+        }
     }
 }

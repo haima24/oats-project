@@ -5,6 +5,92 @@ var events;
 var question_holder = new Array();
 var testid;
 
+function initTagsOnQuestion() {
+    $("#eventTags .tags-container").sortable({
+        revert: true,
+        tolerance: 'pointer',
+        revert: 50,
+        distance: 5,
+        items: '>.nt-tag',
+        cancel: "[contenteditable]",
+        stop: function (ev, ui) {
+            var ids = $(".nt-tag", this).map(function (i, o) { return $(o).attr("tag-id"); }).convertJqueryArrayToJSArray();
+            statusSaving();
+            $.ajax({
+                type: "POST",
+                url: "/Tests/SortTagToTest",
+                data: JSON.stringify({ testid: testid, ids:ids }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        statusSaved();
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        }
+    });
+    $("#test-tags").autocomplete({
+        minLength: 0,
+        select: function (e, ui) {
+            statusSaving();
+            var id = ui.item.id;
+            if (id) {
+                $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
+                    if (res.success) {
+                        var tagItem = $(res.generatedHtml);
+                        $("#eventTags .nt-tags .tags-container").append(tagItem);
+                        statusSaved();
+                    }
+                    else { showMessage("error", res.message); }
+                });
+            }
+        },
+        source: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/SearchTagsOnTest",
+                data: JSON.stringify({ testid: testid, term: req.term }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, element) {
+                            if (element && element.tagname) {
+                                return { id: element.id, label: element.tagname, value: element.tagname };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        }
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+        var li = $("<li>").append("<a>" + item.label + "</a>");
+        if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+        li.appendTo(ul);
+        return li;
+    };
+    $("#eventTags .nt-tag .nt-tag-remove").live("click", function (ev) {
+        var item = $(this).closest(".nt-tag");
+        var tagIdString = $(item).attr("tag-id");
+        var tagId = parseInt(tagIdString);
+        statusSaving();
+        $.post("/Tests/RemoveTagToTest", { testid: testid, tagid: tagId }, function (res) {
+            if (res.success) {
+                item.remove();
+                statusSaved();
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+}
 function initPlot() {
     $('.nt-scores-table-boxplot-container').sparkline('html', {
         type: "box",
@@ -520,6 +606,7 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
+    initTagsOnQuestion();
     initDragAndDrop();
     initEditable();
     initDateTimePicker();
@@ -553,7 +640,6 @@ $(function () {
                 }
 
             });
-            //res([{ label: 'Example', value: 'ex' }]);
         }
     });
     //separator
@@ -955,7 +1041,7 @@ $(function () {
             $.ajax({
                 type: "POST",
                 url: "/Tests/NewTest_ResponseTab_CheckUserIds",
-                data: JSON.stringify({ testid: testid, userids: checkIds,count:checkIds.length }),
+                data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
@@ -1072,8 +1158,8 @@ $(function () {
     //separator
     $("#eventDuplicate").live("click", function (ev) {
         $.post("/Tests/DuplicateTest", { testid: testid }, function (res) {
-            if (res.success&&res.id) {
-                window.location = "/Tests/NewTest/"+res.id;
+            if (res.success && res.id) {
+                window.location = "/Tests/NewTest/" + res.id;
             } else {
                 showMessage("error", res.message);
             }
