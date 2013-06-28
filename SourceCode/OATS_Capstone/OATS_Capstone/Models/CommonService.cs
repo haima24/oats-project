@@ -595,6 +595,28 @@ namespace OATS_Capstone.Models
 
 
         }
+
+        public void NewTest_FeedBackTab(int testid)
+        {
+            try
+            {
+                var db = SingletonDb.Instance();
+                var feedbacks = db.FeedBacks.Where(i => i.TestID == testid);
+                if (OnRenderPartialViewToString != null)
+                {
+                    success = true;
+                    message = Constants.DefaultSuccessMessage;
+                    generatedHtml = OnRenderPartialViewToString.Invoke(feedbacks);
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+                generatedHtml = String.Empty;
+            }
+        }
+
         public void NewTest_SettingTab(int testid)
         {
             success = false;

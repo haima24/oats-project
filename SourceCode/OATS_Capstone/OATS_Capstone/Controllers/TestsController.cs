@@ -167,6 +167,8 @@ namespace OATS_Capstone.Controllers
             common.TestsAssignUserSearch(userid, letter);
             return Json(new { common.resultlist, common.success, common.message });
         }
+
+        
         public JsonResult TestsSearch()
         {
             var common = new CommonService();
@@ -370,6 +372,28 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.generatedHtml, common.success, common.message });
 
         }
+
+        public JsonResult NewTest_FeedBackTab(int testid)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_FeedBackTab", model);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                return result;
+            };
+            common.NewTest_FeedBackTab(testid);
+            return Json(new { common.generatedHtml, common.success, common.message});
+        }
+
+
         public JsonResult NewTest_SettingTab(int testid)
         {
             var common = new CommonService();

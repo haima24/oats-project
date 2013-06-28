@@ -1,0 +1,11 @@
+﻿@using OATS_Capstone.Models
+@model IEnumerable<OATS_Capstone.Models.FeedBack>
+
+<div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
+    <div class="nt-panel" style="height: 400px;">
+        @foreach (var feedback in Model)
+        {
+            <span>@feedback.FeedBackDetail</span>
+        }
+    </div>
+</div>
