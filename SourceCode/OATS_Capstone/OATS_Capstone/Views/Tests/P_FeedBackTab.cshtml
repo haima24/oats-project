@@ -3,11 +3,16 @@
 
 <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
     <div class="nt-panel" style="height: 400px;">
+        @{var feedbackCount = 1;}
         @foreach (var feedback in Model)
         {
-            <span>@feedback.User.FirstName</span>
-            <span>@feedback.FeedBackDateTime</span>
-            <span>@feedback.FeedBackDetail</span>
+            <span>#@feedbackCount.ToString()</span>
+            <span><a></a>@feedback.User.FirstName <br /></span>            
+            <span>@feedback.FeedBackDateTime  <br /></span>           
+            <span>@feedback.FeedBackDetail<br /></span>
+            <span>----------------------------------------------------<br /></span>
+            feedbackCount = feedbackCount + 1;
         }
+
     </div>
 </div>
