@@ -467,6 +467,7 @@
     <Content Include="Views\Tests\P_ResponseTab_Inner.cshtml" />
     <Content Include="Views\Tests\P_Tag_Item.cshtml" />
     <Content Include="Views\Tests\P_ScoreTab_Inner.cshtml" />
+    <Content Include="Views\Tests\P_FeedBackTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

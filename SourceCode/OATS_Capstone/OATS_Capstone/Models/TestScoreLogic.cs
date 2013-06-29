@@ -34,18 +34,7 @@ namespace OATS_Capstone.Models
                     ScoreUserList.Add(item);
                 }
             });
-            if (CheckedUserIds.Count != 0)
-            {
-                CheckedUserIds.ForEach(t =>
-                {
-                    var user = db.Users.FirstOrDefault(i => i.UserID == t);
-                    if (user != null)
-                    { 
-                    }
-                });
-                var names = ScoreUserList.Select(k => k.UserLabel).Aggregate((i, o) => i + "," + o);
-                if (names != null) { ScoreUsersNameLabel = names; }
-            }
+          
             var tags = test.Questions.SelectMany(k => k.TagInQuestions.Select(i => i.Tag)).ToList();
             AvailableTags = new List<ScoreTag>();
             tags.ForEach(i =>
@@ -56,6 +45,11 @@ namespace OATS_Capstone.Models
                         AvailableTags.Add(scoreTag);
                     }
                 });
+            if (CheckedUserIds.Count != 0)
+            {
+                var names = ScoreUserList.Where(t=>CheckedUserIds.Contains(t.UserID)).Select(k => k.UserLabel).Aggregate((i, o) => i + "," + o);
+                if (names != null) { ScoreUsersNameLabel = names; }
+            }
         }
     }
     public class ScoreTag
