@@ -5,6 +5,8 @@
     <div class="nt-panel" style="height: 400px;">
         @foreach (var feedback in Model)
         {
+            <span>@feedback.User.FirstName</span>
+            <span>@feedback.FeedBackDateTime</span>
             <span>@feedback.FeedBackDetail</span>
         }
     </div>
