@@ -701,5 +701,10 @@ namespace OATS_Capstone.Controllers
             common.SortTagToQuestion(questionid, ids);
             return Json(new { common.success, common.message });
         }
+
+        public String aaa()
+        {
+            return "aaaaaaaaaaaaaaaaaa";
+        }
     }
 }
