@@ -1,49 +1,32 @@
 ﻿@using OATS_Capstone.Models
 @model IEnumerable<OATS_Capstone.Models.FeedBack>
-
+@{
+    var commentCount = Model.Select(k => k.FeedBackID); 
+ }
 <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
-    <div id="comments" class="nt-panel" style="height: 400px;">
-        @*@{var feedbackCount = 1;}
+    <div id="comments" class="nt-panel" style="height: 400px; overflow-y: auto">
+        <div class="comment-count"> All Comment
+            <span>
+                (@commentCount.Count())
+            </span>
+
+        </div>
         @foreach (var feedback in Model)
         {
-            <span>@feedback.FeedBackDetail</span>
-            <span>#@feedbackCount.ToString()</span>
-            <span><a></a>@feedback.User.FirstName <br /></span>            
-            <span>@feedback.FeedBackDateTime  <br /></span>           
-            <span>@feedback.FeedBackDetail<br /></span>
-            <span>----------------------------------------------------<br /></span>
-            feedbackCount = feedbackCount + 1;
-        }*@
-        <article class="comment">
-            <div class="comment-meta">
-                <a href="http://www.web4you.co.in" class="url">Deven</a> says
-                <time datetime="2011-08-09T15:15:06+00:00" pubdate="">November 18, 2011 at 1:54 pm</time>
-            </div>
+            <article class="comment">
 
-            <div class="comment-body">
-                <p>Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of .
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                </p>
-            </div>
-        </article>
-        <article class="comment">
-            <div class="comment-meta">
-                <a href="http://www.web4you.co.in" class="url">Deven</a> says
-                <time datetime="2011-08-09T15:15:06+00:00" pubdate="">November 18, 2011 at 1:54 pm</time>
-            </div>
+                <div class="comment-meta">
+                    <a href="http://www.web4you.co.in" class="url">@feedback.User.FirstName <span></span>@feedback.User.LastName</a> says
+                  
+                <time datetime="2011-08-09T15:15:06+00:00" pubdate="">@feedback.FeedBackDateTime</time>
+                </div>
 
-            <div class="comment-body">
-                <p>Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of .
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                    Cool description of HTML 5 explaining with an example. But i am still unable to find the reason on why to use  at the place of 
-                </p>
-            </div>
-        </article>
+                <div class="comment-body">
+                    <p>@feedback.FeedBackDetail
+                    </p>
+                </div>
 
+            </article>		 
+        }
     </div>
 </div>
