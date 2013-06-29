@@ -1,3 +1,11 @@
 ﻿@{
+    ViewBag.Title = "InviteUser";
     Layout = "~/Views/UserMailer/_Layout.cshtml";
 }
+
+<h2>OATS Test Invitation</h2>
+<div>
+    <p>Welcome @ViewBag.UserName</p>
+<p>You have invited to a test which created by @ViewBag.TeacherName</p>
+<p>Please follow this link @ViewBag.Link to do the test.</p>
+</div>

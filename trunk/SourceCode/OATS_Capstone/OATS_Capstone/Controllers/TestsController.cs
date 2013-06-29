@@ -15,12 +15,7 @@ namespace OATS_Capstone.Controllers
 {
     public class TestsController : Controller
     {
-        private IUserMailer _userMailer = new UserMailer();
-        public IUserMailer UserMailer
-        {
-            get { return _userMailer; }
-            set { _userMailer = value; }
-        }
+        
 
         //
         // GET: /Tests/
