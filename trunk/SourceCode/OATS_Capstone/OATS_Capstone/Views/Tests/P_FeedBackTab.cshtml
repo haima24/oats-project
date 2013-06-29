@@ -3,7 +3,7 @@
 
 <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
     <div id="comments" class="nt-panel" style="height: 400px;">
-        @{var feedbackCount = 1;}
+        @*@{var feedbackCount = 1;}
         @foreach (var feedback in Model)
         {
             <span>@feedback.FeedBackDetail</span>
@@ -13,7 +13,7 @@
             <span>@feedback.FeedBackDetail<br /></span>
             <span>----------------------------------------------------<br /></span>
             feedbackCount = feedbackCount + 1;
-        }
+        }*@
         <article class="comment">
             <div class="comment-meta">
                 <a href="http://www.web4you.co.in" class="url">Deven</a> says
