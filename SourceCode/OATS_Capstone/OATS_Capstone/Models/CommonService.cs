@@ -584,7 +584,9 @@ namespace OATS_Capstone.Models
                 if (OnRenderPartialViewToString != null)
                 {
                     success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(test);
+                    var checkIds = new List<int>();
+                    var scoreTest = new ScoreTest(test, checkIds);
+                    generatedHtml = OnRenderPartialViewToString.Invoke(scoreTest);
                 }
             }
             catch (Exception)
@@ -669,6 +671,10 @@ namespace OATS_Capstone.Models
             message = Constants.DefaultProblemMessage;
             try
             {
+                if (answers != null)
+                {
+                    answers.ForEach(i => i.AnswerContent = string.IsNullOrEmpty(i.AnswerContent) ? string.Empty : i.AnswerContent);
+                }
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
@@ -676,7 +682,7 @@ namespace OATS_Capstone.Models
                     var qType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
                     var question = new Question();
                     if (textdescription != null) { question.TextDescription = textdescription; }
-                    question.QuestionTitle = questiontitle;
+                    question.QuestionTitle = string.IsNullOrEmpty(questiontitle) ? string.Empty : (questiontitle);
                     question.SerialOrder = serialorder;
                     question.LabelOrder = labelorder;
                     question.QuestionType = qType;
@@ -692,7 +698,7 @@ namespace OATS_Capstone.Models
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 success = false;
                 message = Constants.DefaultExceptionMessage;
@@ -869,11 +875,24 @@ namespace OATS_Capstone.Models
                 var ans = db.Answers.FirstOrDefault(i => i.AnswerID == answerid);
                 if (ans != null)
                 {
-                    db.Answers.Remove(ans);
-                    if (db.SaveChanges() > 0)
+                    var question = ans.Question;
+                    if (question != null)
                     {
-                        success = true;
+                        //if (question.UserInTestDetails.Count > 0)
+                        //{
+                        //    success = false;
+                        //    message = "This Question Already In Use.";
+                        //}
+                        //else
+                        //{
+                            db.Answers.Remove(ans);
+                            if (db.SaveChanges() > 0)
+                            {
+                                success = true;
+                            }
+                        //}
                     }
+
                 }
             }
             catch (Exception)
@@ -894,7 +913,7 @@ namespace OATS_Capstone.Models
                     var ansDb = db.Answers.FirstOrDefault(i => i.AnswerID == ans.AnswerID);
                     if (ansDb != null)
                     {
-                        ansDb.AnswerContent = ans.AnswerContent;
+                        ansDb.AnswerContent = String.IsNullOrEmpty(ans.AnswerContent) ? string.Empty : (ans.AnswerContent);
                         ansDb.IsRight = ans.IsRight;
                         ansDb.Score = ans.Score;
                         ansDb.SerialOrder = ans.SerialOrder;
@@ -922,7 +941,7 @@ namespace OATS_Capstone.Models
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
                 if (question != null)
                 {
-                    question.QuestionTitle = newtext;
+                    question.QuestionTitle = string.IsNullOrEmpty(newtext) ? string.Empty : (newtext);
                     if (db.SaveChanges() >= 0)
                     {
                         success = true;
@@ -1230,7 +1249,7 @@ namespace OATS_Capstone.Models
                 if (user != null)
                 {
                     user.UserMail = userEmail;
-                    if (db.SaveChanges() > 0) //SaveChanges return affected rows
+                    if (db.SaveChanges() >= 0) //SaveChanges return affected rows
                     {
                         success = true;
                         message = string.Empty;
@@ -1256,7 +1275,7 @@ namespace OATS_Capstone.Models
                 if (user != null)
                 {
                     user.FirstName = userName;
-                    if (db.SaveChanges() > 0)
+                    if (db.SaveChanges() >= 0)
                     {
                         success = true;
                         message = string.Empty;
@@ -1447,6 +1466,29 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+        public void NewTest_ScoreTab_CheckUserIds(int testid, List<int> userids, int count)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (OnRenderPartialViewToString != null)
+                {
+                    success = true;
+                    if (count == 0) { userids = new List<int>(); }
+                    var scoreTest = new ScoreTest(test, userids);
+                    generatedHtml = OnRenderPartialViewToString.Invoke(scoreTest);
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
         public int DuplicateTest(int testid)
         {
             success = false;
@@ -1525,7 +1567,7 @@ namespace OATS_Capstone.Models
             }
             return newId;
         }
-        public void SearchTagsOnTest(int testid, string term)
+        public void SearchTagsOnTest(int testid, string term, int maxrows)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -1547,6 +1589,7 @@ namespace OATS_Capstone.Models
                             resultlist.Add(new { id = item.TagID, tagname = item.TagName });
                         }
                     }
+                    resultlist = resultlist.Take(maxrows).ToList();
                     success = true;
                 }
             }
@@ -1637,7 +1680,7 @@ namespace OATS_Capstone.Models
                     var tagsInTest = test.TagInTests;
                     for (int i = 0; i < ids.Count; i++)
                     {
-                        var id=ids[i];
+                        var id = ids[i];
                         var tagInTest = tagsInTest.FirstOrDefault(k => k.TagID == id);
                         if (tagInTest != null)
                         {
@@ -1657,5 +1700,140 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+
+        public void SearchTagsOnQuestion(int questionid, string term, int maxrows)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            resultlist = new List<object>();
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    var existTags = question.TagInQuestions.Select(k => k.Tag);
+                    var allTags = db.Tags.ToList();
+                    var filteredTags = allTags.Where(k => !existTags.Contains(k));
+                    var lowerTerm = term.ToLower();
+                    foreach (var item in filteredTags)
+                    {
+                        if (item.TagName.ToLower().Contains(lowerTerm))
+                        {
+                            resultlist.Add(new { id = item.TagID, tagname = item.TagName });
+                        }
+                    }
+                    resultlist = resultlist.Take(maxrows).ToList();
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void AddTagToQuestion(int questionid, int tagid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    var tag = db.Tags.FirstOrDefault(i => i.TagID == tagid);
+                    if (tag != null)
+                    {
+                        var tagsInQuestion = question.TagInQuestions;
+                        var order = 0;
+                        if (tagsInQuestion.Count != 0)
+                        {
+                            var max = tagsInQuestion.Max(k => k.SerialOrder);
+                            if (max.HasValue)
+                            {
+                                order = max.Value + 1;
+                            }
+                        }
+                        var newTagInQuestion = new TagInQuestion();
+                        newTagInQuestion.Tag = tag;
+                        newTagInQuestion.SerialOrder = order;
+                        question.TagInQuestions.Add(newTagInQuestion);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            if (OnRenderPartialViewToString != null)
+                            {
+                                generatedHtml = OnRenderPartialViewToString.Invoke(tag);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void RemoveTagToQuestion(int questionid, int tagid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var tagInQuestion = db.TagInQuestions.FirstOrDefault(i => i.QuestionID == questionid && i.TagID == tagid);
+                if (tagInQuestion != null)
+                {
+                    db.TagInQuestions.Remove(tagInQuestion);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                        message = string.Empty;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void SortTagToQuestion(int questionid, List<int> ids)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    var tagsInQuestion = question.TagInQuestions;
+                    for (int i = 0; i < ids.Count; i++)
+                    {
+                        var id = ids[i];
+                        var tagInQuestion = tagsInQuestion.FirstOrDefault(k => k.TagID == id);
+                        if (tagInQuestion != null)
+                        {
+                            tagInQuestion.SerialOrder = i;
+                        }
+                    }
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        message = string.Empty;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
     }
 }

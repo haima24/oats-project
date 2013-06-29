@@ -76,7 +76,7 @@
                     <button id="userDel" class="nt-btn-circle nt-guide" data-guide="edus_delete" data-original-title=""><i class="icon-remove"></i></button>
                 </div>
 
-                <div id="headerUserTags">
+               @* <div id="headerUserTags">
                     <div class="nt-etagcont">
                         <div class="nt-tags">
                             <div>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
         <div class="nt-asms-unrelated">
@@ -114,60 +114,8 @@
                 </div>
             </div>
         </div>
-        <div id="asmsList" style="height: 186px; overflow-y: auto;" class="nt-flex-acc">
-            <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">
-                <div class="nt-asms-list nt-guide">
-                    <a>
-                        <div class="nt-list-head">
-
-                            <div class="nt-name">
-                                Running And Upcoming Tests
-                            </div>
-                            <div class="nt-date">Start</div>
-                            <div class="nt-date">End</div>
-
-                            <i class="nt-icon arrow-up"></i>
-                            <div>&nbsp;</div>
-                        </div>
-                    </a>
-
-                    <div class="nt-list-cont" style="height: 50px;">
-                        <div class="nt-empty-list-ph">
-                            <p>No running or upcoming tests available.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group nt-acc-group nt-asms-list-cont recent nt-acc-open">
-                <!--   <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">-->
-                <div class="nt-asms-list nt-guide
-                    ">
-                    <a>
-                        <div class="nt-list-head">
-
-                            <div class="nt-name">
-                                Tests
-                            </div>
-                            <div class="nt-date">Start</div>
-                            <div class="nt-date">End</div>
-
-
-                            <div class="nt-rate">Resp. Rate</div>
-
-                            <div class="nt-perc">Avg.</div>
-                            <div class="nt-perc">St.Dev.</div>
-                            <i class="nt-icon arrow-up"></i>
-                            <div>&nbsp;</div>
-                        </div>
-                    </a>
-
-                    <div class="nt-list-cont" style="height: 50px;">
-                        <div class="nt-empty-list-ph">
-                            <p>No past tests available.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="asmsList" style="height: 500px; overflow-y: auto;" class="nt-flex-acc">
+        @Html.Partial("P_Assign_Test_To_Teacher",Model)
+         </div>
     </div>
 </div>

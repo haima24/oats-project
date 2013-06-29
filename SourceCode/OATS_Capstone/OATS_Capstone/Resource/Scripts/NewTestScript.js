@@ -4,22 +4,23 @@ var listkey = "listquestion";
 var events;
 var question_holder = new Array();
 var testid;
+var currentEditAnswer;
 
-function initTagsOnQuestion() {
+function initTagsOnTest() {
     $("#eventTags .tags-container").sortable({
         revert: true,
         tolerance: 'pointer',
         revert: 50,
         distance: 5,
         items: '>.nt-tag',
-        cancel: "[contenteditable]",
+        cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
             var ids = $(".nt-tag", this).map(function (i, o) { return $(o).attr("tag-id"); }).convertJqueryArrayToJSArray();
             statusSaving();
             $.ajax({
                 type: "POST",
                 url: "/Tests/SortTagToTest",
-                data: JSON.stringify({ testid: testid, ids:ids }),
+                data: JSON.stringify({ testid: testid, ids: ids }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (r) {
@@ -52,7 +53,7 @@ function initTagsOnQuestion() {
             $.ajax({
                 type: "POST",
                 url: "/Tests/SearchTagsOnTest",
-                data: JSON.stringify({ testid: testid, term: req.term }),
+                data: JSON.stringify({ testid: testid, term: req.term,maxrows:10 }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (r) {
@@ -82,6 +83,109 @@ function initTagsOnQuestion() {
         var tagId = parseInt(tagIdString);
         statusSaving();
         $.post("/Tests/RemoveTagToTest", { testid: testid, tagid: tagId }, function (res) {
+            if (res.success) {
+                item.remove();
+                statusSaved();
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+}
+function initTagsOnQuestion() {
+    $("#checklist .tags-container").sortable({
+        revert: true,
+        tolerance: 'pointer',
+        revert: 50,
+        distance: 5,
+        items: '>.nt-tag',
+        cancel: "[contenteditable],input[type=text],select,textarea",
+        stop: function (ev, ui) {
+            var ids = $(".nt-tag", this).map(function (i, o) { return $(o).attr("tag-id"); }).convertJqueryArrayToJSArray();
+            var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
+            var questionid = parseInt(questionIdString);
+            statusSaving();
+            $.ajax({
+                type: "POST",
+                url: "/Tests/SortTagToQuestion",
+                data: JSON.stringify({ questionid: questionid, ids: ids }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        statusSaved();
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        }
+    });
+    var boxes = $("#checklist .nt-qitem .nt-tag-adder input[type=text]");
+    if (boxes.length > 0) {
+        boxes.each(function () {
+            $(this).autocomplete({
+                minLength: 0,
+                select: function (e, ui) {
+                    var element = $(this);
+                    var line = $(this).closest(".nt-tags");
+                    var container = $(".tags-container", line);
+                    statusSaving();
+                    var id = ui.item.id;
+                    var questionid = ui.item.questionid;
+                    if (id) {
+                        $.post("/Tests/AddTagToQuestion", { questionid: questionid, tagid: id }, function (res) {
+                            if (res.success) {
+                                var tagItem = $(res.generatedHtml);
+                                $(container).append(tagItem);
+                                statusSaved();
+                                var ele = element;
+                                ele.val("");
+                            }
+                            else { showMessage("error", res.message); }
+                        });
+                    }
+                },
+                source: function (req, res) {
+                    var questionIdString = this.element.closest(".nt-qitem").attr("question-id");
+                    var questionid = parseInt(questionIdString);
+                    $.ajax({
+                        type: "POST",
+                        url: "/Tests/SearchTagsOnQuestion",
+                        data: JSON.stringify({ questionid: questionid, term: req.term, maxrows: 10 }),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (r) {
+                            if (r.success) {
+                                var result = $(r.resultlist).map(function (index, element) {
+                                    if (element && element.tagname) {
+                                        return { id: element.id, label: element.tagname, value: element.tagname, questionid: questionid };
+                                    }
+                                }).convertJqueryArrayToJSArray();
+                                res(result);
+                            } else {
+                                showMessage("error", r.message);
+                            }
+                        }
+                    });
+                }
+            }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+                var li = $("<li>").append("<a>" + item.label + "</a>");
+                if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+                li.appendTo(ul);
+                return li;
+            };
+        });
+    }
+    $("#checklist .nt-qitem .nt-tag-remove").live("click", function (ev) {
+        var item = $(this).closest(".nt-tag");
+        var tagIdString = $(item).attr("tag-id");
+        var tagId = parseInt(tagIdString);
+        var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
+        var questionid = parseInt(questionIdString);
+        statusSaving();
+        $.post("/Tests/RemoveTagToQuestion", { questionid: questionid, tagid: tagId }, function (res) {
             if (res.success) {
                 item.remove();
                 statusSaved();
@@ -141,7 +245,7 @@ function initDragAndDrop() {
         distance: 5,
         items: '>.nt-qitem',
         placeholder: 'highlight',
-        cancel: "[contenteditable]",
+        cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
             sortByNumberOrLetters();
             resortInDb();
@@ -189,7 +293,7 @@ function initDragAndDrop() {
         distance: 5,
         items: '>.nt-qans',
         placeholder: 'highlight',
-        cancel: "[contenteditable]",
+        cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
             updateAnswer($(ui.item).closest(".nt-qans"));
         }
@@ -197,6 +301,7 @@ function initDragAndDrop() {
 
 }
 function initEditable() {
+    initTagsOnQuestion();
     //separator
     $("#test-title").contentEditable({
         "placeholder": "<i>Enter Test Title</i>",
@@ -217,6 +322,7 @@ function initEditable() {
         "onBlur": function (element) {
             updateAnswer($(element).closest(".nt-qans"));
         },
+        "onFocusIn": function (element) { currentEditAnswer = element; }
     });
     $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext").contentEditable({
         "placeholder": "<i>Enter Text</i>",
@@ -606,7 +712,7 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
-    initTagsOnQuestion();
+    initTagsOnTest();
     initDragAndDrop();
     initEditable();
     initDateTimePicker();
@@ -767,25 +873,22 @@ $(function () {
     //separator
     $("#checklist[content-tab=true] .nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
-
+        if (currentEditAnswer) { $(currentEditAnswer).blur();}
         addAnswer(parent, parent.attr("question-id"), function () {
             sortByNumberOrLetters();
             showOrHideDeleteLineAnswer();
             initEditable();
         });
-
-        //when add an answer, show delete button on answer line
-
     });
     //separator
     $("#checklist[content-tab=true] .nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
         var parent = $(this).closest(".nt-qitem");
         var ansline = $(this).closest(".nt-qans.nt-qans-edit");
         var ansid = ansline.attr("answer-id");
-        deleteAnswer(ansid);
-        ansline.remove();
-        showOrHideDeleteLineAnswer();
-
+        deleteAnswer(ansid, function () {
+            ansline.remove();
+            showOrHideDeleteLineAnswer();
+        });
     });
     //separator
     $("#checklist[content-tab=true] .nt-qtype-sel-predef,.nt-qtype-sel").live("change", function (ev) {
@@ -1038,21 +1141,38 @@ $(function () {
             var checkIds = $("input[type=checkbox][user-id]:checked").map(function (i, e) {
                 return $(e).attr("user-id");
             }).convertJqueryArrayToJSArray();
-            $.ajax({
-                type: "POST",
-                url: "/Tests/NewTest_ResponseTab_CheckUserIds",
-                data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length }),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (res) {
-                    if (res.success) {
-                        $("#response-container").html(res.generatedHtml);
-                    } else {
-                        showMessage("error", res.message);
+            if (container.attr("response-tab")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/NewTest_ResponseTab_CheckUserIds",
+                    data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.success) {
+                            $("#response-container").html(res.generatedHtml);
+                        } else {
+                            showMessage("error", res.message);
+                        }
                     }
-                }
-
-            });
+                });
+            }
+            if (container.attr("score-tab")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/NewTest_ScoreTab_CheckUserIds",
+                    data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.success) {
+                            $("#score-container").html(res.generatedHtml);
+                        } else {
+                            showMessage("error", res.message);
+                        }
+                    }
+                });
+            }
         }
     });
 

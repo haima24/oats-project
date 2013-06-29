@@ -605,16 +605,36 @@ namespace OATS_Capstone.Controllers
             common.NewTest_ResponseTab_CheckUserIds(testid, userids,count);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
+        public JsonResult NewTest_ScoreTab_CheckUserIds(int testid, List<int> userids, int count)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_ScoreTab_Inner", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.NewTest_ScoreTab_CheckUserIds(testid, userids, count);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
         public JsonResult DuplicateTest(int testid)
         {
             var common = new CommonService();
             var id=common.DuplicateTest(testid);
             return Json(new { common.success,common.message,id});
         }
-        public JsonResult SearchTagsOnTest(int testid,string term)
+        public JsonResult SearchTagsOnTest(int testid, string term, int maxrows)
         {
             var common = new CommonService();
-            common.SearchTagsOnTest(testid,term);
+            common.SearchTagsOnTest(testid, term, maxrows);
             return Json(new {common.success,common.message,common.resultlist });
         }
         public JsonResult AddTagToTest(int testid, int tagid)
@@ -647,6 +667,44 @@ namespace OATS_Capstone.Controllers
             var common = new CommonService();
             common.SortTagToTest(testid, ids);
             return Json(new { common.success,common.message});
+        }
+        public JsonResult SearchTagsOnQuestion(int questionid, string term, int maxrows)
+        {
+            var common = new CommonService();
+            common.SearchTagsOnQuestion(questionid, term, maxrows);
+            return Json(new { common.success, common.message, common.resultlist });
+        }
+        public JsonResult AddTagToQuestion(int questionid, int tagid)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Tag_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.AddTagToQuestion(questionid, tagid);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
+        public JsonResult RemoveTagToQuestion(int questionid, int tagid)
+        {
+            var common = new CommonService();
+            common.RemoveTagToQuestion(questionid, tagid);
+            return Json(new { common.success, common.message });
+        }
+        public JsonResult SortTagToQuestion(int questionid, List<int> ids)
+        {
+            var common = new CommonService();
+            common.SortTagToQuestion(questionid, ids);
+            return Json(new { common.success, common.message });
         }
     }
 }

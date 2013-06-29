@@ -1,5 +1,7 @@
 ﻿@model OATS_Capstone.Models.User
-
+@{
+    var invitations = Model.Invitations.Where(i => i.Role.RoleDescription == "Teacher");
+    }
             <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">
                 <div class="nt-asms-list nt-guide">
                     <a>
@@ -17,7 +19,7 @@
                     </a>
 
                     <div class="nt-list-cont" style="height: 200px;">
-                        @foreach(var invitation in Model.Invitations)
+                        @foreach (var invitation in invitations)
                         {
                         <div class="nt-list-row nt-guide" test-id ="@invitation.Test.TestID">
                             <div class="nt-name">

@@ -204,7 +204,7 @@
           <Property Name="TagInQuestionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TagID" Type="int" Nullable="false" />
           <Property Name="QuestionID" Type="int" Nullable="false" />
-          <Property Name="SerialOrder" Type="nchar" MaxLength="10" />
+          <Property Name="SerialOrder" Type="int" />
         </EntityType>
         <EntityType Name="TagInTest">
           <Key>
@@ -729,7 +729,7 @@
           <Property Name="TagInQuestionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="TagID" Type="Int32" Nullable="false" />
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
-          <Property Name="SerialOrder" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="SerialOrder" Type="Int32" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_TagInQuestion_Question" FromRole="TagInQuestion" ToRole="Question" />
           <NavigationProperty Name="Tag" Relationship="OATSDBModel.FK_TagInQuestion_Tag" FromRole="TagInQuestion" ToRole="Tag" />
         </EntityType>
