@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using OATS_Capstone.Hubs;
+using OATS_Capstone.Mailers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,13 @@ namespace OATS_Capstone.Models
     public delegate String OnRenderPartialViewHandler(object model);
     public class CommonService
     {
+        private IUserMailer _userMailer = new UserMailer();
+        public IUserMailer UserMailer
+        {
+            get { return _userMailer; }
+            set { _userMailer = value; }
+        }
+
         public event OnRenderPartialViewHandler OnRenderPartialViewToString;
 
         bool _success = false;
@@ -434,8 +442,11 @@ namespace OATS_Capstone.Models
                 }
                 if (db.SaveChanges() >= 0)
                 {
-                    if (OnRenderPartialViewToString != null)
-                    {
+                    //send mail
+                    var invitations=test.Invitations.ToList();
+                    UserMailer.InviteUsers(invitations);
+
+                    if (OnRenderPartialViewToString != null) {
                         success = true;
                         generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
                     }
