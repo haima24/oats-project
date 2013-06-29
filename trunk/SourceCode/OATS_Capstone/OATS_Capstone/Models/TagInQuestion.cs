@@ -17,7 +17,7 @@ namespace OATS_Capstone.Models
         public int TagInQuestionID { get; set; }
         public int TagID { get; set; }
         public int QuestionID { get; set; }
-        public string SerialOrder { get; set; }
+        public Nullable<int> SerialOrder { get; set; }
     
         public virtual Question Question { get; set; }
         public virtual Tag Tag { get; set; }

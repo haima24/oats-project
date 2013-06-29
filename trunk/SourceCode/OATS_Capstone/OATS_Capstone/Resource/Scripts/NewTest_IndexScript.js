@@ -47,9 +47,9 @@ $(function () {
         $.post(action, function (res) {
             if (res.success) {
                 var tabcontent = $("#eventTab");
-                if (tabcontent && res.tab) {
+                if (tabcontent && res.generatedHtml) {
 
-                    tabcontent.html(res.tab);
+                    tabcontent.html(res.generatedHtml);
 
                     initCalendar();
 

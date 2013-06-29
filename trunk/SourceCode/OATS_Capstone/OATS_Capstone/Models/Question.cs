@@ -11,7 +11,6 @@ namespace OATS_Capstone.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class Question
     {
@@ -23,14 +22,10 @@ namespace OATS_Capstone.Models
         }
     
         public int QuestionID { get; set; }
-
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string QuestionTitle { get; set; }
         public int TestID { get; set; }
         public int QuestionTypeID { get; set; }
         public string ImageUrl { get; set; }
-
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string TextDescription { get; set; }
         public Nullable<int> SerialOrder { get; set; }
         public string LabelOrder { get; set; }

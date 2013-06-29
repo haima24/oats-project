@@ -32,7 +32,7 @@
 			$(this).attr("contenteditable","true");
 			this.content = $(this).html();
 			this.settings = settings;
-			if(this.content == ''){ $(this).html(settings.placeholder); }
+			if(this.content.trim() == ''){ $(this).html(settings.placeholder); }
 			$(this).on('activate',function(){
 				this.content = updateContent(this);
 				if(this.content == settings.placeholder){
@@ -70,7 +70,7 @@
 			.focusout(function(e){
 				this.content = updateContent(this);
 				$(this).unbind("keypress");
-				if(this.content == ''){ $(this).html(settings.placeholder); }
+				if(this.content.trim() == ''){ $(this).html(settings.placeholder); }
 				if($.isFunction(settings.onFocusOut)){ settings.onFocusOut(this); }
 			}).blur(function(e){
 				if($.isFunction(settings.onBlur)){ settings.onBlur(this); }

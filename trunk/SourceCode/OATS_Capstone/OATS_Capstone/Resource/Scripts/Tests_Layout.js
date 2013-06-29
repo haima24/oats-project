@@ -21,6 +21,7 @@
                 }
                 all.find('.nt-qtagcont').show();
                 all.find('.nt-tag-adder').show();
+                all.find('.tags-container').show();
                 all.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle').hide();
             }
         }
@@ -33,7 +34,8 @@
             $(this).addClass('nt-qitem-edit-act').siblings().addClass('nt-qitem-edit-inact');
             var current = ev.target;
             var pr = $(current).closest('.nt-qitem');
-            if (current.parentNode && $(current.parentNode).hasClass('nt-tag-adder')) {
+
+            if (current.parentNode && ($(current).closest(".nt-tag-adder").hasClass('nt-tag-adder') || $(current).closest(".tags-container").hasClass('tags-container'))) {
                 var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
                 $(pr.find('.nt-qctrls')[0]).hide();
                 $(pr.find('.nt-qtagcont')[0]).show();
@@ -43,6 +45,7 @@
                 var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
                 $(pr.find('.nt-qctrls')[0]).show();
                 $(pr.find('.nt-tag-adder')[0]).hide();
+                $(".tags-container", pr).hide();
                 $(btn).find('i').removeClass('i-setting').addClass('i-tag');
                 $(btn).show();
                 var btnAdd = pr.find('button.nt-btn-text.nt-qansadd')[0];

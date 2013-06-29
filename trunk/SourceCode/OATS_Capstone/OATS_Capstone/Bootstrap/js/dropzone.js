@@ -632,7 +632,7 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
       }
       if (this.options.clickable) {
         if (this.options.clickable === true) {
-          this.clickableElement = this.element;
+            this.clickableElement = this.element;
         } else if (typeof this.options.clickable === "string") {
           this.clickableElement = document.querySelector(this.options.clickable);
         } else if (this.options.clickable.nodeType != null) {
@@ -754,7 +754,7 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
           element: this.clickableElement,
           events: {
             "click": function(evt) {
-              if ((_this.clickableElement !== _this.element) || (evt.target === _this.element || Dropzone.elementInside(evt.target, _this.element.querySelector(".dz-message")))) {
+                if ((_this.clickableElement !== _this.element) || (evt.target === _this.element || Dropzone.elementInside(evt.target, _this.element) || Dropzone.elementInside(evt.target, _this.element.querySelector(".dz-message")))) {
                 return _this.hiddenFileInput.click();
               }
             }
