@@ -41,7 +41,7 @@ namespace OATS_Capstone.Models
                 {
                     if (i != null)
                     {
-                        var scoreTag = new ScoreTag(i);
+                        var scoreTag = new ScoreTag(i,test.TestID,checkIds);
                         AvailableTags.Add(scoreTag);
                     }
                 });
@@ -55,7 +55,7 @@ namespace OATS_Capstone.Models
     public class ScoreTag
     {
         public Tag Tag { get; set; }
-        public ScoreTag(Tag tag)
+        public ScoreTag(Tag tag,int testid,List<int> checkIds)
         {
             Tag = tag;
         }
