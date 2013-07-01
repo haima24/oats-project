@@ -6,7 +6,7 @@
 else
 {
     <div class="nt-scores-cont" style="height: 450px; overflow-y: hidden;">
-        <div class="nt-scores-table-cont" style="height: 300px; overflow-y: hidden;">
+        <div class="nt-scores-table-cont" style="height: 350px; overflow-y: hidden;">
             <table class="nt-scores-table nt-scores-table-header">
                 <thead>
                     <tr>
@@ -45,8 +45,8 @@ else
                         <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
                             <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
                                 <div class="nt-desc">
-                                    <span class="nt-selavg">Student<br>
-                                        Score</span>
+                                    <span class="nt-selavg">Selection<br/>
+                                        AVG</span>
                                     <span class="nt-score-col-mode">(/)</span>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@ else
                             <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
                                 <div class="nt-desc">
                                     <span class="nt-egavg">Group<br/>
-                                        Avg</span>
+                                        AVG</span>
                                     <span class="nt-score-col-mode">(/)</span>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@ else
                     </tr>
                 </thead>
             </table>
-            <div class="nt-scores-table-body" id="c414" style="max-height: 125px; min-height: 20px; overflow-y: auto;">
+            <div class="nt-scores-table-body" id="c414" style="max-height: 320px; min-height: 40px; overflow-y: auto;">
                 <table class="nt-scores-table">
                     <tbody>
                         @foreach (var item in Model.AvailableTags)
@@ -129,24 +129,24 @@ else
                                 </div>
                             </td>
                             <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
-                                <span class="nt-selavg" style="display: none">25%</span>
-                                <span class="nt-selavg-nat">1 / 4</span>
+                                <span class="nt-selavg" style="display: none">@item.Statistic.SelectionAVGScore.Percent</span>
+                                <span class="nt-selavg-nat">@item.Statistic.SelectionAVGScore.Praction</span>
                             </td>
                             <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
-                                <span class="nt-egavg" style="display: none">73%</span>
-                                <span class="nt-egavg-nat">2.75 / 4</span>
+                                <span class="nt-egavg" style="display: none">@item.Statistic.GroupAVGScore.Percent</span>
+                                <span class="nt-egavg-nat">@item.Statistic.GroupAVGScore.Praction</span>
                             </td>
                             <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
-                                <span class="nt-avgdiff" style="display: none">-48%</span>
-                                <span class="nt-avgdiff-nat">-1.75</span>
+                                <span class="nt-avgdiff" style="display: none">@item.Statistic.DifferenceScore.Percent</span>
+                                <span class="nt-avgdiff-nat">@item.Statistic.DifferenceScore.Decimal</span>
                             </td>
                             <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
-                                <span class="nt-grpstdev" style="display: none">25%</span>
-                                <span class="nt-grpstdev-nat">1</span>
+                                <span class="nt-grpstdev" style="display: none">@item.Statistic.GroupSTDEVScore.Percent</span>
+                                <span class="nt-grpstdev-nat">@item.Statistic.GroupSTDEVScore.Decimal</span>
                             </td>
 
                             <td class="nt-scores-table-boxplot">
-                                <span class="nt-scores-table-boxplot-container">1,2,3,4,5,6,7,8,9,10</span>
+                                <span class="nt-scores-table-boxplot-container">@item.Statistic.ScoreListString</span>
                             </td>
                         </tr>    
                         }
@@ -159,23 +159,23 @@ else
                         <td class="nt-scores-table-firstcol">OVERALL:</td>
 
                         <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
-                            <span class="nt-selavg" style="display: none">13%</span>
-                            <span class="nt-selavg-nat">2 / 16</span>
+                            <span class="nt-selavg" style="display: none">@Model.Overall.SelectionAVGScore.Percent</span>
+                            <span class="nt-selavg-nat">@Model.Overall.SelectionAVGScore.Praction</span>
                         </td>
                         <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
-                            <span class="nt-egavg" style="display: none">74%</span>
-                            <span class="nt-egavg-nat">11 / 16</span>
+                            <span class="nt-egavg" style="display: none">@Model.Overall.GroupAVGScore.Percent</span>
+                            <span class="nt-egavg-nat">@Model.Overall.GroupAVGScore.Praction</span>
                         </td>
                         <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
-                            <span class="nt-avgdiff" style="display: none">-61%</span>
-                            <span class="nt-avgdiff-nat">-9</span>
+                            <span class="nt-avgdiff" style="display: none">@Model.Overall.DifferenceScore.Percent</span>
+                            <span class="nt-avgdiff-nat">@Model.Overall.DifferenceScore.Decimal</span>
                         </td>
                         <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
-                            <span class="nt-grpstdev" style="display: none">21%</span>
-                            <span class="nt-grpstdev-nat">3.3</span>
+                            <span class="nt-grpstdev" style="display: none">@Model.Overall.GroupSTDEVScore.Percent</span>
+                            <span class="nt-grpstdev-nat">@Model.Overall.GroupSTDEVScore.Decimal</span>
                         </td>
 
-                        <td class="nt-scores-table-boxplot"><span class="nt-scores-table-boxplot-container">1,2,3,4,5,6,7,8,9,10</span></td>
+                        <td class="nt-scores-table-boxplot"><span class="nt-scores-table-boxplot-container">@Model.Overall.ScoreListString</span></td>
                     </tr>
                 </tfoot>
             </table>
@@ -191,8 +191,8 @@ else
                 </div>
             </div>*@
             <div class="scorecontrols">
-                <button class="nt-btn-submit nt-btn-send">Send Scores...</button>
-                <button class="nt-btn-text nt-btn-dl">Download</button>
+                <button class="nt-btn-submit">Send Scores...</button>
+                <button class="nt-btn-submit">Download</button>
             </div>
         </div>
     </div>
