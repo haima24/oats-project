@@ -178,22 +178,7 @@ function initTagsOnQuestion() {
             };
         });
     }
-    $("#checklist .nt-qitem .nt-tag-remove").live("click", function (ev) {
-        var item = $(this).closest(".nt-tag");
-        var tagIdString = $(item).attr("tag-id");
-        var tagId = parseInt(tagIdString);
-        var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
-        var questionid = parseInt(questionIdString);
-        statusSaving();
-        $.post("/Tests/RemoveTagToQuestion", { questionid: questionid, tagid: tagId }, function (res) {
-            if (res.success) {
-                item.remove();
-                statusSaved();
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
+    
 }
 function initPlot() {
     $('.nt-scores-table-boxplot-container').sparkline('html', {
@@ -205,7 +190,6 @@ function initPlot() {
         cornerRadius: 4,
         strikeThrough: !0,
         tooltipFormat: '<span>{{field:fields}}</span><span style="float: right; padding-left: 5px">{{value}}</span>',
-        numberFormatter: function (e) { return parseInt(e) },
         tooltipFormatFieldlist: ["lw", "lq", "med", "uq", "rw"],
         tooltipFormatFieldlistKey: "field",
         tooltipValueLookups: { fields: { lw: "Minimum", lq: "25th perc", med: "Median", uq: "75th perc", rw: "Maximum" } }
@@ -808,6 +792,7 @@ $(function () {
                 return answer;
             }).convertJqueryArrayToJSArray();
             addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
+                resortInDb();
                 sortByNumberOrLetters();
                 initEditable();
                 initImageUploadFacility();
@@ -1167,6 +1152,7 @@ $(function () {
                     success: function (res) {
                         if (res.success) {
                             $("#score-container").html(res.generatedHtml);
+                            initPlot();
                         } else {
                             showMessage("error", res.message);
                         }
@@ -1224,6 +1210,7 @@ $(function () {
             });
         }
     });
+    
     //separator
     $("#checklist[content-tab=true] .nt-qitem .nt-scrbtn").live("click", function (ev) {
         var item = $(this).closest(".nt-qitem");
@@ -1447,6 +1434,24 @@ $(function () {
         });
     });
     //separator
+    $("#checklist .nt-qitem .nt-tag-remove").live("click", function (ev) {
+        var item = $(this).closest(".nt-tag");
+        var tagIdString = $(item).attr("tag-id");
+        var tagId = parseInt(tagIdString);
+        var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
+        var questionid = parseInt(questionIdString);
+        statusSaving();
+        $.post("/Tests/RemoveTagToQuestion", { questionid: questionid, tagid: tagId }, function (res) {
+            if (res.success) {
+                item.remove();
+                statusSaved();
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+    //separator
+
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
     var hub = $.connection.generalHub;

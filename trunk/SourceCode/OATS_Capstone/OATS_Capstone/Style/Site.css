@@ -1339,7 +1339,7 @@ a {
         }
 
         .nt-scores-cont .nt-scores-table-cont .nt-scores-table .nt-scores-table-boxplot {
-            width: 230px;
+            width: 200px;
             padding-left: 8px;
         }
 
@@ -1422,8 +1422,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
     .nt-scores-cont .nt-scores-footer .scorecontrols {
-        margin-top: 22px;
-        width: 22%;
         text-align: center;
     }
 
