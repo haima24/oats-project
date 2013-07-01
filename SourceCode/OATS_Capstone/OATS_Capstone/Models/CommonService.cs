@@ -1249,6 +1249,38 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+
+        public void SubmitTest(UserInTestDetail userInTestDetail)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var newUserInTestDetail = new UserInTestDetail();
+                newUserInTestDetail.UserInTestID = userInTestDetail.UserInTestID;
+                newUserInTestDetail.QuestionID = userInTestDetail.QuestionID;
+                newUserInTestDetail.AnswerContent = userInTestDetail.AnswerContent;
+                newUserInTestDetail.AnswerIDs = userInTestDetail.AnswerIDs;
+                db.UserInTestDetails.Add(newUserInTestDetail);
+                if (db.SaveChanges() > 0)
+                {
+                    success = true;
+                    message = Constants.DefaultSignUpSuccessMessage;
+                    if (OnRenderPartialViewToString != null)
+                    {
+                        generatedHtml = OnRenderPartialViewToString.Invoke(null);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
         public void UpdateUserEmail(int userId, string userEmail)
         {
             success = false;
