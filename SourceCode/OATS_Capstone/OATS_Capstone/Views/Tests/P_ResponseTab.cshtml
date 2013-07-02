@@ -1,5 +1,13 @@
 ﻿@using OATS_Capstone.Models
 @model OATS_Capstone.Models.ResponseTest
+@if (Model.ResponseUserListCount == 0)
+    {
+        <div class="nt-checklist-ctrl">
+            <div class="nt-msg">No responses found: No students done.</div>
+        </div>
+    }
+    else
+    {
 <div id="sidebar">
     <div style="" class="nt-acc-content" id="learners">
         <div class="nt-ctrl-search">
@@ -55,3 +63,4 @@
 <div id="response-container">
     @Html.Partial("P_ResponseTab_Inner",Model)
 </div>
+}

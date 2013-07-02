@@ -1031,16 +1031,20 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
-                var test = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
-                if (test != null)
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
                 {
                     var questionType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
                     if (questionType != null)
                     {
-                        test.QuestionType = questionType;
+                        question.QuestionType = questionType;
                         if (db.SaveChanges() >= 0)
                         {
                             success = true;
+                            if (OnRenderPartialViewToString != null)
+                            {
+                                generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                            }
                         }
                     }
                 }
@@ -1875,6 +1879,33 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         message = string.Empty;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void UpdateNoneChoiceScore(int questionid, decimal score)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    if (question.QuestionType.Type == "Essay" || question.QuestionType.Type == "ShortAnswer")
+                    {
+                        question.NoneChoiceScore = score;
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            message = string.Empty;
+                        }
                     }
                 }
             }

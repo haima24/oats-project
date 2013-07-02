@@ -2559,7 +2559,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
                     margin-left: 10px;
                 }
 
-.nt-btn-light.nt-icon-left, .nt-login-header .nt-provider-btns > button.nt-icon-left {
+.nt-btn-light.t-icon-left, .nt-login-header .nt-provider-btns > button.t-icon-left {
     position: relative;
     padding-left: 35px;
 }
@@ -3332,4 +3332,14 @@ article, time {
     margin-left: 5px;
     font-size: 17px;
     font-weight: bold;
+}
+.nt-msg .nt-dnd-instr {
+max-width: 516px;
+font-size: 14px;
+padding: 10px;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
 }

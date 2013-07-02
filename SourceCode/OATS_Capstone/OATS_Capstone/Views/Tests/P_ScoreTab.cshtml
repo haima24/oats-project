@@ -1,56 +1,65 @@
 ﻿@model OATS_Capstone.Models.ScoreTest
-<div id="sidebar">
-    <div class="nt-acc-content nt-acc-content-noheader nt-acc-content-resp">
-        <div class="nt-ctrl-search">
-            <div class="nt-search-box">
-                <input type="text" placeholder="Search" class="nt-search-input " />
-                <i class="t-icon icon-search"></i>
-                <button class="nt-btn-icon nt-btn-clear ">
-                    <i class="icon-remove-sign"></i>
-                </button>
-            </div>
-            <div class="nt-ctrl-search-tags nt-taglist"></div>
-        </div>
-        <div class="nt-ctrl-list" score-tab="true">
-            <div class="nt-ctrl-line"></div>
-            <div class="nt-clb-header">
-                <div class="nt-clb-header-control">
-                    <input type="checkbox" checked="checked" class="nt-ctrl-all" />
+@if (Model.ScoreUserList.Count == 0)
+{
+    <div class="nt-checklist-ctrl">
+        <div class="nt-msg">No responses found: No students done.</div>
+    </div>
+}
+else
+{
+    <div id="sidebar">
+        <div class="nt-acc-content nt-acc-content-noheader nt-acc-content-resp">
+            <div class="nt-ctrl-search">
+                <div class="nt-search-box">
+                    <input type="text" placeholder="Search" class="nt-search-input " />
+                    <i class="t-icon icon-search"></i>
+                    <button class="nt-btn-icon nt-btn-clear ">
+                        <i class="icon-remove-sign"></i>
+                    </button>
                 </div>
-                <div class="nt-clb-header-content">
-                    <div class="nt-clb-header-label">
-                        <span>Student</span>
-                        <button class="nt-btn-circle-mini nt-sort-desc"><i class="t-icon i-caret-down"></i></button>
-                        <button class="nt-btn-circle-mini nt-sort-asc active"><i class="t-icon i-caret-up"></i></button>
-                    </div>
-                    <div class="nt-clb-header-desc">
-                        <span>Score</span>
-                        <button class="nt-btn-circle-mini nt-sort-desc"><i class="t-icon i-caret-down"></i></button>
-                        <button class="nt-btn-circle-mini nt-sort-asc"><i class="t-icon i-caret-up"></i></button>
-                    </div>
-                </div>
+                <div class="nt-ctrl-search-tags nt-taglist"></div>
             </div>
-            <div class="nt-ctrl-line"></div>
-            <div id="respUsers" style="max-height: 450px; overflow-y: auto;">
-                @foreach (var uInTest in Model.ScoreUserList)
-                {
-                    <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
-                        <div class="nt-clb-item-control">
-                            <input type="checkbox" checked="checked" user-id="@uInTest.UserID" />
+            <div class="nt-ctrl-list" score-tab="true">
+                <div class="nt-ctrl-line"></div>
+                <div class="nt-clb-header">
+                    <div class="nt-clb-header-control">
+                        <input type="checkbox" checked="checked" class="nt-ctrl-all" />
+                    </div>
+                    <div class="nt-clb-header-content">
+                        <div class="nt-clb-header-label">
+                            <span>Student</span>
+                            <button class="nt-btn-circle-mini nt-sort-desc"><i class="t-icon i-caret-down"></i></button>
+                            <button class="nt-btn-circle-mini nt-sort-asc active"><i class="t-icon i-caret-up"></i></button>
                         </div>
-                        <div class="nt-clb-item-content">
-                            <div class="nt-clb-item-label">@uInTest.UserLabel</div>
-                            <div class="nt-clb-item-desc">@uInTest.UserPercent</div>
+                        <div class="nt-clb-header-desc">
+                            <span>Score</span>
+                            <button class="nt-btn-circle-mini nt-sort-desc"><i class="t-icon i-caret-down"></i></button>
+                            <button class="nt-btn-circle-mini nt-sort-asc"><i class="t-icon i-caret-up"></i></button>
                         </div>
                     </div>
-                }
+                </div>
+                <div class="nt-ctrl-line"></div>
+                <div id="respUsers" style="max-height: 450px; overflow-y: auto;">
+                    @foreach (var uInTest in Model.ScoreUserList)
+                    {
+                        <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
+                            <div class="nt-clb-item-control">
+                                <input type="checkbox" checked="checked" user-id="@uInTest.UserID" />
+                            </div>
+                            <div class="nt-clb-item-content">
+                                <div class="nt-clb-item-label">@uInTest.UserLabel</div>
+                                <div class="nt-clb-item-desc">@uInTest.UserPercent</div>
+                            </div>
+                        </div>
+                    }
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="score-container">
-    @Html.Partial("P_ScoreTab_Inner", Model)
-</div>
+    <div id="score-container">
+        @Html.Partial("P_ScoreTab_Inner", Model)
+    </div>
+}
 

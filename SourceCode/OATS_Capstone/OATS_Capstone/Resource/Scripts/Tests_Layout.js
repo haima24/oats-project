@@ -1,5 +1,6 @@
 ﻿$(function () {
     $("#sidebar").accordion();
+    
     $("#checklist[content-tab=true] .nt-conted-ph-cont").hover(function (ev) {
         var ea = $(ev.currentTarget).find('[contenteditable=true]')[0];
         $(ea).addClass("nt-contedhover");
@@ -34,13 +35,16 @@
             $(this).addClass('nt-qitem-edit-act').siblings().addClass('nt-qitem-edit-inact');
             var current = ev.target;
             var pr = $(current).closest('.nt-qitem');
-
-            if (current.parentNode && ($(current).closest(".nt-tag-adder").hasClass('nt-tag-adder') || $(current).closest(".tags-container").hasClass('tags-container'))) {
+            var tTag = $(current).is(function () {
+                return $(this).is("i.i-tag") || $("i.itag", this).length > 0;
+            });
+            if (current.parentNode && (tTag || $(current).closest(".nt-tag-adder").hasClass('nt-tag-adder') || $(current).closest(".tags-container").hasClass('tags-container'))) {
                 var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
                 $(pr.find('.nt-qctrls')[0]).hide();
                 $(pr.find('.nt-qtagcont')[0]).show();
                 $(btn).find('i').removeClass('i-tag').addClass('i-setting');
                 $(btn).show();
+                $(".nt-tag-adder", pr).show();
             } else {
                 var btn = pr.find('button.nt-btn-sqr.nt-qctrls-qtags-toggle')[0];
                 $(pr.find('.nt-qctrls')[0]).show();
