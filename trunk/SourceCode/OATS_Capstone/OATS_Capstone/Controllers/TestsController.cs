@@ -368,7 +368,7 @@ namespace OATS_Capstone.Controllers
 
         }
 
-        public JsonResult NewTest_FeedBackTab(int testid)
+        public JsonResult NewTest_FeedBackTab(int testid, int sorttype)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -384,7 +384,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.NewTest_FeedBackTab(testid);
+            common.NewTest_FeedBackTab(testid,sorttype);
             return Json(new { common.generatedHtml, common.success, common.message});
         }
 

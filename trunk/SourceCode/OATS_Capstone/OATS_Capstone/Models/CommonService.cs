@@ -611,12 +611,17 @@ namespace OATS_Capstone.Models
 
         }
 
-        public void NewTest_FeedBackTab(int testid)
+        public void NewTest_FeedBackTab(int testid, int softtype)
         {
             try
             {
                 var db = SingletonDb.Instance();
+                //var feedbacks = softtype == 0 ? db.FeedBacks.OrderByDescending(i => i.FeedBackDateTime) :
+                //                                db.FeedBacks.OrderBy(i=>i.User.FirstName);
                 var feedbacks = db.FeedBacks.Where(i => i.TestID == testid);
+                feedbacks = softtype == 0 ? feedbacks.OrderByDescending(i => i.FeedBackDateTime) :
+                                            feedbacks.OrderBy(i => i.User.FirstName);
+
                 if (OnRenderPartialViewToString != null)
                 {
                     success = true;

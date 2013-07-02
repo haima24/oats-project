@@ -2,7 +2,7 @@
 @model IEnumerable<OATS_Capstone.Models.FeedBack>
 @{
     var commentCount = Model.Select(k => k.FeedBackID);
-    var sortedByDateFeedBack = Model.OrderByDescending(i => i.FeedBackDateTime);
+    //var sortedByDateFeedBack = Model.OrderByDescending(i => i.FeedBackDateTime);
 }
 <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
     <div id="comments" class="nt-panel" style="height: 400px; overflow-y: auto">
@@ -14,15 +14,15 @@
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Sort by
     <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu">
-                    <li><a href="@Url.Action("aaa")">By Date</a></li>
-                    <li><a href="@Url.Action("aaa")">By Name</a></li>
+                <ul class="dropdown-menu" id="sortby">
+                    <li id="sortbydate"><a href="@Url.Action("NewTest_FeedBackTab","Tests")">By Date</a></li>
+                    <li id="sortbyname"><a href="@Url.Action("NewTest_FeedBackTab","Tests")">By Name</a></li>
                     <!-- dropdown menu links -->
                 </ul>
             </div>
 
         </div>
-        @foreach (var feedback in sortedByDateFeedBack)
+        @foreach (var feedback in Model)
         {
             <article class="comment">
 
