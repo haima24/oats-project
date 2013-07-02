@@ -307,16 +307,17 @@ i.t-icon.i-essay {
 }
 
 .nt-btn-circle-mini i.t-icon {
-    width:14px;
-    height:14px;
-    position:relative;
+    width: 14px;
+    height: 14px;
+    position: relative;
     left: 2px;
-bottom: 2px;
+    bottom: 2px;
 }
 
 i.t-icon.i-caret-down {
     background: url(./img/caret-down.png) no-repeat;
 }
+
 i.t-icon.i-caret-up {
     background: url(./img/caret-up.png) no-repeat;
 }
@@ -344,12 +345,15 @@ i.t-icon.i-setting {
 i.t-icon.i-tag {
     background: url(./img/tag.png) no-repeat;
 }
+
 i.t-icon.i-user {
     background: url(./img/user.png) no-repeat;
 }
+
 i.t-icon.i-yourself {
     background: url(./img/yourself.png) no-repeat;
 }
+
 i.t-icon {
     display: inline-block;
     width: 20px;
@@ -402,8 +406,9 @@ i, cite, em, var, address, dfn {
     margin-bottom: 20px;
     overflow: hidden;
 }
+
     #container.wrapper {
-        min-height:600px;
+        min-height: 600px;
         position: relative;
         background: rgba(255, 255, 255, 0.3);
         padding: 20px 20px 1px 20px;
@@ -896,7 +901,7 @@ i, cite, em, var, address, dfn {
 }
 
 #checklist .nt-qitem .nt-qans .nt-qans-label {
-    cursor:default;
+    cursor: default;
     font-size: 14px;
     padding: 0;
     margin: 0;
@@ -1241,9 +1246,11 @@ div.hoverscroll {
     height: 24px;
     text-align: right;
 }
+
 .nt-tag:hover .nt-tag-remove {
-display: block;
+    display: block;
 }
+
 #eventTags, #headerUserTags {
     margin: 5px 0;
 }
@@ -2587,6 +2594,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     height: 15px;
     background: url(./img/arrow-right.png) no-repeat;
 }
+
 .search-autocomple {
     background-color: white;
     border: 1px solid #aaaaaa;
@@ -3254,50 +3262,74 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 #userTags {
     margin-top: 5px;
 }
-#comments .comment{
-background: #FFF;
-min-height: 85px;
-position: relative;
-}
-#comments .comment-meta {
 
-float: left;
-font-family: Georgia, 'Times New Roman', Times, serif;
-padding: 14px 10px;
-width: 150px;
+#comments .comment {
+    background: #FFF;
+    min-height: 85px;
+    position: relative;
 }
+
+#comments .comment-meta {
+    float: left;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 14px 10px;
+    width: 150px;
+}
+
 #comments .comment:not(:first-child) .comment-meta {
     border-top: 2px solid #CCC;
 }
+
 #comments .comment-meta time {
-display: block;
-font-size: 12px;
-color: #999;
-font-style: italic;
-padding: 10px 0;
+    display: block;
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+    padding: 10px 0;
 }
+
 #comments .comment:not(:first-child) .comment-body {
     border-top: 2px solid #DDD;
 }
+
 #comments .comment-body {
-padding: 10px 90px 0 0;
-}
-#comments .comment-body p {
-margin: 0 0 10px;
-}
-article,time{
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-font-size: 100%;
-font: inherit;
-vertical-align: baseline;
+    padding: 10px 90px 0 0;
 }
 
-.comment-count{
-margin-top:10px;
-font-size: 16px;
-font-weight: bold;
-margin-bottom: 10px;
+    #comments .comment-body p {
+        margin: 0 0 10px;
+    }
+
+article, time {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+.comment-count {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#score-charter .bar-chart {
+    top: 10px;
+    left: 20px;
+}
+
+#score-charter .jqbar.horizontal .bar-label {
+    text-align: right;
+    width: 300px;
+}
+
+#score-charter .jqbar.horizontal span {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 17px;
+    font-weight: bold;
 }

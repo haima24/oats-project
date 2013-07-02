@@ -5,183 +5,28 @@
 }
 else
 {
-    <div class="nt-scores-cont" style="height: 450px; overflow-y: hidden;">
-        <div class="nt-scores-table-cont" style="height: 350px; overflow-y: hidden;">
-            <table class="nt-scores-table nt-scores-table-header">
-                <thead>
-                    <tr>
-                        <td colspan="6" class="nt-scores-table-users">
-                            <div class="nt-user">
-                                <div class="nt-name">
-                                    <span class="nt-title">Name:</span>
-                                    <span class="nt-descr">@Model.ScoreUsersNameLabel</span>
-                                </div>
-                               @* <div class="nt-grade" style="display: none;">
-                                    <span class="nt-title">Grade:</span>
-                                    <span class="nt-descr"></span>
-                                </div>*@
-                            </div>
-                           @* <div class="nt-users" style="display: none;">
-                                <div class="nt-names"></div>
-                                <div class="nt-more"></div>
-                            </div>*@
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="nt-scores-table-firstcol">
-                            <div class="nt-scores-table-title">
-                                <div class="nt-desc">Tags</div>
-                            </div>
-                            <div class="nt-icons">
-                                <button class="nt-btn-circle-mini nt-sort-asc">
-                                    <i class="t-icon i-caret-up"></i>
-                                </button>
-                                <button class="nt-btn-circle-mini nt-sort-desc">
-                                    <i class="t-icon i-caret-down"></i>
-                                </button>
-                            </div>
-                        </td>
-
-                        <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
-                            <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
-                                <div class="nt-desc">
-                                    <span class="nt-selavg">Selection<br/>
-                                        AVG</span>
-                                    <span class="nt-score-col-mode">(/)</span>
-                                </div>
-                            </div>
-                            <div class="nt-icons" data-sort-attr="selAvg">
-                                <button class="nt-btn-circle-mini nt-sort-asc">
-                                    <i class="t-icon i-caret-up"></i>
-                                </button>
-                                <button class="nt-btn-circle-mini nt-sort-desc">
-                                    <i class="t-icon i-caret-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                        <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
-                            <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
-                                <div class="nt-desc">
-                                    <span class="nt-egavg">Group<br/>
-                                        AVG</span>
-                                    <span class="nt-score-col-mode">(/)</span>
-                                </div>
-                            </div>
-                            <div class="nt-icons" data-sort-attr="egAvg">
-                                <button class="nt-btn-circle-mini nt-sort-asc">
-                                    <i class="t-icon i-caret-up"></i>
-                                </button>
-                                <button class="nt-btn-circle-mini nt-sort-desc">
-                                    <i class="t-icon i-caret-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                        <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
-                            <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
-                                <div class="nt-desc">
-                                    <span class="nt-avgdiff">Difference</span>
-                                    <span class="nt-score-col-mode">(/)</span>
-                                </div>
-                            </div>
-                            <div class="nt-icons" data-sort-attr="avgDiff">
-                                <button class="nt-btn-circle-mini nt-sort-asc">
-                                    <i class="t-icon i-caret-up"></i>
-                                </button>
-                                <button class="nt-btn-circle-mini nt-sort-desc">
-                                    <i class="t-icon i-caret-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                        <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
-                            <div class="nt-scores-table-title nt-guide" data-original-title="Change to x%">
-                                <div class="nt-desc">
-                                    <span class="nt-grpstdev">Group<br/>
-                                        StDev</span>
-                                    <span class="nt-score-col-mode">(/)</span>
-                                </div>
-                            </div>
-                            <div class="nt-icons" data-sort-attr="grpStdev">
-                                <button class="nt-btn-circle-mini nt-sort-asc">
-                                    <i class="t-icon i-caret-up"></i>
-                                </button>
-                                <button class="nt-btn-circle-mini nt-sort-desc">
-                                    <i class="t-icon i-caret-down"></i>
-                                </button>
-                            </div>
-                        </td>
-
-                        <td class="nt-scores-table-boxplot">
-                            <div class="nt-scores-table-title">Box Plot</div>
-                        </td>
-                    </tr>
-                </thead>
-            </table>
-            <div class="nt-scores-table-body" id="c414" style="max-height: 320px; min-height: 40px; overflow-y: auto;">
-                <table class="nt-scores-table">
-                    <tbody>
-                        @foreach (var item in Model.AvailableTags)
-                        {
-                            <tr class="nt-tr-score nt-tr-sortable">
-                            <td class="nt-scores-table-firstcol">
-                                <div class="nt-tag">
-                                    <span>@item.Tag.TagName</span>
-                                    <i class="icon-remove nt-tag-remove"></i>
-                                </div>
-                            </td>
-                            <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
-                                <span class="nt-selavg" style="display: none">@item.Statistic.SelectionAVGScore.Percent</span>
-                                <span class="nt-selavg-nat">@item.Statistic.SelectionAVGScore.Praction</span>
-                            </td>
-                            <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
-                                <span class="nt-egavg" style="display: none">@item.Statistic.GroupAVGScore.Percent</span>
-                                <span class="nt-egavg-nat">@item.Statistic.GroupAVGScore.Praction</span>
-                            </td>
-                            <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
-                                <span class="nt-avgdiff" style="display: none">@item.Statistic.DifferenceScore.Percent</span>
-                                <span class="nt-avgdiff-nat">@item.Statistic.DifferenceScore.Decimal</span>
-                            </td>
-                            <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
-                                <span class="nt-grpstdev" style="display: none">@item.Statistic.GroupSTDEVScore.Percent</span>
-                                <span class="nt-grpstdev-nat">@item.Statistic.GroupSTDEVScore.Decimal</span>
-                            </td>
-
-                            <td class="nt-scores-table-boxplot">
-                                <span class="nt-scores-table-boxplot-container">@item.Statistic.ScoreListString</span>
-                            </td>
-                        </tr>    
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <table class="nt-scores-table nt-scores-table-footer">
-                <tfoot>
-                    <tr>
-                        <td class="nt-scores-table-firstcol">OVERALL:</td>
-
-                        <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
-                            <span class="nt-selavg" style="display: none">@Model.Overall.SelectionAVGScore.Percent</span>
-                            <span class="nt-selavg-nat">@Model.Overall.SelectionAVGScore.Praction</span>
-                        </td>
-                        <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
-                            <span class="nt-egavg" style="display: none">@Model.Overall.GroupAVGScore.Percent</span>
-                            <span class="nt-egavg-nat">@Model.Overall.GroupAVGScore.Praction</span>
-                        </td>
-                        <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
-                            <span class="nt-avgdiff" style="display: none">@Model.Overall.DifferenceScore.Percent</span>
-                            <span class="nt-avgdiff-nat">@Model.Overall.DifferenceScore.Decimal</span>
-                        </td>
-                        <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
-                            <span class="nt-grpstdev" style="display: none">@Model.Overall.GroupSTDEVScore.Percent</span>
-                            <span class="nt-grpstdev-nat">@Model.Overall.GroupSTDEVScore.Decimal</span>
-                        </td>
-
-                        <td class="nt-scores-table-boxplot"><span class="nt-scores-table-boxplot-container">@Model.Overall.ScoreListString</span></td>
-                    </tr>
-                </tfoot>
-            </table>
+    <div class="nt-scores-cont" style="height: 500px; overflow-y: hidden;">
+        <ul class="nav nav-tabs" id="score-detail-tab">
+            <li><a tab="statistic" href="#statistic">Scores Statistic</a></li>
+            <li><a tab="chart" href="#chart">Scores Chart</a></li>
+        </ul>
+        <div id="score-detail-container">
+            @switch ((String)ViewBag.Tab)
+            {
+                case "statistic":
+                @Html.Partial("P_ScoreTab_Statistic", Model)
+                    break;
+                case "chart":
+                @Html.Partial("P_ScoreTab_Chart", Model)
+                    break;
+                default:
+                @Html.Partial("P_ScoreTab_Statistic", Model)
+                    break;
+            }
+            
         </div>
         <div class="nt-scores-footer">
-         @*   <div class="notreptags">
+            @*   <div class="notreptags">
                 <div class="nt-tag-ph">Not Reported Tags</div>
                 <div class="nt-tags">
                     <div class="nt-tag">

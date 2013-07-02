@@ -14,6 +14,7 @@ namespace OATS_Capstone.Models
         public string ScoreUsersNameLabel { get; set; }
         public List<ScoreTag> AvailableTags { get; set; }
         public ScoreStatistics Overall { get; set; }
+        public List<ScoreOnUser> UsersScores { get; set; }
         public ScoreTest(Test test, List<int> checkIds)
         {
             var db = SingletonDb.Instance();
@@ -64,8 +65,24 @@ namespace OATS_Capstone.Models
                 Overall.DifferenceScore = new ScoreStatistic(selectionAverageScore - averageScore, 1);
                 Overall.GroupSTDEVScore = new ScoreStatistic(stdevScore, 1);
                 Overall.ScoreList = userScoreList.ToList();
+
+                UsersScores =test.UserInTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
+                {
+                    var userScore = new ScoreOnUser();
+                    userScore.Name = i.User.FirstName ?? i.User.LastName ?? i.User.UserMail;
+                    decimal? percent=0;
+                    if(totalScore!=0){percent=(i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0))*100/totalScore;}
+                    userScore.Percent=percent;
+                    userScore.UserId = i.UserID;
+                    return userScore;
+                }).ToList();
             }
         }
+    }
+    public class ScoreOnUser {
+        public int UserId { get; set; }
+        public decimal? Percent { get; set; }
+        public string Name { get; set; }
     }
     public class ScoreTag
     {

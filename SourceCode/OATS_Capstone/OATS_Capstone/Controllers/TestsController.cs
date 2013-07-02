@@ -600,7 +600,7 @@ namespace OATS_Capstone.Controllers
             common.NewTest_ResponseTab_CheckUserIds(testid, userids,count);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
-        public JsonResult NewTest_ScoreTab_CheckUserIds(int testid, List<int> userids, int count)
+        public JsonResult NewTest_ScoreTab_CheckUserIds(int testid, List<int> userids, int count,string tab)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -608,6 +608,7 @@ namespace OATS_Capstone.Controllers
                 var result = String.Empty;
                 try
                 {
+                    ViewBag.Tab = tab;
                     result = this.RenderPartialViewToString("P_ScoreTab_Inner", model);
                 }
                 catch (Exception)
