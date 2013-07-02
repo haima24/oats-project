@@ -21,7 +21,7 @@ namespace OATS_Capstone.Models
             CheckedUserIds = checkIds;
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
-                return i.NoneChoiceScore + i.Answers.Sum(k => k.Score);
+                return i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score??0);
             });
             var details = test.UserInTests.ToList();
             ScoreUserList = new List<ScoreUserItem>();
@@ -71,7 +71,7 @@ namespace OATS_Capstone.Models
                     var userScore = new ScoreOnUser();
                     userScore.Name = i.User.FirstName ?? i.User.LastName ?? i.User.UserMail;
                     decimal? percent=0;
-                    if(totalScore!=0){percent=(i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0))*100/totalScore;}
+                    if(totalScore!=0){percent=(i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0)/totalScore).RoundTwo()*100;}
                     userScore.Percent=percent;
                     userScore.UserId = i.UserID;
                     return userScore;

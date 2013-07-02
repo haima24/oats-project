@@ -201,6 +201,18 @@ namespace OATS_Capstone.Models
             var point = question.UserInTestDetails.Sum(i => i.NonChoiceScore);
             decimal? averagePoint = decimal.Zero;
             if (count != 0) { averagePoint = point / count; }
+            if (checkIds.Count == 0)
+            {
+                var id = checkIds.FirstOrDefault();
+                if (id != 0)
+                {
+                    var detail = question.UserInTestDetails.FirstOrDefault(k => k.UserInTest.UserID == id);
+                    if (detail != null)
+                    {
+                        averagePoint = detail.NonChoiceScore ?? 0;
+                    }
+                }
+            }
             var maxPoint = question.NoneChoiceScore;
             _correctPraction = String.Format("{0:0.00} pt (of {1} pt)", averagePoint, maxPoint);
             if (checkIds.Count == 1)
@@ -268,6 +280,18 @@ namespace OATS_Capstone.Models
             var point = question.UserInTestDetails.Sum(i => i.NonChoiceScore);
             decimal? averagePoint = decimal.Zero;
             if (count != 0) { averagePoint = point / count; }
+            if (checkIds.Count == 0)
+            {
+                var id = checkIds.FirstOrDefault();
+                if (id != 0)
+                {
+                    var detail = question.UserInTestDetails.FirstOrDefault(k => k.UserInTest.UserID == id);
+                    if (detail != null)
+                    {
+                        averagePoint = detail.NonChoiceScore ?? 0;
+                    }
+                }
+            }
             var maxPoint = question.NoneChoiceScore;
             _correctPraction = String.Format("{0:0.00} pt (of {1} pt)", averagePoint, maxPoint);
 
@@ -466,7 +490,7 @@ namespace OATS_Capstone.Models
             }
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
-                return i.NoneChoiceScore + i.Answers.Sum(k => k.Score);
+                return i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score??0);
             });
             var details = test.UserInTests.ToList();
             ResponseUserList = new List<ResponseUserItem>();
