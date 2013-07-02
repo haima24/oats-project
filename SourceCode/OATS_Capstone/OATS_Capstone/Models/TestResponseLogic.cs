@@ -471,6 +471,11 @@ namespace OATS_Capstone.Models
         public int ResponseUserListCount { get { return ResponseUserList.Count; } }
         public int CheckedUserIdsCount { get { return CheckedUserIds.Count; } }
         public List<ResponseUserItem> ResponseUserList { get; set; }
+        public ResponseTest(Test test)
+        {
+            var details = test.UserInTests.Select(i => i.UserID).ToList();
+            InitResponseTest(test, details);
+        }
         public ResponseTest(Test test, List<int> checkIds)
         {
             InitResponseTest(test, checkIds);
