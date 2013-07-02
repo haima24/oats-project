@@ -756,7 +756,7 @@ $(function () {
         var li = $(link).closest("li");
         nav.find("li").removeClass("active");
         li.addClass("active");
-        $.post(action, { testid: testid }, function (res) {
+        $.post(action, { testid: testid, sorttype: 0 }, function (res) {
             if (res.success) {
                 var tabcontent = $("#eventTab");
                 if (tabcontent && res.generatedHtml) {
@@ -772,6 +772,68 @@ $(function () {
             } else { showMessage("error", res.message); }
         });
     });
+
+    
+    //Was used in P_FeedBackTab for choose type of sort Date
+    //$('#sortby li').each(function () {
+        
+    //    var sorttype = ($(this).attr('id') === 'sortbydate') ? 0 : 1;
+    //    alert(sorttype);
+
+    //    $(this).find('a').click(function () {
+            
+    //        var url = $(this).attr('href'),
+    //            data = { testid: 3, sorttype: 1 };
+    //        $.post(url, data, function (res) {
+    //            console.debug(res);
+    //            if (res.success) {
+    //                var tabcontent = $("#eventTab");
+    //                if (tabcontent && res.generatedHtml) {
+    //                    tabcontent.html(res.generatedHtml);
+    //                    $("#sidebar[content-tab=true]").accordion();
+    //                }
+    //            } else { showMessage("error", res.message); }
+    //        });
+
+    //        return false;
+    //    });
+    //});
+    $("#sortbyname a").live("click", function (e) {
+        var url = $(this).attr('href'),
+            data = {testid: testid, sorttype: 1 };
+        
+        $.post(url, data, function (res) {
+            console.debug(res);
+            if (res.success) {
+                var tabcontent = $("#eventTab");
+                if (tabcontent && res.generatedHtml) {
+                    tabcontent.html(res.generatedHtml);
+                    
+                }
+            } else { showMessage("error", res.message); }
+        });
+        
+        return false;
+    });
+
+
+    $("#sortbydate a").live("click", function (e) {
+        var url = $(this).attr('href'),
+            data = { testid: testid, sorttype: 0 };
+
+        $.post(url, data, function (res) {
+            console.debug(res);
+            if (res.success) {
+                var tabcontent = $("#eventTab");
+                if (tabcontent && res.generatedHtml) {
+                    tabcontent.html(res.generatedHtml);
+                }
+            } else { showMessage("error", res.message); }
+        });
+
+        return false;
+    });
+
     //separator
     $.post("/Tests/QuestionTypes", function (res) {
         if (res.success) {
