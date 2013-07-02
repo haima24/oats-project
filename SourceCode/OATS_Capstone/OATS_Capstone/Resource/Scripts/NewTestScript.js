@@ -800,22 +800,23 @@ $(function () {
     //        return false;
     //    });
     //});
-    $("#sortbyname a").live("click", function (e) {
-        var url = $(this).attr('href'),
-            data = {testid: testid, sorttype: 1 };
+    $("#sortbyname a,#sortbydate a").live("click", function (e) {
+        e.preventDefault();
+        var sortType = parseInt($(this).attr("sort-type"));
+        if(!isNaN(sortType)){
+            var url = $(this).attr('href'),
+                data = { testid: testid, sorttype: sortType };
         
-        $.post(url, data, function (res) {
-            console.debug(res);
-            if (res.success) {
-                var tabcontent = $("#eventTab");
-                if (tabcontent && res.generatedHtml) {
-                    tabcontent.html(res.generatedHtml);
-                    
-                }
-            } else { showMessage("error", res.message); }
-        });
-        
-        return false;
+            $.post(url, data, function (res) {
+                console.debug(res);
+                if (res.success) {
+                    var tabcontent = $("#eventTab");
+                    if (tabcontent && res.generatedHtml) {
+                        tabcontent.html(res.generatedHtml);
+                    }
+                } else { showMessage("error", res.message); }
+            });
+        }
     });
 
 
