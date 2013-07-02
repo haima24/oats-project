@@ -570,8 +570,9 @@ namespace OATS_Capstone.Models
                 if (OnRenderPartialViewToString != null)
                 {
                     success = true;
-                    var checkIds = new List<int>();
-                    var responseTest = new ResponseTest(test, checkIds);
+                    //var checkIds = new List<int>();
+                    //var responseTest = new ResponseTest(test, checkIds);
+                    var responseTest = new ResponseTest(test);
                     generatedHtml = OnRenderPartialViewToString.Invoke(responseTest);
                 }
             }
@@ -595,8 +596,9 @@ namespace OATS_Capstone.Models
                 if (OnRenderPartialViewToString != null)
                 {
                     success = true;
-                    var checkIds = new List<int>();
-                    var scoreTest = new ScoreTest(test, checkIds);
+                    //var checkIds = new List<int>();
+                    //var scoreTest = new ScoreTest(test, checkIds);
+                    var scoreTest = new ScoreTest(test);
                     generatedHtml = OnRenderPartialViewToString.Invoke(scoreTest);
                 }
             }

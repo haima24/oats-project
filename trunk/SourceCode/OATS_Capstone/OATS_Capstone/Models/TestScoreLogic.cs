@@ -15,7 +15,15 @@ namespace OATS_Capstone.Models
         public List<ScoreTag> AvailableTags { get; set; }
         public ScoreStatistics Overall { get; set; }
         public List<ScoreOnUser> UsersScores { get; set; }
+        public ScoreTest(Test test) {
+            var details = test.UserInTests.Select(i => i.UserID).ToList();
+            InitScoreTest(test, details);
+        }
         public ScoreTest(Test test, List<int> checkIds)
+        {
+            InitScoreTest(test,checkIds);
+        }
+        private void InitScoreTest(Test test,List<int> checkIds)
         {
             var db = SingletonDb.Instance();
             CheckedUserIds = checkIds;
