@@ -5,7 +5,20 @@ var events;
 var question_holder = new Array();
 var testid;
 var currentEditAnswer;
+var currentScoreDetailTab = "statistic";
 
+function initScoreOnUserChart()
+{
+    var charts = $("#score-charter div[data=charter]");
+    if(charts.length>0){
+        charts.each(function (i, e) {
+            var name = $(e).attr("name");
+            var percent = $(e).attr("percent");
+            var color = $.findColor(percent, 0, 100);
+            $(e).jqbar({ label: name, value: percent, barColor: color,barWidth:20 });
+        });
+    }
+}
 function initTagsOnTest() {
     $("#eventTags .tags-container").sortable({
         revert: true,
@@ -53,7 +66,7 @@ function initTagsOnTest() {
             $.ajax({
                 type: "POST",
                 url: "/Tests/SearchTagsOnTest",
-                data: JSON.stringify({ testid: testid, term: req.term,maxrows:10 }),
+                data: JSON.stringify({ testid: testid, term: req.term, maxrows: 10 }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (r) {
@@ -178,7 +191,7 @@ function initTagsOnQuestion() {
             };
         });
     }
-    
+
 }
 function initPlot() {
     $('.nt-scores-table-boxplot-container').sparkline('html', {
@@ -754,6 +767,7 @@ $(function () {
                     initImageUploadFacility();
                     initDragAndDrop();
                     initPlot();
+                    initScoreOnUserChart();
                 }
             } else { showMessage("error", res.message); }
         });
@@ -858,7 +872,7 @@ $(function () {
     //separator
     $("#checklist[content-tab=true] .nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
-        if (currentEditAnswer) { $(currentEditAnswer).blur();}
+        if (currentEditAnswer) { $(currentEditAnswer).blur(); }
         addAnswer(parent, parent.attr("question-id"), function () {
             sortByNumberOrLetters();
             showOrHideDeleteLineAnswer();
@@ -1146,12 +1160,16 @@ $(function () {
                 $.ajax({
                     type: "POST",
                     url: "/Tests/NewTest_ScoreTab_CheckUserIds",
-                    data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length }),
+                    data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length, tab: currentScoreDetailTab }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (res) {
                         if (res.success) {
                             $("#score-container").html(res.generatedHtml);
+                            var activeLi = $("#score-detail-tab li").filter(function () {
+                                return $("a[tab=" + currentScoreDetailTab + "]", this).length > 0;
+                            }).addClass("active");
+                            initScoreOnUserChart();
                             initPlot();
                         } else {
                             showMessage("error", res.message);
@@ -1210,7 +1228,7 @@ $(function () {
             });
         }
     });
-    
+
     //separator
     $("#checklist[content-tab=true] .nt-qitem .nt-scrbtn").live("click", function (ev) {
         var item = $(this).closest(".nt-qitem");
@@ -1451,7 +1469,36 @@ $(function () {
         });
     });
     //separator
-
+    $("#score-detail-tab li a[tab]").live("click", function (ev) {
+        ev.preventDefault();
+        var tab = $(this).attr("tab");
+        if (tab) {
+            currentScoreDetailTab = tab;
+            var checkIds = $("input[type=checkbox][user-id]:checked").map(function (i, e) {
+                return $(e).attr("user-id");
+            }).convertJqueryArrayToJSArray();
+            $.ajax({
+                type: "POST",
+                url: "/Tests/NewTest_ScoreTab_CheckUserIds",
+                data: JSON.stringify({ testid: testid, userids: checkIds, count: checkIds.length, tab: currentScoreDetailTab }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.success) {
+                        $("#score-container").html(res.generatedHtml);
+                        var activeLi = $("#score-detail-tab li").filter(function () {
+                            return $("a[tab=" + currentScoreDetailTab + "]", this).length > 0;
+                        }).addClass("active");
+                        initScoreOnUserChart();
+                        initPlot();
+                    } else {
+                        showMessage("error", res.message);
+                    }
+                }
+            });
+        }
+    });
+    //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
     var hub = $.connection.generalHub;
