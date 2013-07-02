@@ -21,7 +21,7 @@ namespace OATS_Capstone.Models
             CheckedUserIds = checkIds;
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
-                return i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score??0);
+                return i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
             });
             var details = test.UserInTests.ToList();
             ScoreUserList = new List<ScoreUserItem>();
@@ -66,20 +66,21 @@ namespace OATS_Capstone.Models
                 Overall.GroupSTDEVScore = new ScoreStatistic(stdevScore, 1);
                 Overall.ScoreList = userScoreList.ToList();
 
-                UsersScores =test.UserInTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
+                UsersScores = test.UserInTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
                     var userScore = new ScoreOnUser();
                     userScore.Name = i.User.FirstName ?? i.User.LastName ?? i.User.UserMail;
-                    decimal? percent=0;
-                    if(totalScore!=0){percent=(i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0)/totalScore).RoundTwo()*100;}
-                    userScore.Percent=percent;
+                    decimal? percent = 0;
+                    if (totalScore != 0) { percent = (i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0) / totalScore).RoundTwo() * 100; }
+                    userScore.Percent = percent;
                     userScore.UserId = i.UserID;
                     return userScore;
                 }).ToList();
             }
         }
     }
-    public class ScoreOnUser {
+    public class ScoreOnUser
+    {
         public int UserId { get; set; }
         public decimal? Percent { get; set; }
         public string Name { get; set; }
@@ -100,31 +101,23 @@ namespace OATS_Capstone.Models
                 var questions = tag.TagInQuestions.Where(i => i.Question.TestID == testid).Select(k => k.Question);
                 statistic = new ScoreStatistics();
                 var totalScore = questions.TotalScore();
-                var groupScoreList = questions.Select(i =>
-                {
-                    return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
-                });
-                var stdevScore = groupScoreList.StandardDeviation();
-                var averageScore = groupScoreList.Average();
-                var userScoreList = questions.Select(i =>
-                {
-                    return i.UserInTestDetails.Sum(k =>
-                    {
-                        if (checkIds.Contains(k.UserInTest.UserID))
-                        {
-                            return k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    });
-                });
-                var selectionAverageScore = userScoreList.Average();
+                var groupDetails = questions.SelectMany(i => i.UserInTestDetails);
+                var groupCalculate = from g in groupDetails
+                                     group g by g.UserInTestID into GroupDetails
+                                     select new {Score=GroupDetails.Sum(k=>k.NonChoiceScore??0+k.ChoiceScore??0)};
+                var userDetails = groupDetails.Where(i => checkIds.Contains(i.UserInTest.UserID));
+                var userCalculate = from g in userDetails
+                                     group g by g.UserInTestID into UserDetails
+                                     select new {Score=UserDetails.Sum(k=>k.NonChoiceScore??0+k.ChoiceScore??0)};
+                var selectionAverageScore = userCalculate.Average(i => i.Score);
+                var groupAverageScore = groupCalculate.Average(i => i.Score);
+                var stdevScore = groupCalculate.Select(i => i.Score).StandardDeviation();
+                var userScoreList = userCalculate.Select(i => i.Score);
+                
                 statistic.Name = tag.TagName;
                 statistic.SelectionAVGScore = new ScoreStatistic(selectionAverageScore, totalScore);
-                statistic.GroupAVGScore = new ScoreStatistic(averageScore, totalScore);
-                statistic.DifferenceScore = new ScoreStatistic(selectionAverageScore - averageScore, 1);
+                statistic.GroupAVGScore = new ScoreStatistic(groupAverageScore, totalScore);
+                statistic.DifferenceScore = new ScoreStatistic(selectionAverageScore - groupAverageScore, 1);
                 statistic.GroupSTDEVScore = new ScoreStatistic(stdevScore, 1);
                 statistic.ScoreList = userScoreList.ToList();
             }
