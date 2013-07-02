@@ -1,36 +1,30 @@
 ﻿@model OATS_Capstone.Models.ResponseTest
-@if (Model.ResponseUserListCount == 0)
+
+@if (Model.CheckedUserIdsCount == 0)
+{ 
+    <div class="nt-msg">Please select one or more students!</div>
+}
+else
+{
+    if (Model.CheckedUserIdsCount == 1)
     {
-        <div class="nt-checklist-ctrl">
-            <div class="nt-msg">No responses found: No students assigned.</div>
-        </div>
+    <div class="nt-checklist-ctrl">
+        <div class="nt-msg">Submitted on @Model.TestTakenDate</div>
+        <button id="btnEdit" class="nt-btn-dark" style="display: none;">Edit</button>
+        <button id="btnDone" class="nt-btn-dark" style="display: none;">Done</button>
+        <button id="btnDel" class="nt-btn-dark" data-guide="resp_remove_btn" style="display: inline-block;">Remove</button>
+        <button id="btnSubmit" class="nt-btn-submit" data-guide="resp_submit_btn" style="display: none;">Submit</button>
+    </div>
     }
     else
     {
-        if (Model.CheckedUserIdsCount == 0)
-        { 
-        <div class="nt-msg">Please select one or more students!</div>
-        }
-        else
-        {
-            if (Model.CheckedUserIdsCount == 1)
-            {
-        <div class="nt-checklist-ctrl">
-            <div class="nt-msg">Submitted on @Model.TestTakenDate</div>
-            <button id="btnEdit" class="nt-btn-dark" style="display: none;">Edit</button>
-            <button id="btnDone" class="nt-btn-dark" style="display: none;">Done</button>
-            <button id="btnDel" class="nt-btn-dark" data-guide="resp_remove_btn" style="display: inline-block;">Remove</button>
-            <button id="btnSubmit" class="nt-btn-submit" data-guide="resp_submit_btn" style="display: none;">Submit</button>
-        </div>
-            }else{
-            <div class="nt-checklist-ctrl">
-        </div>
-            }
-        <div id="checklist" style="height: 450px; overflow-y: auto;">
-            @foreach (var item in Model.Questions)
-            {
-                @Html.Partial("P_Response_Instance", item)    
-            }
-        </div>
-        }
+    <div class="nt-checklist-ctrl">
+    </div>
     }
+    <div id="checklist" style="height: 450px; overflow-y: auto;">
+        @foreach (var item in Model.Questions)
+        {
+            @Html.Partial("P_Response_Instance", item)    
+        }
+    </div>
+}

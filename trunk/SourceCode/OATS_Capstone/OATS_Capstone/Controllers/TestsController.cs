@@ -15,7 +15,7 @@ namespace OATS_Capstone.Controllers
 {
     public class TestsController : Controller
     {
-        
+
 
         //
         // GET: /Tests/
@@ -163,7 +163,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.resultlist, common.success, common.message });
         }
 
-        
+
         public JsonResult TestsSearch()
         {
             var common = new CommonService();
@@ -385,7 +385,7 @@ namespace OATS_Capstone.Controllers
                 return result;
             };
             common.NewTest_FeedBackTab(testid,sorttype);
-            return Json(new { common.generatedHtml, common.success, common.message});
+            return Json(new { common.generatedHtml, common.success, common.message });
         }
 
 
@@ -491,7 +491,7 @@ namespace OATS_Capstone.Controllers
                 return result;
             };
             common.AddAnswer(questionid);
-            return Json(new {common.generatedHtml,common.success,common.message });
+            return Json(new { common.generatedHtml, common.success, common.message });
         }
 
         public JsonResult ResortQuestions(int count, List<Question> questions)
@@ -504,7 +504,7 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.DeleteQuestion(questionid);
-            return Json(new { common.success,common.message});
+            return Json(new { common.success, common.message });
         }
         public JsonResult DeleteAnswer(int answerid)
         {
@@ -539,13 +539,27 @@ namespace OATS_Capstone.Controllers
         public JsonResult UpdateQuestionType(int questionid, string type)
         {
             var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Question_Instance", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
             common.UpdateQuestionType(questionid, type);
-            return Json(new { common.success, common.message });
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult UpdateStartEnd(int testid, DateTime start, DateTime end)
         {
             var common = new CommonService();
-            common.UpdateStartEnd(testid, start,end);
+            common.UpdateStartEnd(testid, start, end);
             return Json(new { common.success, common.message });
         }
         public JsonResult UpdateSettings(int testid, String settingKey, bool isactive)
@@ -578,9 +592,9 @@ namespace OATS_Capstone.Controllers
                 return result;
             };
             common.EnableTest(testid);
-            return Json(new { common.success,common.message,common.generatedHtml});
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
-        public JsonResult NewTest_ResponseTab_CheckUserIds(int testid, List<int> userids,int count)
+        public JsonResult NewTest_ResponseTab_CheckUserIds(int testid, List<int> userids, int count)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -597,10 +611,10 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.NewTest_ResponseTab_CheckUserIds(testid, userids,count);
+            common.NewTest_ResponseTab_CheckUserIds(testid, userids, count);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
-        public JsonResult NewTest_ScoreTab_CheckUserIds(int testid, List<int> userids, int count,string tab)
+        public JsonResult NewTest_ScoreTab_CheckUserIds(int testid, List<int> userids, int count, string tab)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -624,19 +638,20 @@ namespace OATS_Capstone.Controllers
         public JsonResult DuplicateTest(int testid)
         {
             var common = new CommonService();
-            var id=common.DuplicateTest(testid);
-            return Json(new { common.success,common.message,id});
+            var id = common.DuplicateTest(testid);
+            return Json(new { common.success, common.message, id });
         }
         public JsonResult SearchTagsOnTest(int testid, string term, int maxrows)
         {
             var common = new CommonService();
             common.SearchTagsOnTest(testid, term, maxrows);
-            return Json(new {common.success,common.message,common.resultlist });
+            return Json(new { common.success, common.message, common.resultlist });
         }
         public JsonResult AddTagToTest(int testid, int tagid)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -656,13 +671,13 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.RemoveTagToTest(testid, tagid);
-            return Json(new { common.success,common.message});
+            return Json(new { common.success, common.message });
         }
         public JsonResult SortTagToTest(int testid, List<int> ids)
         {
             var common = new CommonService();
             common.SortTagToTest(testid, ids);
-            return Json(new { common.success,common.message});
+            return Json(new { common.success, common.message });
         }
         public JsonResult SearchTagsOnQuestion(int questionid, string term, int maxrows)
         {
@@ -700,6 +715,12 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.SortTagToQuestion(questionid, ids);
+            return Json(new { common.success, common.message });
+        }
+        public JsonResult UpdateNoneChoiceScore(int questionid, decimal score)
+        {
+            var common = new CommonService();
+            common.UpdateNoneChoiceScore(questionid, score);
             return Json(new { common.success, common.message });
         }
 
