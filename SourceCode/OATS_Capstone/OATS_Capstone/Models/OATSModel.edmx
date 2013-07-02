@@ -249,7 +249,7 @@
           <Property Name="UserInTestID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TestID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
-          <Property Name="Score" Type="int" Nullable="false" />
+          <Property Name="Score" Type="decimal" Scale="2" />
           <Property Name="TestTakenDate" Type="datetime" />
           <Property Name="NumberOfAttend" Type="int" Nullable="false" />
         </EntityType>
@@ -789,7 +789,7 @@
           <Property Name="UserInTestID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="TestID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="Score" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TestTakenDate" Type="DateTime" Precision="3" />
           <Property Name="NumberOfAttend" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="UserInTest" ToRole="Test" />

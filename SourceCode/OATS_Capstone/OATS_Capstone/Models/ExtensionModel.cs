@@ -11,7 +11,7 @@ namespace OATS_Capstone.Models
             var percent = String.Empty;
             try
             {
-                var per = praction * 100;
+                var per = praction.RoundTwo() * 100;
                 percent = String.Format("{0:##}%", per);
             }
             catch (Exception)
@@ -26,7 +26,7 @@ namespace OATS_Capstone.Models
             if (praction == 0) { return "0%"; }
             try
             {
-                var per = praction * 100;
+                var per = praction.RoundTwo() * 100;
                 percent = String.Format("{0:##}%", per);
             }
             catch (Exception)
@@ -35,6 +35,14 @@ namespace OATS_Capstone.Models
             }
             return percent;
         }
+        public static decimal? RoundTwo(this decimal? value)
+        {
+            return Math.Round(value??0, 2);
+        }
+        public static decimal RoundTwo(this decimal value)
+        {
+            return Math.Round(value, 2);
+        }
         public static decimal? TotalScore(this IEnumerable<Question> questions)
         {
             decimal? score = 0;
@@ -42,7 +50,7 @@ namespace OATS_Capstone.Models
             {
                 score = questions.Sum(i => 
                 {
-                    var temp= i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score);
+                    var temp= i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score??0);
                     return temp;
                 });
             }

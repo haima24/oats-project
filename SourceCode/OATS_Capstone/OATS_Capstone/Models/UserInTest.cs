@@ -22,7 +22,7 @@ namespace OATS_Capstone.Models
         public int UserInTestID { get; set; }
         public int TestID { get; set; }
         public int UserID { get; set; }
-        public int Score { get; set; }
+        public Nullable<decimal> Score { get; set; }
         public Nullable<System.DateTime> TestTakenDate { get; set; }
         public int NumberOfAttend { get; set; }
     
