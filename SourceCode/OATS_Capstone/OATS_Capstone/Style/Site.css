@@ -3365,7 +3365,7 @@ article, time {
 
 #modalPopupFeedback.modal {
     width: auto;
-    left: 35%;
+    left: 33%;
 }
 
 #modalPopupFeedback .modal-body {
@@ -3374,7 +3374,7 @@ article, time {
 }
 
 #modalPopupFeedback.modal.fade.in {
-    top: 5%;
+    top: 4%;
 }
 
 #modalPopupFeedback .modal-body .controls:first-child {
