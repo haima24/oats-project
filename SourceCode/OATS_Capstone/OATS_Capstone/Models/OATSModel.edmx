@@ -123,6 +123,7 @@
           <Property Name="TestID" Type="int" Nullable="false" />
           <Property Name="FeedBackDetail" Type="nvarchar" MaxLength="1024" />
           <Property Name="FeedBackDateTime" Type="datetime" />
+          <Property Name="ParentID" Type="int" />
         </EntityType>
         <EntityType Name="Invitation">
           <Key>
@@ -133,6 +134,7 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="RoleID" Type="int" />
           <Property Name="InvitationDateTime" Type="datetime" />
+          <Property Name="AccessToken" Type="varchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -629,6 +631,7 @@
           <Property Name="TestID" Type="Int32" Nullable="false" />
           <Property Name="FeedBackDetail" Type="String" MaxLength="1024" Unicode="true" FixedLength="false" />
           <Property Name="FeedBackDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ParentID" Type="Int32" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_FeedBack_Test" FromRole="FeedBack" ToRole="Test" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_FeedBack_User" FromRole="FeedBack" ToRole="User" />
         </EntityType>
@@ -641,6 +644,7 @@
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="RoleID" Type="Int32" />
           <Property Name="InvitationDateTime" Type="DateTime" Precision="3" />
+          <Property Name="AccessToken" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Role" Relationship="OATSDBModel.FK_Invitation_Role" FromRole="Invitation" ToRole="Role" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Invitation" ToRole="Test" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Invitation_User" FromRole="Invitation" ToRole="User" />
@@ -1076,6 +1080,7 @@
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
                 <ScalarProperty Name="FeedBackDetail" ColumnName="FeedBackDetail" />
                 <ScalarProperty Name="FeedBackDateTime" ColumnName="FeedBackDateTime" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1087,6 +1092,7 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="InvitationDateTime" ColumnName="InvitationDateTime" />
+                <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

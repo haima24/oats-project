@@ -1,11 +1,15 @@
 ﻿@model OATS_Capstone.Models.Question
+@{
+    var answers = @Model.Answers.Where(k => !String.IsNullOrEmpty(k.AnswerContent)).Select(i => i.AnswerContent);
+    var answersDescription =answers.Count()==0?string.Empty: answers.Aggregate((w, n) => w + "/ " + n);
+    }
 <div class="nt-qsearch" question-id="@Model.QuestionID">
                 <div>
                     <i class="t-icon i-radio"></i>
                 </div>
                 <div class="nt-qsearch-content">
                     <div class="nt-qsearch-title">@Model.QuestionTitle</div>
-                    <div class="nt-qsearch-desc">@Model.Answers.Where(k=>!String.IsNullOrEmpty(k.AnswerContent)).Select(i=>i.AnswerContent).Aggregate((w,n)=>w+"/ "+n)</div>
+                    <div class="nt-qsearch-desc">@answersDescription</div>
                 </div>
                 <div class="nt-qsearch-popover-cont">
                     <div class="nt-qsearch-popover">
