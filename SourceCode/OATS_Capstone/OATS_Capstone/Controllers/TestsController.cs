@@ -309,22 +309,23 @@ namespace OATS_Capstone.Controllers
         }
         public JsonResult Index_TestListTab()
         {
-            var success = false;
-            var message = Constants.DefaultProblemMessage;
-            var generatedHtml = String.Empty;
-            try
-            {
-                var db = SingletonDb.Instance();
-                generatedHtml = this.RenderPartialViewToString("P_TestListTab", db.Tests);
-                success = true;
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_TestListTab", model);
+                }
+                catch (Exception)
+                {
 
-            return Json(new { success, message, generatedHtml });
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.Index_TestListTab();
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult NewTest_ResponseTab(int testid)
         {

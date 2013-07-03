@@ -42,9 +42,10 @@ namespace OATS_Capstone.Models
     }
     public class TestListItem
     {
+        public int TestID { get; set; }
         public string TestTitle { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime? End { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
         private int allInvitedCount = 0;
         private int resultedOnInvitedCount = 0;
 
@@ -57,20 +58,42 @@ namespace OATS_Capstone.Models
         {
             get { return allInvitedCount; }
         }
-        public decimal? Average { get; }
-        public decimal? STDEV { get; }
+        private decimal? _Average=null;
+
+        public decimal? Average
+        {
+            get { return _Average; }
+        }
+        public string AverageString { get { return Average.HasValue ?Average.ToString(): "-"; } }
+        public string STDEVString { get { return STDEV.HasValue ? STDEV.ToString() : "-"; } }
+        private decimal? _STDEV=null;
+
+        public decimal? STDEV
+        {
+            get { return _STDEV; }
+        }
+        public string Rate { get {
+            var r = "N/A";
+            if (allInvitedCount!=0&&resultedOnInvitedCount!=0) {
+                r = string.Format("{0} out of {1}", resultedOnInvitedCount, allInvitedCount);
+            }
+            return r;
+        } }
         public TestListItem(Test test)
         {
+            TestID = test.TestID;
             TestTitle = test.TestTitle;
-            Start = test.StartDateTime;
-            End = test.EndDateTime;
-
-            var groupScoreList = test.UserInTests.Select(i =>
+            Start = test.StartDateTime.ToDateDefaultFormat();
+            End = test.EndDateTime.ToDateDefaultFormat() ;
+            if (test.UserInTests.Count > 0)
             {
-                return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
-            });
-            var stdevScore = groupScoreList.StandardDeviation();
-            var averageScore = groupScoreList.Average();
+                var groupScoreList = test.UserInTests.Select(i =>
+                {
+                    return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
+                });
+                _STDEV = groupScoreList.StandardDeviation();
+                _Average = groupScoreList.Average();
+            }
             var allInvited = test.Invitations.Where(i => i.Role.RoleDescription == "Student");
             allInvitedCount = allInvited.Count();
             resultedOnInvitedCount = allInvited.Count(i =>

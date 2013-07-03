@@ -1980,6 +1980,26 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+        public void Index_TestListTab()
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                success = true;
+                if (OnRenderPartialViewToString != null)
+                { 
+                    var testList=new TestList(db.Tests);
+                    generatedHtml = OnRenderPartialViewToString.Invoke(testList);
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
 
+        }
     }
 }
