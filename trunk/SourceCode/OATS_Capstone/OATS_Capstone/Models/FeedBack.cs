@@ -19,6 +19,7 @@ namespace OATS_Capstone.Models
         public int TestID { get; set; }
         public string FeedBackDetail { get; set; }
         public Nullable<System.DateTime> FeedBackDateTime { get; set; }
+        public Nullable<int> ParentID { get; set; }
     
         public virtual Test Test { get; set; }
         public virtual User User { get; set; }

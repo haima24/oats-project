@@ -277,17 +277,22 @@ namespace OATS_Capstone.Models
             success = false;
             message = Constants.DefaultProblemMessage;
             resultlist = new List<Object>();
-            var termLower = term.ToLower();
+            
             try
             {
                 var db = SingletonDb.Instance();
                 var questions = db.Questions.ToList();
-                var matchQuestions = questions.Where(delegate(Question question)
+                var matches = new List<Question>();
+                if (!string.IsNullOrEmpty(term))
                 {
-                    return question.QuestionTitle.ToLower().Contains(termLower)
-                        || question.Answers.Any(k => k.AnswerContent.ToLower().Contains(termLower));
-                });
-                var matches = matchQuestions.Take(maxrows).ToList();
+                    var termLower = term.Trim().ToLower();
+                    var matchQuestions = questions.Where(delegate(Question question)
+                    {
+                        return question.QuestionTitle.ToLower().Contains(termLower)
+                            || question.Answers.Any(k => k.AnswerContent.ToLower().Contains(termLower));
+                    });
+                    matches = matchQuestions.Take(maxrows).ToList();
+                }
                 success = true;
                 matches.ForEach(delegate(Question question)
                 {
@@ -436,6 +441,7 @@ namespace OATS_Capstone.Models
                             var invitation = new Invitation();
                             invitation.User = user;
                             invitation.Role = userRole;
+                            invitation.InvitationDateTime = DateTime.Now;
                             test.Invitations.Add(invitation);
                         }
                     });
@@ -1415,6 +1421,7 @@ namespace OATS_Capstone.Models
                     var invitation = new Invitation();
                     invitation.Test = test;
                     invitation.Role = userRole;
+                    invitation.InvitationDateTime = DateTime.Now;
                     user.Invitations.Add(invitation);
                     if (db.SaveChanges() > 0)
                     {
@@ -1449,6 +1456,7 @@ namespace OATS_Capstone.Models
                     var invitation = new Invitation();
                     invitation.Test = test;
                     invitation.Role = userRole;
+                    invitation.InvitationDateTime = DateTime.Now;
                     user.Invitations.Add(invitation);
                     if (db.SaveChanges() > 0)
                     {

@@ -144,7 +144,7 @@ namespace OATS_Capstone.Controllers
                 var result = string.Empty;
                 try
                 {
-                    this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", model);
+                    result= this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", model);
                 }
                 catch (Exception)
                 {
