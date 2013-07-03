@@ -70,6 +70,16 @@ namespace OATS_Capstone.Models
             decimal avg = values.Average();
             return (decimal)Math.Sqrt(values.Average(v => Math.Pow((double)(v - avg), 2)));
         }
+        public static string ToDateDefaultFormat(this DateTime datetime)
+        {
+            return String.Format("{0:dd MMM yyyy}", datetime);
+        }
+        public static string ToDateDefaultFormat(this DateTime? datetime)
+        {
+            var s = string.Empty;
+            if (datetime.HasValue) { s = String.Format("{0:dd MMM yyyy}", datetime.Value); }
+            return s;
+        }
     }
 
 }

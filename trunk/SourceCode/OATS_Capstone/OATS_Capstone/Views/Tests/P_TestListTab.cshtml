@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OATS_Capstone.Models.Test>
+﻿@model OATS_Capstone.Models.TestList
 <script>
     $(function () {
         $("#asmsList").accordion({
@@ -8,14 +8,6 @@
     });
 </script>
 <style>
-    /*body {
-        margin-top: 40px;
-        text-align: center;
-        font-size: 13px;
-        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-    }*/
-
-
     #asmsOverview {
         margin-right: 5px;
         vertical-align: top;
@@ -26,114 +18,117 @@
         background: red;
     }
 </style>
-    <div id="asmsList" style="height: 600px; overflow-y: visible; float: left; width: 740px;" class="nt-flex-acc" >
-        <div class="accordion-group nt-acc-group nt-acc-open">
-            <div class="accordion-heading">
+<div id="asmsList" style="height: 600px; overflow-y: visible; float: left; width: 740px;" class="nt-flex-acc">
+    <div class="accordion-group nt-acc-group nt-acc-open">
+        <div class="accordion-heading">
 
-                <a class="accordion-toggle" href="#">
-                    <div class="nt-led on"></div>
-                    <div class="nt-led "></div>
-                    <div class="nt-led "></div>
-                    <i class="t-icon arrow-up"></i>
-                    <div class="nt-desc">Recent Tests</div>
-                </a>
-            </div>
-            <div id="recent" class="accordion-body" style="max-height:400px">
-                <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
-                    <a>
-                        <div class="nt-list-head">
-
-                            <div class="nt-name">
-                                Tests
-                            </div>
-                            <div class="nt-date">Start</div>
-                            <div class="nt-date">End</div>
-
-
-                            <div class="nt-rate">Resp. Rate</div>
-
-                            <div class="nt-perc">Avg.</div>
-                            <div class="nt-perc">St.Dev.</div>
-                            <div>&nbsp;</div>
-                        </div>
-                    </a>
-
-                    <div class="nt-list-cont">
-                        <div class="nt-list-row nt-guide">
-                            <div class="nt-name">
-                                <span data-original-title="Open this test">Enter Test Title
-                                </span>
-
-                            </div>
-
-
-                            <div class="nt-date">
-                                23 May 2013
-                            </div>
-                            <div class="nt-date">
-                                23 May 2013
-                            </div>
-
-
-                            <div class="nt-rate ">N/A</div>
-
-                            <div class="nt-perc">-</div>
-                            <div class="nt-perc">-</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a class="accordion-toggle" href="#">
+                <div class="nt-led on"></div>
+                <div class="nt-led "></div>
+                <div class="nt-led "></div>
+                <i class="t-icon arrow-up"></i>
+                <div class="nt-desc">Recent Tests</div>
+            </a>
         </div>
-        <div class="accordion-group nt-acc-group">
-            <div class="accordion-heading">
+        <div id="recent" class="accordion-body" style="max-height: 400px">
+            <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
+                <a>
+                    <div class="nt-list-head">
 
-                <a class="accordion-toggle" href="#">
-                    <div class="nt-led "></div>
-                    <div class="nt-led on"></div>
-                    <div class="nt-led "></div>
-                    <i class="t-icon arrow-up"></i>
-                    <div class="nt-desc">Running Tests</div>
+                        <div class="nt-name">
+                            Tests
+                        </div>
+                        <div class="nt-date">Start</div>
+                        <div class="nt-date">End</div>
+
+
+                        <div class="nt-rate">Resp. Rate</div>
+
+                        <div class="nt-perc">Avg.</div>
+                        <div class="nt-perc">St.Dev.</div>
+                        <div>&nbsp;</div>
+                    </div>
                 </a>
-            </div>
-            <div class="accordion-body" style="max-height:400px">
-                <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
-                    <a>
-                        <div class="nt-list-head">
+
+                <div class="nt-list-cont">
+                    @foreach (var item in Model.RecentTests)
+                    {
+                        <div class="nt-list-row">
 
                             <div class="nt-name">
-                                Tests
+                                <a href="@Url.Action("DoTest", new { id = item.TestID })">@item.TestTitle</a>
                             </div>
-                            <div class="nt-date">Start</div>
-                            <div class="nt-date">End</div>
 
 
-                            <div class="nt-rate">Resp. Rate</div>
+                            <div class="nt-date">
+                                @item.Start
+                            </div>
+                            <div class="nt-date">
+                                @item.End
+                            </div>
 
-                            <div class="nt-perc">Avg.</div>
-                            <div class="nt-perc">St.Dev.</div>
-                            <div>&nbsp;</div>
+
+                            <div class="nt-rate ">@item.Rate</div>
+
+                            <div class="nt-perc">@item.AverageString</div>
+                            <div class="nt-perc">@item.STDEVString</div>
                         </div>
-                    </a>
+                    }
 
-                    <div class="nt-list-cont">
-                        @foreach (var item in Model)
-                                    {
-                                        <div class="nt-list-row nt-guide">
-                                            <div class="nt-name">
-                                                <a href="@Url.Action("DoTest", new {id=item.TestID })">@item.TestTitle</a>
-                                            </div>
-                                            <div class="nt-date">@item.StartDateTime</div>
-                                            <div class="nt-date">@item.EndDateTime</div>
-                                            <div class="nt-rate">N/A</div>
-                                            <div class="nt-perc">-</div>
-                                            <div class="nt-perc">-</div>
-                                        </div>
-                                    }
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="accordion-group nt-acc-group">
+        <div class="accordion-heading">
+
+            <a class="accordion-toggle" href="#">
+                <div class="nt-led "></div>
+                <div class="nt-led on"></div>
+                <div class="nt-led "></div>
+                <i class="t-icon arrow-up"></i>
+                <div class="nt-desc">Running Tests</div>
+            </a>
+        </div>
+        <div class="accordion-body" style="max-height: 400px">
+            <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
+                <a>
+                    <div class="nt-list-head">
+
+                        <div class="nt-name">
+                            Tests
+                        </div>
+                        <div class="nt-date">Start</div>
+                        <div class="nt-date">End</div>
+
+
+                        <div class="nt-rate">Resp. Rate</div>
+
+                        <div class="nt-perc">Avg.</div>
+                        <div class="nt-perc">St.Dev.</div>
+                        <div>&nbsp;</div>
+                    </div>
+                </a>
+
+                <div class="nt-list-cont">
+                    @foreach (var item in Model.RunningTests)
+                    {
+                        <div class="nt-list-row">
+                            <div class="nt-name">
+                                <a href="@Url.Action("DoTest", new { id = item.TestID })">@item.TestTitle</a>
+                            </div>
+                            <div class="nt-date">@item.Start</div>
+                            <div class="nt-date">@item.End</div>
+                            <div class="nt-rate">@item.Rate</div>
+                            <div class="nt-perc">@item.AverageString</div>
+                            <div class="nt-perc">@item.STDEVString</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="asmsOverview">
 </div>
 
