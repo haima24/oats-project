@@ -57,6 +57,9 @@
 
                             <div class="nt-name">
                                 <a href="@Url.Action("DoTest", new { id = item.TestID })">@item.TestTitle</a>
+                                <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
+                                    <i class="t-icon i-feedback"></i>
+                                </button>
                             </div>
 
 

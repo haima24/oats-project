@@ -724,17 +724,30 @@ namespace OATS_Capstone.Controllers
             common.UpdateNoneChoiceScore(questionid, score);
             return Json(new { common.success, common.message });
         }
-
-        public String aaa()
-        {
-            return "aaaaaaaaaaaaaaaaaa";
-        }
-
         public JsonResult SubmitTest(UserInTest userInTest)
         {
             var common = new CommonService();
             common.SubmitTest(userInTest);
             return Json(new { common.success, common.message });
+        }
+        public JsonResult ModalFeedBackPopup(int testid)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_FeedBack_Form", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.ModalFeedBackPopup(testid);
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
     }
 }

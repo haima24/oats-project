@@ -254,6 +254,7 @@
     <Content Include="Bootstrap\js\dropzone.js" />
     <Content Include="Bootstrap\js\fullcalendar.min.js" />
     <Content Include="Bootstrap\js\jquery-1.9.1.min.js" />
+    <Content Include="Bootstrap\js\jquery.autosize.js" />
     <Content Include="Bootstrap\js\jquery.contenteditable.js" />
     <Content Include="Bootstrap\js\jquery.filedrop.js" />
     <Content Include="Bootstrap\js\jquery.sparkline.js" />
@@ -335,9 +336,11 @@
     <Content Include="Style\img\background_tile_2.jpg" />
     <Content Include="Style\img\background_tile_3.jpg" />
     <Content Include="Style\img\blue_line.jpg" />
+    <Content Include="Style\img\chat.png" />
     <Content Include="Style\img\done.png" />
     <Content Include="Style\img\duplicate.png" />
     <Content Include="Style\img\essay.png" />
+    <Content Include="Style\img\feedback.png" />
     <Content Include="Style\img\img.png" />
     <Content Include="Style\img\loader-large.gif" />
     <Content Include="Style\img\loader-larger-clock.gif" />
@@ -475,6 +478,7 @@
     <Content Include="Views\Tests\P_ScoreTab_Statistic.cshtml" />
     <Content Include="Views\Teachers\P_ScoreTab_Chart.cshtml" />
     <Content Include="Views\Tests\P_ScoreTab_Chart.cshtml" />
+    <Content Include="Views\Tests\P_Modal_FeedBack_Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

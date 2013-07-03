@@ -2066,5 +2066,28 @@ namespace OATS_Capstone.Models
                 }
             }
         }
+        public void ModalFeedBackPopup(int testid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    if (OnRenderPartialViewToString != null)
+                    {
+                        success = true;
+                        generatedHtml = OnRenderPartialViewToString.Invoke(test);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
     }
 }

@@ -1,7 +1,8 @@
 ﻿@using OATS_Capstone.Models
 @model IEnumerable<OATS_Capstone.Models.FeedBack>
-<div class="nt-asm-settings" style="height: 450px; overflow-y: auto;">
-    <div id="comments" class="nt-panel" style="height: 450px; overflow-y: auto">
+<div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
+
+    <div class="nt-panel">
         <div class="comment-count">
             All Comments
             <span>(@Model.Count())         
@@ -18,20 +19,38 @@
             </div>
 
         </div>
-        @foreach (var feedback in Model)
-        {
-            <article class="comment">
+        <div id="comments" style="height: 400px; overflow-y: auto">
+            @foreach (var feedback in Model)
+            {
+                <article class="comment">
 
-                <div class="comment-meta">
-                    <a href="#" class="url">@feedback.User.FirstName<span> </span>@feedback.User.LastName</a> says<time>@feedback.FeedBackDateTime</time>
-                </div>
+                    <div class="comment-meta">
+                        <a href="#" class="url">@feedback.User.FirstName<span> </span>@feedback.User.LastName</a> says<time>@feedback.FeedBackDateTime</time>
+                    </div>
 
-                <div class="comment-body">
-                    <p>@feedback.FeedBackDetail
-                    </p>
-                </div>
+                    <div class="comment-body">
+                        <p>@feedback.FeedBackDetail
+                        </p>
+                        <div class="reply-container" toggle-header>
+                            <div class="pointer">
+                                <i class="t-icon i-chat"></i>
+                                <a class="reply-count-link">3 reply</a>
+                            </div>
+                        </div>
+                        <div class="reply-container" style="display: none;" toggle-detail>
+                            <div class="pointer" toggle-detail-trigger>
+                                <i class="t-icon i-caret-up"></i>
+                                <a class="reply-count-link">Hide</a>
+                            </div>
+                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
+                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
+                            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
+                            <button class="btn btn-primary">Reply</button>
+                        </div>
+                    </div>
 
-            </article>		 
-        }
+                </article>		 
+            }
+        </div>
     </div>
 </div>
