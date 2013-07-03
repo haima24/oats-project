@@ -65,7 +65,7 @@ function showCountDownMessage(type, message,after) {
     popup.fadeIn("fast");
     var i = 3;
     var countdown = setInterval(function () {
-        var downmessage = "To HomePage in " + (i--);
+        var downmessage = "Redirect to HomePage in " + (i--);
         $(">div", popup).html(downmessage);
     }, 1000);
     setTimeout(function () {

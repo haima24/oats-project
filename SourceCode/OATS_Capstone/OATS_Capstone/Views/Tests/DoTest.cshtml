@@ -6,7 +6,12 @@
 @{
     var authen=AuthenticationSessionModel.Instance();
     var user = authen.User;
-    }
+}
+@if (Model != null)
+{
+    <input id="test-id" type="hidden" value="@Model.TestID" />
+}
+
 <script src="~/Resource/Scripts/DoTestScript.js"></script>
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">

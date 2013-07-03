@@ -728,5 +728,12 @@ namespace OATS_Capstone.Controllers
         {
             return "aaaaaaaaaaaaaaaaaa";
         }
+
+        public JsonResult SubmitTest(UserInTest userInTest)
+        {
+            var common = new CommonService();
+            common.SubmitTest(userInTest);
+            return Json(new { common.success, common.message });
+        }
     }
 }
