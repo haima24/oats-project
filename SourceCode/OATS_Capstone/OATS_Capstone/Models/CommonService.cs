@@ -277,7 +277,7 @@ namespace OATS_Capstone.Models
             success = false;
             message = Constants.DefaultProblemMessage;
             resultlist = new List<Object>();
-            
+
             try
             {
                 var db = SingletonDb.Instance();
@@ -933,6 +933,7 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
+                List<Answer> dbAnswers = new List<Answer>();
                 answers.ForEach(delegate(Answer ans)
                 {
                     var ansDb = db.Answers.FirstOrDefault(i => i.AnswerID == ans.AnswerID);
@@ -942,12 +943,14 @@ namespace OATS_Capstone.Models
                         ansDb.IsRight = ans.IsRight;
                         ansDb.Score = ans.Score;
                         ansDb.SerialOrder = ans.SerialOrder;
-                    }
-                    if (db.SaveChanges() >= 0)
-                    {
-                        success = true;
+                        dbAnswers.Add(ansDb);
                     }
                 });
+                RecalculateUserInTestScore(dbAnswers);
+                if (db.SaveChanges() >= 0)
+                {
+                    success = true;
+                }
             }
             catch (Exception)
             {
@@ -1324,7 +1327,7 @@ namespace OATS_Capstone.Models
                                         {
                                             i.NonChoiceScore = question.NoneChoiceScore;
                                         }
-                                        else 
+                                        else
                                         {
                                             i.NonChoiceScore = 0;
                                         }
@@ -1989,8 +1992,8 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 success = true;
                 if (OnRenderPartialViewToString != null)
-                { 
-                    var testList=new TestList(db.Tests);
+                {
+                    var testList = new TestList(db.Tests);
                     generatedHtml = OnRenderPartialViewToString.Invoke(testList);
                 }
             }
@@ -2000,6 +2003,68 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
 
+        }
+        private void RecalculateUserInTestScore(IEnumerable<Answer> answers)
+        {
+            var groupAnswers = from ans in answers
+                               group ans by ans.Question into GroupAnswers
+                               select new { Key = GroupAnswers.Key };
+            foreach (var item in groupAnswers)
+            {
+                if (item.Key != null)
+                {
+                    var question = item.Key;
+                    var inTestDetails = question.UserInTestDetails.ToList();
+                    var inTests = from d in inTestDetails
+                                  group d by d.UserInTest into InTestGroup
+                                  select new { Key = InTestGroup.Key };
+                    foreach (var intest in inTests)
+                    {
+                        var inTestObj = intest.Key;
+                        var details = inTestObj.UserInTestDetails.Where(k=>k.QuestionID==question.QuestionID).ToList();
+                        details.ForEach(i =>
+                        {
+                            if (question != null)
+                            {
+                                if (i.AnswerIDs != null)
+                                {
+                                    var IDs = i.AnswerIDs.Split(',');
+                                    var score = IDs.Sum(k =>
+                                    {
+                                        var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                        return answer.Score < 0 ? 0 : answer.Score;
+                                    });
+                                    i.ChoiceScore = score;
+                                }
+                                else
+                                {
+                                    if (question.QuestionType.Type == "ShortAnswer")
+                                    {
+                                        if (!string.IsNullOrEmpty(i.AnswerContent))
+                                        {
+                                            var userAnswers = i.AnswerContent.Split(',');
+                                            if (!string.IsNullOrEmpty(question.TextDescription))
+                                            {
+                                                var questionAnswers = question.TextDescription.Split(',');
+
+                                                if (questionAnswers.All(o => userAnswers.Contains(o)))
+                                                {
+                                                    i.NonChoiceScore = question.NoneChoiceScore;
+                                                }
+                                                else
+                                                {
+                                                    i.NonChoiceScore = 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        inTestObj.Score = inTestObj.UserInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
+                    }
+                }
+            }
         }
     }
 }
