@@ -3,10 +3,10 @@
     var sortedAns = Model.Answers.OrderBy(i => i.SerialOrder);
 }
 
-<div class="nt-qitem" question-type="Multiple" id=@Model.QuestionID>
+<div class="nt-qitem" question-type="Multiple" question-id=@Model.QuestionID>
     <div class="nt-qnum "></div>
     <a class="nt-qanchor" name="Qundefined"></a>
-    <div class="nt-qmaxpts">@Model.Answers.Sum(i=>i.Score)</div>
+    <div class="nt-qmaxpts">@Model.Answers.Sum(i=>i.Score < 0?0 : i.Score)</div>
     <div class="nt-qtext ">
         <p>@Model.QuestionTitle</p>
     </div>

@@ -449,10 +449,11 @@ namespace OATS_Capstone.Models
                 if (db.SaveChanges() >= 0)
                 {
                     //send mail
-                    var invitations=test.Invitations.ToList();
+                    var invitations = test.Invitations.ToList();
                     UserMailer.InviteUsers(invitations);
 
-                    if (OnRenderPartialViewToString != null) {
+                    if (OnRenderPartialViewToString != null)
+                    {
                         success = true;
                         generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
                     }
@@ -909,11 +910,11 @@ namespace OATS_Capstone.Models
                         //}
                         //else
                         //{
-                            db.Answers.Remove(ans);
-                            if (db.SaveChanges() > 0)
-                            {
-                                success = true;
-                            }
+                        db.Answers.Remove(ans);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                        }
                         //}
                     }
 
@@ -1267,28 +1268,84 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void SubmitTest(UserInTestDetail userInTestDetail)
+        public void SubmitTest(UserInTest userInTest)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
             generatedHtml = String.Empty;
+
             try
             {
+                var authen = AuthenticationSessionModel.Instance();
+                userInTest.UserID = authen.UserId;
+                userInTest.TestTakenDate = DateTime.Now;
                 var db = SingletonDb.Instance();
-                var newUserInTestDetail = new UserInTestDetail();
-                newUserInTestDetail.UserInTestID = userInTestDetail.UserInTestID;
-                newUserInTestDetail.QuestionID = userInTestDetail.QuestionID;
-                newUserInTestDetail.AnswerContent = userInTestDetail.AnswerContent;
-                newUserInTestDetail.AnswerIDs = userInTestDetail.AnswerIDs;
-                db.UserInTestDetails.Add(newUserInTestDetail);
+
+                var oldUserInTest = db.UserInTests.Where(i => i.TestID == userInTest.TestID && i.UserID == userInTest.UserID);
+                if (oldUserInTest != null)
+                {
+                    userInTest.NumberOfAttend = oldUserInTest.Max(i => i.NumberOfAttend) + 1;
+                }
+                else
+                {
+                    userInTest.NumberOfAttend = 1;
+                }
+
+                var userInTestDetails = userInTest.UserInTestDetails.ToList();
+                userInTestDetails.ForEach(i =>
+                {
+                    var question = db.Questions.FirstOrDefault(j => j.QuestionID == i.QuestionID);
+                    if (question != null)
+                    {
+                        if (i.AnswerIDs != null)
+                        {
+
+                            var IDs = i.AnswerIDs.Split(',');
+                            var score = IDs.Sum(k =>
+                            {
+                                var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                return answer.Score < 0 ? 0 : answer.Score;
+                            });
+                            i.ChoiceScore = score;
+
+                        }
+                        else
+                        {
+                            if (question.QuestionType.Type == "ShortAnswer")
+                            {
+                                if (!string.IsNullOrEmpty(i.AnswerContent))
+                                {
+                                    var userAnswers = i.AnswerContent.Split(',');
+                                    if (!string.IsNullOrEmpty(question.TextDescription))
+                                    {
+                                        var questionAnswers = question.TextDescription.Split(',');
+
+                                        if (questionAnswers.All(o => userAnswers.Contains(o)))
+                                        {
+                                            i.NonChoiceScore = question.NoneChoiceScore;
+                                        }
+                                        else 
+                                        {
+                                            i.NonChoiceScore = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                });
+                userInTest.Score = userInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
+                userInTest.UserInTestDetails = userInTestDetails;
+
+                db.UserInTests.Add(userInTest);
+
+
                 if (db.SaveChanges() > 0)
                 {
                     success = true;
-                    message = Constants.DefaultSignUpSuccessMessage;
-                    if (OnRenderPartialViewToString != null)
-                    {
-                        generatedHtml = OnRenderPartialViewToString.Invoke(null);
-                    }
+                    message = Constants.DefaultSubmitTestSuccessMessage;
+
                 }
             }
             catch (Exception)

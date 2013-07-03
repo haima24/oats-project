@@ -11,5 +11,6 @@ namespace OATS_Capstone.Models
         public const string DefaultSuccessMessage="Success!";
         public const string DefaultExceptionMessage = "There was a problem in server, please try gain later.";
         public const string DefaultSignUpSuccessMessage = "Signup was success, please choose tests holder and login.";
+        public const string DefaultSubmitTestSuccessMessage = "Submit test was success.";
     }
 }
