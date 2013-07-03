@@ -106,4 +106,17 @@ $(function () {
             }
         });
     });
+    //separator
+    $(".reply-container[toggle-header]").live("click", function () {
+        var cur = $(this);
+        var detail = cur.siblings(".reply-container[toggle-detail]");
+        cur.hide();
+        detail.show();
+    });
+    $(".reply-container[toggle-detail] div[toggle-detail-trigger]").live("click", function () {
+        var cur = $(this).closest(".reply-container[toggle-detail]");
+        var header = cur.siblings(".reply-container[toggle-header]");
+        cur.hide();
+        header.show();
+    });
 });
