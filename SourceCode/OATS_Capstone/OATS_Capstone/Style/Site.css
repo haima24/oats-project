@@ -282,6 +282,10 @@ textarea {
     margin-right: 5px;
 }
 
+i.t-icon.i-chat {
+    background: url(./img/chat.png) no-repeat;
+}
+
 i.t-icon.i-student {
     background: url(./img/student.png) no-repeat;
 }
@@ -312,6 +316,10 @@ i.t-icon.i-essay {
     position: relative;
     left: 2px;
     bottom: 2px;
+}
+
+i.t-icon.i-feedback {
+    background: url(./img/feedback.png) no-repeat;
 }
 
 i.t-icon.i-caret-down {
@@ -1675,7 +1683,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
         position: relative;
         padding-left: 15px;
-        padding-right: 25px;
+        padding-right: 40px;
         text-align: left;
         width: 31%;
     }
@@ -1683,7 +1691,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         .nt-asms-list .nt-list-head > div.nt-name button, .nt-asms-list .nt-list-row > div.nt-name button {
             position: absolute;
             top: 9px;
-            right: 0;
+            right: 15px;
         }
 
     .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {
@@ -3267,6 +3275,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     background: #FFF;
     min-height: 150px;
     position: relative;
+    overflow-y: auto;
 }
 
 #comments .comment-meta {
@@ -3277,7 +3286,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 }
 
 #comments .comment:not(:first-child) .comment-meta {
-    border-top: 2px solid #CCC;
+    border-top: 2px solid #DDD;
 }
 
 #comments .comment-meta time {
@@ -3292,8 +3301,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     border-top: 2px solid #DDD;
 }
 
+#comments .comment .comment-body textarea {
+    margin-bottom: 0px;
+    margin-right: 5px;
+}
+
 #comments .comment-body {
     padding: 10px 90px 0 0;
+    padding-left: 200px;
 }
 
     #comments .comment-body p {
@@ -3333,13 +3348,108 @@ article, time {
     font-size: 17px;
     font-weight: bold;
 }
+
 .nt-msg .nt-dnd-instr {
-max-width: 516px;
-font-size: 14px;
-padding: 10px;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
--ms-border-radius: 4px;
--o-border-radius: 4px;
-border-radius: 4px;
+    max-width: 516px;
+    font-size: 14px;
+    padding: 10px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
 }
+
+#modalPopupFeedback #message {
+}
+
+#modalPopupFeedback.modal {
+    width: auto;
+    left: 35%;
+}
+
+#modalPopupFeedback .modal-body {
+    padding: 20px;
+    max-height: 520px;
+}
+
+#modalPopupFeedback.modal.fade.in {
+    top: 5%;
+}
+
+#modalPopupFeedback .modal-body .controls:first-child {
+    border-bottom: 1px solid gainsboro;
+    margin-bottom: 20px;
+}
+
+#modalPopupFeedback .modal-body .comment {
+    background: #FFF;
+    min-height: 100px;
+    position: relative;
+    overflow-y: auto;
+}
+
+#modalPopupFeedback .modal-body .comment-meta {
+    float: left;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 14px 10px;
+    width: 150px;
+}
+
+#modalPopupFeedback .modal-body .comment:not(:first-child) .comment-meta {
+    border-top: 2px solid #CCC;
+}
+
+#modalPopupFeedback .modal-body .comment-meta time {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+#modalPopupFeedback .modal-body .comment:not(:first-child) .comment-body {
+    border-top: 2px solid #DDD;
+}
+
+#modalPopupFeedback .modal-body .comment-body {
+    padding: 10px 90px 0 0;
+     padding-left: 200px;
+}
+
+    #modalPopupFeedback .modal-body .comment-body p {
+        margin: 0 0 10px;
+    }
+
+.reply-container {
+    background-color: #f0f1f3;
+    border-top: 0;
+    margin-top: 0;
+    margin-bottom:20px;
+    padding: 20px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+}
+    .reply-container .pointer {
+        cursor:pointer;
+    }
+    .reply-container .i-caret-up {
+        position: relative;
+        top: 3px;
+        left: 5px;
+    }
+    .reply-container .reply-detail {
+        margin:10px;
+    }
+    .reply-container span.name {
+        font-weight:bold;
+        margin-right:5px;
+        float:left;
+    }
+    .reply-container .reply-count-link {
+        margin-left: 5px;
+        font-size: 14px;
+    }

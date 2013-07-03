@@ -87,4 +87,23 @@ $(function () {
             showMessage("error", res.message);
         }
     });
+    $(".btn-feedback").live("click", function () {
+        var button = $(this);
+        var testIdString = button.attr("test-id");
+        var testid = parseInt(testIdString);
+        $.post("/Tests/ModalFeedBackPopup", { testid: testid }, function (res) {
+            if (res.success) {
+                var html = res.generatedHtml;
+                if (!$("#modalRemovePopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalRemovePopupUser").replaceWith($(html));
+                }
+                initReplyAreas();
+                $("#modalRemovePopupUser").modal("show");
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
 });

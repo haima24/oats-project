@@ -770,6 +770,7 @@ $(function () {
                     initDragAndDrop();
                     initPlot();
                     initScoreOnUserChart();
+                    initReplyAreas();
                 }
             } else { showMessage("error", res.message); }
         });
@@ -813,6 +814,7 @@ $(function () {
                     var tabcontent = $("#eventTab");
                     if (tabcontent && res.generatedHtml) {
                         tabcontent.html(res.generatedHtml);
+                        initReplyAreas();
                     }
                 } else { showMessage("error", res.message); }
             });
@@ -1282,12 +1284,12 @@ $(function () {
         $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Student" }, function (res) {
             if (res.success) {
                 var html = res.generatedHtml;
-                if (!$("#modalRemovePopupUser").length > 0) {
+                if (!$("#modalPopupFeedback").length > 0) {
                     $(html).modal();
                 } else {
-                    $("#modalRemovePopupUser").replaceWith($(html));
+                    $("#modalPopupFeedback").replaceWith($(html));
                 }
-                $("#modalRemovePopupUser").modal("show");
+                $("#modalPopupFeedback").modal("show");
 
             } else {
                 showMessage("error", res.message);
@@ -1462,6 +1464,19 @@ $(function () {
                 }
             });
         }
+    });
+    //separator
+    $(".reply-container[toggle-header]").live("click", function () {
+        var cur = $(this);
+        var detail = cur.siblings(".reply-container[toggle-detail]");
+        cur.hide();
+        detail.show();
+    });
+    $(".reply-container[toggle-detail] div[toggle-detail-trigger]").live("click", function () {
+        var cur = $(this).closest(".reply-container[toggle-detail]");
+        var header = cur.siblings(".reply-container[toggle-header]");
+        cur.hide();
+        header.show();
     });
     //separator
     showOrHideDeleteLineAnswer();

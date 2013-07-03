@@ -1,4 +1,8 @@
-﻿$.fn.disable = function () {
+﻿function initReplyAreas() {
+    $(".reply-container textarea.reply-area").autosize({ append: "\n" });
+}
+
+$.fn.disable = function () {
     this.each(function () {
         $(this).attr("disabled", "disabled");
     });
