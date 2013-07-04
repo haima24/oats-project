@@ -6,15 +6,14 @@ var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 
-function initReuseDragAndDrop(){
+function initReuseDragAndDrop() {
     $("#sidebar[content-tab=true] .nt-qsearch").draggable({
         connectToSortable: "#checklist[content-tab=true]",
         helper: "clone",
         revert: "invalid"
     });
 }
-function initDropText()
-{
+function initDropText() {
     $("#qpaste textarea").filedrop({
         success: function (text) {
             handleImportText(text);
@@ -332,22 +331,51 @@ function initDragAndDrop() {
             initEditable();
         },
         update: function (ev, ui) {
-            var cur=$(ui.item);
-            var type = cur.attr("type");
+            var cur = $(ui.item);
+            var dataAction = cur.attr("data-action");
             var etab = $("#checklist");
-            if (etab && type) {
-                addQuestion(testid, type, function (newelement) {
-                    if ($(".nt-empty-list-ph", etab).length > 0) {
-                        etab.html(newelement);
-                    } else {
-                        cur.replaceWith(newelement);
+            if (dataAction) {
+                if (dataAction == "addnew") {
+                    var type = cur.attr("type");
+                    if (etab && type) {
+                        addQuestion(testid, type, function (newelement) {
+                            if ($(".nt-empty-list-ph", etab).length > 0) {
+                                etab.html(newelement);
+                            } else {
+                                cur.replaceWith(newelement);
+                            }
+                            resortInDb();
+                            sortByNumberOrLetters();
+                            initEditable();
+                            initImageUploadFacility();
+                            etab.scrollToElement(newelement);
+                        });
                     }
-                    resortInDb();
-                    sortByNumberOrLetters();
-                    initEditable();
-                    initImageUploadFacility();
-                    etab.scrollToElement(newelement);
-                });
+                }
+                else if (dataAction == "reuse") {
+                    var questionIdString = cur.attr("question-id");
+                    var questionid = parseInt(questionIdString);
+                    if (etab && !isNaN(questionid)) {
+                        $.post("/Tests/CloneQuestion", { targetTestID: testid, questionid: questionid }, function (res) {
+                            if (res.success) {
+                                var newelement = $(res.generatedHtml);
+                                if ($(".nt-empty-list-ph", etab).length > 0) {
+                                    etab.html(newelement);
+                                } else {
+                                    cur.replaceWith(newelement);
+                                }
+                                resortInDb();
+                                sortByNumberOrLetters();
+                                initEditable();
+                                initImageUploadFacility();
+                                etab.scrollToElement(newelement);
+                                statusSaved();
+                            } else {
+                                showMessage("error", res.message);
+                            }
+                        });
+                    }
+                }
             }
         }
     });
@@ -451,7 +479,7 @@ function initImageUploadFacility() {
         });
     }
 }
-function updateQuestionType(questionidString, type,onsuccess) {
+function updateQuestionType(questionidString, type, onsuccess) {
     var questionid = parseInt(questionidString);
     if (!isNaN(questionid)) {
         statusSaving();
@@ -624,7 +652,7 @@ function updateAnswer(lineElement, target) {
     });
 }
 function resortInDb() {
-    var questions = $("[question-id]").map(function (index, item) {
+    var questions = $("#checklist[content-tab=true] [question-id]").map(function (index, item) {
         var question = new Object();
         question.QuestionID = parseInt($(item).attr("question-id"));
         question.SerialOrder = index;
@@ -856,15 +884,15 @@ $(function () {
         });
     });
 
-    
+
     //Was used in P_FeedBackTab for choose type of sort Date
     //$('#sortby li').each(function () {
-        
+
     //    var sorttype = ($(this).attr('id') === 'sortbydate') ? 0 : 1;
     //    alert(sorttype);
 
     //    $(this).find('a').click(function () {
-            
+
     //        var url = $(this).attr('href'),
     //            data = { testid: 3, sorttype: 1 };
     //        $.post(url, data, function (res) {
@@ -884,10 +912,10 @@ $(function () {
     $("#sortbyname a,#sortbydate a").live("click", function (e) {
         e.preventDefault();
         var sortType = parseInt($(this).attr("sort-type"));
-        if(!isNaN(sortType)){
+        if (!isNaN(sortType)) {
             var url = $(this).attr('href'),
                 data = { testid: testid, sorttype: sortType };
-        
+
             $.post(url, data, function (res) {
                 console.debug(res);
                 if (res.success) {
@@ -1029,7 +1057,7 @@ $(function () {
                 initEditable();
             });
         }
-        
+
 
     });
     //separator
@@ -1050,17 +1078,15 @@ $(function () {
     $("#checklist[content-tab=true] .nt-qitem[question-type=Essay],[question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
         var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
         var questionid = parseInt(questionIdString);
-        var scoreString=$(this).val();
-        var score=parseFloat(scoreString);
+        var scoreString = $(this).val();
+        var score = parseFloat(scoreString);
         if (!isNaN(questionid) && !isNaN(score)) {
             statusSaving();
             $.post("/Tests/UpdateNoneChoiceScore", { questionid: questionid, score: score }, function (res) {
-                if (res.success)
-                {
+                if (res.success) {
                     statusSaved();
                 }
-                else
-                {
+                else {
                     showMessage("error", res.message);
                 }
             });
@@ -1154,7 +1180,7 @@ $(function () {
         var templateQuestion;
         if (!isNaN(questionid)) {
             statusSaving();
-            $.post("/Tests/CloneQuestion", {targetTestID:testid, questionid: questionid }, function (res) {
+            $.post("/Tests/CloneQuestion", { targetTestID: testid, questionid: questionid }, function (res) {
                 if (res.success) {
                     var newItem = $(res.generatedHtml);
                     var etab = $("#checklist");
@@ -1380,7 +1406,7 @@ $(function () {
                     showMessage("error", res.message);
                 }
             }
-            });
+        });
         $("#modalReinvitePopupUser").modal('hide');
     });
     //Separator
