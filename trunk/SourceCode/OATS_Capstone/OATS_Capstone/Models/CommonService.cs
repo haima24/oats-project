@@ -771,7 +771,7 @@ namespace OATS_Capstone.Models
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 success = false;
