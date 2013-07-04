@@ -1,12 +1,12 @@
-using Mvc.Mailer;
+﻿using Mvc.Mailer;
 using OATS_Capstone.Models;
 using System.Collections.Generic;
 
 namespace OATS_Capstone.Mailers
 {
-    public class UserMailer : MailerBase, IUserMailer
+    public class UserReinviteMailer : MailerBase, IUserReinviteMailer
     {
-        public UserMailer()
+        public UserReinviteMailer()
         {
             MasterName = "_Layout";
         }
@@ -45,13 +45,12 @@ namespace OATS_Capstone.Mailers
 
 
 
-        public virtual void InviteUsers(List<Invitation> invitations)
+        public virtual void ReInviteUsers(List<Invitation> invitations)
         {
             invitations.ForEach(i =>
             {
                 this.InviteUser(i).Send();
             });
         }
-
-    }
+    } 
 }

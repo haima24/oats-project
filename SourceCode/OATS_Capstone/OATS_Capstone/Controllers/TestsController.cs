@@ -207,6 +207,26 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
+        public JsonResult ReinviteUserToInvitationTest(int testid, int count, List<int> userids, string role)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_InvitationTab", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.ReinviteUserToInvitationTest(testid, count, userids);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
         public JsonResult RemoveUserToInvitationTest(int testid, int count, List<int> userids)
         {
             var common = new CommonService();

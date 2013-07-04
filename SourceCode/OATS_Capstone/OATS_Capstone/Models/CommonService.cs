@@ -467,6 +467,54 @@ namespace OATS_Capstone.Models
             }
         }
 
+
+        //reinvite
+        public void ReinviteUserToInvitationTest(int testid, int count, List<int> userids)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                var authen = AuthenticationSessionModel.Instance();
+                if (test != null)
+                {
+                    if (count > 0)
+                    {
+                        userids.ForEach(delegate(int id)
+                        {
+                            var user = db.Users.FirstOrDefault(k => k.UserID == id);
+                            if (user != null)
+                            {
+                                var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
+                               // test.Invitations.Remove(inv);
+                               // db.Invitations.Remove(inv);
+                            }
+                        });
+                    }
+                    if (db.SaveChanges() >= 0)
+                    {
+                        //send mail
+                        var invitations = test.Invitations.ToList();
+                        UserMailer.InviteUsers(invitations);
+
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
         public void RemoveUserToInvitationTest(int testid, int count, List<int> userids)
         {
             success = false;

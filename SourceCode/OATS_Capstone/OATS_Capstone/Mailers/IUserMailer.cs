@@ -7,5 +7,6 @@ namespace OATS_Capstone.Mailers
     public interface IUserMailer
     {
         void InviteUsers(List<Invitation> invitations);
+        //void ReInviteUsers(List<Invitation> invitations);
 	}
 }
