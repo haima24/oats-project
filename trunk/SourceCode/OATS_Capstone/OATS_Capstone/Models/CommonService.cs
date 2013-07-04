@@ -346,7 +346,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void TestsSearch()
+        public void TestsSearch(string term)
         {
 
             success = false;
@@ -355,16 +355,26 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
-                var tests = db.Tests.ToList();
-                tests.ForEach(delegate(Test test)
+                if (!string.IsNullOrEmpty(term))
                 {
-                    var testTemplate = new SearchingTests();
-                    testTemplate.Id = test.TestID;
-                    testTemplate.TestTitle = test.TestTitle;
-                    testTemplate.StartDate = test.StartDateTime;
-                    testTemplate.EndDate = test.EndDateTime;
-                    resultlist.Add(testTemplate);
-                });
+                    var lower = term.ToLower();
+                    var tests = db.Tests.ToList();
+                    tests.ForEach(delegate(Test test)
+                    {
+                        if (test.TestTitle != null)
+                        {
+                            if (test.TestTitle.ToLower().Contains(lower))
+                            {
+                                var testTemplate = new SearchingTests();
+                                testTemplate.Id = test.TestID;
+                                testTemplate.TestTitle = test.TestTitle;
+                                testTemplate.StartDate = test.StartDateTime;
+                                testTemplate.EndDate = test.EndDateTime;
+                                resultlist.Add(testTemplate);
+                            }
+                        }
+                    });
+                }
                 success = true;
                 message = String.Empty;
             }
@@ -376,7 +386,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void UsersSearch()
+        public void UsersSearch(string term)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -385,15 +395,28 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
-                var users = db.Users.ToList();
-                users.ForEach(delegate(User user)
+                if (!string.IsNullOrEmpty(term))
                 {
-                    var userTemplate = new SearchingUsers();
-                    userTemplate.UserID = user.UserID;
-                    userTemplate.LastName = user.LastName;
-                    userTemplate.FirstName = user.FirstName;
-                    resultlist.Add(userTemplate);
-                });
+                    var lower = term.ToLower();
+                    var users = db.Users.ToList();
+                    users.ForEach(delegate(User user)
+                    {
+                        var first = false;
+                        var last = false;
+                        var mail = false;
+                        if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
+                        if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                        if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
+                        if (first || last || mail)
+                        {
+                            var userTemplate = new SearchingUsers();
+                            userTemplate.UserID = user.UserID;
+                            userTemplate.LastName = user.LastName;
+                            userTemplate.FirstName = user.FirstName;
+                            resultlist.Add(userTemplate);
+                        }
+                    });
+                }
                 success = true;
                 message = String.Empty;
             }
@@ -489,8 +512,8 @@ namespace OATS_Capstone.Models
                             if (user != null)
                             {
                                 var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
-                               // test.Invitations.Remove(inv);
-                               // db.Invitations.Remove(inv);
+                                // test.Invitations.Remove(inv);
+                                // db.Invitations.Remove(inv);
                             }
                         });
                     }
@@ -792,7 +815,7 @@ namespace OATS_Capstone.Models
                 {
                     listquestion.ForEach(delegate(QuestionItemTemplate item)
                     {
-                        
+
                         var qItem = item.QuestionItem;
                         if (qItem != null)
                         {
@@ -2075,7 +2098,7 @@ namespace OATS_Capstone.Models
                     foreach (var intest in inTests)
                     {
                         var inTestObj = intest.Key;
-                        var details = inTestObj.UserInTestDetails.Where(k=>k.QuestionID==question.QuestionID).ToList();
+                        var details = inTestObj.UserInTestDetails.Where(k => k.QuestionID == question.QuestionID).ToList();
                         details.ForEach(i =>
                         {
                             if (question != null)

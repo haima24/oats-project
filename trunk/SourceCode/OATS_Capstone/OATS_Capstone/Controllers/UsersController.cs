@@ -30,10 +30,10 @@ namespace OATS_Capstone.Controllers
             }
             return Json(new { success, message, generatedHtml });
         }
-        public JsonResult UsersSearch()
+        public JsonResult UsersSearch(string term)
         {
             var common = new CommonService();
-            common.UsersSearch();
+            common.UsersSearch(term);
             return Json(new { common.resultlist, common.message, common.success });
         }
         public JsonResult UpdateUserEmail(int userId, string userEmail)

@@ -121,50 +121,50 @@ function initTagsOnTest() {
             });
         }
     });
-    $("#test-tags").autocomplete({
-        minLength: 0,
-        select: function (e, ui) {
-            statusSaving();
-            var id = ui.item.id;
-            if (id) {
-                $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
-                    if (res.success) {
-                        var tagItem = $(res.generatedHtml);
-                        $("#eventTags .nt-tags .tags-container").append(tagItem);
-                        statusSaved();
+        $("#test-tags").autocomplete({
+            minLength: 0,
+            select: function (e, ui) {
+                statusSaving();
+                var id = ui.item.id;
+                if (id) {
+                    $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
+                        if (res.success) {
+                            var tagItem = $(res.generatedHtml);
+                            $("#eventTags .nt-tags .tags-container").append(tagItem);
+                            statusSaved();
+                        }
+                        else { showMessage("error", res.message); }
+                    });
+                }
+            },
+            source: function (req, res) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/TestsSearch",
+                    data: JSON.stringify({term: req.term }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var result = $(r.resultlist).map(function (index, element) {
+                                if (element && element.tagname) {
+                                    return { id: element.id, label: element.tagname, value: element.tagname };
+                                }
+                            }).convertJqueryArrayToJSArray();
+                            res(result);
+                        } else {
+                            showMessage("error", r.message);
+                        }
                     }
-                    else { showMessage("error", res.message); }
                 });
             }
-        },
-        source: function (req, res) {
-            $.ajax({
-                type: "POST",
-                url: "/Tests/SearchTagsOnTest",
-                data: JSON.stringify({ testid: testid, term: req.term, maxrows: 10 }),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (r) {
-                    if (r.success) {
-                        var result = $(r.resultlist).map(function (index, element) {
-                            if (element && element.tagname) {
-                                return { id: element.id, label: element.tagname, value: element.tagname };
-                            }
-                        }).convertJqueryArrayToJSArray();
-                        res(result);
-                    } else {
-                        showMessage("error", r.message);
-                    }
-                }
-            });
-        }
-    }).data("ui-autocomplete")._renderItem = function (ul, item) {
-        if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
-        var li = $("<li>").append("<a>" + item.label + "</a>");
-        if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
-        li.appendTo(ul);
-        return li;
-    };
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+            var li = $("<li>").append("<a>" + item.label + "</a>");
+            if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+            li.appendTo(ul);
+            return li;
+        };
     $("#eventTags .nt-tag .nt-tag-remove").live("click", function (ev) {
         var item = $(this).closest(".nt-tag");
         var tagIdString = $(item).attr("tag-id");
@@ -475,36 +475,45 @@ function updateQuestionType(questionidString, type,onsuccess) {
     }
 }
 function initSearchTests() {
-    $.post("/Tests/TestsSearch", function (res) {
-        if (res.success) {
-            var source = $(res.resultlist).map(function (index, obj) {
-                if (obj.TestTitle && obj.TestTitle != "") {
-                    return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
+    $(".navbar-search input[type=text].nt-search-input").autocomplete({
+        minLength: 0,
+        focus: function (ev, ui) {
+            $(".navbar-search input[type=text].nt-search-input").val(ui.item.label);
+            return false;
+        },
+        select: function (ev, ui) {
+            $(".navbar-search input[type=text].nt-search-input").val(ui.item.label);
+            window.location.href = "/Tests/NewTest/" + ui.item.id;
+            return false;
+        },
+        source: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsSearch",
+                data: JSON.stringify({ term: req.term }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TestTitle && obj.TestTitle != "") {
+                                return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
                 }
-            }).convertJqueryArrayToJSArray();
-            $(".navbar-search .nt-search-input").autocomplete({
-                minLength: 0,
-                source: source,
-                focus: function (ev, ui) {
-                    $(".navbar-search .nt-search-input").val(ui.item.label);
-                    return false;
-                },
-                select: function (ev, ui) {
-                    $(".navbar-search .nt-search-input").val(ui.item.label);
-                    window.location.href = "/Tests/NewTest/" + ui.item.id;
-                    return false;
-                }
-            }).data("ui-autocomplete")._renderItem = function (ul, item) {
-                if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
-                var li = $("<li>").append("<a>" + item.label + "</a>");
-                if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
-                li.appendTo(ul);
-                return li;
-            };
-        } else {
-            showMessage("error", res.message);
+            });
         }
-    });
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+        var li = $("<li>").append("<a>" + item.label + "</a>");
+        if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+        li.appendTo(ul);
+        return li;
+    };
 }
 function checkConstraintStartEnd(start, end, onsuccessvalidate) {
     if (start.getTime() > end.getTime()) {
