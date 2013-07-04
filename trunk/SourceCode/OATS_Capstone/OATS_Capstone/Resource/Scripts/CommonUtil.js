@@ -197,6 +197,60 @@ $.fn.extend({
         return arr;
     }
 });
+
+$.fn.extend({
+    filedrop: function (options) {
+        var defaults = {
+            success: null,
+            rFilter: /^(?:text\/plain)$/i,
+            error:null
+        }
+        options = $.extend(defaults, options)
+        return this.each(function () {
+            var files = []
+            var $this = $(this)
+
+            // Stop default browser actions
+            $this.bind('dragover', function (event) {
+                $(this).css("background-color", "#EAEFFA");
+                event.stopPropagation()
+                event.preventDefault()
+            })
+            $this.bind('dragleave', function (event) {
+                $(this).css("background-color", "#ffffff");
+                event.stopPropagation()
+                event.preventDefault()
+            })
+            // Catch drop event
+            $this.bind('drop', function (event) {
+                $(this).css("background-color", "#ffffff");
+                // Stop default browser actions
+                event.stopPropagation()
+                event.preventDefault()
+
+                // Get all files that are dropped
+                files = event.originalEvent.target.files || event.originalEvent.dataTransfer.files
+                var file = files[0];
+                if (!options.rFilter.test(file.type)) {
+                    if (options.error && typeof (options.error) === "function") {
+                        options.error("Use plain text file.");
+                    }
+                } else {
+                    // Convert uploaded file to data URL and pass trought callback
+                    if (options.success && typeof (options.success) === "function") {
+                        var reader = new FileReader()
+                        reader.onload = function (event) {
+                            options.success(event.target.result)
+                        }
+                        reader.readAsText(file)
+                    }
+                }
+                return false
+            })
+        })
+    }
+})
+
 function statusSaving() {
     $("#savestatus .nt-desc").html("Saving...");
     $("#savestatus").fadeIn("slow");
