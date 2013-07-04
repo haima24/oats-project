@@ -116,7 +116,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
-        public JsonResult ReuseQuestionTemplate(int questionid)
+        public JsonResult CloneQuestion(int targetTestID, int questionid)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -133,7 +133,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.ReuseQuestionTemplate(questionid);
+            common.CloneQuestion(targetTestID, questionid);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult ReuseSearchQuestionTemplate(int maxrows, string term)
@@ -451,7 +451,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.generatedHtml, common.success, common.message });
         }
 
-        public JsonResult AddNewQuestion(int testid, string type, string questiontitle, List<Answer> answers, int serialorder, string labelorder, string textdescription)
+        public JsonResult AddNewQuestion(int testid, string type)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -469,7 +469,7 @@ namespace OATS_Capstone.Controllers
                     }
                     return result;
                 };
-            common.AddNewQuestion(testid, type, questiontitle, answers, serialorder, labelorder, textdescription);
+            common.AddNewQuestion(testid, type);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
         public JsonResult AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)

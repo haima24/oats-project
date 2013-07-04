@@ -6,6 +6,13 @@ var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 
+function initReuseDragAndDrop(){
+    $("#sidebar[content-tab=true] .nt-qsearch").draggable({
+        connectToSortable: "#checklist[content-tab=true]",
+        helper: "clone",
+        revert: "invalid"
+    });
+}
 function initDropText()
 {
     $("#qpaste textarea").filedrop({
@@ -121,50 +128,50 @@ function initTagsOnTest() {
             });
         }
     });
-        $("#test-tags").autocomplete({
-            minLength: 0,
-            select: function (e, ui) {
-                statusSaving();
-                var id = ui.item.id;
-                if (id) {
-                    $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
-                        if (res.success) {
-                            var tagItem = $(res.generatedHtml);
-                            $("#eventTags .nt-tags .tags-container").append(tagItem);
-                            statusSaved();
-                        }
-                        else { showMessage("error", res.message); }
-                    });
-                }
-            },
-            source: function (req, res) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Tests/TestsSearch",
-                    data: JSON.stringify({term: req.term }),
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (r) {
-                        if (r.success) {
-                            var result = $(r.resultlist).map(function (index, element) {
-                                if (element && element.tagname) {
-                                    return { id: element.id, label: element.tagname, value: element.tagname };
-                                }
-                            }).convertJqueryArrayToJSArray();
-                            res(result);
-                        } else {
-                            showMessage("error", r.message);
-                        }
+    $("#test-tags").autocomplete({
+        minLength: 0,
+        select: function (e, ui) {
+            statusSaving();
+            var id = ui.item.id;
+            if (id) {
+                $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
+                    if (res.success) {
+                        var tagItem = $(res.generatedHtml);
+                        $("#eventTags .nt-tags .tags-container").append(tagItem);
+                        statusSaved();
                     }
+                    else { showMessage("error", res.message); }
                 });
             }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
-            var li = $("<li>").append("<a>" + item.label + "</a>");
-            if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
-            li.appendTo(ul);
-            return li;
-        };
+        },
+        source: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/SearchTagsOnTest",
+                data: JSON.stringify({ testid: testid, term: req.term, maxrows: 10 }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, element) {
+                            if (element && element.tagname) {
+                                return { id: element.id, label: element.tagname, value: element.tagname };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        }
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+        var li = $("<li>").append("<a>" + item.label + "</a>");
+        if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+        li.appendTo(ul);
+        return li;
+    };
     $("#eventTags .nt-tag .nt-tag-remove").live("click", function (ev) {
         var item = $(this).closest(".nt-tag");
         var tagIdString = $(item).attr("tag-id");
@@ -325,34 +332,22 @@ function initDragAndDrop() {
             initEditable();
         },
         update: function (ev, ui) {
-            var cur = ui.item;
+            var cur=$(ui.item);
+            var type = cur.attr("type");
             var etab = $("#checklist");
-            if (etab && cur.hasClass("t-question-type") && questions) {
-                var type = "";
-                if (cur.hasClass("t-question-type-radio")) { type = "Radio"; var obj = $(questions.radio); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : cur.replaceWith(obj); }
-                if (cur.hasClass("t-question-type-multiple")) { type = "Multiple"; var obj = $(questions.multiple); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : cur.replaceWith(obj); }
-                if (cur.hasClass("t-question-type-essay")) { type = "Essay"; var obj = $(questions.essay); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : cur.replaceWith(obj); }
-                if (cur.hasClass("t-question-type-short")) { type = "ShortAnswer"; var obj = $(questions.shortanswer); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(questions.shortanswer) : cur.replaceWith(obj); }
-                if (cur.hasClass("t-question-type-text")) { type = "Text"; var obj = $(questions.text); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : cur.replaceWith(obj); }
-                if (cur.hasClass("t-question-type-img")) { type = "Image"; var obj = $(questions.image); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : cur.replaceWith(obj); }
-                sortByNumberOrLetters();
-
-                var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" ? "" : $(".nt-qtext", obj).html();
-                var serialorder = obj.index();
-                var labelorder = $(".nt-qnum", obj).html();
-                var answers = $(".nt-qans", obj).map(function (iAns, ans) {
-                    var answer = new Object();
-                    answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
-                    answer.SerialOrder = $(ans).index();
-                    return answer;
-                }).convertJqueryArrayToJSArray();
-                addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder, function () {
+            if (etab && type) {
+                addQuestion(testid, type, function (newelement) {
+                    if ($(".nt-empty-list-ph", etab).length > 0) {
+                        etab.html(newelement);
+                    } else {
+                        cur.replaceWith(newelement);
+                    }
                     resortInDb();
+                    sortByNumberOrLetters();
+                    initEditable();
+                    initImageUploadFacility();
+                    etab.scrollToElement(newelement);
                 });
-
-                initImageUploadFacility();
-                initEditable();
-                //obj.remove();
             }
         }
     });
@@ -656,15 +651,10 @@ function resortInDb() {
 
     });
 }
-function addQuestion(element, testidentify, type, questiontitle, answers, serialorder, labelorder, onaddquestion, textdescription) {
+function addQuestion(testidentify, type, onaddquestion) {
     var data = {
         testid: testidentify,
-        type: type,
-        questiontitle: type == "Image" ? "" : questiontitle,
-        serialorder: serialorder,
-        labelorder: labelorder,
-        textdescription: textdescription,
-        answers: answers
+        type: type
     };
     statusSaving();
     $.ajax({
@@ -677,7 +667,6 @@ function addQuestion(element, testidentify, type, questiontitle, answers, serial
         success: function (res) {
             if (res && res.success) {
                 var newElement = $(res.generatedHtml);
-                $(element).replaceWith(newElement);
                 if (onaddquestion && typeof (onaddquestion) === "function") {
                     onaddquestion(newElement);
                 }
@@ -797,6 +786,7 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
+    initReuseDragAndDrop();
     initDropText();
     initTagsOnTest();
     initDragAndDrop();
@@ -825,6 +815,7 @@ $(function () {
                         $(r.resultlist).each(function (i, o) {
                             list.append(o);
                         });
+                        initReuseDragAndDrop();
                         initPopover();
                     } else {
                         showMessage("error", r.message);
@@ -853,6 +844,7 @@ $(function () {
                     $("#sidebar[content-tab=true]").accordion();
                     sortByNumberOrLetters();
                     initEditable();
+                    initReuseDragAndDrop();
                     initImageUploadFacility();
                     initDragAndDrop();
                     initPlot();
@@ -938,75 +930,51 @@ $(function () {
     });
     //separator
     $(".t-question-type").live("click", function (ev) {
-        var cur = $(ev.currentTarget);
+        var type = $(this).attr("type");
         var etab = $("#checklist");
-        if (questions && etab) {
-            var type = "";
-            var obj;
-            if (cur.hasClass("t-question-type-radio")) { type = "Radio"; obj = $(questions.radio); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-multiple")) { type = "Multiple"; obj = $(questions.multiple); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-essay")) { type = "Essay"; obj = $(questions.essay); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-short")) { type = "ShortAnswer"; obj = $(questions.shortanswer); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-text")) { type = "Text"; obj = $(questions.text); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            if (cur.hasClass("t-question-type-img")) { type = "Image"; obj = $(questions.image); obj.uniqueId(); $(".nt-empty-list-ph", etab).length == 1 ? etab.html(obj) : etab.append(obj); }
-            sortByNumberOrLetters();
-
-            var questiontitle = $(".nt-qtext", obj).html() == "<i>Enter Question</i>" || "<i>Enter Text</i>" ? "" : $(".nt-qtext", obj).html();
-            var serialorder = obj.index();
-            var labelorder = $(".nt-qnum", obj).html();
-            var answers = $(".nt-qans", obj).map(function (iAns, ans) {
-                var answer = new Object();
-                answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
-                answer.SerialOrder = $(ans).index();
-                return answer;
-            }).convertJqueryArrayToJSArray();
-            addQuestion(obj, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
+        if (etab && type) {
+            addQuestion(testid, type, function (newelement) {
+                if ($(".nt-empty-list-ph", etab).length > 0) {
+                    etab.html(newelement);
+                } else {
+                    etab.append(newelement);
+                }
                 resortInDb();
                 sortByNumberOrLetters();
                 initEditable();
                 initImageUploadFacility();
                 etab.scrollToElement(newelement);
             });
-
-
         }
     });
     //separator
     $("#checklist[content-tab=true] .bt-duplicate").live("click", function (ev) {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         var etab = $("#checklist");
-        if (content && etab) {
-            var duplicated = $(content).clone();
-            duplicated.removeAttr("id");
-            duplicated.removeAttr("question-id");
-            $(".nt-qans", duplicated).removeAttr("answer-id");
-            $(".nt-qanselem input[type=radio][name]", duplicated).removeAttrs("name");
-            duplicated.uniqueId();
-            duplicated.insertAfter(content);
-            sortByNumberOrLetters();
-
-            var type = duplicated.attr("question-type");
-            var serialorder = duplicated.index();
-            var labelorder = $(".nt-qnum", duplicated).html();
-            var questiontitle = $(".nt-qtext", duplicated).html() == "<i>Enter Question</i>" ? "" : $(".nt-qtext", duplicated).html();
-            var answers = $(".nt-qans", duplicated).map(function (iAns, ans) {
-                var answer = new Object();
-                answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
-                answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", ans).html();
-                var scoreString = $("input[type=text].nt-on-score", ans).val();
-                var nScore = parseInt(scoreString);
-                answer.Score = isNaN(nScore) ? 0 : nScore;
-                return answer;
-            }).convertJqueryArrayToJSArray();
-            var textdes = $(".nt-qrespinput", duplicated).val();
-            addQuestion(duplicated, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
-                etab.scrollToElement(newelement);
-                resortInDb();
-            }, textdes);
-
-            initImageUploadFacility();
-            initEditable();
-
+        var questionidString = $(content).attr("question-id");
+        var questionid = parseInt(questionidString);
+        var templateQuestion;
+        if (!isNaN(questionid)) {
+            statusSaving();
+            $.post("/Tests/CloneQuestion", { targetTestID: testid, questionid: questionid }, function (res) {
+                if (res.success) {
+                    var newItem = $(res.generatedHtml);
+                    var etab = $("#checklist");
+                    if ($(".nt-empty-list-ph", etab).length == 1) {
+                        etab.html(newItem)
+                    } else {
+                        etab.append(newItem);
+                    }
+                    resortInDb();
+                    sortByNumberOrLetters();
+                    initEditable();
+                    initImageUploadFacility();
+                    etab.scrollToElement(newItem);
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
         }
     });
     //separator
@@ -1180,46 +1148,26 @@ $(function () {
     });
 
     //separator
-    $("#sidebar .nt-ctrl-list .nt-qsearch").live("click", function (ev) {
+    $("#sidebar[content-tab=true] .nt-ctrl-list .nt-qsearch").live("click", function (ev) {
         var questionidString = $(this).attr("question-id");
         var questionid = parseInt(questionidString);
         var templateQuestion;
         if (!isNaN(questionid)) {
             statusSaving();
-            $.post("/Tests/ReuseQuestionTemplate", { questionid: questionid }, function (res) {
-                if (res && res.success && res.generatedHtml) {
+            $.post("/Tests/CloneQuestion", {targetTestID:testid, questionid: questionid }, function (res) {
+                if (res.success) {
                     var newItem = $(res.generatedHtml);
-                    var type = newItem.attr("question-type");
-                    newItem.removeAttr("id");//if exist
-                    newItem.removeAttr("question-id");
-                    $(".nt-qans", newItem).removeAttr("answer-id");
-                    $(".nt-qanselem input[type=radio][name]", newItem).removeAttr("name");
-                    newItem.uniqueId();
-                    var clist = $("#checklist");
-                    if ($(".nt-empty-list-ph", clist).length == 1) {
-                        clist.html(newItem)
+                    var etab = $("#checklist");
+                    if ($(".nt-empty-list-ph", etab).length == 1) {
+                        etab.html(newItem)
                     } else {
-                        clist.append(newItem);
+                        etab.append(newItem);
                     }
+                    resortInDb();
                     sortByNumberOrLetters();
-                    var type = newItem.attr("question-type");
-                    var serialorder = newItem.index();
-                    var labelorder = $(".nt-qnum", newItem).html();
-                    var questiontitle = $(".nt-qtext", newItem).html();
-                    var answers = $(".nt-qans", newItem).map(function (iAns, ans) {
-                        var answer = new Object();
-                        answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", ans).attr("checked") ? true : false;
-                        answer.AnswerContent = $(".nt-qansdesc", ans).html() == "<i>Enter Answer</id>" ? "" : $(".nt-qansdesc", ans).html();
-                        var scoreString = $("input[type=text].nt-on-score", ans).val();
-                        var nScore = parseInt(scoreString);
-                        answer.Score = isNaN(nScore) ? 0 : nScore;
-                        return answer;
-                    }).convertJqueryArrayToJSArray();
-                    var textdes = $(".nt-qrespinput", newItem).val();
-                    addQuestion(newItem, testid, type, questiontitle, answers, serialorder, labelorder, function (newelement) {
-                        clist.scrollToElement(newelement);
-                        resortInDb();
-                    }, textdes);
+                    initEditable();
+                    initImageUploadFacility();
+                    etab.scrollToElement(newItem);
                     statusSaved();
                 } else {
                     showMessage("error", res.message);
