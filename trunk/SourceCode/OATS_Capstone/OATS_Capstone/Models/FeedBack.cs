@@ -14,6 +14,11 @@ namespace OATS_Capstone.Models
     
     public partial class FeedBack
     {
+        public FeedBack()
+        {
+            this.FeedBackChilds = new HashSet<FeedBack>();
+        }
+    
         public int FeedBackID { get; set; }
         public int UserID { get; set; }
         public int TestID { get; set; }
@@ -21,6 +26,8 @@ namespace OATS_Capstone.Models
         public Nullable<System.DateTime> FeedBackDateTime { get; set; }
         public Nullable<int> ParentID { get; set; }
     
+        public virtual ICollection<FeedBack> FeedBackChilds { get; set; }
+        public virtual FeedBack FeedBackParent { get; set; }
         public virtual Test Test { get; set; }
         public virtual User User { get; set; }
     }

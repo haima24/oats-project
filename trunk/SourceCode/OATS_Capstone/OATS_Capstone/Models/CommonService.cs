@@ -733,7 +733,6 @@ namespace OATS_Capstone.Models
 
         public void AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
         {
-
             success = false;
             arraylist = new ArrayList();
             message = Constants.DefaultProblemMessage;

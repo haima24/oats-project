@@ -4,13 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="83210fb2625e440b8d462e3f960267fb" Name="Diagram1">
+      <Diagram DiagramId="cc5caca8ec1a4c89b439876e4b8739f5" Name="Diagram1">
         <EntityTypeShape EntityType="OATSDBModel.Answer" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.FeedBack" Width="1.5" PointX="3" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.FeedBack" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.Invitation" Width="1.5" PointX="6" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.Question" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.QuestionType" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OATSDBModel.Role" Width="1.5" PointX="3.75" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Role" Width="1.5" PointX="3.75" PointY="17.25" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.SettingConfig" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.SettingConfigDetail" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.SettingType" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
@@ -22,6 +22,7 @@
         <EntityTypeShape EntityType="OATSDBModel.UserInTest" Width="1.5" PointX="8.25" PointY="11" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.UserInTestDetail" Width="1.5" PointX="10.5" PointY="11.125" IsExpanded="true" />
         <AssociationConnector Association="OATSDBModel.FK_Answer_Question" ManuallyRouted="false" />
+        <AssociationConnector Association="OATSDBModel.FK_FeedBack_FeedBack" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_FeedBack_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_FeedBack_User" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_Invitation_Role" ManuallyRouted="false" />
