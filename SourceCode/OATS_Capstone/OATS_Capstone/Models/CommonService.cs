@@ -792,13 +792,20 @@ namespace OATS_Capstone.Models
                 {
                     listquestion.ForEach(delegate(QuestionItemTemplate item)
                     {
-                        var type = item.QuestionItem.QuestionType.Type;
-                        var realType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
-                        if (realType != null)
+                        
+                        var qItem = item.QuestionItem;
+                        if (qItem != null)
                         {
-                            item.QuestionItem.QuestionType = realType;
+                            var type = qItem.QuestionType.Type;
+                            var realType = db.QuestionTypes.FirstOrDefault(k => k.Type == type);
+                            if (realType != null)
+                            {
+                                qItem.QuestionType = realType;
+                            }
+                            qItem.QuestionTitle = qItem.QuestionTitle ?? string.Empty;
+                            qItem.TextDescription = qItem.TextDescription ?? string.Empty;
+                            test.Questions.Add(qItem);
                         }
-                        test.Questions.Add(item.QuestionItem);
                     });
 
                     if (db.SaveChanges() > 0)
@@ -919,7 +926,7 @@ namespace OATS_Capstone.Models
                     {
                         question.Answers.ToList().ForEach(k => db.Answers.Remove(k));
                         var tags = question.TagInQuestions.ToList();
-                        tags.ForEach(k => question.TagInQuestions.Remove(k));
+                        tags.ForEach(k => db.TagInQuestions.Remove(k));
                         db.Questions.Remove(question);
                         if (db.SaveChanges() > 0)
                         {

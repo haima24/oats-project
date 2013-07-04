@@ -6,6 +6,83 @@ var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 
+function initDropText()
+{
+    $("#qpaste textarea").filedrop({
+        success: function (text) {
+            handleImportText(text);
+        },
+        error: function (msg) {
+            showMessage("error", msg);
+        }
+    });
+}
+function handleImportText(text) {
+    var pastedText = text;
+    if (pastedText) {
+        var textarea = $("#qpaste textarea");
+        //begin effect
+        textarea.addClass("blur");
+        $("#qpaste .nt-loader-large").show();
+        //begin effect
+        var questionslist = pastedText.split(/\s*\n\s*[\s*\n\s*]+/);
+        var questionGenerated = new Array();
+        $(questionslist).each(function (index, element) {
+            var lines = element.split("\n");
+            if (lines.length > 0) {
+                var question = new Object();
+                var htmlQuestion;
+                if (lines.length == 1) {
+                    //text
+                    question.QuestionType = { Type: "Text" };
+                    question.QuestionTitle = lines[0];
+                    htmlQuestion = $(questions.text);
+                } else {
+                    //radio question
+                    question.QuestionType = { Type: "Radio" };
+                    question.QuestionTitle = lines[0];
+                    question.Answers = $(lines).map(function (i, o) {
+                        if (i > 0) {
+                            return { AnswerContent: o };
+                        }
+                    }).convertJqueryArrayToJSArray();
+                    htmlQuestion = $(questions.radio);
+                }
+                htmlQuestion.uniqueId();
+                var clist = $("#checklist");
+                if ($(".nt-empty-list-ph", clist).length == 1) {
+                    clist.html(htmlQuestion)
+                } else {
+                    clist.append(htmlQuestion);
+                }
+
+                var clientid = htmlQuestion.attr("id");
+                questionGenerated.push({ clientid: clientid, question: question });
+            }
+
+        });
+        sortByNumberOrLetters();
+        var listquestion = $(questionGenerated).map(function (idex, ele) {
+            var cid = ele.clientid;
+            var ques = ele.question;
+            if (cid && ques) {
+                var obj = $("#" + cid);
+                ques.SerialOrder = obj.index();
+                ques.LabelOrder = $(".nt-qnum", obj).html();
+                return { ClientID: cid, QuestionItem: ques };
+            }
+        }).convertJqueryArrayToJSArray();
+
+        addListQuestion(listquestion, function () {
+            //end effect
+            textarea.val("");
+            $("#qpaste .nt-loader-large").hide();
+            textarea.removeClass("blur");
+            //end effect
+            $("#checklist").animate({ scrollTop: $('#checklist')[0].scrollHeight }, 1000);
+        });
+    }
+}
 function initScoreOnUserChart() {
     var charts = $("#score-charter div[data=charter]");
     if (charts.length > 0) {
@@ -711,6 +788,7 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
+    initDropText();
     initTagsOnTest();
     initDragAndDrop();
     initEditable();
@@ -771,6 +849,7 @@ $(function () {
                     initPlot();
                     initScoreOnUserChart();
                     initReplyAreas();
+                    initDropText();
                 }
             } else { showMessage("error", res.message); }
         });
@@ -981,70 +1060,14 @@ $(function () {
         setTimeout(function () {
             var textarea = $("#qpaste textarea");
             if (textarea) {
-                //begin effect
-                textarea.addClass("blur");
-                $("#qpaste .nt-loader-large").show();
-                //begin effect
                 var pastedText = textarea.val();
-                var questionslist = pastedText.split(/\n[\n]+/);
-                var questionGenerated = new Array();
-                $(questionslist).each(function (index, element) {
-                    var lines = element.split("\n");
-                    if (lines.length > 0) {
-                        var question = new Object();
-                        var htmlQuestion;
-                        if (lines.length == 1) {
-                            //text
-                            question.QuestionType = { Type: "Text" };
-                            question.QuestionTitle = lines[0];
-                            htmlQuestion = $(questions.text);
-                        } else {
-                            //radio question
-                            question.QuestionType = { Type: "Radio" };
-                            question.QuestionTitle = lines[0];
-                            question.Answers = $(lines).map(function (i, o) {
-                                if (i > 0) {
-                                    return { AnswerContent: o };
-                                }
-                            }).convertJqueryArrayToJSArray();
-                            htmlQuestion = $(questions.radio);
-                        }
-                        htmlQuestion.uniqueId();
-                        var clist = $("#checklist");
-                        if ($(".nt-empty-list-ph", clist).length == 1) {
-                            clist.html(htmlQuestion)
-                        } else {
-                            clist.append(htmlQuestion);
-                        }
-
-                        var clientid = htmlQuestion.attr("id");
-                        questionGenerated.push({ clientid: clientid, question: question });
-                    }
-
-                });
-                sortByNumberOrLetters();
-                var listquestion = $(questionGenerated).map(function (idex, ele) {
-                    var cid = ele.clientid;
-                    var ques = ele.question;
-                    if (cid && ques) {
-                        var obj = $("#" + cid);
-                        ques.SerialOrder = obj.index();
-                        ques.LabelOrder = $(".nt-qnum", obj).html();
-                        return { ClientID: cid, QuestionItem: ques };
-                    }
-                }).convertJqueryArrayToJSArray();
-
-                addListQuestion(listquestion, function () {
-                    //end effect
-                    textarea.val("");
-                    $("#qpaste .nt-loader-large").hide();
-                    textarea.removeClass("blur");
-                    //end effect
-                    $("#checklist").animate({ scrollTop: $('#checklist')[0].scrollHeight }, 1000);
-                });
-
+                handleImportText(pastedText);
             }
         }, 100);
+    });
+    $("#qpaste textarea").live("mouseup", function (ev) {
+        var text = $(this).val();
+        handleImportText(text);
     });
     //separator
     $("#checklist[content-tab=true] .nt-qitem[question-type=Essay],[question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
