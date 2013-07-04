@@ -164,10 +164,10 @@ namespace OATS_Capstone.Controllers
         }
 
 
-        public JsonResult TestsSearch()
+        public JsonResult TestsSearch(string term)
         {
             var common = new CommonService();
-            common.TestsSearch();
+            common.TestsSearch(term);
             return Json(new { common.resultlist, common.success, common.message });
         }
         public ActionResult Index()
