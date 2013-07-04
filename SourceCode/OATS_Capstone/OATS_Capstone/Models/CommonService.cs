@@ -249,7 +249,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void CloneQuestion(int targetTestID,int questionid)
+        public void CloneQuestion(int targetTestID, int questionid)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -259,45 +259,51 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var oldQuestion = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
                 var test = db.Tests.FirstOrDefault(i => i.TestID == targetTestID);
-                if (test != null && oldQuestion != null)
+                if (oldQuestion != null)
                 {
-                    var question = new Question();
-                    question.ImageUrl = oldQuestion.ImageUrl;
-                    question.NoneChoiceScore = oldQuestion.NoneChoiceScore;
-                    question.QuestionTitle = oldQuestion.QuestionTitle;
-                    question.QuestionType = oldQuestion.QuestionType;
-                    var tagsInQuestion = oldQuestion.TagInQuestions.ToList();
-                    question.TagInQuestions = new List<TagInQuestion>();
-                    tagsInQuestion.ForEach(k =>
+                    if (test != null)
                     {
-                        var tagInquestion = new TagInQuestion();
-                        tagInquestion.Tag = k.Tag;
-                        tagInquestion.SerialOrder = k.SerialOrder;
-                        question.TagInQuestions.Add(tagInquestion);
-                    });
-                    question.TextDescription = oldQuestion.TextDescription;
-                    var answers = oldQuestion.Answers.ToList();
-                    question.Answers = new List<Answer>();
-                    answers.ForEach(k =>
-                    {
-                        var answer = new Answer();
-                        answer.AnswerContent = k.AnswerContent;
-                        answer.IsRight = k.IsRight;
-                        answer.Score = k.Score;
-                        answer.SerialOrder = k.SerialOrder;
-                        question.Answers.Add(answer);
-                    });
-                    test.Questions.Add(question);
-                    if (db.SaveChanges() > 0)
-                    {
-                        if (OnRenderPartialViewToString != null)
+                        var question = new Question();
+                        question.ImageUrl = oldQuestion.ImageUrl;
+                        question.NoneChoiceScore = oldQuestion.NoneChoiceScore;
+                        question.QuestionTitle = oldQuestion.QuestionTitle;
+                        question.QuestionType = oldQuestion.QuestionType;
+                        var tagsInQuestion = oldQuestion.TagInQuestions.ToList();
+                        question.TagInQuestions = new List<TagInQuestion>();
+                        tagsInQuestion.ForEach(k =>
                         {
-                            success = true;
-                            generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                            var tagInquestion = new TagInQuestion();
+                            tagInquestion.Tag = k.Tag;
+                            tagInquestion.SerialOrder = k.SerialOrder;
+                            question.TagInQuestions.Add(tagInquestion);
+                        });
+                        question.TextDescription = oldQuestion.TextDescription;
+                        var answers = oldQuestion.Answers.ToList();
+                        question.Answers = new List<Answer>();
+                        answers.ForEach(k =>
+                        {
+                            var answer = new Answer();
+                            answer.AnswerContent = k.AnswerContent;
+                            answer.IsRight = k.IsRight;
+                            answer.Score = k.Score;
+                            answer.SerialOrder = k.SerialOrder;
+                            question.Answers.Add(answer);
+                        });
+                        test.Questions.Add(question);
+                        if (db.SaveChanges() > 0)
+                        {
+                            if (OnRenderPartialViewToString != null)
+                            {
+                                success = true;
+                                generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                            }
                         }
                     }
                 }
-                
+                else {
+                    success = false;
+                    message = "This question is no longer exist.";
+                }
             }
             catch (Exception)
             {
@@ -805,14 +811,15 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var dbType = db.QuestionTypes.FirstOrDefault(i => i.Type == type);
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (dbType != null&&test!=null)
+                if (dbType != null && test != null)
                 {
-                    var question=new Question();
+                    var question = new Question();
                     question.QuestionTitle = string.Empty;
                     question.TextDescription = string.Empty;
-                    question.QuestionType=dbType;
-                    if (dbType.Type == "Radio" || dbType.Type == "Multiple") {
-                        var ans1 = new Answer() { AnswerContent=string.Empty};
+                    question.QuestionType = dbType;
+                    if (dbType.Type == "Radio" || dbType.Type == "Multiple")
+                    {
+                        var ans1 = new Answer() { AnswerContent = string.Empty };
                         var ans2 = new Answer() { AnswerContent = string.Empty };
                         question.Answers.Add(ans1);
                         question.Answers.Add(ans2);
