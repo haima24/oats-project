@@ -156,7 +156,9 @@
     </Compile>
     <Compile Include="Hubs\GeneralHub.cs" />
     <Compile Include="Mailers\IUserMailer.cs" />
+    <Compile Include="Mailers\IUserReinviteMailer.cs" />
     <Compile Include="Mailers\UserMailer.cs" />
+    <Compile Include="Mailers\UserReinviteMailer.cs" />
     <Compile Include="Models\Answer.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>

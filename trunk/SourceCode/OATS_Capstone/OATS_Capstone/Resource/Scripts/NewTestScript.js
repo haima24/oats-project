@@ -1379,6 +1379,28 @@ $(function () {
     });
     //Separator
     $("#modalReinvitePopupUser button.nt-btn-ok").live("click", function (ev) {
+        var container = $("#modalReinvitePopupUser .nt-clb-list");
+        var checkedCheckbox = $("input[type=checkbox]:checked", container);
+        var chekcedIds = checkedCheckbox.map(function (index, element) {
+            return parseInt($(element).attr("user-id"));
+
+        }).convertJqueryArrayToJSArray();
+        statusSaving();
+        $.ajax({
+            type: "POST",
+            url: "/Tests/ReinviteUserToInvitationTest",
+            data: JSON.stringify({ testid: testid, count: chekcedIds.length, userids: chekcedIds }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.success) {
+                    $("#eventTab").html($(res.generatedHtml));
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            }
+            });
         $("#modalReinvitePopupUser").modal('hide');
     });
     //Separator
