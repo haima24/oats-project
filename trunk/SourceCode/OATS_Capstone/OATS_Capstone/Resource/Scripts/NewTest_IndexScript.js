@@ -3,12 +3,12 @@
     $.post("/Tests/TestCalendarObjectResult", function (res) {
         if (res.success) {
             events = $(res.resultlist).map(function (index, obj) {
-                    return {
-                        id: obj.id,
-                        title: obj.testTitle,
-                        start: convertJsonDatetoDate(obj.startDateTime),
-                        end: convertJsonDatetoDate(obj.endDateTime)
-                    };
+                return {
+                    id: obj.id,
+                    title: obj.testTitle,
+                    start: convertJsonDatetoDate(obj.startDateTime),
+                    end: convertJsonDatetoDate(obj.endDateTime)
+                };
             }).convertJqueryArrayToJSArray();
             $('#calendar').fullCalendar({
                 theme: true,
@@ -24,7 +24,7 @@
         } else {
             showMessage("error", res.message);
         }
-        
+
 
     });
 
@@ -54,30 +54,34 @@ $(function () {
                     initCalendar();
 
                 }
-            } else { showMessage("error", res.message);}
+            } else { showMessage("error", res.message); }
         });
     });
     $(".navbar-search input[type=text].nt-search-input").oatsSearch({
-        source: function (req,res) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/Tests/TestsSearch",
-                        data: JSON.stringify({term:req} ),
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (r) {
-                            if (r.success) {
-                                var result = $(r.resultlist).map(function (index, obj) {
-                                    if (obj.TestTitle && obj.TestTitle != "") {
-                                        return { des: obj.TestTitle, title: obj.TestTitle, id: obj.Id };
-                                    }
-                                }).convertJqueryArrayToJSArray();
-                                res(result);
-                            } else {
-                                showMessage("error", r.message);
+        source: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsSearch",
+                data: JSON.stringify({ term: req }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TestTitle && obj.TestTitle != "") {
+                                return { des: obj.TestTitle, title: obj.TestTitle, id: obj.Id };
                             }
-                        }
-                    });
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        },
+        tagsource: function (req, res) {
+            var obj = [{ id: 1, name: "xyz" }, { id: 2, name: "abc" }];
+            res(obj);
         }
     });
     $(".btn-feedback").live("click", function () {

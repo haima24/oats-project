@@ -2113,7 +2113,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 }
 
 .nt-search-results {
-    z-index:10;
+    z-index: 10;
     display: none;
     overflow: hidden;
     position: absolute;
@@ -2131,42 +2131,77 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     -moz-box-shadow: 1px 2px #c7c7c7;
     box-shadow: 1px 2px #c7c7c7;
 }
-.nt-search-results .nt-taglist {
-padding-bottom: 2px;
-border-bottom: 1px solid #ececec;
-}
+
+    .nt-search-results .nt-tags div {
+        margin: 10px 2px 4px 0;
+    }
+
+    .nt-search-results .nt-taglist {
+        padding-bottom: 2px;
+        border-bottom: 1px solid #ececec;
+        position:static;
+    }
+
     .nt-search-results .nt-hitlist {
         min-height: 100px;
         max-height: 300px;
         margin-top: 10px;
         overflow-y: auto;
     }
-    .nt-search-results .nt-tags div {
-        margin:10px 2px 4px 0;
-    }
-        .nt-search-results .nt-hitlist .nt-empty-list-ph {
-            color: #999999;
-        }
 
-        .nt-search-results .nt-hitlist .nt-item {
+    .nt-search-results .nt-tags .nt-tag-hitlist {
+        z-index: 15;
+        display: none;
+        background-color: white;
+        width: 110px;
+        margin: 0;
+        top: 30px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 1px 2px #c7c7c7;
+        -moz-box-shadow: 1px 2px #c7c7c7;
+        box-shadow: 1px 2px #c7c7c7;
+        position: absolute;
+        min-height: 100px;
+        max-height: 200px;
+        margin-top: 5px;
+        overflow-y: auto;
+    }
+        .nt-search-results .nt-tags .nt-tag-hitlist .nt-item {
             color: #444444;
             cursor: pointer;
+            margin:8px 8px 8px 0px;
             padding: 2px;
-            -webkit-border-radius: 2px;
-            -moz-border-radius: 2px;
-            -ms-border-radius: 2px;
-            -o-border-radius: 2px;
-            border-radius: 2px;
-            border-bottom: 1px solid #ececec;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+            border-radius: 4px;
+            background-color:#EAEFFA;
+        }
+        .nt-search-results .nt-tags .nt-tag-hitlist div {
+            float: none;
+            margin:0px;
+            padding:5px;
+            
         }
 
-            .nt-search-results .nt-hitlist .nt-item .nt-item-desc {
-                font-size: 11px;
-                line-height: 16px;
-                color: #999999;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+    .nt-search-results .nt-hitlist .nt-empty-list-ph, .nt-search-results .nt-tag-hitlist .nt-empty-list-ph {
+        color: #999999;
+    }
+
+
+
+    .nt-search-results .nt-hitlist .nt-item .nt-item-desc {
+        font-size: 11px;
+        line-height: 16px;
+        color: #999999;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
 .nt-user-details .nt-asms-unrelated .nt-rolldown-search .nt-cover {
     position: absolute;
