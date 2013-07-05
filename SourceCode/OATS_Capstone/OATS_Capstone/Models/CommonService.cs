@@ -387,7 +387,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void TestsSearch(string term)
+        public void TestsSearch(string term, List<int> tagids)
         {
 
             success = false;
@@ -398,8 +398,13 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 if (!string.IsNullOrEmpty(term))
                 {
+                    if (tagids == null) { tagids = new List<int>(); }
+                    var tags = db.Tags.Where(i => tagids.Contains(i.TagID));
                     var lower = term.ToLower();
                     var tests = db.Tests.ToList();
+                    if (tagids.Count > 0) { 
+                    tests = tags.SelectMany(i => i.TagInTests.Select(k => k.Test)).ToList();
+                    }
                     tests.ForEach(delegate(Test test)
                     {
                         if (test.TestTitle != null)
