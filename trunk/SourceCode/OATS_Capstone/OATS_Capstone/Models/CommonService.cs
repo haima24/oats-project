@@ -371,8 +371,12 @@ namespace OATS_Capstone.Models
                     var search = new SearchingTests();
                     search.TestTitle = item.TestTitle;
                     search.Id = item.TestID;
-                    search.StartDate = item.StartDateTime;
-                    search.EndDate = item.EndDateTime;
+                    var dateDes = item.StartDateTime.ToDateDefaultFormat();
+                    if (item.EndDateTime.HasValue)
+                    {
+                        dateDes += " - " + item.EndDateTime.ToDateDefaultFormat();
+                    }
+                    search.DateDescription = dateDes;
                     resultlist.Add(search);
                 }
                 success = true;
@@ -418,8 +422,12 @@ namespace OATS_Capstone.Models
                                 var testTemplate = new SearchingTests();
                                 testTemplate.Id = test.TestID;
                                 testTemplate.TestTitle = test.TestTitle;
-                                testTemplate.StartDate = test.StartDateTime;
-                                testTemplate.EndDate = test.EndDateTime;
+                                var dateDes = test.StartDateTime.ToDateDefaultFormat();
+                                if (test.EndDateTime.HasValue)
+                                {
+                                    dateDes += " - " + test.EndDateTime.ToDateDefaultFormat();
+                                }
+                                testTemplate.DateDescription = dateDes;
                                 resultlist.Add(testTemplate);
                             }
                         }
