@@ -124,6 +124,23 @@ $(function () {
             }
         });
     });
+
+    $("#contact-submit").live("click", function () {
+        var testid = $("#test-id").val();
+        var text = $("#message").val();
+        $.post("/Tests/StudentCommentFeedBack", { testid: testid, fbDetail: text }, function (res) {
+            if (res.success) {
+                var html = res.generatedHtml;
+                
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+
+
+
+    
     //separator
     $(".reply-container[toggle-header]").live("click", function () {
         var cur = $(this);

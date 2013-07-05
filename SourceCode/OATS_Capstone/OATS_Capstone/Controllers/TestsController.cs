@@ -790,5 +790,26 @@ namespace OATS_Capstone.Controllers
             common.ModalFeedBackPopup(testid);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
+
+        public JsonResult StudentCommentFeedBack(int testid, string fbDetail)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_FeedBack_Form_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.ModalFeedBackPopup(testid);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
     }
 }

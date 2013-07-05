@@ -29,11 +29,12 @@ namespace OATS_Capstone.Models
 
         public TestList(IEnumerable<Test> tests)
         {
-            runningTests = tests.Where(i => i.UserInTests.Count == 0).Select(k => {
+            var authen = AuthenticationSessionModel.Instance();
+            runningTests = tests.Where(i => i.UserInTests.Count == 0&&i.Invitations.Select(t=>t.UserID).Contains(authen.UserId)).Select(k => {
                 var testListItem = new TestListItem(k);
                 return testListItem;
             }).ToList();
-            recentTests = tests.Where(i => i.UserInTests.Count > 0).Select(k =>
+            recentTests = tests.Where(i => i.UserInTests.Count > 0 && i.Invitations.Select(t => t.UserID).Contains(authen.UserId)&&i.UserInTests.Select(t=>t.UserID).Contains(authen.UserId)).Select(k =>
             {
                 var testListItem = new TestListItem(k);
                 return testListItem;

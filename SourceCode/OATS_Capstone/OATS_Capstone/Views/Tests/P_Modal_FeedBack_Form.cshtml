@@ -1,5 +1,6 @@
-﻿@model OATS_Capstone.Models.Test
+﻿@model OATS_Capstone.Models.AbsFeedBackUser
 <div id="modalPopupFeedback" class="modal hide fade">
+    <input id="test-id" type="hidden" value="@Model.TestID" />
     <div class="modal-header">
         <div class="modal-title">Feedback on: @Model.TestTitle</div>
     </div>
@@ -7,7 +8,7 @@
         <div class="controls">
             <div class="comment-count">
                 All Comments
-            <span>(11)         
+            <span>@Model.FeedBackCount        
             </span>
                 <div class="btn-group" style="margin-left: 38px">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Sort by
@@ -21,130 +22,20 @@
                 </div>
 
             </div>
+            
             <div class="nt-panel" style="height: 280px; width: 950px; overflow-y: auto">
-                <article class="comment">
-
-                    <div class="comment-meta">
-                        <a href="#" class="url">Tu<span> </span>Huynh</a> says<time>30/06/2013 12:00:00 AM</time>
-                    </div>
-
-                    <div class="comment-body">
-                        <p>
-                            this a negative lookahead. Like all lookarounds, it's a zero-width assertion, which just means it matches a position between characters rather than a pattern of characters themselves. So this matches "a position that is not followed by Country". This means if you had a country named CountryTown, it wouldn't get matched by the full regex
-                        </p>
-                         <div class="reply-container" toggle-header>
-                            <div class="pointer">
-                                <i class="t-icon i-chat"></i>
-                                <a class="reply-count-link">3 reply</a>
-                            </div>
-                        </div>
-                        <div class="reply-container" style="display: none;" toggle-detail>
-                            <div class="pointer" toggle-detail-trigger>
-                                <i class="t-icon i-caret-up"></i>
-                                <a class="reply-count-link">Hide</a>
-                            </div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
-                            <button class="btn btn-primary">Reply</button>
-                        </div>
-                    </div>
-
-                </article>
-                <article class="comment">
-
-                    <div class="comment-meta">
-                        <a href="#" class="url">Tu<span> </span>Huynh</a> says<time>30/06/2013 12:00:00 AM</time>
-                    </div>
-
-                    <div class="comment-body">
-                        <p>
-                            this a negative lookahead. Like all lookarounds, it's a zero-width assertion, which just means it matches a position between characters rather than a pattern of characters themselves. So this matches "a position that is not followed by Country". This means if you had a country named CountryTown, it wouldn't get matched by the full regex
-                        </p>
-                         <div class="reply-container" toggle-header>
-                            <div class="pointer">
-                                <i class="t-icon i-chat"></i>
-                                <a class="reply-count-link">3 reply</a>
-                            </div>
-                        </div>
-                        <div class="reply-container" style="display: none;" toggle-detail>
-                            <div class="pointer" toggle-detail-trigger>
-                                <i class="t-icon i-caret-up"></i>
-                                <a class="reply-count-link">Hide</a>
-                            </div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
-                            <button class="btn btn-primary">Reply</button>
-                        </div>
-                    </div>
-
-                </article>
-                <article class="comment">
-
-                    <div class="comment-meta">
-                        <a href="#" class="url">Tu<span> </span>Huynh</a> says<time>30/06/2013 12:00:00 AM</time>
-                    </div>
-
-                    <div class="comment-body">
-                        <p>
-                            this a negative lookahead. Like all lookarounds, it's a zero-width assertion, which just means it matches a position between characters rather than a pattern of characters themselves. So this matches "a position that is not followed by Country". This means if you had a country named CountryTown, it wouldn't get matched by the full regex
-                        </p>
-                         <div class="reply-container" toggle-header>
-                            <div class="pointer">
-                                <i class="t-icon i-chat"></i>
-                                <a class="reply-count-link">3 reply</a>
-                            </div>
-                        </div>
-                        <div class="reply-container" style="display: none;" toggle-detail>
-                            <div class="pointer" toggle-detail-trigger>
-                                <i class="t-icon i-caret-up"></i>
-                                <a class="reply-count-link">Hide</a>
-                            </div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
-                            <button class="btn btn-primary">Reply</button>
-                        </div>
-                    </div>
-
-                </article>
-                <article class="comment">
-
-                    <div class="comment-meta">
-                        <a href="#" class="url">Tu<span> </span>Huynh</a> says<time>30/06/2013 12:00:00 AM</time>
-                    </div>
-
-                    <div class="comment-body">
-                        <p>
-                            this a negative lookahead. Like all lookarounds, it's a zero-width assertion, which just means it matches a position between characters rather than a pattern of characters themselves. So this matches "a position that is not followed by Country". This means if you had a country named CountryTown, it wouldn't get matched by the full regex
-                        </p>
-                         <div class="reply-container" toggle-header>
-                            <div class="pointer">
-                                <i class="t-icon i-chat"></i>
-                                <a class="reply-count-link">3 reply</a>
-                            </div>
-                        </div>
-                        <div class="reply-container" style="display: none;" toggle-detail>
-                            <div class="pointer" toggle-detail-trigger>
-                                <i class="t-icon i-caret-up"></i>
-                                <a class="reply-count-link">Hide</a>
-                            </div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
-                            <button class="btn btn-primary">Reply</button>
-                        </div>
-                    </div>
-
-                </article>
+                @foreach (var feedback in @Model.Parents)
+                {
+                    @Html.Partial("P_Modal_FeedBack_Form_Item",feedback)
+                }
+               
             </div>
         </div>
         <div class="controls">
-            <textarea id="message" name="message" style="width:950px" placeholder="Your Message" rows="4"></textarea>
+            <textarea id="message" name="message" style="width: 950px" placeholder="Your Message" rows="4"></textarea>
         </div>
         <div class="controls">
-            <button id="contact-submit" type="submit" class="btn btn-primary input-medium pull-right">Send</button>
+            <button id="contact-submit" class="btn btn-primary input-medium pull-right">Send</button>
         </div>
     </div>
     <div class="modal-footer">

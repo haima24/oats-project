@@ -2249,7 +2249,8 @@ namespace OATS_Capstone.Models
                     if (OnRenderPartialViewToString != null)
                     {
                         success = true;
-                        generatedHtml = OnRenderPartialViewToString.Invoke(test);
+                        AbsFeedBackUser feedBackUser = new FeedBackStudent(test);
+                        generatedHtml = OnRenderPartialViewToString.Invoke(feedBackUser);
                     }
                 }
             }
@@ -2259,7 +2260,51 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public string GenerateKey()
+
+        public void StudentCommentFeedBack(int testid, string fbDetail)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var authen = AuthenticationSessionModel.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid); //#1
+                if (test != null)
+                {
+                    //new a FeedBack
+                    var feedback = new FeedBack();
+                    //assign attribute
+                    feedback.UserID = authen.UserId;
+                    feedback.FeedBackDetail = fbDetail;
+                    feedback.FeedBackDateTime = DateTime.Now;
+                    feedback.ParentID = null;
+                    //add to test #1
+                    test.FeedBacks.Add(feedback);
+                    //save
+                    if (db.SaveChanges()> 0)
+                    {
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
+                        }
+                    }
+                    
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
+       
+
+      
+
+      public string GenerateKey()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
             var random = new Random();
@@ -2269,5 +2314,5 @@ namespace OATS_Capstone.Models
                           .ToArray());
             return result;
         }
-    }
+  }
 }
