@@ -252,6 +252,7 @@ $.fn.extend({
 })
 $.fn.extend({
     oatsSearch: function (options) {
+        var addedTags = new Array(); //list of int
         var items = new Array();
         var tagItems = new Array();
         var res = function (response) {
@@ -340,7 +341,7 @@ $.fn.extend({
                 $(".nt-hitlist .nt-item", dropdown).remove();
                 var text= $(this).val() + String.fromCharCode(ev.keyCode);
                 if (options.source && typeof (options.source) === "function") {
-                    options.source(text, res);
+                    options.source(text, res,addedTags);
                 }
             });
             $(document).live("click", function (e) {
@@ -350,14 +351,20 @@ $.fn.extend({
             });
             $(".nt-tag-hitlist", dropdown).on("click", function (ev) {
                 var clickItem = $(ev.target).closest(".nt-item");
+                var tagsContainer = $(".nt-taglist.nt-tags", dropdown);
                 if (clickItem.length > 0) {
                     if (items) {
                         var item = $(tagItems).filter(function () {
                             return clickItem.is($(this).attr("key"));
                         });
                         if (item.length > 0) {
-                            if (options.tagselect && typeof (options.tagselect) === "function") {
-                                options.tagselect(item.attr("value"));
+                            var bindedObj = item.attr("value");
+                            if (($.inArray(bindedObj.id, addedTags)) < 0) {
+                                addedTags.push(bindedObj.id);
+                                var htmlTag = $("<div>").addClass("nt-tag").attr("tag-id", bindedObj.id).append(
+                                    $("<span>").html(bindedObj.name)
+                                    ).append("<i class='icon-remove nt-tag-remove'></i>");
+                                tagsContainer.prepend(htmlTag);
                             }
                         }
                     }

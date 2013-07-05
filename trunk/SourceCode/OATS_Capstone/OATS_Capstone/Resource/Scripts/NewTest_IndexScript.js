@@ -60,13 +60,11 @@ $(function () {
     $(".navbar-search input[type=text].nt-search-input").oatsSearch({
         select: function (item) {
         },
-        tagselect: function (item) {
-        },
-        source: function (req, res) {
+        source: function (req, res,addedTagIds) {
             $.ajax({
                 type: "POST",
                 url: "/Tests/TestsSearch",
-                data: JSON.stringify({ term: req }),
+                data: JSON.stringify({ term: req, tagids: addedTagIds }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (r) {
