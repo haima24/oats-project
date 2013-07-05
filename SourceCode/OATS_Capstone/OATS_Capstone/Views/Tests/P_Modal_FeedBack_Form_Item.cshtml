@@ -2,7 +2,7 @@
 
 <article class="comment">
     <div class="comment-meta">
-        <a href="#" class="url">@Model.User.FirstName<span> </span>@Model.User.LastName</a> says<time>@Model.FeedBackDateTime</time>
+        <a href="#" class="url">@(Model.User.FirstName??Model.User.LastName??Model.User.UserMail)</a> says<time>@Model.FeedBackDateTime</time>
     </div>
 
     <div class="comment-body">
@@ -13,7 +13,7 @@
         <div class="reply-container" toggle-header>
             <div class="pointer">
                 <i class="t-icon i-chat"></i>
-                <a class="reply-count-link">@Model.FeedBackChilds.Count reply</a>
+                <a class="reply-count-link">@Model.FeedBackChilds.Count() reply</a>
             </div>
         </div>
         <div class="reply-container" style="display: none;" toggle-detail>

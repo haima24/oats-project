@@ -1328,12 +1328,12 @@ $(function () {
         $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Student" }, function (res) {
             if (res.success) {
                 var html = res.generatedHtml;
-                if (!$("#modalPopupFeedback").length > 0) {
+                if (!$("#modalRemovePopupUser").length > 0) {
                     $(html).modal();
                 } else {
-                    $("#modalPopupFeedback").replaceWith($(html));
+                    $("#modalRemovePopupUser").replaceWith($(html));
                 }
-                $("#modalPopupFeedback").modal("show");
+                $("#modalRemovePopupUser").modal("show");
 
             } else {
                 showMessage("error", res.message);
