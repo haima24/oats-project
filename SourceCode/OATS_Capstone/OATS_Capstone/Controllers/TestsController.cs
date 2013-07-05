@@ -310,7 +310,7 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
-        public ActionResult DoTest(int id, bool check, string accesscode)
+        public ActionResult DoTest(int id, string accesscode, bool check=false)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);

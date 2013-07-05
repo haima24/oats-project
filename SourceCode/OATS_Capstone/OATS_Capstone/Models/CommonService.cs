@@ -300,7 +300,8 @@ namespace OATS_Capstone.Models
                         }
                     }
                 }
-                else {
+                else
+                {
                     success = false;
                     message = "This question is no longer exist.";
                 }
@@ -406,7 +407,8 @@ namespace OATS_Capstone.Models
                     var tags = db.Tags.Where(i => tagids.Contains(i.TagID));
                     var lower = term.ToLower();
                     var tests = db.Tests.ToList();
-                    if (tagids.Count > 0) {
+                    if (tagids.Count > 0)
+                    {
                         var rawTests = tags.SelectMany(i => i.TagInTests.Select(k => k.Test));
                         var groupTests = from t in rawTests
                                          group t by t into GroupTests
@@ -1299,7 +1301,7 @@ namespace OATS_Capstone.Models
                     }
                     else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
                     {
-                        detail.TextValue = GenerateKey();
+                        detail.TextValue = GenerateAccessKey();
                     }
                     if (db.SaveChanges() >= 0)
                     {
@@ -1903,7 +1905,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void AddTagToTest(int testid, int tagid)
+        public void AddTagToTest(int testid, int tagid, string tagname)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2037,7 +2039,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void AddTagToQuestion(int questionid, int tagid)
+        public void AddTagToQuestion(int questionid, int tagid, string tagname)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2294,7 +2296,7 @@ namespace OATS_Capstone.Models
                     //add to test #1
                     test.FeedBacks.Add(feedback);
                     //save
-                    if (db.SaveChanges()> 0)
+                    if (db.SaveChanges() > 0)
                     {
                         if (OnRenderPartialViewToString != null)
                         {
@@ -2302,7 +2304,7 @@ namespace OATS_Capstone.Models
                             generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
                         }
                     }
-                    
+
                 }
             }
             catch (Exception)
@@ -2312,11 +2314,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-       
-
-      
-
-      public string GenerateKey()
+        private string GenerateAccessKey()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
             var random = new Random();
@@ -2326,5 +2324,5 @@ namespace OATS_Capstone.Models
                           .ToArray());
             return result;
         }
-  }
+    }
 }
