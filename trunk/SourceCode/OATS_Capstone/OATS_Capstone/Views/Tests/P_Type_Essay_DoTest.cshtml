@@ -3,7 +3,14 @@
 <div class="nt-qitem" question-type="Essay" question-id="@Model.QuestionID">
     <div class="nt-qnum "></div>
     <a class="nt-qanchor" name="Qundefined"></a>
-    <div class="nt-qmaxpts">@Model.NoneChoiceScore</div>
+    @{
+        var detail = Model.Test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "SQP");
+    }
+    @if (detail.IsActive) 
+    {
+        <div class="nt-qmaxpts">@Model.NoneChoiceScore</div>
+    }
+    
 
     <div class="nt-qtext ">
         <p>@Model.QuestionTitle</p>
