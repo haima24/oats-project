@@ -2308,6 +2308,7 @@ namespace OATS_Capstone.Models
                     feedback.FeedBackDetail = fbDetail;
                     feedback.FeedBackDateTime = DateTime.Now;
                     feedback.ParentID = null;
+                    
                     //add to test #1
                     test.FeedBacks.Add(feedback);
                     //save

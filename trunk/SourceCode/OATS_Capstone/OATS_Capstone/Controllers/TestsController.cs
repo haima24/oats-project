@@ -841,7 +841,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.ModalFeedBackPopup(testid);
+            common.StudentCommentFeedBack(testid,fbDetail);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
     }

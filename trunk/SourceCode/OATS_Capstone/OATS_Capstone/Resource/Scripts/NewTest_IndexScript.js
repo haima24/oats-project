@@ -113,13 +113,13 @@ $(function () {
         $.post("/Tests/ModalFeedBackPopup", { testid: testid }, function (res) {
             if (res.success) {
                 var html = res.generatedHtml;
-                if (!$("#modalRemovePopupUser").length > 0) {
+                if (!$("#modalPopupFeedback").length > 0) {
                     $(html).modal();
                 } else {
-                    $("#modalRemovePopupUser").replaceWith($(html));
+                    $("#modalPopupFeedback").replaceWith($(html));
                 }
                 initReplyAreas();
-                $("#modalRemovePopupUser").modal("show");
+                $("#modalPopupFeedback").modal("show");
             } else {
                 showMessage("error", res.message);
             }
@@ -127,7 +127,7 @@ $(function () {
     });
 
     $("#contact-submit").live("click", function () {
-        var testid = $("#test-id").val();
+        var testid = parseInt($("#test-id").val());
         var text = $("#message").val();
         $.post("/Tests/StudentCommentFeedBack", { testid: testid, fbDetail: text }, function (res) {
             if (res.success) {
