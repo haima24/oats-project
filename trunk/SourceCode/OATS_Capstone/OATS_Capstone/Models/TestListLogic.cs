@@ -30,25 +30,30 @@ namespace OATS_Capstone.Models
         public TestList(IEnumerable<Test> tests)
         {
             var authen = AuthenticationSessionModel.Instance();
-            runningTests = tests.Where(i => i.UserInTests.Count == 0&&i.Invitations.Select(t=>t.UserID).Contains(authen.UserId)).Select(k => {
-                var testListItem = new TestListItem(k);
-                return testListItem;
-            }).ToList();
-            recentTests = tests.Where(i => i.UserInTests.Count > 0 && i.Invitations.Select(t => t.UserID).Contains(authen.UserId)&&i.UserInTests.Select(t=>t.UserID).Contains(authen.UserId)).Select(k =>
-            {
-                var testListItem = new TestListItem(k);
-                return testListItem;
-            }).ToList();
+            var invitedTest = tests.Where(i => i.Invitations.Select(t => t.UserID).Contains(authen.UserId));
+            var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId);
+            recentTests = invitedTest.FilterByRecents().Select(i => new TestListItem(i)).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true })).ToList();
+            runningTests = invitedTest.FilterByRuning().Select(i => new TestListItem(i)).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true })).ToList();
+            upComingTests = invitedTest.FilterByUpcoming().Select(i => new TestListItem(i)).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true })).ToList();
         }
     }
     public class TestListItem
     {
+        private bool isCurrentUserOwnTest = false;
+
+        public bool IsCurrentUserOwnTest
+        {
+            get { return isCurrentUserOwnTest; }
+            set { isCurrentUserOwnTest = value; }
+        }
         public int TestID { get; set; }
         public string TestTitle { get; set; }
         public string Start { get; set; }
         public string End { get; set; }
         private int allInvitedCount = 0;
         private int resultedOnInvitedCount = 0;
+        public int NumOfStudent { get; set; }
+        public int NumOfTeacher { get; set; }
 
         public int ResultedOnInvitedCount
         {
@@ -102,6 +107,9 @@ namespace OATS_Capstone.Models
                 var userInTest = test.UserInTests.FirstOrDefault(k => k.UserID == i.UserID);
                 return userInTest != null;
             });
+            var allInvitations = test.Invitations;
+            NumOfStudent = allInvitations.Count(k => k.Role.RoleDescription == "Student");
+            NumOfTeacher = allInvitations.Count(k => k.Role.RoleDescription == "Teacher");
         }
     }
 }

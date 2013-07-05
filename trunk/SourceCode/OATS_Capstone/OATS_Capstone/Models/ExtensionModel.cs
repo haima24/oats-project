@@ -80,6 +80,66 @@ namespace OATS_Capstone.Models
             if (datetime.HasValue) { s = String.Format("{0:dd MMM yyyy}", datetime.Value); }
             return s;
         }
+        public static IEnumerable<Test> FilterByRecents(this IEnumerable<Test> tests)
+        {
+            var today = DateTime.Now;
+            var recentTests = tests.Where(condition =>
+            {
+                //when end date is have value and end date earlier today
+                var isRecent = false;
+                var end = condition.EndDateTime;
+                if (end.HasValue)
+                {
+                    if (end.Value.CompareTo(today) < 0)
+                    {
+                        isRecent = true;
+                    }
+                }
+                return isRecent;
+            });
+            return recentTests;
+        }
+        public static IEnumerable<Test> FilterByRuning(this IEnumerable<Test> tests)
+        {
+            var today = DateTime.Now;
+            var runningTests = tests.Where(condition =>
+            {
+                var isRunning = false;
+                var start = condition.StartDateTime;
+                var end = condition.EndDateTime;
+                if (end.HasValue)
+                {
+                    if (start.CompareTo(today) <= 0 && today.CompareTo(end) <= 0)
+                    {
+                        isRunning = true;
+                    }
+                }
+                else
+                {
+                    if (start.CompareTo(today) <= 0)
+                    {
+                        isRunning = true;
+                    }
+                }
+                return isRunning;
+            });
+            return runningTests;
+        }
+        public static IEnumerable<Test> FilterByUpcoming(this IEnumerable<Test> tests)
+        {
+            var today = DateTime.Now;
+            var upComingTests = tests.Where(condition =>
+            {
+                var isUpComing = false;
+                var start = condition.StartDateTime;
+                if (today.CompareTo(start) < 0)
+                {
+                    isUpComing = true;
+                }
+                return isUpComing;
+            });
+            return upComingTests;
+        }
     }
 
 }

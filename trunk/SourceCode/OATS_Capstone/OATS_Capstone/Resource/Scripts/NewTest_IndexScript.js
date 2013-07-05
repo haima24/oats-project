@@ -59,6 +59,7 @@ $(function () {
     });
     $(".navbar-search input[type=text].nt-search-input").oatsSearch({
         select: function (item) {
+            window.location.href = "/Tests/NewTest/" + item.id;
         },
         source: function (req, res,addedTagIds) {
             $.ajax({

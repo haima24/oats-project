@@ -1625,9 +1625,8 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     overflow: auto;
 }
 
-.nt-asms-list .nt-empty-list-ph {
-    padding: 10px 15px;
-    font-style: italic;
+.nt-asms-list .nt-list-cont {
+    min-height:100px;
 }
 
 #asmsList .accordion-group:last-child {
@@ -1674,11 +1673,28 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     border-top: 1px solid #ececec;
     font-size: 12px;
 }
-
+.nt-asms-list .nt-list-row.nt-upcoming:first-child {
+border-top: 0;
+}
     .nt-asms-list .nt-list-row .nt-name {
         text-overflow: ellipsis;
         font-size: 14px;
     }
+    .nt-asms-list .nt-list-row.nt-upcoming .nt-name {
+width: 40%;
+}
+    .nt-asms-list .nt-list-row .nt-desc {
+width: 16%;
+}
+    .nt-asms-list .nt-list-row.nt-upcoming .nt-name .nt-smalldesc {
+font-size: 12px;
+}
+    .nt-asms-list .nt-list-row.nt-upcoming .nt-name .nt-smalldesc-subj {
+color: #B1A798;
+}
+    .nt-asms-list .nt-list-row.nt-upcoming .nt-desc {
+text-decoration: underline;
+}
 
     .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
         position: relative;
@@ -1700,7 +1716,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
     .nt-asms-list .nt-list-head > div, .nt-asms-list .nt-list-row > div {
         display: inline-block;
-        padding: 10px 2px;
+        padding: 8px 2px;
         text-align: center;
         vertical-align: top;
         overflow: hidden;
@@ -2143,7 +2159,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
     .nt-search-results .nt-hitlist {
-        min-height: 100px;
+        min-height: 200px;
         max-height: 300px;
         margin-top: 10px;
         overflow-y: auto;
@@ -2155,7 +2171,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         background-color: white;
         width: auto;
         margin: 0;
-        top: 30px;
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
         -ms-border-radius: 10px;
@@ -2827,7 +2842,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
     .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
-        padding: 6px 1px;
+        padding: 8px 1px;
         text-align: right;
     }
 

@@ -514,29 +514,43 @@ function updateQuestionType(questionidString, type, onsuccess) {
     }
 }
 function initSearchTests() {
-    $(".navbar-search input[type=text].nt-search-input").autocomplete({
-        minLength: 0,
-        focus: function (ev, ui) {
-            $(".navbar-search input[type=text].nt-search-input").val(ui.item.label);
-            return false;
+    $(".navbar-search input[type=text].nt-search-input").oatsSearch({
+        select: function (item) {
+            window.location.href = "/Tests/NewTest/" + item.id;
         },
-        select: function (ev, ui) {
-            $(".navbar-search input[type=text].nt-search-input").val(ui.item.label);
-            window.location.href = "/Tests/NewTest/" + ui.item.id;
-            return false;
-        },
-        source: function (req, res) {
+        source: function (req, res,addedTagIds) {
             $.ajax({
                 type: "POST",
                 url: "/Tests/TestsSearch",
-                data: JSON.stringify({ term: req.term }),
+                data: JSON.stringify({ term: req, tagids: addedTagIds }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (r) {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { label: obj.TestTitle, value: obj.TestTitle, id: obj.Id };
+                                return { des: obj.TestTitle, title: obj.TestTitle, id: obj.Id };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        },
+        tagsource: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsSearchTag",
+                data: JSON.stringify({ term: req }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TagName && obj.TagName != "") {
+                                return { id: obj.TagID, name: obj.TagName };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);
@@ -546,13 +560,7 @@ function initSearchTests() {
                 }
             });
         }
-    }).data("ui-autocomplete")._renderItem = function (ul, item) {
-        if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
-        var li = $("<li>").append("<a>" + item.label + "</a>");
-        if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
-        li.appendTo(ul);
-        return li;
-    };
+    });
 }
 function checkConstraintStartEnd(start, end, onsuccessvalidate) {
     if (start.getTime() > end.getTime()) {
