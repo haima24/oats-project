@@ -1209,7 +1209,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void UpdateSettings(int testid, String settingKey, bool isactive)
+        public void UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -1236,19 +1236,30 @@ namespace OATS_Capstone.Models
                     test.SettingConfig = newSettingConfig;
                 }
                 var currentSetting = test.SettingConfig;
-                var sets = currentSetting.SettingConfigDetails.ToList();
-                sets.ForEach(delegate(SettingConfigDetail detail)
+                var detail = currentSetting.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == settingKey);
+                if (detail != null)
                 {
-                    if (detail.SettingType.SettingTypeKey == settingKey)
+                    detail.IsActive = isactive;
+                    if (detail.SettingType.SettingTypeKey == "OSM")
                     {
-                        detail.IsActive = isactive;
+                        detail.NumberValue = testtime;
                     }
-                });
-                if (db.SaveChanges() >= 0)
-                {
-                    success = true;
-                    message = String.Empty;
+                    else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
+                    {
+                        detail.TextValue = GenerateKey();
+                    }
+                    if (db.SaveChanges() >= 0)
+                    {
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            message = String.Empty;
+                            generatedHtml = OnRenderPartialViewToString.Invoke(detail);
+                        }
+
+                    }
                 }
+
             }
             catch (Exception)
             {
@@ -2206,6 +2217,16 @@ namespace OATS_Capstone.Models
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
+        }
+        public string GenerateKey()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+            var random = new Random();
+            var result = new string(
+                Enumerable.Repeat(chars, 8)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+            return result;
         }
     }
 }

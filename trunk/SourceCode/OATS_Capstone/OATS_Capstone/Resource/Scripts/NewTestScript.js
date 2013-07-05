@@ -6,6 +6,22 @@ var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 
+function postSetting(li) {
+    var cb = $("input[type=checkbox]", li);
+    var settingKey = cb.attr("setting-key");
+    var isactive = cb.attr("checked") ? true : false;
+    var testtime = $("#asm_time_limit").val();
+    $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive, testtime: testtime }, function (res) {
+        if (res.success) {
+            var html = $(res.generatedHtml);
+            if (li) {
+                li.replaceWith(html);
+            }
+        } else {
+            showMessage("error", res.message);
+        }
+    });
+}
 function initReuseDragAndDrop() {
     $("#sidebar[content-tab=true] .nt-qsearch").draggable({
         connectToSortable: "#checklist[content-tab=true]",
@@ -1264,14 +1280,13 @@ $(function () {
         });
     });
     //separator
-    $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("click", function (ev) {
-        var settingKey = $(this).attr("setting-key");
-        var isactive = $(this).attr("checked") ? true : false;
-        $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive }, function (res) {
-            if (!res.success) {
-                showMessage("error", res.message);
-            }
-        });
+    $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("change", function (ev) {
+        var li = $(this).closest("li");
+        postSetting(li);
+    });
+    $("#asm_time_limit").live("blur", function (ev) {
+        var li = $(this).closest("li");
+        postSetting(li);
     });
     //separator
     $(".nt-btn-rm").live("click", function (ev) {
