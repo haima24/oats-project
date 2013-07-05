@@ -66,7 +66,7 @@
                         <div class="nt-list-row">
 
                             <div class="nt-name">
-                                <a href="@Url.Action("DoTest", new { id = item.TestID, check = false, accesscode = "" })">@item.TestTitle</a>
+                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
                                 <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
                                     <i class="t-icon i-feedback"></i>
                                 </button>
@@ -138,7 +138,7 @@
                         {
                         <div class="nt-list-row">
                             <div class="nt-name">
-                                <a href="@Url.Action("DoTest", new { id = item.TestID, check = false, accesscode = "" })">@item.TestTitle</a>
+                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
                             </div>
                             <div class="nt-date">@item.Start</div>
                             <div class="nt-date">@item.End</div>
