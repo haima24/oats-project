@@ -72,7 +72,7 @@ $(function () {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { des: obj.TestTitle, title: obj.TestTitle, id: obj.Id };
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);

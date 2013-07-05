@@ -2222,7 +2222,9 @@ text-decoration: underline;
     }
 
 
-
+    .nt-search-results .nt-hitlist .nt-item {
+        cursor:pointer;
+    }
     .nt-search-results .nt-hitlist .nt-item .nt-item-desc {
         font-size: 11px;
         line-height: 16px;
