@@ -583,11 +583,24 @@ namespace OATS_Capstone.Controllers
             common.UpdateStartEnd(testid, start, end);
             return Json(new { common.success, common.message });
         }
-        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive)
+        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
         {
             var common = new CommonService();
-            common.UpdateSettings(testid, settingKey, isactive);
-            return Json(new { common.success, common.message });
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_SettingTab_ConfigDetail", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.UpdateSettings(testid, settingKey, isactive, testtime);
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult DeActiveTest(int testid)
         {

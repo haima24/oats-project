@@ -16,17 +16,7 @@
                         }
                         @foreach (var item in sortedItems)
                         {
-                            <li>
-                                <label class="checkbox">
-                                    @if(item.IsActive){
-                                    <input setting-key="@item.SettingType.SettingTypeKey" type="checkbox" checked="checked"/>
-                                    }else{
-                                        <input setting-key="@item.SettingType.SettingTypeKey" type="checkbox" />
-                                    }
-                                    @item.SettingType.SettingTypeDescription
-                                </label>
-                                @*<div id="asm_access_code" class="nt-access-code hide"></div>*@
-                            </li>
+                            @Html.Partial("P_SettingTab_ConfigDetail", item)
                         }
                         @*    <li>
                     <label class="checkbox  nt-guide" data-guide="delivery_opt_1submit">

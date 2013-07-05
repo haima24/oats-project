@@ -1,0 +1,43 @@
+﻿@model OATS_Capstone.Models.SettingConfigDetail
+<li>
+    <label class="checkbox">
+        @if (Model.IsActive)
+        {
+            <input setting-key="@Model.SettingType.SettingTypeKey" type="checkbox" checked="checked"/>
+        }
+        else
+        {
+            <input setting-key="@Model.SettingType.SettingTypeKey" type="checkbox" />
+        }
+        @Model.SettingType.SettingTypeDescription
+    </label>
+    @if (Model.SettingType.SettingTypeKey == "OSM")
+    {
+        if (Model.IsActive)
+        {
+        <input id="asm_time_limit" type="text" value="@Model.NumberValue"><span>mins</span>
+        }
+        else
+        {
+            if (Model.NumberValue != null)
+            { 
+        <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
+            }
+            else
+            {
+        <input id="asm_time_limit" type="text" disabled="disabled" value="15"><span>mins</span>
+            }
+
+        }
+    }
+    else if (Model.SettingType.SettingTypeKey == "RTC")
+    {
+        if (Model.IsActive)
+        {
+        <div id="asm_access_code" class="nt-access-code">@Model.TextValue</div>
+        }else{
+            <div id="asm_access_code" class="nt-access-code hide"></div>
+        }
+    }
+@*<div id="asm_access_code" class="nt-access-code hide"></div>*@
+</li>
