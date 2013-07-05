@@ -2098,7 +2098,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     float: left;
 }
 
-.nt-itemhover, .nt-clb-item:hover, #checklist .nt-qitem .nt-qtext .nt-fitb > span .nt-qcorr-hl, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput .nt-qcorr-hl, .t-question-type:hover, .nt-qsearch:hover, .nt-ctrl-search-tag-popup li.nt-tag-selected, .ac_results li.ac_over, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item:hover, .nt-rolldown-search .nt-search-results .nt-hitlist .nt-item.nt-item-selected, .nt-modalwelcome.nt-modalwelcome-dashboard .modal-body table td:hover {
+.nt-itemhover, .nt-clb-item:hover, #checklist .nt-qitem .nt-qtext .nt-fitb > span .nt-qcorr-hl, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput .nt-qcorr-hl, .t-question-type:hover, .nt-qsearch:hover, .nt-ctrl-search-tag-popup li.nt-tag-selected, .ac_results li.ac_over, .nt-search-results .nt-hitlist .nt-item:hover, .nt-search-results .nt-hitlist .nt-item.nt-item-selected, .nt-modalwelcome.nt-modalwelcome-dashboard .modal-body table td:hover {
     background-color: rgba(90, 148, 233, 0.3);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -2112,11 +2112,12 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     top: 34px;
 }
 
-.nt-rolldown-search .nt-search-results {
+.nt-search-results {
+    z-index:10;
     display: none;
     overflow: hidden;
     position: absolute;
-    top: 29px;
+    top: 33px;
     left: 0;
     background-color: white;
     padding: 0 10px 10px 10px;
@@ -2130,17 +2131,42 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     -moz-box-shadow: 1px 2px #c7c7c7;
     box-shadow: 1px 2px #c7c7c7;
 }
-
-    .nt-rolldown-search .nt-search-results .nt-taglist {
-        border-bottom: 1px solid #ececec;
-    }
-
-    .nt-rolldown-search .nt-search-results .nt-hitlist {
+.nt-search-results .nt-taglist {
+padding-bottom: 2px;
+border-bottom: 1px solid #ececec;
+}
+    .nt-search-results .nt-hitlist {
         min-height: 100px;
         max-height: 300px;
         margin-top: 10px;
         overflow-y: auto;
     }
+    .nt-search-results .nt-tags div {
+        margin:10px 2px 4px 0;
+    }
+        .nt-search-results .nt-hitlist .nt-empty-list-ph {
+            color: #999999;
+        }
+
+        .nt-search-results .nt-hitlist .nt-item {
+            color: #444444;
+            cursor: pointer;
+            padding: 2px;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            -ms-border-radius: 2px;
+            -o-border-radius: 2px;
+            border-radius: 2px;
+            border-bottom: 1px solid #ececec;
+        }
+
+            .nt-search-results .nt-hitlist .nt-item .nt-item-desc {
+                font-size: 11px;
+                line-height: 16px;
+                color: #999999;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
 
 .nt-user-details .nt-asms-unrelated .nt-rolldown-search .nt-cover {
     position: absolute;
@@ -3414,7 +3440,7 @@ article, time {
 
 #modalPopupFeedback .modal-body .comment-body {
     padding: 10px 90px 0 0;
-     padding-left: 200px;
+    padding-left: 200px;
 }
 
     #modalPopupFeedback .modal-body .comment-body p {
@@ -3425,7 +3451,7 @@ article, time {
     background-color: #f0f1f3;
     border-top: 0;
     margin-top: 0;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     padding: 20px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -3433,22 +3459,27 @@ article, time {
     -o-border-radius: 4px;
     border-radius: 4px;
 }
+
     .reply-container .pointer {
-        cursor:pointer;
+        cursor: pointer;
     }
+
     .reply-container .i-caret-up {
         position: relative;
         top: 3px;
         left: 5px;
     }
+
     .reply-container .reply-detail {
-        margin:10px;
+        margin: 10px;
     }
+
     .reply-container span.name {
-        font-weight:bold;
-        margin-right:5px;
-        float:left;
+        font-weight: bold;
+        margin-right: 5px;
+        float: left;
     }
+
     .reply-container .reply-count-link {
         margin-left: 5px;
         font-size: 14px;

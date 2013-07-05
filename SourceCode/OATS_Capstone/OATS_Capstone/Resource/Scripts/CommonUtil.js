@@ -43,7 +43,7 @@ function showMessage(type, message, heading) {
         });
     }, 5000);
 }
-function showCountDownMessage(type, message,after) {
+function showCountDownMessage(type, message, after) {
     var popup = $("#message-popup");
     $("#message-popup .close").live("click", function () {
         popup.fadeOut("fast", function () {
@@ -51,7 +51,7 @@ function showCountDownMessage(type, message,after) {
         });
 
     });
-  
+
     $(".alert-heading").html(message);
     switch (type) {
         case "error":
@@ -77,7 +77,7 @@ function showCountDownMessage(type, message,after) {
         popup.fadeOut("fast", function () {
             popup.removeClass("alert-error alert-info alert-success")
         });
-        if (after && typeof (after) === "function") { after();}
+        if (after && typeof (after) === "function") { after(); }
     }, 5000);
 }
 function convertJsonDatetoDate(jsondate) {
@@ -94,8 +94,8 @@ $.fn.extend({
     }
 });
 (function ($) {
-    $.initCheckboxAllSub =  function (param) {
-        if (param && param.container && param.all && param.sub&&param.onchange&& typeof(param.onchange)==="function") {
+    $.initCheckboxAllSub = function (param) {
+        if (param && param.container && param.all && param.sub && param.onchange && typeof (param.onchange) === "function") {
             //separator
             $(param.all).live("change", function (ev) {
                 var modal = $(this).closest(param.container);
@@ -132,49 +132,49 @@ $.fn.extend({
             colorStyle: 'roygbiv',
             reverseOrder: false
         };
-        var process= function( num ) {
-			
+        var process = function (num) {
+
             // adjust lightness
-            var n = Math.floor( num + settings.lightness * (256 - num));
-			
+            var n = Math.floor(num + settings.lightness * (256 - num));
+
             // turn to hex
             var s = n.toString(16);
-			
+
             // if no first char, prepend 0
             s = s.length == 1 ? '0' + s : s;
-			
-            return s;		
+
+            return s;
         };
-	
+
         // value between 1 and 0
-        var position = (curval - mn) / (mx - mn); 
-			
+        var position = (curval - mn) / (mx - mn);
+
         // this adds 0.5 at the top to get red, and limits the bottom at x= 1.7 to get purple
         var shft = settings.colorStyle == 'roygbiv'
-            ? 0.5*position + 1.7*(1-position)
-            : position + 0.2 + 5.5*(1-position);
-			
+            ? 0.5 * position + 1.7 * (1 - position)
+            : position + 0.2 + 5.5 * (1 - position);
+
         // scale will be multiplied by the cos(x) + 1 
         // (value from 0 to 2) so it comes up to a max of 255
         var scale = 128;
-			
+
         // period is 2Pi
-        var period = 2*Math.PI;
-			
+        var period = 2 * Math.PI;
+
         // x is place along x axis of cosine wave
         var x = shft + position * period;
-			
+
         // shift to negative if greentored
         x = settings.colorStyle != 'roygbiv'
             ? -x
             : x;
-				
-        var r = process( Math.floor((Math.cos(x) + 1) * scale) );
-        var g = process( Math.floor((Math.cos(x+Math.PI/2) + 1) * scale) );
-        var b = process( Math.floor((Math.cos(x+Math.PI) + 1) * scale) );
-			
+
+        var r = process(Math.floor((Math.cos(x) + 1) * scale));
+        var g = process(Math.floor((Math.cos(x + Math.PI / 2) + 1) * scale));
+        var b = process(Math.floor((Math.cos(x + Math.PI) + 1) * scale));
+
         return '#' + r + g + b;
-		
+
     };
 }(jQuery));
 $.fn.extend({
@@ -203,7 +203,7 @@ $.fn.extend({
         var defaults = {
             success: null,
             rFilter: /^(?:text\/plain)$/i,
-            error:null
+            error: null
         }
         options = $.extend(defaults, options)
         return this.each(function () {
@@ -250,6 +250,77 @@ $.fn.extend({
         })
     }
 })
+$.fn.extend({
+    oatsSearch: function (options) {
+        var response;
+        var res = function (e) {
+            response = e;
+            
+            if (response.length > 0) {
+                $(".nt-hitlist .nt-empty-list-ph", dropdown).hide();
+                $(response).each(function (i, e) {
+                    var nElement = $("<div>").addClass("nt-item");
+                    var id = $(e).attr("id");
+                    if (id) {
+                        nElement.attr("uid", id);
+                    }
+                    var title = $(e).attr("title");
+                    if (title) {
+                        nElement.append($("<div>").html(title));
+                    }
+                    var des = $(e).attr("des");
+                    if (des) {
+                        nElement.append($("<div>").addClass("nt-item-desc").html(des));
+                    }
+                    $(".nt-hitlist", dropdown).append(nElement);
+                });
+            } else {
+                $(".nt-hitlist .nt-empty-list-ph", dropdown).show();
+            }
+        };
+        var dropdown =
+            $("<div>")
+            .addClass("nt-search-results")
+            .append(
+                $("<div>").addClass("nt-taglist").addClass("nt-tags")
+                .append(
+                    $("<div>").addClass("nt-tag-adder").append
+                        (
+                        $("<input type='text' class='input-small nt-as-input' placeholder='Search Tag...'>")
+                        )
+                )
+            )
+            .append(
+            $("<div>").addClass("nt-hitlist").append($("<div>").addClass("nt-empty-list-ph").append($("<p>").html("Start typing a test title or a tag.")))
+            );
+
+        var defaults = {
+            minLength: 0,
+        }
+        options = $.extend(defaults, options);
+        $(this).each(function (index, element) {
+            var self = $(this);
+            var parent = $(element).parent();
+            parent.append(dropdown);
+            $(element).live("focus", function () {
+                dropdown.show();
+            });
+            $(element).live("keydown", function (ev) {
+                $(".nt-hitlist .nt-item", dropdown).remove();
+                var text= $(this).val() + String.fromCharCode(ev.keyCode);
+                if (options.source && typeof (options.source) === "function") {
+                    options.source(text, res);
+                    
+                }
+            });
+            $(document).live("click", function (e) {
+                if (!$(e.target).is(self) && $(e.target).closest(dropdown).length == 0) {
+                    dropdown.hide();
+                }
+            });
+        });
+    }
+});
 
 function statusSaving() {
     $("#savestatus .nt-desc").html("Saving...");
