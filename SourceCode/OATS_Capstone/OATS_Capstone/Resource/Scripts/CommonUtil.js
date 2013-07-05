@@ -292,7 +292,7 @@ $.fn.extend({
                         nElement.append($("<div>").html(name));
                     }
                     $(".nt-tag-hitlist", dropdown).append(nElement);
-                    tagItems.push({ key: nElement, value: e });
+                    tagItems.push({ key: nElement, value: ele });
                 });
 
                 $(".nt-tag-hitlist", dropdown).show();
