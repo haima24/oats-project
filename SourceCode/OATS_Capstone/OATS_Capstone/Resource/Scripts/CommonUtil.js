@@ -255,7 +255,6 @@ $.fn.extend({
         var response;
         var res = function (e) {
             response = e;
-            
             if (response.length > 0) {
                 $(".nt-hitlist .nt-empty-list-ph", dropdown).hide();
                 $(response).each(function (i, e) {
@@ -278,6 +277,26 @@ $.fn.extend({
                 $(".nt-hitlist .nt-empty-list-ph", dropdown).show();
             }
         };
+        var restag = function (e) {
+            if (e.length > 0) {
+                $(e).each(function (i, ele) {
+                    var nElement = $("<div>").addClass("nt-item");
+                    var id = $(ele).attr("id");
+                    if (id) {
+                        nElement.attr("uid", id);
+                    }
+                    var name = $(ele).attr("name");
+                    if (name) {
+                        nElement.append($("<div>").html(name));
+                    }
+                    $(".nt-tag-hitlist", dropdown).append(nElement);
+                });
+
+                $(".nt-tag-hitlist", dropdown).show();
+            } else {
+                $(".nt-tag-hitlist", dropdown).hide();
+            }
+        };
         var dropdown =
             $("<div>")
             .addClass("nt-search-results")
@@ -288,12 +307,13 @@ $.fn.extend({
                         (
                         $("<input type='text' class='input-small nt-as-input' placeholder='Search Tag...'>")
                         )
+                ).append(
+                    $("<div>").addClass("nt-tag-hitlist")
                 )
             )
             .append(
             $("<div>").addClass("nt-hitlist").append($("<div>").addClass("nt-empty-list-ph").append($("<p>").html("Start typing a test title or a tag.")))
             );
-
         var defaults = {
             minLength: 0,
         }
@@ -302,6 +322,14 @@ $.fn.extend({
             var self = $(this);
             var parent = $(element).parent();
             parent.append(dropdown);
+            $("input[type=text]", dropdown).on("keydown", function (ev) {
+                var text = $(this).val() + String.fromCharCode(ev.keyCode);
+                $(".nt-tag-hitlist .nt-item", dropdown).remove();
+                if (options.tagsource && typeof (options.tagsource) === "function") {
+                    options.tagsource(text, restag);
+
+                }
+            });
             $(element).live("focus", function () {
                 dropdown.show();
             });
