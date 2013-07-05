@@ -2139,7 +2139,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     .nt-search-results .nt-taglist {
         padding-bottom: 2px;
         border-bottom: 1px solid #ececec;
-        position:static;
+        position: static;
     }
 
     .nt-search-results .nt-hitlist {
@@ -2153,7 +2153,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         z-index: 15;
         display: none;
         background-color: white;
-        width: 110px;
+        width: auto;
         margin: 0;
         top: 30px;
         -webkit-border-radius: 10px;
@@ -2170,23 +2170,36 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         margin-top: 5px;
         overflow-y: auto;
     }
+
         .nt-search-results .nt-tags .nt-tag-hitlist .nt-item {
             color: #444444;
             cursor: pointer;
-            margin:8px 8px 8px 0px;
+            margin: 4px;
             padding: 2px;
             -webkit-border-radius: 4px;
             -moz-border-radius: 4px;
             -ms-border-radius: 4px;
             -o-border-radius: 4px;
             border-radius: 4px;
-            background-color:#EAEFFA;
         }
+            .nt-search-results .nt-tags .nt-tag-hitlist .nt-item:hover {
+                background-color: #EAEFFA;
+            }
+
+            .nt-search-results .nt-tags .nt-tag-hitlist .nt-item i {
+                float: left;
+                margin: 5px;
+            }
+
+
         .nt-search-results .nt-tags .nt-tag-hitlist div {
             float: none;
-            margin:0px;
-            padding:5px;
-            
+            margin: 0px;
+            padding: 5px;
+        }
+
+        .nt-search-results .nt-tags .nt-tag-hitlist .nt-item div {
+            padding-left:30px;
         }
 
     .nt-search-results .nt-hitlist .nt-empty-list-ph, .nt-search-results .nt-tag-hitlist .nt-empty-list-ph {

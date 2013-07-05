@@ -58,6 +58,10 @@ $(function () {
         });
     });
     $(".navbar-search input[type=text].nt-search-input").oatsSearch({
+        select: function (item) {
+        },
+        tagselect: function (item) {
+        },
         source: function (req, res) {
             $.ajax({
                 type: "POST",
