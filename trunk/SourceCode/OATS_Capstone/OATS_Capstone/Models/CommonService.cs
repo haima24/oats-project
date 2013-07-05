@@ -1916,6 +1916,13 @@ namespace OATS_Capstone.Models
                 if (test != null)
                 {
                     var tag = db.Tags.FirstOrDefault(i => i.TagID == tagid);
+                    if (tag == null) { 
+                        if(!string.IsNullOrEmpty(tagname))
+                        {
+                            tag=new Tag();
+                            tag.TagName=tagname;
+                        }
+                    }
                     if (tag != null)
                     {
                         var tagsInTest = test.TagInTests;
@@ -2050,6 +2057,14 @@ namespace OATS_Capstone.Models
                 if (question != null)
                 {
                     var tag = db.Tags.FirstOrDefault(i => i.TagID == tagid);
+                    if (tag == null)
+                    {
+                        if (!string.IsNullOrEmpty(tagname))
+                        {
+                            tag = new Tag();
+                            tag.TagName = tagname;
+                        }
+                    }
                     if (tag != null)
                     {
                         var tagsInQuestion = question.TagInQuestions;

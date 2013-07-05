@@ -721,7 +721,7 @@ namespace OATS_Capstone.Controllers
             common.SearchTagsOnTest(testid, term, maxrows);
             return Json(new { common.success, common.message, common.resultlist });
         }
-        public JsonResult AddTagToTest(int testid, int tagid)
+        public JsonResult AddTagToTest(int testid, int tagid,string tagname)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -738,7 +738,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.AddTagToTest(testid, tagid);
+            common.AddTagToTest(testid, tagid,tagname);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult RemoveTagToTest(int testid, int tagid)
@@ -759,7 +759,7 @@ namespace OATS_Capstone.Controllers
             common.SearchTagsOnQuestion(questionid, term, maxrows);
             return Json(new { common.success, common.message, common.resultlist });
         }
-        public JsonResult AddTagToQuestion(int questionid, int tagid)
+        public JsonResult AddTagToQuestion(int questionid, int tagid,string tagname)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -776,7 +776,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.AddTagToQuestion(questionid, tagid);
+            common.AddTagToQuestion(questionid, tagid,tagname);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult RemoveTagToQuestion(int questionid, int tagid)
