@@ -8,7 +8,7 @@ namespace OATS_Capstone.Models
     public class AuthenticationSessionModel
     {
         private bool _isCookieEnable = false;
-
+        private OATSDBEntities db = null;
         public bool IsCookieEnable
         {
             get { return _isCookieEnable; }
@@ -22,6 +22,15 @@ namespace OATS_Capstone.Models
                 _authenticationSessionModel = new AuthenticationSessionModel();
             }
 
+            return _authenticationSessionModel;
+        }
+        public static AuthenticationSessionModel Instance(OATSDBEntities iDb)
+        {
+            if (_authenticationSessionModel == null)
+            {
+                _authenticationSessionModel = new AuthenticationSessionModel();
+                _authenticationSessionModel.db = iDb;
+            }
             return _authenticationSessionModel;
         }
         private static void ClearCookie(string key)
@@ -121,7 +130,16 @@ namespace OATS_Capstone.Models
             get
             {
                 User user = null;
-                var obj = SingletonDb.Instance().Users.FirstOrDefault(i => i.UserID == UserId);
+                OATSDBEntities d = null;
+                if (db == null)
+                {
+                    d = SingletonDb.Instance();
+                }
+                else
+                {
+                    d = db;
+                }
+                var obj = d.Users.FirstOrDefault(i => i.UserID == UserId);
                 if (obj != null)
                 {
                     user = obj;

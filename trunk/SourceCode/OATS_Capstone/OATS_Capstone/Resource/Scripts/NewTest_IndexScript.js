@@ -131,8 +131,8 @@ $(function () {
         var text = $("#message").val();
         $.post("/Tests/StudentCommentFeedBack", { testid: testid, fbDetail: text }, function (res) {
             if (res.success) {
-                var html = res.generatedHtml;
-                
+                var html = $(res.generatedHtml);
+                $("#modalPopupFeedback .nt-panel").prepend(html);
             } else {
                 showMessage("error", res.message);
             }

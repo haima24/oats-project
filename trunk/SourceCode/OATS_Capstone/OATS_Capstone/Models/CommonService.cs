@@ -2314,6 +2314,7 @@ namespace OATS_Capstone.Models
                     //save
                     if (db.SaveChanges() > 0)
                     {
+                        db.Entry(feedback).Reference(p => p.User).Load();
                         if (OnRenderPartialViewToString != null)
                         {
                             success = true;
