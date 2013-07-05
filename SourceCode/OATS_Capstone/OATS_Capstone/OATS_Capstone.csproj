@@ -484,6 +484,7 @@
     <Content Include="Views\Tests\P_Modal_FeedBack_Form.cshtml" />
     <Content Include="Views\Tests\P_Modal_FeedBack_Form_Item.cshtml" />
     <Content Include="Views\Tests\P_SettingTab_ConfigDetail.cshtml" />
+    <Content Include="Views\Tests\AccessCode.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

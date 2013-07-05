@@ -144,7 +144,7 @@ namespace OATS_Capstone.Controllers
                 var result = string.Empty;
                 try
                 {
-                    result= this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", model);
+                    result = this.RenderPartialViewToString("P_Reuse_Template_Question_Instance", model);
                 }
                 catch (Exception)
                 {
@@ -304,11 +304,41 @@ namespace OATS_Capstone.Controllers
             common.NewTest_ContentTab(testid);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
-        public ActionResult DoTest(int id)
+        public ActionResult AccessCode(int id)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
+        }
+        public ActionResult DoTest(int id, bool check, string accesscode)
+        {
+            var db = SingletonDb.Instance();
+            var test = db.Tests.FirstOrDefault(i => i.TestID == id);
+            var detail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+            if (check)
+            {
+                if (detail.TextValue == accesscode)
+                {
+                    return View(test);
+                }
+                else 
+                {
+                    return RedirectToAction("AccessCode", new { id = id });
+                }
+            }
+            else
+            {
+                
+                if (detail.IsActive)
+                {
+                    return RedirectToAction("AccessCode", new { id = id });
+                }
+                else
+                {
+                    return View(test);
+                }
+            }
+
         }
         public JsonResult TestCalendarObjectResult()
         {
@@ -338,7 +368,8 @@ namespace OATS_Capstone.Controllers
         public JsonResult Index_TestListTab()
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -413,7 +444,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.NewTest_FeedBackTab(testid,sorttype);
+            common.NewTest_FeedBackTab(testid, sorttype);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
 
@@ -594,7 +625,8 @@ namespace OATS_Capstone.Controllers
         public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -774,7 +806,8 @@ namespace OATS_Capstone.Controllers
         public JsonResult ModalFeedBackPopup(int testid)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
