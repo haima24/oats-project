@@ -146,6 +146,7 @@ function initTagsOnTest() {
     $("#test-tags").autocomplete({
         minLength: 0,
         select: function (e, ui) {
+            $("#test-tags").val("")
             statusSaving();
             var id = ui.item.id;
             if (id) {
@@ -187,6 +188,20 @@ function initTagsOnTest() {
         li.appendTo(ul);
         return li;
     };
+    $("#test-tags").live("keydown", function (ev) {
+        if (ev.keyCode == 13) {
+            statusSaving();
+            var text=$(this).val();
+            $.post("/Tests/AddTagToTest", { testid: testid,tagid:0, tagname: text}, function (res) {
+                if (res.success) {
+                    var tagItem = $(res.generatedHtml);
+                    $("#eventTags .nt-tags .tags-container").append(tagItem);
+                    statusSaved();
+                }
+                else { showMessage("error", res.message); }
+            });
+        }
+    });
     $("#eventTags .nt-tag .nt-tag-remove").live("click", function (ev) {
         var item = $(this).closest(".nt-tag");
         var tagIdString = $(item).attr("tag-id");
@@ -518,7 +533,7 @@ function initSearchTests() {
         select: function (item) {
             window.location.href = "/Tests/NewTest/" + item.id;
         },
-        source: function (req, res,addedTagIds) {
+        source: function (req, res, addedTagIds) {
             $.ajax({
                 type: "POST",
                 url: "/Tests/TestsSearch",
@@ -1528,6 +1543,26 @@ $(function () {
         var header = cur.siblings(".reply-container[toggle-header]");
         cur.hide();
         header.show();
+    });
+    //separator
+    $("#checklist .nt-qitem .nt-tag-adder input[type=text]").live("keydown", function (ev) {
+        if (ev.keyCode == 13) {
+            var tb=$(this);
+            var questionIdString = tb.closest(".nt-qitem").attr("question-id");
+            var questionid = parseInt(questionIdString);
+            var text = tb.val();
+            $.post("/Tests/AddTagToQuestion", { questionid: questionid, tagid: 0, tagname: text }, function (res) {
+                if (res.success) {
+                    var tags = tb.closest(".nt-tags");
+                    var container = $(".tags-container", tags);
+                    var tagItem = $(res.generatedHtml);
+                    $(container).append(tagItem);
+                    statusSaved();
+                    tb.val("");
+                }
+                else { showMessage("error", res.message); }
+            });
+        }
     });
     //separator
     showOrHideDeleteLineAnswer();
