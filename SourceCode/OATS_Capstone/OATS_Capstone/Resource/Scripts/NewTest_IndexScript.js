@@ -80,10 +80,29 @@ $(function () {
             });
         },
         tagsource: function (req, res) {
-            var obj = [{ id: 1, name: "xyz" }, { id: 2, name: "abc" }];
-            res(obj);
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsSearchTag",
+                data: JSON.stringify({ term: req }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TagName && obj.TagName != "") {
+                                return { id: obj.TagID, name: obj.TagName };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
         }
     });
+
+        
     $(".btn-feedback").live("click", function () {
         var button = $(this);
         var testIdString = button.attr("test-id");

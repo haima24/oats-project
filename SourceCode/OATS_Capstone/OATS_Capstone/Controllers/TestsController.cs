@@ -170,6 +170,14 @@ namespace OATS_Capstone.Controllers
             common.TestsSearch(term);
             return Json(new { common.resultlist, common.success, common.message });
         }
+
+        public JsonResult TestsSearchTag(string term)
+        {
+            var common = new CommonService();
+            common.TestsSearchTag(term);
+            return Json(new { common.resultlist, common.success, common.message });
+        }
+
         public ActionResult Index()
         {
             return View();
