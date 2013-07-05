@@ -1,57 +1,69 @@
 ﻿@using OATS_Capstone.Models
 @model IEnumerable<OATS_Capstone.Models.FeedBack>
-<div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
+@if (Model.Count() == 0)
+{
+    <div class="nt-checklist-ctrl">
+        <div class="nt-msg">No feedback found: no student give their feedbacks.</div>
+    </div>
+}
+else
+{
+    <div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
 
-    <div class="nt-panel">
-        <div class="comment-count">
-            All Comments
+        <div class="nt-panel">
+            <div class="comment-count">
+                All Comments
             <span>(@Model.Count())         
             </span>
-            <div class="btn-group" style="margin-left: 38px">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Sort by
+                <div class="btn-group" style="margin-left: 38px">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Sort by
     <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" id="sortby">
-                    <li id="sortbydate"><a sort-type="0" href="@Url.Action("NewTest_FeedBackTab", "Tests")">By Date</a></li>
-                    <li id="sortbyname"><a sort-type="1" href="@Url.Action("NewTest_FeedBackTab", "Tests")">By Name</a></li>
-                    <!-- dropdown menu links -->
-                </ul>
+                    </a>
+                    <ul class="dropdown-menu" id="sortby">
+                        <li id="sortbydate"><a sort-type="0" href="@Url.Action("NewTest_FeedBackTab", "Tests")">By Date</a></li>
+                        <li id="sortbyname"><a sort-type="1" href="@Url.Action("NewTest_FeedBackTab", "Tests")">By Name</a></li>
+                        <!-- dropdown menu links -->
+                    </ul>
+                </div>
+
             </div>
 
-        </div>
+            <div id="comments" style="height: 400px; overflow-y: auto">
+                @foreach (var feedback in Model)
+                {
+                    <article class="comment">
 
-        <div id="comments" style="height: 400px; overflow-y: auto">
-            @foreach (var feedback in Model)
-            {
-                <article class="comment">
+                        <div class="comment-meta">
+                            <a href="#" class="url">@feedback.User.FirstName<span> </span>@feedback.User.LastName</a> says<time>@feedback.FeedBackDateTime</time>
+                        </div>
 
-                    <div class="comment-meta">
-                        <a href="#" class="url">@feedback.User.FirstName<span> </span>@feedback.User.LastName</a> says<time>@feedback.FeedBackDateTime</time>
-                    </div>
+                        <div class="comment-body">
+                            <p>@feedback.FeedBackDetail
+                            </p>
+                            <div class="reply-container" toggle-header>
+                                <div class="pointer">
+                                    <i class="t-icon i-chat"></i>
+                                    <a class="reply-count-link">@feedback.FeedBackChilds.Count reply</a>
+                                </div>
+                            </div>
+                            <div class="reply-container" style="display: none;" toggle-detail>
+                                <div class="pointer" toggle-detail-trigger>
+                                    <i class="t-icon i-caret-up"></i>
+                                    <a class="reply-count-link">Hide</a>
+                                </div>
+                                @foreach (var item in @feedback.FeedBackChilds)
+                                {
+                                    <div class="reply-detail"><span class="name">@(item.User.FirstName ?? item.User.LastName ?? item.User.UserMail)</span><span>@item.FeedBackDetail</span></div>
+                                }
 
-                    <div class="comment-body">
-                        <p>@feedback.FeedBackDetail
-                        </p>
-                        <div class="reply-container" toggle-header>
-                            <div class="pointer">
-                                <i class="t-icon i-chat"></i>
-                                <a class="reply-count-link">3 reply</a>
+                                <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
+                                <button class="btn btn-primary">Reply</button>
                             </div>
                         </div>
-                        <div class="reply-container" style="display: none;" toggle-detail>
-                            <div class="pointer" toggle-detail-trigger>
-                                <i class="t-icon i-caret-up"></i>
-                                <a class="reply-count-link">Hide</a>
-                            </div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <div class="reply-detail"><span class="name">abc</span><span>dsdjsoijdskdjsldsflsdjfsdf</span></div>
-                            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
-                            <button class="btn btn-primary">Reply</button>
-                        </div>
-                    </div>
 
-                </article>		 
-            }
+                    </article>		 
+                }
+            </div>
         </div>
     </div>
-</div>
+}
