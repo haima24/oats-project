@@ -427,6 +427,42 @@ namespace OATS_Capstone.Models
             }
         }
 
+        public void TestsSearchTag(string term)
+        {
+
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            resultlist = new List<Object>();
+            try
+            {
+                var db = SingletonDb.Instance();
+                if (!string.IsNullOrEmpty(term))
+                {
+                    var lower = term.ToLower();
+                    var tags = db.Tags.ToList();
+                    tags.ForEach(delegate(Tag tag)
+                    {
+                        if (tag.TagName != null)
+                        {
+                            if (tag.TagName.ToLower().Contains(lower))
+                            {
+                                var result = new { TagID = tag.TagID, TagName = tag.TagName };
+                                resultlist.Add(result);
+                            }
+                        }
+                    });
+                }
+                success = true;
+                message = String.Empty;
+            }
+            catch (Exception)
+            {
+
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
         public void UsersSearch(string term)
         {
             success = false;
