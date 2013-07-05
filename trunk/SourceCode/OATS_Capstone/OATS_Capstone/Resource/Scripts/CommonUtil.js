@@ -252,9 +252,9 @@ $.fn.extend({
 })
 $.fn.extend({
     oatsSearch: function (options) {
-        var response;
-        var res = function (e) {
-            response = e;
+        var items = new Array();
+        var tagItems = new Array();
+        var res = function (response) {
             if (response.length > 0) {
                 $(".nt-hitlist .nt-empty-list-ph", dropdown).hide();
                 $(response).each(function (i, e) {
@@ -272,6 +272,7 @@ $.fn.extend({
                         nElement.append($("<div>").addClass("nt-item-desc").html(des));
                     }
                     $(".nt-hitlist", dropdown).append(nElement);
+                    items.push({key:nElement,value:e});
                 });
             } else {
                 $(".nt-hitlist .nt-empty-list-ph", dropdown).show();
@@ -281,6 +282,7 @@ $.fn.extend({
             if (e.length > 0) {
                 $(e).each(function (i, ele) {
                     var nElement = $("<div>").addClass("nt-item");
+                    nElement.append($("<i>").addClass("t-icon").addClass("i-tag"));
                     var id = $(ele).attr("id");
                     if (id) {
                         nElement.attr("uid", id);
@@ -290,6 +292,7 @@ $.fn.extend({
                         nElement.append($("<div>").html(name));
                     }
                     $(".nt-tag-hitlist", dropdown).append(nElement);
+                    tagItems.push({ key: nElement, value: e });
                 });
 
                 $(".nt-tag-hitlist", dropdown).show();
@@ -338,12 +341,41 @@ $.fn.extend({
                 var text= $(this).val() + String.fromCharCode(ev.keyCode);
                 if (options.source && typeof (options.source) === "function") {
                     options.source(text, res);
-                    
                 }
             });
             $(document).live("click", function (e) {
                 if (!$(e.target).is(self) && $(e.target).closest(dropdown).length == 0) {
                     dropdown.hide();
+                }
+            });
+            $(".nt-tag-hitlist", dropdown).on("click", function (ev) {
+                var clickItem = $(ev.target).closest(".nt-item");
+                if (clickItem.length > 0) {
+                    if (items) {
+                        var item = $(tagItems).filter(function () {
+                            return clickItem.is($(this).attr("key"));
+                        });
+                        if (item.length > 0) {
+                            if (options.tagselect && typeof (options.tagselect) === "function") {
+                                options.tagselect(item.attr("value"));
+                            }
+                        }
+                    }
+                }
+            });
+            $(".nt-hitlist", dropdown).on("click", function (ev) {
+                var clickItem = $(ev.target).closest(".nt-item");
+                if (clickItem.length > 0) {
+                    if (items) {
+                        var item = $(items).filter(function () {
+                            return clickItem.is($(this).attr("key"));
+                        });
+                        if (item.length>0) {
+                            if (options.select && typeof (options.select) === "function") {
+                                options.select(item.attr("value"));
+                            }
+                        }
+                    }
                 }
             });
         });
