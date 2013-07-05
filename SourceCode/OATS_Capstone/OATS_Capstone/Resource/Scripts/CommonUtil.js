@@ -252,6 +252,20 @@ $.fn.extend({
 })
 $.fn.extend({
     oatsSearch: function (options) {
+        var text;
+        var reCalculatePosition = function () {
+            var tb = $(".nt-tag-adder input[type=text]", dropdown);
+            var pos = tb.position();
+            var height = tb.height();
+            var list = $(".nt-tag-hitlist", dropdown);
+            list.css({ top: pos.top + height, left: pos.left });
+        }; 
+        var reSearch = function () {
+            $(".nt-hitlist .nt-item", dropdown).remove();
+             if (options.source && typeof (options.source) === "function") {
+                                    options.source(text, res, addedTags);
+                                }
+        };
         var addedTags = new Array(); //list of int
         var items = new Array();
         var tagItems = new Array();
@@ -280,25 +294,31 @@ $.fn.extend({
             }
         };
         var restag = function (e) {
+            var list = $(".nt-tag-hitlist", dropdown);
+            reCalculatePosition();
             if (e.length > 0) {
                 $(e).each(function (i, ele) {
-                    var nElement = $("<div>").addClass("nt-item");
-                    nElement.append($("<i>").addClass("t-icon").addClass("i-tag"));
-                    var id = $(ele).attr("id");
-                    if (id) {
-                        nElement.attr("uid", id);
+                    var tid = $(ele).attr("id");
+                    var isNotIn = $.inArray(tid, addedTags) < 0;
+                    var currentCount = $(".nt-item", list).length+1;
+                    if (tid && isNotIn&&currentCount<=options.maxTags) {
+                        var nElement = $("<div>").addClass("nt-item");
+                        nElement.append($("<i>").addClass("t-icon").addClass("i-tag"));
+                        var id = $(ele).attr("id");
+                        if (id) {
+                            nElement.attr("uid", id);
+                        }
+                        var name = $(ele).attr("name");
+                        if (name) {
+                            nElement.append($("<div>").html(name));
+                        }
+                        list.append(nElement);
+                        tagItems.push({ id: id, key: nElement, value: ele });
                     }
-                    var name = $(ele).attr("name");
-                    if (name) {
-                        nElement.append($("<div>").html(name));
-                    }
-                    $(".nt-tag-hitlist", dropdown).append(nElement);
-                    tagItems.push({ key: nElement, value: ele });
                 });
-
-                $(".nt-tag-hitlist", dropdown).show();
+                list.show();
             } else {
-                $(".nt-tag-hitlist", dropdown).hide();
+                list.hide();
             }
         };
         var dropdown =
@@ -319,7 +339,7 @@ $.fn.extend({
             $("<div>").addClass("nt-hitlist").append($("<div>").addClass("nt-empty-list-ph").append($("<p>").html("Start typing a test title or a tag.")))
             );
         var defaults = {
-            minLength: 0,
+            maxTags: 5,
         }
         options = $.extend(defaults, options);
         $(this).each(function (index, element) {
@@ -330,6 +350,7 @@ $.fn.extend({
                 var text = $(this).val() + String.fromCharCode(ev.keyCode);
                 $(".nt-tag-hitlist .nt-item", dropdown).remove();
                 if (options.tagsource && typeof (options.tagsource) === "function") {
+                    
                     options.tagsource(text, restag);
 
                 }
@@ -338,18 +359,36 @@ $.fn.extend({
                 dropdown.show();
             });
             $(element).live("keydown", function (ev) {
-                $(".nt-hitlist .nt-item", dropdown).remove();
-                var text= $(this).val() + String.fromCharCode(ev.keyCode);
-                if (options.source && typeof (options.source) === "function") {
-                    options.source(text, res,addedTags);
-                }
+                text= $(this).val() + String.fromCharCode(ev.keyCode);
+                reSearch();
             });
             $(document).live("click", function (e) {
                 if (!$(e.target).is(self) && $(e.target).closest(dropdown).length == 0) {
                     dropdown.hide();
                 }
             });
+            $(".nt-taglist", dropdown).on("click", function (ev) {
+                var clickItem = $(ev.target).closest(".nt-tag-remove");
+                if (clickItem.length > 0) {
+                    var tag = clickItem.closest(".nt-tag");
+                    if (tag) {
+                        var id = tag.attr("tag-id");
+                        if (id) {
+                            var intId = parseInt(id);
+                            var index = addedTags.indexOf(intId);
+                            if (index >= 0) {
+                                addedTags.splice(index, 1);
+                                reSearch();
+                                tag.remove();
+                                ev.stopPropagation();
+                            }
+                        }
+                    }
+                }
+            });
+
             $(".nt-tag-hitlist", dropdown).on("click", function (ev) {
+                var list = $(this);
                 var clickItem = $(ev.target).closest(".nt-item");
                 var tagsContainer = $(".nt-taglist.nt-tags", dropdown);
                 if (clickItem.length > 0) {
@@ -365,10 +404,17 @@ $.fn.extend({
                                     $("<span>").html(bindedObj.name)
                                     ).append("<i class='icon-remove nt-tag-remove'></i>");
                                 tagsContainer.prepend(htmlTag);
+                                reCalculatePosition();
+                                reSearch();
+                                var taglist = $(".nt-tag-hitlist", dropdown);
+                                taglist.hide();
+                                $("input[type=text]", dropdown).val("");
                             }
+
                         }
                     }
                 }
+                ev.stopPropagation();
             });
             $(".nt-hitlist", dropdown).on("click", function (ev) {
                 var clickItem = $(ev.target).closest(".nt-item");

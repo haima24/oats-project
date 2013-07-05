@@ -402,8 +402,12 @@ namespace OATS_Capstone.Models
                     var tags = db.Tags.Where(i => tagids.Contains(i.TagID));
                     var lower = term.ToLower();
                     var tests = db.Tests.ToList();
-                    if (tagids.Count > 0) { 
-                    tests = tags.SelectMany(i => i.TagInTests.Select(k => k.Test)).ToList();
+                    if (tagids.Count > 0) {
+                        var rawTests = tags.SelectMany(i => i.TagInTests.Select(k => k.Test));
+                        var groupTests = from t in rawTests
+                                         group t by t into GroupTests
+                                         select GroupTests.Key;
+                        tests = groupTests.ToList();
                     }
                     tests.ForEach(delegate(Test test)
                     {

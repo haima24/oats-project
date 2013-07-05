@@ -49,11 +49,19 @@
 </div>
 <div id="container" class="container wrapper nt-de-cont">
     <div id="jointest_container">
-        @using (Html.BeginForm("DoTest","Tests",new { id = Model.TestID, check = true },FormMethod.Post))
+        @using (Html.BeginForm("DoTest", "Tests", new { id = Model.TestID, check = true }, FormMethod.Post))
         {
-            <input type="password" name="accesscode" id="accesscode" value="" required="">
-            <button class="btn-submit" >OK</button>
-    
+            <div class="thumbnail well well-small text-center">
+                <h2>Test Enrollment</h2>
+                <p>This test require test access code to. Please use your access code in invitation email.</p>
+                <div class="input-prepend">
+                    <span class="add-on"><i class="icon-pencil"></i></span>
+                    <input type="text" id="" name="" placeholder="your access code" />
+                </div>
+                <br />
+                <button type="submit" class="btn-submit btn btn-large">Take this test</button>
+            </div>
+           
         }
     </div>
 
