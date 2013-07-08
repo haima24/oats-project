@@ -22,8 +22,7 @@
             </div>
             @foreach (var item in @Model.FeedBackChilds)
             {
-                
-                <div class="reply-detail"><span class="name">@(item.User.FirstName ?? item.User.LastName ?? item.User.UserMail)</span><span>@item.FeedBackDetail</span></div>
+                @Html.Partial("P_Modal_FeedBack_Form_Item_Reply",item)
             }
             @*<input type="hidden" id="parent-feedback-id" value="@Model.FeedBackID" />*@
             <textarea class="span5 pull-left reply-area" placeholder="Your comment" id="ReplyText"></textarea>

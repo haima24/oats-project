@@ -143,13 +143,13 @@ $(function () {
     $("#ReplyButton").live("click", function () {
         var button= $(this);
         var testid = parseInt($("#test-id").val());
-        //var parentFeedbackId = parseInt($("#parent-feedback-id").val());
         var parentFeedbackID = button.val();
         var text = $("#ReplyText").val();
+        var place = $("#modalPopupFeedback .reply-detail");
         $.post("/Tests/StudentReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, ReplyDetail: text }, function (res) {
             if (res.success) {
                 var html = $(res.generatedHtml);
-                $("#modalPopupFeedback .nt-panel").prepend(html);
+                $("#modalPopupFeedback .reply-detail")[0].append(html);
             } else {
                 showMessage("error", res.message);
             }

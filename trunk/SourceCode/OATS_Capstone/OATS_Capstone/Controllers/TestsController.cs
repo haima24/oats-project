@@ -854,7 +854,7 @@ namespace OATS_Capstone.Controllers
                 var result = string.Empty;
                 try
                 {
-                    result = this.RenderPartialViewToString("P_Modal_FeedBack_Form_Item", model);
+                    result = this.RenderPartialViewToString("P_Modal_FeedBack_Form_Item_Reply", model);
                 }
                 catch (Exception)
                 {

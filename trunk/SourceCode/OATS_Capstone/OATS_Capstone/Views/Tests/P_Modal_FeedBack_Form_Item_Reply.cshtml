@@ -1,0 +1,8 @@
+﻿@model OATS_Capstone.Models.FeedBack
+
+
+<div class="reply-detail">
+    <span class="name">@(Model.User.FirstName ?? Model.User.LastName ?? Model.User.UserMail)</span>
+    <span>@Model.FeedBackDetail</span>
+
+</div>
