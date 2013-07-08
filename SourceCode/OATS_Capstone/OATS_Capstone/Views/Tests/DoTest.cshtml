@@ -20,33 +20,7 @@
         </div>
         <div class="container">
             <a id="logo" class="brand" href="@Url.Action("Index","Tests")">OATS</a>
-            <div class="nav-collapse collapse navbar-responsive-collapse">
-                <ul class="nav">
-                    <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
-                    <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
-                    <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
-                    <li>
-                        <button class="btn oval" onclick="window.location='@Url.Action("MakeTest")'">New</button></li>
-                </ul>
-
-               <ul class="nav pull-right">
-                    <li>
-                        <div class="navbar-search pull-left">
-                            <input type="text" class="nt-search-input search-query" placeholder="Search Tests" />
-                        </div>
-                    </li>
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li class="nav-header">Welcome: @(user.FirstName ?? user.LastName ?? user.UserMail)</li>
-                            <li class="divider"></li>
-                            <li><a href="#" id="profile-link">My Profile</a></li>
-                            <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+            <div class="nt-test-header">@Model.TestTitle</div>
             <!-- /.nav-collapse -->
         </div>
     </div>
@@ -54,8 +28,11 @@
 </div>
 <div id="container" class="container wrapper nt-de-cont">
     @*<div class="nt-header">Demo to copy</div>*@
-    <div class="nt-checklist-cont" style="height: 500px; overflow-y: auto;">
-        <div class="nt-msg"></div>
+    <div class="nt-checklist-cont" style="max-height: 560px; overflow-y: auto;">
+        <div class="introduction">
+            <span class="summary">Introduction : </span>
+            <span>@Model.Introduction</span>
+        </div>
         <div class="nt-username">Admin User</div>
         @*<div class="nt-asm-title">Demo to copy</div>*@
         <div id="checklist">

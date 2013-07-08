@@ -251,6 +251,25 @@ $.fn.extend({
     }
 })
 $.fn.extend({
+    clickout: function (options) {
+        $(this).each(function (i, e) {
+            var self = $(this);
+            $(document).live("click", function (e) {
+                var isExcept = $(options.excepts).is(function () {
+                    return $(e.target).is(this) || $(e.target).closest(this).length > 0;
+                });
+                if (!isExcept) {
+                    if (!$(e.target).is(self) && $(e.target).closest(self).length == 0) {
+                        if (options.callback && typeof (options.callback) === "function") {
+                            options.callback(e);
+                        }
+                    }
+                }
+            });
+        });
+    }
+})
+$.fn.extend({
     oatsSearch: function (options) {
         var text;
         var reCalculatePosition = function () {

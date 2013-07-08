@@ -6,6 +6,17 @@ var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 
+function updateTestIntroduction() {
+    var text = $("#intro-detail").val();
+    statusSaving();
+    $.post("/Tests/UpdateTestIntroduction", { testid: testid, introduction: text }, function (res) {
+        if (res.success) {
+            statusSaved();
+        } else {
+            showMessage("error", res.message);
+        }
+    });
+}
 function postSetting(li) {
     var cb = $("input[type=checkbox]", li);
     var settingKey = cb.attr("setting-key");
@@ -61,13 +72,39 @@ function handleImportText(text) {
                     htmlQuestion = $(questions.text);
                 } else {
                     //radio question
-                    question.QuestionType = { Type: "Radio" };
+                    var trueCount = 0;
                     question.QuestionTitle = lines[0];
                     question.Answers = $(lines).map(function (i, o) {
                         if (i > 0) {
-                            return { AnswerContent: o };
+                            var ans = new Object();
+                            var indicator = o.substr(0, 1);
+                            var length = o.length;
+                            if (indicator) {
+                                switch (indicator) {
+                                    case "-":
+                                        ans.IsRight = false;
+                                        ans.AnswerContent = o.substr(1,length-1);
+                                        break;
+                                    case "=":
+                                        trueCount++;
+                                        ans.IsRight = true;
+                                        ans.AnswerContent = o.substr(1, length - 1);
+                                        break;
+                                    default:
+                                        ans.IsRight = false;
+                                        ans.AnswerContent = o;
+                                        break;
+
+                                }
+                            }
+                            return ans;
                         }
                     }).convertJqueryArrayToJSArray();
+                    if (trueCount <= 1) {
+                        question.QuestionType = { Type: "Radio" };
+                    } else {
+                        question.QuestionType = { Type: "Multiple" };
+                    }
                     htmlQuestion = $(questions.radio);
                 }
                 htmlQuestion.uniqueId();
@@ -1563,6 +1600,39 @@ $(function () {
                 else { showMessage("error", res.message); }
             });
         }
+    });
+    //separator
+    $("#intro-detail").live("change", function () {
+        updateTestIntroduction();
+    });
+    $("#intro-detail").live("blur", function () {
+        var btn = $("#eventIntroduction");
+        if (btn.hasClass("active")) {
+            updateTestIntroduction();
+            btn.removeClass("active");
+            $("#test-introduction").hide();
+        }
+    });
+    $("#eventIntroduction").live("click", function () {
+        var btn = $(this);
+        if (btn.hasClass("active")) {
+            btn.removeClass("active");
+            $("#test-introduction").hide();
+        } else {
+            btn.addClass("active");
+            $("#test-introduction").show();
+        }
+    });
+    $("#test-introduction").clickout({
+        callback: function (ev) {
+            var btn = $("#eventIntroduction");
+            if (btn.hasClass("active")) {
+                updateTestIntroduction();
+                btn.removeClass("active");
+                $("#test-introduction").hide();
+            }
+        },
+        excepts: "#eventIntroduction",
     });
     //separator
     showOrHideDeleteLineAnswer();
