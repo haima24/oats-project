@@ -42,9 +42,6 @@ namespace OATS_Capstone.Mailers
                 x.To.Add(email);
             });
         }
-
-
-
         public virtual void InviteUsers(List<Invitation> invitations)
         {
             invitations.ForEach(i =>
@@ -53,5 +50,12 @@ namespace OATS_Capstone.Mailers
             });
         }
 
+        public virtual void ReInviteUsers(List<Invitation> invitations)
+        {
+            invitations.ForEach(i =>
+            {
+                this.InviteUser(i).Send();
+            });
+        }
     }
 }

@@ -156,9 +156,7 @@
     </Compile>
     <Compile Include="Hubs\GeneralHub.cs" />
     <Compile Include="Mailers\IUserMailer.cs" />
-    <Compile Include="Mailers\IUserReinviteMailer.cs" />
     <Compile Include="Mailers\UserMailer.cs" />
-    <Compile Include="Mailers\UserReinviteMailer.cs" />
     <Compile Include="Models\Answer.cs">
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
@@ -345,6 +343,7 @@
     <Content Include="Style\img\essay.png" />
     <Content Include="Style\img\feedback.png" />
     <Content Include="Style\img\img.png" />
+    <Content Include="Style\img\introduction.png" />
     <Content Include="Style\img\loader-large.gif" />
     <Content Include="Style\img\loader-larger-clock.gif" />
     <Content Include="Style\img\loader.gif" />

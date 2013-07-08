@@ -1,6 +1,5 @@
 ﻿$(function () {
     $("#sidebar").accordion();
-    
     $("#checklist[content-tab=true] .nt-conted-ph-cont").hover(function (ev) {
         var ea = $(ev.currentTarget).find('[contenteditable=true]')[0];
         $(ea).addClass("nt-contedhover");
@@ -28,7 +27,7 @@
         }
     });
     $("#checklist[content-tab=true] .nt-qitem").live('click', function (ev) {
-        if($(this).parent().length!=0){
+        if ($(this).parent().length != 0) {
             var all = $(".nt-qitem");
             all.removeClass('nt-qitem-edit-act');
             all.removeClass('nt-qitem-edit-inact');
@@ -57,4 +56,5 @@
             }
         }
     });
+   
 });

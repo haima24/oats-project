@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OATSDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="OATSDBModelStoreContainer">
           <EntitySet Name="Answer" EntityType="OATSDBModel.Store.Answer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeedBack" EntityType="OATSDBModel.Store.FeedBack" store:Type="Tables" Schema="dbo" />
@@ -227,6 +227,7 @@
           </Key>
           <Property Name="TestID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TestTitle" Type="nvarchar" Nullable="false" MaxLength="512" />
+          <Property Name="Introduction" Type="nvarchar" MaxLength="1024" />
           <Property Name="CreatedUserID" Type="int" Nullable="false" />
           <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
           <Property Name="StartDateTime" Type="datetime" Nullable="false" />
@@ -523,8 +524,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OATSDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -790,6 +790,7 @@
           <NavigationProperty Name="TagInTests" Relationship="OATSDBModel.FK_TagInTest_Test" FromRole="Test" ToRole="TagInTest" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Test_User" FromRole="Test" ToRole="User" />
           <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="Test" ToRole="UserInTest" />
+          <Property Type="String" Name="Introduction" MaxLength="1024" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -1223,6 +1224,7 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="OATSDBModel.Test">
               <MappingFragment StoreEntitySet="Test">
+                <ScalarProperty Name="Introduction" ColumnName="Introduction" />
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
                 <ScalarProperty Name="TestTitle" ColumnName="TestTitle" />
                 <ScalarProperty Name="CreatedUserID" ColumnName="CreatedUserID" />

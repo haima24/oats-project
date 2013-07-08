@@ -844,5 +844,10 @@ namespace OATS_Capstone.Controllers
             common.StudentCommentFeedBack(testid,fbDetail);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
+        public JsonResult UpdateTestIntroduction(int testid, string introduction) {
+            var common = new CommonService();
+            common.UpdateTestIntroduction(testid, introduction);
+            return Json(new { common.success,common.message});
+        }
     }
 }

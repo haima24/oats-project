@@ -598,32 +598,21 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 var authen = AuthenticationSessionModel.Instance();
+                var invitations = new List<Invitation>();
                 if (test != null)
                 {
                     if (count > 0)
                     {
                         userids.ForEach(delegate(int id)
                         {
-                            var user = db.Users.FirstOrDefault(k => k.UserID == id);
-                            if (user != null)
+                            var invitation = db.Invitations.FirstOrDefault(i => i.TestID == testid && i.UserID == id);
+                            if (invitation != null)
                             {
-                                var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
-                                // test.Invitations.Remove(inv);
-                                // db.Invitations.Remove(inv);
+                                invitations.Add(invitation);
                             }
                         });
-                    }
-                    if (db.SaveChanges() >= 0)
-                    {
-                        //send mail
-                        var invitations = test.Invitations.ToList();
-                        UserMailer.InviteUsers(invitations);
-
-                        if (OnRenderPartialViewToString != null)
-                        {
-                            success = true;
-                            generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
-                        }
+                        IUserMailer mailer = new UserMailer();
+                        mailer.ReInviteUsers(invitations);
                     }
                 }
             }
@@ -2289,7 +2278,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
         public void StudentCommentFeedBack(int testid, string fbDetail)
         {
             success = false;
@@ -2330,7 +2318,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
         private string GenerateAccessKey()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
@@ -2340,6 +2327,27 @@ namespace OATS_Capstone.Models
                           .Select(s => s[random.Next(s.Length)])
                           .ToArray());
             return result;
+        }
+        public void UpdateTestIntroduction(int testid, string introduction) {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null) {
+                    test.Introduction = introduction;
+                    if (db.SaveChanges() >= 0) {
+                        success = true;
+                        message = string.Empty;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
         }
     }
 }

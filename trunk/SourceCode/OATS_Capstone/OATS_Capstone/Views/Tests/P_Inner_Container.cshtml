@@ -14,6 +14,9 @@
 }
  <input id="test_id" type="hidden" value="@Model.TestID" />
 <div id="test-header">
+    <div>
+        <button id="eventIntroduction" class="nt-btn-circle"><i class="t-icon i-introduction t-icon-white"></i></button>
+    </div>
     <div contenteditable="true" id="test-title">
         @if (Model != null)
         {@Model.TestTitle}
@@ -24,6 +27,13 @@
     <button id="eventDuplicate" class="nt-btn-circle"><i class="t-icon i-duplicate t-icon-white"></i></button>
     <button id="eventDel" class="nt-btn-circle"><i class="icon-remove t-icon-white"></i></button>
 </div>
+<div id="test-introduction" class="popover bottom">
+            <div class="arrow"></div>
+            <h3 class="popover-title">Introduction</h3>
+            <div class="popover-content">
+              <textarea id="intro-detail" rows="4" class="span5">@Model.Introduction</textarea>
+            </div>
+          </div>
 <div id="eventTags">
     <div class="nt-etagcont">
         <div class="nt-tags">
