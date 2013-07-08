@@ -136,7 +136,7 @@ namespace OATS_Capstone.Controllers
             common.CloneQuestion(targetTestID, questionid);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
-        public JsonResult ReuseSearchQuestionTemplate(int maxrows, string term)
+        public JsonResult ReuseSearchQuestionTemplate(string term,List<int> tagids)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -153,7 +153,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.ReuseSearchQuestionTemplate(maxrows, term);
+            common.ReuseSearchQuestionTemplate(term, tagids);
             return Json(new { common.success, common.message, common.resultlist });
         }
         public JsonResult TestsAssignUserSearch(int userid, string letter)

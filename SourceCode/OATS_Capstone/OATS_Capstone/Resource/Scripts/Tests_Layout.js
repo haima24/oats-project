@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $("#sidebar").accordion();
+    $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
     $("#checklist[content-tab=true] .nt-conted-ph-cont").hover(function (ev) {
         var ea = $(ev.currentTarget).find('[contenteditable=true]')[0];
         $(ea).addClass("nt-contedhover");

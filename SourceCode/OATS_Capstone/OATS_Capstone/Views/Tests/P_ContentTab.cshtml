@@ -1,6 +1,6 @@
 ﻿@model OATS_Capstone.Models.Test
 @{
-    var templateQuestions=OATS_Capstone.Models.SingletonDb.Instance().Questions.Where(i=>i.TagInQuestions.Select(t=>t.Tag).Any(k=>k.TagName=="Template")).Take(2);
+    var templateQuestions = OATS_Capstone.Models.SingletonDb.Instance().Questions.Where(i => i.TagInQuestions.Select(t => t.Tag).Any(k => k.TagName == "Template")).Take(2);
 }
 <div id="sidebar" content-tab="true">
     <div class="t-accord-header">New Question<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
@@ -39,9 +39,17 @@
             </div>
             <div class="nt-ctrl-search-tags nt-taglist"></div>
         </div>
-        <div class="nt-ctrl-list" style="max-height: 200px; min-height: 30px; overflow-y: auto;">
-            @foreach(var tQuestion in templateQuestions){
-                @Html.Partial("P_Reuse_Template_Question_Instance",tQuestion)
+        <div class="nt-ctrl-list">
+            <div class="nt-taglist nt-tags">
+                <div class="nt-tag-adder">
+                    <input type="text" class="input-small nt-as-input" placeholder="Search Tag..."></div>
+                <div class="nt-tag-hitlist"></div>
+            </div>
+        </div>
+        <div class="nt-ctrl-list" data-result style="max-height: 200px; min-height: 30px; overflow-y: auto;">
+            @foreach (var tQuestion in templateQuestions)
+            {
+                @Html.Partial("P_Reuse_Template_Question_Instance", tQuestion)
             }
         </div>
     </div>
@@ -67,7 +75,7 @@
             var orderedQuestions = Model.Questions.OrderBy(i => i.SerialOrder);
             foreach (var question in orderedQuestions)
             {
-                     @Html.Partial("P_Question_Instance",question)
+        @Html.Partial("P_Question_Instance", question)
             }
         }
     }

@@ -5,6 +5,7 @@ var events;
 var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
+var reuseAddedTags = new Array();
 
 function updateTestIntroduction() {
     var text = $("#intro-detail").val();
@@ -83,7 +84,7 @@ function handleImportText(text) {
                                 switch (indicator) {
                                     case "-":
                                         ans.IsRight = false;
-                                        ans.AnswerContent = o.substr(1,length-1);
+                                        ans.AnswerContent = o.substr(1, length - 1);
                                         break;
                                     case "=":
                                         trueCount++;
@@ -228,8 +229,8 @@ function initTagsOnTest() {
     $("#test-tags").live("keydown", function (ev) {
         if (ev.keyCode == 13) {
             statusSaving();
-            var text=$(this).val();
-            $.post("/Tests/AddTagToTest", { testid: testid,tagid:0, tagname: text}, function (res) {
+            var text = $(this).val();
+            $.post("/Tests/AddTagToTest", { testid: testid, tagid: 0, tagname: text }, function (res) {
                 if (res.success) {
                     var tagItem = $(res.generatedHtml);
                     $("#eventTags .nt-tags .tags-container").append(tagItem);
@@ -902,34 +903,6 @@ $(function () {
     //separator
     initPopover();
     initSearchTests();
-    //separator
-    $("#sidebar .nt-ctrl-search input[type=text]").autocomplete({
-        minLength: 0,
-        source: function (req, res) {
-            $.ajax({
-                type: "POST",
-                url: "/Tests/ReuseSearchQuestionTemplate",
-                data: JSON.stringify({ maxrows: 4, term: req.term }),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (r) {
-                    if (r.success) {
-                        var list = $("#sidebar .nt-ctrl-list");
-                        list.empty();
-                        $(r.resultlist).each(function (i, o) {
-                            list.append(o);
-                        });
-                        initReuseDragAndDrop();
-                        initPopover();
-                    } else {
-                        showMessage("error", r.message);
-                    }
-                }
-
-            });
-        }
-    });
-    //separator
 
     //separator
     $(".tab-event").live("click", function (e) {
@@ -945,7 +918,7 @@ $(function () {
                 var tabcontent = $("#eventTab");
                 if (tabcontent && res.generatedHtml) {
                     tabcontent.html(res.generatedHtml);
-                    $("#sidebar[content-tab=true]").accordion();
+                    $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
                     sortByNumberOrLetters();
                     initEditable();
                     initReuseDragAndDrop();
@@ -1515,7 +1488,7 @@ $(function () {
                 initImageUploadFacility();
                 sortByNumberOrLetters();
                 initPopover();
-                $("#sidebar").accordion();
+                $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
             } else {
                 showMessage("error", res.message);
             }
@@ -1584,7 +1557,7 @@ $(function () {
     //separator
     $("#checklist .nt-qitem .nt-tag-adder input[type=text]").live("keydown", function (ev) {
         if (ev.keyCode == 13) {
-            var tb=$(this);
+            var tb = $(this);
             var questionIdString = tb.closest(".nt-qitem").attr("question-id");
             var questionid = parseInt(questionIdString);
             var text = tb.val();
@@ -1633,6 +1606,62 @@ $(function () {
             }
         },
         excepts: "#eventIntroduction",
+    });
+    var reuseAutoComplete = $("#sidebar .nt-ctrl-search input[type=text]").autocomplete({
+        minLength: 0,
+        source: function (req, res) {
+            if (reuseAddedTags) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/ReuseSearchQuestionTemplate",
+                    data: JSON.stringify({ term: req.term, tagids: reuseAddedTags }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var list = $("#sidebar .nt-ctrl-list[data-result]");
+                            list.empty();
+                            $(r.resultlist).each(function (i, o) {
+                                list.append(o);
+                            });
+                            initReuseDragAndDrop();
+                            initPopover();
+                        } else {
+                            showMessage("error", r.message);
+                        }
+                    }
+
+                });
+            }
+        }
+    });
+    $("#sidebar .nt-tag-adder input[type=text]").reuseTagSearch({
+        container: ".nt-taglist.nt-tags",
+        tagsource: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsSearchTag",
+                data: JSON.stringify({ term: req }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TagName && obj.TagName != "") {
+                                return { id: obj.TagID, name: obj.TagName };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        },
+        tagschange: function (addedTags) {
+            reuseAddedTags = addedTags;
+            reuseAutoComplete.autocomplete("search");
+        }
     });
     //separator
     showOrHideDeleteLineAnswer();

@@ -1902,6 +1902,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     overflow-x: hidden;
 }
 
+    .nt-ctrl-list .nt-taglist.nt-tags .nt-tag {
+        line-height: 2;
+    }
+
+#sidebar .nt-ctrl-list .nt-taglist {
+    position: static;
+}
+
 .nt-qsearch {
     padding: 5px 3px;
     cursor: pointer;
@@ -2206,75 +2214,75 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         overflow-y: auto;
     }
 
-    .nt-search-results .nt-tags .nt-tag-hitlist {
-        z-index: 15;
-        display: none;
-        background-color: white;
-        width: auto;
-        margin: 0;
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        -ms-border-radius: 10px;
-        -o-border-radius: 10px;
-        border-radius: 10px;
-        -webkit-box-shadow: 1px 2px #c7c7c7;
-        -moz-box-shadow: 1px 2px #c7c7c7;
-        box-shadow: 1px 2px #c7c7c7;
-        position: absolute;
-        min-height: 100px;
-        max-height: 200px;
-        margin-top: 5px;
-        overflow-y: auto;
-    }
+.nt-tags .nt-tag-hitlist {
+    z-index: 15;
+    display: none;
+    background-color: white;
+    width: auto;
+    margin: 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 1px 2px #c7c7c7;
+    -moz-box-shadow: 1px 2px #c7c7c7;
+    box-shadow: 1px 2px #c7c7c7;
+    position: absolute;
+    min-height: 100px;
+    max-height: 200px;
+    margin-top: 5px;
+    overflow-y: auto;
+}
 
-        .nt-search-results .nt-tags .nt-tag-hitlist .nt-item {
-            color: #444444;
-            cursor: pointer;
-            margin: 4px;
-            padding: 2px;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            -ms-border-radius: 4px;
-            -o-border-radius: 4px;
-            border-radius: 4px;
-        }
-
-            .nt-search-results .nt-tags .nt-tag-hitlist .nt-item:hover {
-                background-color: #EAEFFA;
-            }
-
-            .nt-search-results .nt-tags .nt-tag-hitlist .nt-item i {
-                float: left;
-                margin: 5px;
-            }
-
-
-        .nt-search-results .nt-tags .nt-tag-hitlist div {
-            float: none;
-            margin: 0px;
-            padding: 5px;
-        }
-
-        .nt-search-results .nt-tags .nt-tag-hitlist .nt-item div {
-            padding-left: 30px;
-        }
-
-    .nt-search-results .nt-hitlist .nt-empty-list-ph, .nt-search-results .nt-tag-hitlist .nt-empty-list-ph {
-        color: #999999;
-    }
-
-
-    .nt-search-results .nt-hitlist .nt-item {
+    .nt-tags .nt-tag-hitlist .nt-item {
+        color: #444444;
         cursor: pointer;
+        margin: 4px;
+        padding: 2px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        border-radius: 4px;
     }
 
-        .nt-search-results .nt-hitlist .nt-item .nt-item-desc {
-            font-size: 11px;
-            line-height: 16px;
-            color: #999999;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .nt-tags .nt-tag-hitlist .nt-item:hover {
+            background-color: #EAEFFA;
         }
+
+        .nt-tags .nt-tag-hitlist .nt-item i {
+            float: left;
+            margin: 5px;
+        }
+
+
+    .nt-tags .nt-tag-hitlist div {
+        float: none;
+        margin: 0px;
+        padding: 5px;
+    }
+
+    .nt-tags .nt-tag-hitlist .nt-item div {
+        padding-left: 30px;
+    }
+
+.nt-search-results .nt-hitlist .nt-empty-list-ph, .nt-tag-hitlist .nt-empty-list-ph {
+    color: #999999;
+}
+
+
+.nt-search-results .nt-hitlist .nt-item {
+    cursor: pointer;
+}
+
+    .nt-search-results .nt-hitlist .nt-item .nt-item-desc {
+        font-size: 11px;
+        line-height: 16px;
+        color: #999999;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
 .nt-user-details .nt-asms-unrelated .nt-rolldown-search .nt-cover {
     position: absolute;
@@ -2933,19 +2941,20 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
     #container.nt-de-cont .nt-checklist-cont .introduction {
         font-size: 14px;
-max-width: 712px;
-margin: 0 auto;
-background-color: #EAEFFA;
-border: 1px solid #bacbe3;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
--ms-border-radius: 4px;
--o-border-radius: 4px;
-border-radius: 4px;
-padding: 10px;
+        max-width: 712px;
+        margin: 0 auto;
+        background-color: #EAEFFA;
+        border: 1px solid #bacbe3;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        border-radius: 4px;
+        padding: 10px;
     }
+
         #container.nt-de-cont .nt-checklist-cont .introduction .summary {
-            font-weight:bold;
+            font-weight: bold;
         }
 
     #container.nt-de-cont .nt-checklist-cont .nt-username {
@@ -2955,7 +2964,7 @@ padding: 10px;
         text-overflow: ellipsis;
         text-align: right;
         right: 0;
-        margin:10px auto;
+        margin: 10px auto;
         font-weight: bold;
     }
 

@@ -411,7 +411,7 @@ $.fn.extend({
                 var clickItem = $(ev.target).closest(".nt-item");
                 var tagsContainer = $(".nt-taglist.nt-tags", dropdown);
                 if (clickItem.length > 0) {
-                    if (items) {
+                    if (tagItems) {
                         var item = $(tagItems).filter(function () {
                             return clickItem.is($(this).attr("key"));
                         });
@@ -450,6 +450,124 @@ $.fn.extend({
                     }
                 }
             });
+        });
+    }
+});
+$.fn.extend({
+    reuseTagSearch: function (options) {
+        var tagItems = new Array();
+        var addedTags = new Array();
+        var container;
+        var defaults = {
+            maxTags: 5,
+        }
+        options = $.extend(defaults, options);
+        var curElement;
+        var reCalculatePosition = function (list) {
+            if (curElement) {
+                var tb = $(curElement);
+                var pos = tb.position();
+                var height = tb.height();
+                list.css({ top: pos.top + height, left: pos.left });
+            }
+        };
+        var restag = function (e) {
+            if (container) {
+                var list = $(".nt-tag-hitlist", container);
+                list.empty();
+                reCalculatePosition(list);
+                if (e.length > 0) {
+                    $(e).each(function (i, ele) {
+                        var tid = $(ele).attr("id");
+                        //var isNotIn = $.inArray(tid, addedTags) < 0;
+                        var isNotIn = true;
+                        var currentCount = $(".nt-item", list).length + 1;
+                        if (tid && isNotIn && currentCount <= options.maxTags) {
+                            var nElement = $("<div>").addClass("nt-item");
+                            nElement.append($("<i>").addClass("t-icon").addClass("i-tag"));
+                            var id = $(ele).attr("id");
+                            if (id) {
+                                nElement.attr("uid", id);
+                            }
+                            var name = $(ele).attr("name");
+                            if (name) {
+                                nElement.append($("<div>").html(name));
+                            }
+                            list.append(nElement);
+                            tagItems.push({ id: id, key: nElement, value: ele });
+                        }
+                    });
+                    list.show();
+                } else {
+                    list.hide();
+                }
+            }
+        };
+        $(this).each(function (index, element) {
+            $(element).live("keydown", function (ev) {
+                if (options.container) {
+                    container = $(this).closest(options.container);
+                }
+                curElement = $(this);
+                var text = $(this).val() + String.fromCharCode(ev.keyCode);
+                if (options.tagsource && typeof (options.tagsource) === "function") {
+                    options.tagsource(text, restag);
+                }
+            });
+            if (options.container) {
+                var curContainer = $(this).closest(options.container);
+                $(curContainer).on("click", function (ev) {
+                    var clickItem = $(ev.target).closest(".nt-tag-remove");
+                    if (clickItem.length > 0) {
+                        var tag = clickItem.closest(".nt-tag");
+                        if (tag) {
+                            var id = tag.attr("tag-id");
+                            if (id) {
+                                var intId = parseInt(id);
+                                var index = addedTags.indexOf(intId);
+                                if (index >= 0) {
+                                    addedTags.splice(index, 1);
+                                    tag.remove();
+                                    ev.stopPropagation();
+                                    if (options.tagschange && typeof (options.tagschange) === "function") {
+                                        options.tagschange(addedTags);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                $(".nt-tag-hitlist", curContainer).on("click", function (ev) {
+                    var list = $(this);
+                    var clickItem = $(ev.target).closest(".nt-item");
+                    var tagsContainer = curContainer;
+                    if (clickItem.length > 0) {
+                        if (tagItems) {
+                            var item = $(tagItems).filter(function () {
+                                return clickItem.is($(this).attr("key"));
+                            });
+                            if (item.length > 0) {
+                                var bindedObj = item.attr("value");
+                                if (($.inArray(bindedObj.id, addedTags)) < 0) {
+                                    addedTags.push(bindedObj.id);
+                                    var htmlTag = $("<div>").addClass("nt-tag").attr("tag-id", bindedObj.id).append(
+                                        $("<span>").html(bindedObj.name)
+                                        ).append("<i class='icon-remove nt-tag-remove'></i>");
+                                    tagsContainer.prepend(htmlTag);
+                                    reCalculatePosition(list);
+                                    list.hide();
+                                    $("input[type=text]", curContainer).val("");
+                                    if (options.tagschange && typeof (options.tagschange) === "function") {
+                                        options.tagschange(addedTags);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    ev.stopPropagation();
+                });
+            }
         });
     }
 });
