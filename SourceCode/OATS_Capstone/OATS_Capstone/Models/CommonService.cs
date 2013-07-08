@@ -2324,6 +2324,51 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+
+
+
+        public void StudentReplyFeedBack(int testid, int parentFeedBackId, string ReplyDetail)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var authen = AuthenticationSessionModel.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid); //#1
+                if (test != null)
+                {
+                    //new a FeedBack
+                    var feedback = new FeedBack();
+                    //assign attribute
+                    feedback.UserID = authen.UserId;
+                    feedback.FeedBackDetail = ReplyDetail;
+                    feedback.FeedBackDateTime = DateTime.Now;
+                    feedback.ParentID = parentFeedBackId;
+
+                    //add to test #1
+                    test.FeedBacks.Add(feedback);
+                    //save
+                    if (db.SaveChanges() > 0)
+                    {
+                        db.Entry(feedback).Reference(p => p.User).Load();
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
+
         private string GenerateAccessKey()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";

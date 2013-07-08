@@ -140,6 +140,24 @@ $(function () {
     });
 
 
+    $("#ReplyButton").live("click", function () {
+        var button= $(this);
+        var testid = parseInt($("#test-id").val());
+        //var parentFeedbackId = parseInt($("#parent-feedback-id").val());
+        var parentFeedbackID = button.val();
+        var text = $("#ReplyText").val();
+        $.post("/Tests/StudentReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, ReplyDetail: text }, function (res) {
+            if (res.success) {
+                var html = $(res.generatedHtml);
+                $("#modalPopupFeedback .nt-panel").prepend(html);
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+
+    });
+
+
 
     
     //separator

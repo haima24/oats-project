@@ -4,7 +4,6 @@
     <div class="comment-meta">
         <a href="#" class="url">@(Model.User.FirstName??Model.User.LastName??Model.User.UserMail)</a> says<time>@Model.FeedBackDateTime</time>
     </div>
-
     <div class="comment-body">
         <p>
             @Model.FeedBackDetail
@@ -23,12 +22,13 @@
             </div>
             @foreach (var item in @Model.FeedBackChilds)
             {
+                
                 <div class="reply-detail"><span class="name">@(item.User.FirstName ?? item.User.LastName ?? item.User.UserMail)</span><span>@item.FeedBackDetail</span></div>
             }
-
-            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
-            <button class="btn btn-primary">Reply</button>
+            @*<input type="hidden" id="parent-feedback-id" value="@Model.FeedBackID" />*@
+            <textarea class="span5 pull-left reply-area" placeholder="Your comment" id="ReplyText"></textarea>
+            <button class="btn btn-primary" id= "ReplyButton" value="@Model.FeedBackID">Reply</button>
         </div>
     </div>
-
+     
 </article>
