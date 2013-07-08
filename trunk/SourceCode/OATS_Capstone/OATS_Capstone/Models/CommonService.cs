@@ -153,7 +153,7 @@ namespace OATS_Capstone.Models
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User.UserID);
-                    users = db.Users.Where(i => !invitedUsers.Contains(i.UserID)).Where(k => k.UserID != authen.UserId).ToList();
+                    users = db.Users.Where(i => !invitedUsers.Contains(i.UserID)&&!invitedUsers.Contains(test.CreatedUserID)).Where(k => k.UserID != authen.UserId).ToList();
                 }
 
                 if (OnRenderPartialViewToString != null)
@@ -314,7 +314,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void ReuseSearchQuestionTemplate(int maxrows, string term)
+        public void ReuseSearchQuestionTemplate(string term,List<int> tagids)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -324,6 +324,12 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var questions = db.Questions.ToList();
+                if (tagids != null) {
+                    questions = questions.Where(i => {
+                        var tags = i.Test.TagInTests.Select(k => k.TagID);
+                        return tags.Any(t => tagids.Contains(t));
+                    }).ToList();
+                }
                 var matches = new List<Question>();
                 if (!string.IsNullOrEmpty(term))
                 {
@@ -333,7 +339,7 @@ namespace OATS_Capstone.Models
                         return question.QuestionTitle.ToLower().Contains(termLower)
                             || question.Answers.Any(k => k.AnswerContent.ToLower().Contains(termLower));
                     });
-                    matches = matchQuestions.Take(maxrows).ToList();
+                    matches = matchQuestions.ToList();
                 }
                 success = true;
                 matches.ForEach(delegate(Question question)
