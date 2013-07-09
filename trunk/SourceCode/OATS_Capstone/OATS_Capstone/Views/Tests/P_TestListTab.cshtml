@@ -65,12 +65,21 @@
                         {
                         <div class="nt-list-row">
 
-                            <div class="nt-name">
-                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
-                                <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
-                                    <i class="t-icon i-feedback"></i>
-                                </button>
-                            </div>
+                            @if (item.IsCurrentUserOwnTest)
+                            {
+                                <div class="nt-name">
+                                    <a href="@Url.Action("NewTest", new { id = item.TestID })">@item.TestTitle</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="nt-name">
+                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
+                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
+                                        <i class="t-icon i-feedback"></i>
+                                    </button>
+                                </div>
+                            }
 
 
                             <div class="nt-date">
@@ -137,9 +146,21 @@
                         foreach (var item in Model.RunningTests)
                         {
                         <div class="nt-list-row">
-                            <div class="nt-name">
-                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
-                            </div>
+                            @if (item.IsCurrentUserOwnTest)
+                            {
+                                <div class="nt-name">
+                                    <a href="@Url.Action("NewTest", new { id = item.TestID })">@item.TestTitle</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="nt-name">
+                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
+                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
+                                        <i class="t-icon i-feedback"></i>
+                                    </button>
+                                </div>
+                            }
                             <div class="nt-date">@item.Start</div>
                             <div class="nt-date">@item.End</div>
                             <div class="nt-rate">@item.Rate</div>
@@ -169,30 +190,30 @@
                     @foreach (var item in Model.UpComingTests)
                     {
                         <div class="nt-list-row nt-upcoming">
-                        <div class="nt-name">
-                            <div>demo test</div>
-                            <div class="nt-smalldesc"><span class="nt-smalldesc-subj">Starting:</span>@item.Start</div>
-                            <button class="nt-btn-icon nt-openbtn">
-                                <i class="t-icon pencilpaper"></i>
-                            </button>
+                            <div class="nt-name">
+                                <div>demo test</div>
+                                <div class="nt-smalldesc"><span class="nt-smalldesc-subj">Starting:</span>@item.Start</div>
+                                <button class="nt-btn-icon nt-openbtn">
+                                    <i class="t-icon pencilpaper"></i>
+                                </button>
+                            </div>
+                            <!-- TODO: invite -->
+                            <div class="nt-desc">@item.NumOfStudent Student</div>
+
+                            <div class="nt-desc">
+                                <button class="nt-btn-text nt-invbtn">Invite</button>
+                            </div>
+
+                            <div class="nt-desc">@item.NumOfTeacher Educator</div>
+
+
+                            <div class="nt-ctrl nt-ctrl-wide">
+                                <button class="nt-btn-circle nt-dupbtn"><i class="nt-icon copy"></i></button>
+                                <button class="nt-btn-circle nt-delbtn"><i class="nt-icon remove"></i></button>
+                            </div>
                         </div>
-                        <!-- TODO: invite -->
-                        <div class="nt-desc">@item.NumOfStudent Student</div>
-
-                        <div class="nt-desc">
-                            <button class="nt-btn-text nt-invbtn">Invite</button>
-                        </div>
-
-                        <div class="nt-desc">@item.NumOfTeacher Educator</div>
-
-
-                        <div class="nt-ctrl nt-ctrl-wide">
-                            <button class="nt-btn-circle nt-dupbtn"><i class="nt-icon copy"></i></button>
-                            <button class="nt-btn-circle nt-delbtn"><i class="nt-icon remove"></i></button>
-                        </div>
-                    </div>
                     }
-                    
+
                 </div>
             </div>
         </div>
