@@ -7,26 +7,12 @@
     <div class="modal-body">
         <div class="controls">
             <div class="comment-count">
-                All Comments
-            <span>@Model.FeedBackCount        
-            </span>
-                <div class="btn-group" style="margin-left: 38px">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Sort by
-    <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" id="sortby">
-                        <li id="sortbydate"><a sort-type="0" href="/Tests/NewTest_FeedBackTab">By Date</a></li>
-                        <li id="sortbyname"><a sort-type="1" href="/Tests/NewTest_FeedBackTab">By Name</a></li>
-                        <!-- dropdown menu links -->
-                    </ul>
-                </div>
-
+            <span>All Comments @Model.FeedBackCount</span>
             </div>
-            
-            <div class="nt-panel" style="height: 280px; width: 950px; overflow-y: auto">
+            <div id="comments" class="nt-panel" style="height: 280px; width: 950px; overflow-y: auto">
                 @foreach (var feedback in @Model.Parents)
                 {
-                    @Html.Partial("P_Modal_FeedBack_Form_Item",feedback)
+                    @Html.Partial("P_FeedBack_Form_Item",feedback)
                 }
                
             </div>

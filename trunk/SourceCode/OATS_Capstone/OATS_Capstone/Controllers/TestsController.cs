@@ -428,7 +428,7 @@ namespace OATS_Capstone.Controllers
 
         }
 
-        public JsonResult NewTest_FeedBackTab(int testid, int sorttype)
+        public JsonResult NewTest_FeedBackTab(int testid)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -444,7 +444,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.NewTest_FeedBackTab(testid, sorttype);
+            common.NewTest_FeedBackTab(testid);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
 
@@ -833,7 +833,7 @@ namespace OATS_Capstone.Controllers
                 var result = string.Empty;
                 try
                 {
-                    result = this.RenderPartialViewToString("P_Modal_FeedBack_Form_Item", model);
+                    result = this.RenderPartialViewToString("P_FeedBack_Form_Item", model);
                 }
                 catch (Exception)
                 {
@@ -847,7 +847,7 @@ namespace OATS_Capstone.Controllers
         }
 
 
-        public JsonResult StudentReplyFeedBack(int testid, int parentFeedBackId, string ReplyDetail)
+        public JsonResult UserReplyFeedBack(int testid, int parentFeedBackId, string replyDetail)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -855,7 +855,7 @@ namespace OATS_Capstone.Controllers
                 var result = string.Empty;
                 try
                 {
-                    result = this.RenderPartialViewToString("P_Modal_FeedBack_Form_Item_Reply", model);
+                    result = this.RenderPartialViewToString("P_FeedBack_Form_Item_Reply", model);
                 }
                 catch (Exception)
                 {
@@ -864,7 +864,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.StudentReplyFeedBack(testid, parentFeedBackId,ReplyDetail);
+            common.UserReplyFeedBack(testid, parentFeedBackId, replyDetail);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 

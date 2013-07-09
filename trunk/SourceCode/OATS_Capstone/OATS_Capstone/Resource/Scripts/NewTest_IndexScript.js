@@ -61,7 +61,7 @@ $(function () {
         select: function (item) {
             window.location.href = "/Tests/NewTest/" + item.id;
         },
-        source: function (req, res,addedTagIds) {
+        source: function (req, res, addedTagIds) {
             $.ajax({
                 type: "POST",
                 url: "/Tests/TestsSearch",
@@ -105,7 +105,7 @@ $(function () {
         }
     });
 
-        
+
     $(".btn-feedback").live("click", function () {
         var button = $(this);
         var testIdString = button.attr("test-id");
@@ -138,28 +138,6 @@ $(function () {
             }
         });
     });
-
-
-    $("#ReplyButton").live("click", function () {
-        var button= $(this);
-        var testid = parseInt($("#test-id").val());
-        var parentFeedbackID = button.val();
-        var text = $("#ReplyText").val();
-        var place = $("#modalPopupFeedback .reply-detail");
-        $.post("/Tests/StudentReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, ReplyDetail: text }, function (res) {
-            if (res.success) {
-                var html = $(res.generatedHtml);
-                $("#modalPopupFeedback .reply-detail")[0].append(html);
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-
-    });
-
-
-
-    
     //separator
     $(".reply-container[toggle-header]").live("click", function () {
         var cur = $(this);
@@ -172,5 +150,41 @@ $(function () {
         var header = cur.siblings(".reply-container[toggle-header]");
         cur.hide();
         header.show();
+    });
+
+    var hub = $.connection.generalHub;
+    hub.client.R_replyFeedback = function (tid, parentFeedBackId, generatedHtml) {
+        var popTestIdString = $("#modalPopupFeedback #test-id").val();
+        var popTestId = parseInt(popTestIdString);
+        if (tid && parentFeedBackId && generatedHtml) {
+            if (!isNaN(popTestId)) {
+                if (tid == popTestId) {
+                    var article = $("#comments article[parent-id=" + parentFeedBackId + "]");
+                    if (article.length > 0) {
+                        var ele = $(generatedHtml);
+                        $(".reply-details", article).append(ele);
+                    }
+                }
+            }
+        }
+    }
+    $.connection.hub.start().done(function () {
+        $("#modalPopupFeedback .reply-button").live("click", function () {
+            var button = $(this);
+            var testid = parseInt($("#test-id").val());
+            var parentFeedbackID = parseInt(button.val());
+            var container = button.closest(".reply-container");
+            var area=$(".reply-area", container);
+            var text = area.val();
+            var place = $(".reply-details", container);
+            $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
+                if (res.success) {
+                    if (area) { area.val(""); }
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+
+        });
     });
 });
