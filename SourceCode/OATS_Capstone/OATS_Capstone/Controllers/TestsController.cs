@@ -625,11 +625,12 @@ namespace OATS_Capstone.Controllers
         public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) =>
+            common.OnRenderPartialViewToStringWithParameter += (model,isOwner) =>
             {
                 var result = string.Empty;
                 try
                 {
+                    ViewBag.isOwner = isOwner;
                     result = this.RenderPartialViewToString("P_SettingTab_ConfigDetail", model);
                 }
                 catch (Exception)

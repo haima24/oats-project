@@ -2,7 +2,14 @@
 @{
     var sortedAns = Model.Answers.OrderBy(i => i.SerialOrder);
     var tags = Model.TagInQuestions.OrderBy(i=>i.SerialOrder).Select(i => i.Tag);
+
+    var isOwner = true;
+    if (ViewBag.isOwner != null)
+    {
+        isOwner = ViewBag.isOwner;
+    }
 }
+@if(isOwner){
 <div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Radio" question-id="@Model.QuestionID">
     <div class="nt-qnum ">@Model.LabelOrder</div>
     <a class="nt-qanchor"></a>
@@ -109,3 +116,71 @@
     </div>
 
 </div>
+}else{
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" data-not-owner question-type="Radio" question-id="@Model.QuestionID">
+    <div class="nt-qnum ">@Model.LabelOrder</div>
+    <a class="nt-qanchor"></a>
+    <!-- NOT isImg START -->
+
+
+    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+        <div class="redactor_box">
+            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor">@Model.QuestionTitle</div>
+        </div>
+    </div>
+
+
+    <div class="nt-qanscont nt-sortable">
+        @foreach (var ans in sortedAns)
+        {
+            
+        <div class="nt-qans nt-qans-edit nt-qans-hover" answer-id="@ans.AnswerID" data-not-owner>
+            <div class="nt-qanselem">
+                @if (ans.IsRight) { 
+                    <input type="radio" checked="checked" disabled="disabled"/>
+                }else{
+                    <input type="radio" disabled="disabled" />
+                }
+                
+            </div>
+            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                <div class="redactor_box">
+                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor">@ans.AnswerContent</div>
+                </div>
+            </div>
+            <div class="nt-qansscore">
+                <input type="text" class="nt-on-score" disabled="disabled" placeholder="Point Value" value="@ans.Score" />
+            </div>
+        </div>
+        }
+    </div>
+
+
+    <div class="nt-qfoot">
+
+        <div class="nt-qctrls" style="display: none">
+
+            <button class="nt-btn-text nt-scrbtn">
+                Points
+            </button>
+        </div>
+        <div class="nt-qtagcont">
+            <div class="hoverscroll horizontal" style="width: 100%; height: 28px;">
+                <div class="listcontainer" style="width: 100%; height: 27px;">
+                    <div class="nt-tags list">
+                        <div class="tags-container">
+                            @foreach (var item in tags)
+                            {
+                                @Html.Partial("P_Tag_Item", item)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+}

@@ -1,10 +1,14 @@
 ﻿@model OATS_Capstone.Models.Test
 @{
     var templateQuestions = OATS_Capstone.Models.SingletonDb.Instance().Questions.Where(i => i.TagInQuestions.Select(t => t.Tag).Any(k => k.TagName == "Template")).Take(2);
+    var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
+    var isOwner = Model.CreatedUserID == authen.UserId;
+    ViewBag.isOwner = isOwner;
 }
 <div id="sidebar" content-tab="true">
     <div class="t-accord-header">New Question<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
     <div class="t-accord-content">
+        @if(isOwner){
         <div data-action="addnew" type="Radio" class="t-question-type t-question-type-radio">
             <i class="t-icon i-radio"></i><span>Radio choice</span>
         </div>
@@ -23,10 +27,15 @@
         <div data-action="addnew" type="Image" class="t-question-type t-question-type-img">
             <i class="t-icon i-img"></i><span>Image</span>
         </div>
+        }else{
+            <p>The content of this test has been locked because you are not the owner.</p>
+            <p>Duplicate this test to get all the questions in a new test without responses and to be able to change all content freely.</p>
+        }
     </div>
 
     <div class="t-accord-header">Reuse Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
     <div class="t-accord-content">
+        @if(isOwner){
         <div class="nt-ctrl-search">
             <div class="nt-search-box">
                 <input type="text" placeholder="Search or pick a template" class="nt-search-input " />
@@ -52,12 +61,24 @@
                 @Html.Partial("P_Reuse_Template_Question_Instance", tQuestion)
             }
         </div>
+        }else{
+            <p>The content of this test has been locked because you are not the owner.</p>
+            <p>Duplicate this test to get all the questions in a new test without responses and to be able to change all content freely.</p>
+        }
     </div>
 
     <div class="t-accord-header nt-hover" role="tab">Import Questions<i class="t-icon arrow-up"></i><i class="t-icon arrow-down"></i></div>
-    <div class="t-accord-content" id="qpaste">
+    <div class="t-accord-content">
+        @if(isOwner){
+        <div id="qpaste">
         <div class="nt-loader-large"></div>
         <textarea placeholder="Paste or drag and drop questions here from any document to add them to this test." style="height: 300px; min-height: 30px; overflow-y: auto;"></textarea>
+            </div>
+        }else{
+              <p>The content of this test has been locked because you are not the owner.</p>
+            <p>Duplicate this test to get all the questions in a new test without responses and to be able to change all content freely.</p>
+        
+        }
     </div>
 </div>
 <div id="checklist" content-tab="true" class="nt-sortable" style="height: 500px; overflow-y: auto;">

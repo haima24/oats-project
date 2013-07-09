@@ -1,7 +1,13 @@
 ﻿@model OATS_Capstone.Models.Question
 @{
     var tags = Model.TagInQuestions.OrderBy(i=>i.SerialOrder).Select(i => i.Tag);
+    var isOwner = true;
+    if (ViewBag.isOwner != null)
+    {
+        isOwner = ViewBag.isOwner;
     }
+    }
+@if(isOwner){
 <div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Image" question-id="@Model.QuestionID">
     <div class="nt-qnum nt-qnum-letter">@Model.LabelOrder</div>
     <a class="nt-qanchor"></a>
@@ -110,3 +116,75 @@
     </div>
 
 </div>
+}else{
+    <div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" data-not-owner question-type="Image" question-id="@Model.QuestionID">
+    <div class="nt-qnum nt-qnum-letter">@Model.LabelOrder</div>
+    <a class="nt-qanchor"></a>
+    <!-- NOT isImg START -->
+    <!-- NOT isImg END -->
+
+    <!-- isImg START -->
+
+    @if (Model.ImageUrl != null && Model.ImageUrl.Trim() != String.Empty)
+    {
+        <div class="nt-qimg-ph nt-hover dz-clickable" style="display: none;">
+            <i class="t-icon type-img"></i><span>Drag an image here or click here to select</span>
+        </div>
+
+@*<input style="display: none" type="file" class="nt-qfile"/>*@
+
+        <div class="preview-container">
+            <div align="center" class="nt-qimg-cont dz-processing dz-image-preview" style="display: block;">
+                <div style="display: none;" data-dz-name="" data-dz-size="" data-dz-uploadprogress="" data-dz-errormessage=""></div>
+                <img data-dz-thumbnail="" width="300" height="300" alt="@Path.GetFileName(Model.ImageUrl.Trim())" src="@Url.Content(Model.ImageUrl.Trim())">
+                <button class="nt-btn-circle nt-qimg-close">
+                    <i class="icon-remove"></i>
+                </button>
+            </div>
+        </div>
+
+@*Additional preview HTML will genereate here*@
+
+        <div class="preview-container"></div>
+    }
+    else
+    {
+        <div class="nt-qimg-ph nt-clickable nt-hover">
+            <i class="t-icon type-img"></i><span>Drag an image here or click here to select</span>
+        </div>
+
+@*<input style="display: none" type="file" class="nt-qfile"/>*@
+
+        <div class="nt-qimg-upload">Uploading Image...</div>
+
+@*Additional preview HTML will genereate here*@
+
+        <div class="preview-container"></div>
+    }
+
+
+
+    <!-- isImg END -->
+
+    <div class="nt-qfoot">
+
+        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+            <div class="hoverscroll horizontal" style="width: 100%; height: 28px;">
+                <div class="listcontainer" style="width: 100%; height: 27px;">
+                    <div class="nt-tags list">
+                        <div class="tags-container">
+                            @foreach (var item in tags)
+                            {
+                                @Html.Partial("P_Tag_Item", item)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+}

@@ -1,5 +1,19 @@
 ﻿@model OATS_Capstone.Models.Tag
+@{
+    var isOwner = true;
+    if (ViewBag.isOwner != null)
+    {
+        isOwner = ViewBag.isOwner;
+
+    }
+}
+@if(isOwner){
 <div class="nt-tag" tag-id="@Model.TagID">
     <span>@Model.TagName</span>
     <i class="icon-remove nt-tag-remove"></i>
 </div>
+}else{
+<div class="nt-tag" tag-id="@Model.TagID" data-not-owner>
+    <span>@Model.TagName</span>
+</div>
+}

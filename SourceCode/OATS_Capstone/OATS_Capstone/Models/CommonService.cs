@@ -6,12 +6,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using TugberkUg.MVC.Helpers;
 
 namespace OATS_Capstone.Models
 {
     public delegate String OnRenderPartialViewHandler(object model);
+    public delegate String OnRenderPartialViewHandlerWithParameter(object model, object parameter);
     public class CommonService
     {
         private IUserMailer _userMailer = new UserMailer();
@@ -22,6 +24,7 @@ namespace OATS_Capstone.Models
         }
 
         public event OnRenderPartialViewHandler OnRenderPartialViewToString;
+        public event OnRenderPartialViewHandlerWithParameter OnRenderPartialViewToStringWithParameter;
 
         bool _success = false;
         public bool success
@@ -153,7 +156,7 @@ namespace OATS_Capstone.Models
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User.UserID);
-                    users = db.Users.Where(i => !invitedUsers.Contains(i.UserID)&&!invitedUsers.Contains(test.CreatedUserID)).Where(k => k.UserID != authen.UserId).ToList();
+                    users = db.Users.Where(i => !invitedUsers.Contains(i.UserID) && !invitedUsers.Contains(test.CreatedUserID)).Where(k => k.UserID != authen.UserId).ToList();
                 }
 
                 if (OnRenderPartialViewToString != null)
@@ -314,7 +317,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void ReuseSearchQuestionTemplate(string term,List<int> tagids)
+        public void ReuseSearchQuestionTemplate(string term, List<int> tagids)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -324,8 +327,10 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var questions = db.Questions.ToList();
-                if (tagids != null) {
-                    questions = questions.Where(i => {
+                if (tagids != null)
+                {
+                    questions = questions.Where(i =>
+                    {
                         var tags = i.Test.TagInTests.Select(k => k.TagID);
                         return tags.Any(t => tagids.Contains(t));
                     }).ToList();
@@ -573,17 +578,20 @@ namespace OATS_Capstone.Models
                 }
                 if (db.SaveChanges() >= 0)
                 {
-                    //send mail
-                    var invitations = test.Invitations.ToList();
-                    UserMailer.InviteUsers(invitations);
-
                     if (OnRenderPartialViewToString != null)
                     {
                         success = true;
                         generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
                     }
-
+                    //send mail
+                    var invitations = test.Invitations.ToList();
+                    UserMailer.InviteUsers(invitations);
                 }
+            }
+            catch (SmtpException)
+            {
+                success = false;
+                message = "Invitation has been save, but server could not send invitation emails due to internet connection problem, please use re-invite method later.";
             }
             catch (Exception ex)
             {
@@ -1187,11 +1195,24 @@ namespace OATS_Capstone.Models
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
                 {
-                    test.TestTitle = text;
-                    if (db.SaveChanges() >= 0)
+                    if (!string.IsNullOrEmpty(text))
                     {
-                        success = true;
+                        var duplicateTestByName = db.Tests.FirstOrDefault(i => i.TestTitle.Trim() == text.Trim());
+                        if (duplicateTestByName != null)
+                        {
+                            success = false;
+                            message = "Duplicate Test Name.";
+                        }
+                        else
+                        {
+                            test.TestTitle = text;
+                            if (db.SaveChanges() >= 0)
+                            {
+                                success = true;
+                            }
+                        }
                     }
+
                 }
 
             }
@@ -1267,49 +1288,53 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                var settingConfig = test.SettingConfig;
-                if (settingConfig.SettingConfigID == 1)//1 is default
+                if (test != null)
                 {
-                    var settings = settingConfig.SettingConfigDetails.ToList();
-                    //clone default setting
-                    var newSettingConfig = new SettingConfig();
-                    settings.ForEach(delegate(SettingConfigDetail settingDetail)
+                    var settingConfig = test.SettingConfig;
+                    var authen = AuthenticationSessionModel.Instance();
+                    var isOwner = authen.UserId == test.CreatedUserID;
+                    if (settingConfig.SettingConfigID == 1)//1 is default
                     {
-                        var newSettingDetail = new SettingConfigDetail();
-                        newSettingDetail.IsActive = settingDetail.IsActive;
-                        newSettingDetail.NumberValue = settingDetail.NumberValue;
-                        newSettingDetail.SettingType = settingDetail.SettingType;
-                        newSettingDetail.TextValue = settingDetail.TextValue;
-                        newSettingConfig.SettingConfigDetails.Add(newSettingDetail);
-                    });
-                    newSettingConfig.Description = "SettingForTest_" + test.TestID;
-                    test.SettingConfig = newSettingConfig;
-                }
-                var currentSetting = test.SettingConfig;
-                var detail = currentSetting.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == settingKey);
-                if (detail != null)
-                {
-                    detail.IsActive = isactive;
-                    if (detail.SettingType.SettingTypeKey == "OSM")
-                    {
-                        detail.NumberValue = testtime;
-                    }
-                    else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
-                    {
-                        detail.TextValue = GenerateAccessKey();
-                    }
-                    if (db.SaveChanges() >= 0)
-                    {
-                        if (OnRenderPartialViewToString != null)
+                        var settings = settingConfig.SettingConfigDetails.ToList();
+                        //clone default setting
+                        var newSettingConfig = new SettingConfig();
+                        settings.ForEach(delegate(SettingConfigDetail settingDetail)
                         {
-                            success = true;
-                            message = String.Empty;
-                            generatedHtml = OnRenderPartialViewToString.Invoke(detail);
+                            var newSettingDetail = new SettingConfigDetail();
+                            newSettingDetail.IsActive = settingDetail.IsActive;
+                            newSettingDetail.NumberValue = settingDetail.NumberValue;
+                            newSettingDetail.SettingType = settingDetail.SettingType;
+                            newSettingDetail.TextValue = settingDetail.TextValue;
+                            newSettingConfig.SettingConfigDetails.Add(newSettingDetail);
+                        });
+                        newSettingConfig.Description = "SettingForTest_" + test.TestID;
+                        test.SettingConfig = newSettingConfig;
+                    }
+                    var currentSetting = test.SettingConfig;
+                    var detail = currentSetting.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == settingKey);
+                    if (detail != null)
+                    {
+                        detail.IsActive = isactive;
+                        if (detail.SettingType.SettingTypeKey == "OSM")
+                        {
+                            detail.NumberValue = testtime;
                         }
+                        else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
+                        {
+                            detail.TextValue = GenerateAccessKey();
+                        }
+                        if (db.SaveChanges() >= 0)
+                        {
+                            if (OnRenderPartialViewToStringWithParameter != null)
+                            {
+                                success = true;
+                                message = String.Empty;
+                                generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(detail,isOwner);
+                            }
 
+                        }
                     }
                 }
-
             }
             catch (Exception)
             {
@@ -1911,11 +1936,12 @@ namespace OATS_Capstone.Models
                 if (test != null)
                 {
                     var tag = db.Tags.FirstOrDefault(i => i.TagID == tagid);
-                    if (tag == null) { 
-                        if(!string.IsNullOrEmpty(tagname))
+                    if (tag == null)
+                    {
+                        if (!string.IsNullOrEmpty(tagname))
                         {
-                            tag=new Tag();
-                            tag.TagName=tagname;
+                            tag = new Tag();
+                            tag.TagName = tagname;
                         }
                     }
                     if (tag != null)
@@ -2302,7 +2328,7 @@ namespace OATS_Capstone.Models
                     feedback.FeedBackDetail = fbDetail;
                     feedback.FeedBackDateTime = DateTime.Now;
                     feedback.ParentID = null;
-                    
+
                     //add to test #1
                     test.FeedBacks.Add(feedback);
                     //save
@@ -2379,16 +2405,19 @@ namespace OATS_Capstone.Models
                           .ToArray());
             return result;
         }
-        public void UpdateTestIntroduction(int testid, string introduction) {
+        public void UpdateTestIntroduction(int testid, string introduction)
+        {
             success = false;
             message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null) {
+                if (test != null)
+                {
                     test.Introduction = introduction;
-                    if (db.SaveChanges() >= 0) {
+                    if (db.SaveChanges() >= 0)
+                    {
                         success = true;
                         message = string.Empty;
                     }

@@ -1,7 +1,11 @@
 ﻿@model OATS_Capstone.Models.Test
 
 @using OATS_Capstone.Models
-@{var tags = Model.TagInTests.OrderBy(k => k.SerialOrder).Select(i => i.Tag);}
+@{var tags = Model.TagInTests.OrderBy(k => k.SerialOrder).Select(i => i.Tag);
+  var authen = AuthenticationSessionModel.Instance();
+  var isOwner = Model.CreatedUserID == authen.UserId;
+  ViewBag.isOwner = isOwner;
+}
 @if (!Model.IsActive)
 { 
     <script type="text/javascript">
@@ -12,15 +16,26 @@
     <div class="test-disable-mask" style="display: block;">
     </div>
 }
- <input id="test_id" type="hidden" value="@Model.TestID" />
+<input id="test_id" type="hidden" value="@Model.TestID" />
 <div id="test-header">
     <div>
         <button id="eventIntroduction" class="nt-btn-circle"><i class="t-icon i-introduction t-icon-white"></i></button>
     </div>
-    <div contenteditable="true" id="test-title">
-        @if (Model != null)
-        {@Model.TestTitle}
-    </div>
+    @if (Model != null)
+    {
+        if (isOwner)
+        {
+        <div contenteditable="true" id="test-title">
+            @Model.TestTitle
+        </div>
+        }
+        else
+        {
+        <div id="test-title">
+            @Model.TestTitle
+        </div>
+        }
+    }
     <div id="eventDateFrom" class="test-date-time" contenteditable="true" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.StartDateTime)</div>
     <div class="spacer">_</div>
     <div id="eventDateTo" class="test-date-time" contenteditable="true" current-date="@((Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime).ToJavaScriptMilliseconds())" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime)</div>
@@ -28,12 +43,12 @@
     <button id="eventDel" class="nt-btn-circle"><i class="icon-remove t-icon-white"></i></button>
 </div>
 <div id="test-introduction" class="popover bottom">
-            <div class="arrow"></div>
-            <h3 class="popover-title">Introduction</h3>
-            <div class="popover-content">
-              <textarea id="intro-detail" rows="4" class="span5">@Model.Introduction</textarea>
-            </div>
-          </div>
+    <div class="arrow"></div>
+    <h3 class="popover-title">Introduction</h3>
+    <div class="popover-content">
+        <textarea id="intro-detail" rows="4" class="span5">@Model.Introduction</textarea>
+    </div>
+</div>
 <div id="eventTags">
     <div class="nt-etagcont">
         <div class="nt-tags">
@@ -60,7 +75,7 @@
                 <li><a class="tab-event" href="@Url.Action("NewTest_ResponseTab")">Response</a></li>
                 <li><a class="tab-event" href="@Url.Action("NewTest_ScoreTab")">Score</a></li>
                 <li><a class="tab-event" href="@Url.Action("NewTest_FeedBackTab")">FeedBack</a></li>
-               
+
             </ul>
         </div>
     </div>
