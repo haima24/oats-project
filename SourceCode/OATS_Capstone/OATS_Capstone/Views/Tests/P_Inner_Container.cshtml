@@ -25,15 +25,11 @@
     {
         if (isOwner)
         {
-        <div contenteditable="true" id="test-title">
-            @Model.TestTitle
-        </div>
+        <div contenteditable="true" id="test-title">@Model.TestTitle</div>
         }
         else
         {
-        <div id="test-title">
-            @Model.TestTitle
-        </div>
+        <div id="test-title">@Model.TestTitle</div>
         }
     }
     <div id="eventDateFrom" class="test-date-time" contenteditable="true" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.StartDateTime)</div>

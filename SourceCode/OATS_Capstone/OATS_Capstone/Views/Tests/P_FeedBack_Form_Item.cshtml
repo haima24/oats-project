@@ -1,6 +1,6 @@
 ﻿@model OATS_Capstone.Models.FeedBack
 
-<article class="comment">
+<article class="comment" parent-id="@Model.FeedBackID">
     <div class="comment-meta">
         <a href="#" class="url">@(Model.User.FirstName??Model.User.LastName??Model.User.UserMail)</a> says<time>@Model.FeedBackDateTime</time>
     </div>
@@ -20,13 +20,14 @@
                 <i class="t-icon i-caret-up"></i>
                 <a class="reply-count-link">Hide</a>
             </div>
+            <div class="reply-details">
             @foreach (var item in @Model.FeedBackChilds)
             {
-                @Html.Partial("P_Modal_FeedBack_Form_Item_Reply",item)
+                @Html.Partial("P_FeedBack_Form_Item_Reply",item)
             }
-            @*<input type="hidden" id="parent-feedback-id" value="@Model.FeedBackID" />*@
-            <textarea class="span5 pull-left reply-area" placeholder="Your comment" id="ReplyText"></textarea>
-            <button class="btn btn-primary" id= "ReplyButton" value="@Model.FeedBackID">Reply</button>
+                </div>
+            <textarea class="span5 pull-left reply-area" placeholder="Your comment"></textarea>
+            <button class="btn btn-primary reply-button" value="@Model.FeedBackID">Reply</button>
         </div>
     </div>
      

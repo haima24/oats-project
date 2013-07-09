@@ -3459,8 +3459,12 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 #comments .comment .comment-body textarea {
     margin-bottom: 0px;
     margin-right: 5px;
+    resize:none;
 }
-
+#comments .comment .comment-body button.btn {
+    position:relative;
+    top:10px;
+}
 #comments .comment-body {
     padding: 10px 90px 0 0;
     padding-left: 200px;

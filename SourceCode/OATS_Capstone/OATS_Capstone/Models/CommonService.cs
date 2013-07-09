@@ -788,22 +788,22 @@ namespace OATS_Capstone.Models
 
         }
 
-        public void NewTest_FeedBackTab(int testid, int softtype)
+        public void NewTest_FeedBackTab(int testid)
         {
             try
             {
                 var db = SingletonDb.Instance();
-                //var feedbacks = softtype == 0 ? db.FeedBacks.OrderByDescending(i => i.FeedBackDateTime) :
-                //                                db.FeedBacks.OrderBy(i=>i.User.FirstName);
-                var feedbacks = db.FeedBacks.Where(i => i.TestID == testid);
-                feedbacks = softtype == 0 ? feedbacks.OrderByDescending(i => i.FeedBackDateTime) :
-                                            feedbacks.OrderBy(i => i.User.FirstName);
-
-                if (OnRenderPartialViewToString != null)
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
                 {
-                    success = true;
-                    message = Constants.DefaultSuccessMessage;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(feedbacks);
+
+                    if (OnRenderPartialViewToString != null)
+                    {
+                        success = true;
+                        message = Constants.DefaultSuccessMessage;
+                        var feedbacksLogic = new FeedBackStudent(test);
+                        generatedHtml = OnRenderPartialViewToString.Invoke(feedbacksLogic);
+                    }
                 }
             }
             catch (Exception)
@@ -1197,15 +1197,16 @@ namespace OATS_Capstone.Models
                 {
                     if (!string.IsNullOrEmpty(text))
                     {
-                        var duplicateTestByName = db.Tests.FirstOrDefault(i => i.TestTitle.Trim() == text.Trim());
-                        if (duplicateTestByName != null)
+                        var tests = db.Tests.Where(k => k.TestID != testid).ToList();
+                        var duplicatedTestByName = tests.FirstOrDefault(i => i.TestTitle.Trim() == text.Trim());
+                        if (duplicatedTestByName != null)
                         {
                             success = false;
                             message = "Duplicate Test Name.";
                         }
                         else
                         {
-                            test.TestTitle = text;
+                            test.TestTitle = text.Trim();
                             if (db.SaveChanges() >= 0)
                             {
                                 success = true;
@@ -1329,7 +1330,7 @@ namespace OATS_Capstone.Models
                             {
                                 success = true;
                                 message = String.Empty;
-                                generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(detail,isOwner);
+                                generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(detail, isOwner);
                             }
 
                         }
@@ -2350,10 +2351,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
-
-
-        public void StudentReplyFeedBack(int testid, int parentFeedBackId, string ReplyDetail)
+        public void UserReplyFeedBack(int testid, int parentFeedBackId, string replyDetail)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2368,7 +2366,7 @@ namespace OATS_Capstone.Models
                     var feedback = new FeedBack();
                     //assign attribute
                     feedback.UserID = authen.UserId;
-                    feedback.FeedBackDetail = ReplyDetail;
+                    feedback.FeedBackDetail = replyDetail;
                     feedback.FeedBackDateTime = DateTime.Now;
                     feedback.ParentID = parentFeedBackId;
 
@@ -2382,6 +2380,8 @@ namespace OATS_Capstone.Models
                         {
                             success = true;
                             generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
+                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                            context.Clients.All.R_replyFeedback(testid, parentFeedBackId, generatedHtml);
                         }
                     }
 
@@ -2393,8 +2393,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
-
         private string GenerateAccessKey()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";

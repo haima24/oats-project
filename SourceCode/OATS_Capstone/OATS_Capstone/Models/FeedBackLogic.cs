@@ -33,6 +33,7 @@ namespace OATS_Capstone.Models
             
             //default order by date
             parents=parents.OrderByDescending(i=>i.FeedBackDateTime).ToList();
+            parents.ForEach(i =>i.FeedBackChilds= i.FeedBackChilds.OrderBy(k => k.FeedBackDateTime).ToList());
         }
         public override List<FeedBack> Parents
         {

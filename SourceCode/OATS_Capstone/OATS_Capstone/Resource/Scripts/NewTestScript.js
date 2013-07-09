@@ -1168,7 +1168,7 @@ $(function () {
         }
 
     });
-    
+
     $.initCheckboxAllSub({
         container: "#sidebar .nt-ctrl-list",
         all: "#sidebar .nt-clb-header-control input[type=checkbox]",
@@ -1674,6 +1674,17 @@ $(function () {
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
     var hub = $.connection.generalHub;
+    hub.client.R_replyFeedback = function (tid, parentFeedBackId, generatedHtml) {
+        if (tid && parentFeedBackId && generatedHtml) {
+            if (tid == testid) {
+                var article = $("#comments article[parent-id=" + parentFeedBackId + "]");
+                if (article.length > 0) {
+                    var ele = $(generatedHtml);
+                    $(".reply-details", article).append(ele);
+                }
+            }
+        }
+    }
     hub.client.R_deactivetest = function (id, mail) {
         if (id && id == testid) {
             showCountDownMessage("info", "User with email:" + mail + " disabled this test", function () {
@@ -1681,12 +1692,28 @@ $(function () {
             });
         }
     }
+
     $.connection.hub.start().done(function () {
         $("#eventDel").live("click", function () {
             $.post("/Tests/DeActiveTest", { testid: testid }, function (res) {
                 if (!res.success) { showMessage("error", res.message); }
                 else {
                     showMessage("success", res.message);
+                }
+            });
+        });
+        $("#comments .reply-button").live("click", function () {
+            var button = $(this);
+            var parentFeedbackID = parseInt(button.val());
+            var container = button.closest(".reply-container");
+            var area = $(".reply-area", container);
+            var text = area.val();
+            var place = $(".reply-details", container);
+            $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
+                if (res.success) {
+                    if (area) { area.val(""); }
+                } else {
+                    showMessage("error", res.message);
                 }
             });
         });

@@ -480,9 +480,10 @@
     <Content Include="Views\Teachers\P_ScoreTab_Chart.cshtml" />
     <Content Include="Views\Tests\P_ScoreTab_Chart.cshtml" />
     <Content Include="Views\Tests\P_Modal_FeedBack_Form.cshtml" />
-    <Content Include="Views\Tests\P_Modal_FeedBack_Form_Item.cshtml" />
+    <Content Include="Views\Tests\P_FeedBack_Form_Item.cshtml" />
     <Content Include="Views\Tests\P_SettingTab_ConfigDetail.cshtml" />
     <Content Include="Views\Tests\AccessCode.cshtml" />
+    <Content Include="Views\Tests\P_FeedBack_Form_Item_Reply.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
