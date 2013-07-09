@@ -430,7 +430,6 @@
     <Content Include="Views\Tests\P_CalendarTab.cshtml" />
     <Content Include="Views\Tests\P_TestListTab.cshtml" />
     <Content Include="Views\Tests\P_RenderPreviewImage.cshtml" />
-    <Content Include="Views\Tests\P_Type_Essay_Template.cshtml" />
     <Content Include="Views\Tests\P_Type_Image_Template.cshtml" />
     <Content Include="Views\Tests\P_Type_Multiple_Template.cshtml" />
     <Content Include="Views\Tests\P_Type_Radio_Template.cshtml" />

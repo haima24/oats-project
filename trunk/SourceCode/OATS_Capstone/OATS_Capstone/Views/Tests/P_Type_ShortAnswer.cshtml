@@ -1,7 +1,13 @@
 ﻿@model OATS_Capstone.Models.Question
 @{
     var tags = Model.TagInQuestions.OrderBy(i=>i.SerialOrder).Select(i => i.Tag);
+    var isOwner = true;
+    if (ViewBag.isOwner != null)
+    {
+        isOwner = ViewBag.isOwner;
     }
+    }
+@if(isOwner){
 <div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="ShortAnswer" question-id="@Model.QuestionID">
     <div class="nt-qnum ">@Model.LabelOrder</div>
     <a class="nt-qanchor"></a>
@@ -46,7 +52,7 @@
 
             <div class="nt-qoepts">
                 <span>Max. Points:</span>
-                <input type="text" />
+                <input type="text" value="@Model.NoneChoiceScore"/>
             </div>
 
             <select class="nt-qtype-sel">
@@ -91,3 +97,57 @@
     </div>
 
 </div>
+}else{
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" data-not-owner question-type="ShortAnswer" question-id="@Model.QuestionID">
+    <div class="nt-qnum ">@Model.LabelOrder</div>
+    <a class="nt-qanchor"></a>
+    <!-- NOT isImg START -->
+
+
+    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+        <div class="redactor_box">
+            <div class="nt-qtext nt-qedit nt-guide nt-delayedblur redactor_editor">@Model.QuestionTitle</div>
+        </div>
+    </div>
+
+
+
+    <div class="nt-qmiddle">
+
+        <div style="overflow: hidden; position: relative; width: 710px; height: 35px; top: auto; left: auto; margin: 0px 0px 16px; padding-right: 7px;">
+            <input type="text" disabled="disabled"  class="nt-qrespinput" value="@Model.TextDescription" maxlength="140" style="width: 670px; margin: 0px; resize: none; position: static; zoom: 1; display: block; height: 18px;"/>
+        </div>
+
+    </div>
+
+    <div class="nt-qfoot">
+
+        <div class="nt-qctrls" style="display: none;">
+
+
+            <div class="nt-qoepts">
+                <span>Max. Points:</span>
+                <input type="text" disabled="disabled" value="@Model.NoneChoiceScore" />
+            </div>
+
+        </div>
+        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+            <div class="hoverscroll horizontal" style="width: 100%; height: 28px;">
+                <div class="listcontainer" style="width: 100%; height: 27px;">
+                    <div class="nt-tags list">
+                        <div class="tags-container">
+                            @foreach (var item in tags)
+                            {
+                                @Html.Partial("P_Tag_Item", item)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+    
+}

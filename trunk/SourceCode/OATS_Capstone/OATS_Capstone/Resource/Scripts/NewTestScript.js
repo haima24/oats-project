@@ -27,7 +27,7 @@ function postSetting(li) {
         if (res.success) {
             var html = $(res.generatedHtml);
             if (li) {
-                li.replaceWith(html);
+                li.html(html);
             }
         } else {
             showMessage("error", res.message);
@@ -160,7 +160,7 @@ function initTagsOnTest() {
         tolerance: 'pointer',
         revert: 50,
         distance: 5,
-        items: '>.nt-tag',
+        items: '>.nt-tag:not([data-not-owner])',
         cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
             var ids = $(".nt-tag", this).map(function (i, o) { return $(o).attr("tag-id"); }).convertJqueryArrayToJSArray();
@@ -261,7 +261,7 @@ function initTagsOnQuestion() {
         tolerance: 'pointer',
         revert: 50,
         distance: 5,
-        items: '>.nt-tag',
+        items: '>.nt-tag:not([data-not-owner])',
         cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
             var ids = $(".nt-tag", this).map(function (i, o) { return $(o).attr("tag-id"); }).convertJqueryArrayToJSArray();
@@ -390,7 +390,7 @@ function initDragAndDrop() {
         tolerance: 'pointer',
         revert: 50,
         distance: 5,
-        items: '>.nt-qitem',
+        items: '>.nt-qitem:not([data-not-owner])',
         placeholder: 'highlight',
         cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
@@ -455,7 +455,7 @@ function initDragAndDrop() {
         tolerance: 'pointer',
         revert: 50,
         distance: 5,
-        items: '>.nt-qans',
+        items: '>.nt-qans:not([data-not-owner])',
         placeholder: 'highlight',
         cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
@@ -467,7 +467,7 @@ function initDragAndDrop() {
 function initEditable() {
     initTagsOnQuestion();
     //separator
-    $("#test-title").contentEditable({
+    $("#test-title[contenteditable=true]").contentEditable({
         "placeholder": "<i>Enter Test Title</i>",
         "onBlur": function (element) {
             statusSaving();
@@ -481,14 +481,14 @@ function initEditable() {
             });
         },
     });
-    $("#checklist[content-tab=true] .nt-qans .nt-qansdesc").contentEditable({
+    $("#checklist[content-tab=true] .nt-qans .nt-qansdesc[contenteditable=true]").contentEditable({
         "placeholder": "<i>Enter Answer</i>",
         "onBlur": function (element) {
             updateAnswer($(element).closest(".nt-qans"));
         },
         "onFocusIn": function (element) { currentEditAnswer = element; }
     });
-    $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext").contentEditable({
+    $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext[contenteditable=true]").contentEditable({
         "placeholder": "<i>Enter Text</i>",
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
@@ -497,7 +497,7 @@ function initEditable() {
             updateQuestionTitle(quesid, content);
         },
     });
-    $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit").contentEditable({
+    $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit[contenteditable=true]").contentEditable({
         "placeholder": "<i>Enter Question</i>",
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
@@ -928,6 +928,9 @@ $(function () {
                     initScoreOnUserChart();
                     initReplyAreas();
                     initDropText();
+                    var activeLi = $("#score-detail-tab li").filter(function () {
+                        return $("a[tab=" + currentScoreDetailTab + "]", this).length > 0;
+                    }).addClass("active");
                 }
             } else { showMessage("error", res.message); }
         });
@@ -1000,7 +1003,7 @@ $(function () {
     $.post("/Tests/QuestionTypes", function (res) {
         if (res.success) {
             questions = res.obj;
-            initImageUploadFacility();
+            //initImageUploadFacility();
         } else {
             showMessage("error", res.message);
         }
@@ -1165,6 +1168,7 @@ $(function () {
         }
 
     });
+    
     $.initCheckboxAllSub({
         container: "#sidebar .nt-ctrl-list",
         all: "#sidebar .nt-clb-header-control input[type=checkbox]",
@@ -1282,10 +1286,13 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             success: function (res) {
                 if (res.success) {
-                    $("#eventTab").html($(res.generatedHtml));
+                    $("#eventTab").html(res.generatedHtml);
                     statusSaved();
                 } else {
                     showMessage("error", res.message);
+                    if (res.generatedHtml) {
+                        $("#eventTab").html(res.generatedHtml);
+                    }
                 }
             }
 
