@@ -412,6 +412,8 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
+                var authen = AuthenticationSessionModel.Instance();
+                var authenUserId=authen.UserId;
                 if (!string.IsNullOrEmpty(term))
                 {
                     if (tagids == null) { tagids = new List<int>(); }
@@ -441,6 +443,8 @@ namespace OATS_Capstone.Models
                                     dateDes += " - " + test.EndDateTime.ToDateDefaultFormat();
                                 }
                                 testTemplate.DateDescription = dateDes;
+                                testTemplate.IsCurrentUserOwnTest = test.CreatedUserID == authenUserId;
+                                testTemplate.Introduction = test.Introduction;
                                 resultlist.Add(testTemplate);
                             }
                         }
@@ -537,17 +541,22 @@ namespace OATS_Capstone.Models
 
         public int MakeTest()
         {
-            var db = SingletonDb.Instance();
-            var test = new Test();
-            test.TestTitle = String.Empty;
-            test.CreatedUserID = 1;//must be fix, this is for test purpose
-            test.CreatedDateTime = DateTime.Now;
-            test.StartDateTime = DateTime.Now;
-            test.SettingConfigID = 1;
-            test.IsActive = true;
-            db.Tests.Add(test);
-            db.SaveChanges();
-            var generatedId = test.TestID;
+            var authen = AuthenticationSessionModel.Instance();
+            var generatedId = 0;
+            if (authen.UserId != 0)
+            {
+                var db = SingletonDb.Instance();
+                var test = new Test();
+                test.TestTitle = String.Empty;
+                test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
+                test.CreatedDateTime = DateTime.Now;
+                test.StartDateTime = DateTime.Now;
+                test.SettingConfigID = 1;
+                test.IsActive = true;
+                db.Tests.Add(test);
+                db.SaveChanges();
+                generatedId = test.TestID;
+            }
             return generatedId;
         }
 
@@ -584,8 +593,8 @@ namespace OATS_Capstone.Models
                         generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
                     }
                     //send mail
-                    var invitations = test.Invitations.ToList();
-                    UserMailer.InviteUsers(invitations);
+                    //var invitations = test.Invitations.ToList();
+                    //UserMailer.InviteUsers(invitations);
                 }
             }
             catch (SmtpException)
@@ -1490,7 +1499,7 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
 
                 var oldUserInTest = db.UserInTests.Where(i => i.TestID == userInTest.TestID && i.UserID == userInTest.UserID);
-                if (oldUserInTest != null)
+                if (oldUserInTest.Count()>0)
                 {
                     userInTest.NumberOfAttend = oldUserInTest.Max(i => i.NumberOfAttend) + 1;
                 }

@@ -40,7 +40,7 @@ namespace OATS_Capstone.Models
     public class TestListItem
     {
         private bool isCurrentUserOwnTest = false;
-
+        public string Introduction { get; set; }
         public bool IsCurrentUserOwnTest
         {
             get { return isCurrentUserOwnTest; }
@@ -89,6 +89,7 @@ namespace OATS_Capstone.Models
         {
             TestID = test.TestID;
             TestTitle = test.TestTitle;
+            Introduction = test.Introduction;
             Start = test.StartDateTime.ToDateDefaultFormat();
             End = test.EndDateTime.ToDateDefaultFormat() ;
             if (test.UserInTests.Count > 0)

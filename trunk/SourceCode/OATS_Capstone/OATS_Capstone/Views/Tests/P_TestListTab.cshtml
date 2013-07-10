@@ -68,17 +68,21 @@
                             @if (item.IsCurrentUserOwnTest)
                             {
                                 <div class="nt-name">
-                                    <a href="@Url.Action("NewTest", new { id = item.TestID })">@item.TestTitle</a>
+                                    <i class="t-icon i-teachers"></i>
+                                    <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test">@item.TestTitle</a>
                                 </div>
+                                <div class="popover-introduction">@item.Introduction</div>
                             }
                             else
                             {
                                 <div class="nt-name">
-                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
+                                     <i class="t-icon i-student"></i>
+                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
                                     <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
                                         <i class="t-icon i-feedback"></i>
                                     </button>
                                 </div>
+                                <div class="popover-introduction">@item.Introduction</div>
                             }
 
 
@@ -133,7 +137,7 @@
                 </a>
 
                 <div class="nt-list-cont">
-                    @if (Model.RecentTests.Count == 0)
+                    @if (Model.RunningTests.Count == 0)
                     {
                         <div class="nt-list-row">
                             <div class="nt-name">
@@ -149,17 +153,21 @@
                             @if (item.IsCurrentUserOwnTest)
                             {
                                 <div class="nt-name">
-                                    <a href="@Url.Action("NewTest", new { id = item.TestID })">@item.TestTitle</a>
+                                    <i class="t-icon i-teachers"></i>
+                                    <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test">@item.TestTitle</a>
                                 </div>
+                                <div class="popover-introduction">@item.Introduction</div>
                             }
                             else
                             {
                                 <div class="nt-name">
-                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })">@item.TestTitle</a>
+                                    <i class="t-icon i-student"></i>
+                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
                                     <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
                                         <i class="t-icon i-feedback"></i>
                                     </button>
                                 </div>
+                                <div class="popover-introduction">@item.Introduction</div>
                             }
                             <div class="nt-date">@item.Start</div>
                             <div class="nt-date">@item.End</div>
