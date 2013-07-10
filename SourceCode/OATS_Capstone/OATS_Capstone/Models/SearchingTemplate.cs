@@ -7,9 +7,11 @@ namespace OATS_Capstone.Models
 {
     public class SearchingTests
     {
-        public int Id;
-        public string TestTitle;
-        public string DateDescription;
+        public int Id { get; set; }
+        public string TestTitle { get; set; }
+        public string DateDescription { get; set; }
+        public bool IsCurrentUserOwnTest { get; set; }
+        public string Introduction { get; set; }
     }
 
     public class SearchingUsers

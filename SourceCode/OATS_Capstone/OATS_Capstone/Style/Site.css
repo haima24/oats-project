@@ -1707,7 +1707,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     border-top: 1px solid #ececec;
     font-size: 12px;
 }
-
+    .nt-asms-list .nt-list-row .popover-introduction {
+        display:none;
+    }
     .nt-asms-list .nt-list-row.nt-upcoming:first-child {
         border-top: 0;
     }
@@ -1760,7 +1762,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         padding: 8px 2px;
         text-align: center;
         vertical-align: top;
-        overflow: hidden;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
@@ -2180,7 +2181,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 .nt-search-results {
     z-index: 10;
     display: none;
-    overflow: hidden;
     position: absolute;
     top: 33px;
     left: 0;
@@ -2636,8 +2636,11 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
                 #eventTab > div.nt-asm-settings .nt-panel .nt-section ul li {
                     min-height: 30px;
                 }
-
-            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_time_limit {
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section label.checkbox {
+                float:left;
+            }
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_time_limit,
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_max_point {
                 width: 35px;
                 margin: 0 3px;
                 padding: 2px;

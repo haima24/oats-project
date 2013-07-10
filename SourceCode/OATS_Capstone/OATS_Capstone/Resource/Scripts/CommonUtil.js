@@ -43,7 +43,7 @@ function showMessage(type, message, heading) {
         });
     }, 5000);
 }
-function showCountDownMessage(type, message, after) {
+function showCountDownMessage(type, message,redirectMessage, after) {
     var popup = $("#message-popup");
     $("#message-popup .close").live("click", function () {
         popup.fadeOut("fast", function () {
@@ -69,7 +69,7 @@ function showCountDownMessage(type, message, after) {
     popup.fadeIn("fast");
     var i = 3;
     var countdown = setInterval(function () {
-        var downmessage = "Redirect to HomePage in " + (i--);
+        var downmessage = redirectMessage + " in " + (i--);
         $(">div", popup).html(downmessage);
     }, 1000);
     setTimeout(function () {
@@ -289,6 +289,7 @@ $.fn.extend({
         var items = new Array();
         var tagItems = new Array();
         var res = function (response) {
+            items = new Array();
             if (response.length > 0) {
                 $(".nt-hitlist .nt-empty-list-ph", dropdown).hide();
                 $(response).each(function (i, e) {
@@ -297,22 +298,29 @@ $.fn.extend({
                     if (id) {
                         nElement.attr("uid", id);
                     }
+                    var popover = $("<div>").addClass("pop-over");
                     var title = $(e).attr("title");
                     if (title) {
-                        nElement.append($("<div>").html(title));
+                        popover.append($("<div>").html(title));
                     }
                     var des = $(e).attr("des");
                     if (des) {
-                        nElement.append($("<div>").addClass("nt-item-desc").html(des));
+                        popover.append($("<div>").addClass("nt-item-desc").html(des));
                     }
+                    nElement.append(popover);
                     $(".nt-hitlist", dropdown).append(nElement);
-                    items.push({key:nElement,value:e});
+                    items.push({ key: nElement, value: e });
+                    if (options.rendermenu && typeof (options.rendermenu) === "function") {
+                        options.rendermenu(items);
+                    }
                 });
+
             } else {
                 $(".nt-hitlist .nt-empty-list-ph", dropdown).show();
             }
         };
         var restag = function (e) {
+            tagItems = new Array();
             var list = $(".nt-tag-hitlist", dropdown);
             reCalculatePosition();
             if (e.length > 0) {
@@ -472,6 +480,7 @@ $.fn.extend({
             }
         };
         var restag = function (e) {
+            tagItems = new Array();
             if (container) {
                 var list = $(".nt-tag-hitlist", container);
                 list.empty();
@@ -579,4 +588,26 @@ function statusSaving() {
 function statusSaved() {
     $("#savestatus .nt-desc").html("All changes saved.");
     $("#savestatus").fadeOut("slow");
+}
+function setLocalStorage(key, value) {
+    if (typeof (Storage) !== "undefined") {
+        // Yes! localStorage and sessionStorage support!
+        // Some code.....
+        localStorage.setItem(key, value);
+    }
+    else {
+        // Sorry! No web storage support..
+    }
+}
+function getLocalStorage(key) {
+    var obj;
+    if (typeof (Storage) !== "undefined") {
+        // Yes! localStorage and sessionStorage support!
+        // Some code.....
+        obj = localStorage.getItem(key);
+    }
+    else {
+        // Sorry! No web storage support..
+    }
+    return obj;
 }

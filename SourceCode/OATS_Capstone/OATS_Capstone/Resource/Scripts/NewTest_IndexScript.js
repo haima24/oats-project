@@ -1,4 +1,13 @@
-﻿function initCalendar() {
+﻿function initPopover() {
+    $(".nt-asms-list .nt-list-row .nt-name").popover({
+        trigger: "hover",
+        html: true,
+        content: function () {
+            return $(this).closest(".nt-list-row").find(".popover-introduction").html();
+        }
+    });
+}
+function initCalendar() {
     $('#calendar').addClass("loading");
     $.post("/Tests/TestCalendarObjectResult", function (res) {
         if (res.success) {
@@ -52,14 +61,46 @@ $(function () {
                     tabcontent.html(res.generatedHtml);
 
                     initCalendar();
-
+                    $("[data-toggle=tooltip]").tooltip();
+                    initPopover();
                 }
             } else { showMessage("error", res.message); }
         });
     });
     $(".navbar-search input[type=text].nt-search-input").oatsSearch({
+        rendermenu: function (items) {
+            $(items).each(function () {
+                var html = this.key;
+                var obj = this.value;
+                if (html && obj) {
+                    $(html).attr("data-toggle", "tooltip");
+                    if (obj.isCurrentUserOwnTest) {
+                        $(html).attr("data-original-title", "Open This Test");
+                    } else {
+                        $(html).attr("data-original-title", "Take This Test");
+                    }
+                    $(html).tooltip();
+                    if (obj.intro) {
+                        $(".pop-over", html).popover({
+                            placement:"left",
+                            trigger: "hover",
+                            html: true,
+                            content: function () {
+                                var div = $("<div>").html(obj.intro);
+                                return div;
+                            }
+                        });
+                    }
+                }
+            });
+            
+        },
         select: function (item) {
-            window.location.href = "/Tests/NewTest/" + item.id;
+            //if (item.isCurrentUserOwnTest) {
+            //    window.location.href = "/Tests/NewTest/" + item.id;
+            //} else {
+            //    window.location.href = "/Tests/DoTest/" + item.id;
+            //}
         },
         source: function (req, res, addedTagIds) {
             $.ajax({
@@ -72,7 +113,7 @@ $(function () {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id };
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);
@@ -163,6 +204,8 @@ $(function () {
                     if (article.length > 0) {
                         var ele = $(generatedHtml);
                         $(".reply-details", article).append(ele);
+                        var count = $(".reply-detail", article).length;
+                        $(".reply-count-link span[data-count]", article).html(count);
                     }
                 }
             }

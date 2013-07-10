@@ -60,11 +60,13 @@ $(function () {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
-                    if (!res.success) {
-                        showMessage("error", res.message);
-                    } else {
-                        showMessage("success", res.message);
+                    if (res.success) {
                         if (res.generatedHtml) { $("#signup-container").html(res.generatedHtml); }
+                        showCountDownMessage("success", res.message, "Redirect to Homepage", function () {
+                            window.location = "/Tests";
+                        });
+                    } else {
+                        showMessage("error", res.message);
                     }
                 }
             });

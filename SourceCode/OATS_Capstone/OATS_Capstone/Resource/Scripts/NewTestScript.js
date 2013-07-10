@@ -568,8 +568,38 @@ function updateQuestionType(questionidString, type, onsuccess) {
 }
 function initSearchTests() {
     $(".navbar-search input[type=text].nt-search-input").oatsSearch({
+        rendermenu: function (items) {
+            $(items).each(function () {
+                var html = this.key;
+                var obj = this.value;
+                if (html && obj) {
+                    $(html).attr("data-toggle", "tooltip");
+                    if (obj.isCurrentUserOwnTest) {
+                        $(html).attr("data-original-title", "Open This Test");
+                    } else {
+                        $(html).attr("data-original-title", "Take This Test");
+                    }
+                    $(html).tooltip();
+                    if (obj.intro) {
+                        $(html).popover({
+                            trigger: "hover",
+                            html: true,
+                            content: function () {
+                                var div = $("<div>").html(obj.intro);
+                                return div;
+                            }
+                        });
+                    }
+                }
+            });
+
+        },
         select: function (item) {
-            window.location.href = "/Tests/NewTest/" + item.id;
+            if (item.isCurrentUserOwnTest) {
+                window.location.href = "/Tests/NewTest/" + item.id;
+            } else {
+                window.location.href = "/Tests/DoTest/" + item.id;
+            }
         },
         source: function (req, res, addedTagIds) {
             $.ajax({
@@ -582,7 +612,7 @@ function initSearchTests() {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id };
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);
@@ -1681,13 +1711,15 @@ $(function () {
                 if (article.length > 0) {
                     var ele = $(generatedHtml);
                     $(".reply-details", article).append(ele);
+                    var count = $(".reply-detail", article).length;
+                    $(".reply-count-link span[data-count]", article).html(count);
                 }
             }
         }
     }
     hub.client.R_deactivetest = function (id, mail) {
         if (id && id == testid) {
-            showCountDownMessage("info", "User with email:" + mail + " disabled this test", function () {
+            showCountDownMessage("info", "User with email:" + mail + " disabled this test","Redirect to Homepage", function () {
                 window.location = "/Tests";
             });
         }

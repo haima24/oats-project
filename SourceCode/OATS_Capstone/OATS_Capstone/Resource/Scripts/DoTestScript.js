@@ -41,7 +41,7 @@
             contentType: "application/json; charset=utf-8",
             success: function (res) {
                 if (res.success) {
-                    showCountDownMessage("info", res.message, function () {
+                    showCountDownMessage("info", res.message,"Redirect to Homepage", function () {
                         window.location = "/Tests";
                     });
                 } else {
