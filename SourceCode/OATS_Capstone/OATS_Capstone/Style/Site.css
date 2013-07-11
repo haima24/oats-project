@@ -298,6 +298,9 @@ i.t-icon.i-teachers {
     background: url(./img/teachers.png) no-repeat;
 }
 
+i.t-icon.i-test-history {
+    background: url(./img/test_history.png) no-repeat;
+}
 i.t-icon.i-tests {
     background: url(./img/tests.png) no-repeat;
 }
@@ -1742,15 +1745,24 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
         position: relative;
         padding-left: 15px;
-        padding-right: 40px;
+        padding-right: 50px;
         text-align: left;
         width: 31%;
     }
-
-        .nt-asms-list .nt-list-head > div.nt-name button, .nt-asms-list .nt-list-row > div.nt-name button {
+        .nt-asms-list .nt-list-head > div.nt-name button {
             position: absolute;
             top: 9px;
             right: 15px;
+        }
+        .nt-asms-list .nt-list-row > div.nt-name button.btn-test-history{
+            position: absolute;
+            top: 9px;
+            right: 28px;
+        }
+        .nt-asms-list .nt-list-row > div.nt-name button.btn-feedback {
+            position: absolute;
+            top: 9px;
+            right: 0px;
         }
 
     .nt-asms-list .nt-list-head > div.nt-date, .nt-asms-list .nt-list-row > div.nt-date {

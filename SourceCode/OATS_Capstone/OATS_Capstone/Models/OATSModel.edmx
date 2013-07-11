@@ -192,6 +192,7 @@
           </Key>
           <Property Name="SettingTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SettingGroupName" Type="nvarchar" MaxLength="512" />
+          <Property Name="SettingGroupOrder" Type="int" />
           <Property Name="SettingInGroupOrder" Type="int" />
           <Property Name="SettingTypeKey" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="SettingTypeDescription" Type="nvarchar" MaxLength="512" />
@@ -738,6 +739,7 @@
           <Property Name="SettingTypeKey" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="SettingTypeDescription" Type="String" MaxLength="512" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="SettingConfigDetails" Relationship="OATSDBModel.FK_SettingConfigDetail_SettingTypes" FromRole="SettingTypes" ToRole="SettingConfigDetail" />
+          <Property Type="Int32" Name="SettingGroupOrder" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -1185,6 +1187,7 @@
           <EntitySetMapping Name="SettingTypes">
             <EntityTypeMapping TypeName="OATSDBModel.SettingType">
               <MappingFragment StoreEntitySet="SettingTypes">
+                <ScalarProperty Name="SettingGroupOrder" ColumnName="SettingGroupOrder" />
                 <ScalarProperty Name="SettingTypeID" ColumnName="SettingTypeID" />
                 <ScalarProperty Name="SettingGroupName" ColumnName="SettingGroupName" />
                 <ScalarProperty Name="SettingInGroupOrder" ColumnName="SettingInGroupOrder" />

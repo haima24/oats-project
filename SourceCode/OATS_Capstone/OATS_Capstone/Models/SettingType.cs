@@ -24,6 +24,7 @@ namespace OATS_Capstone.Models
         public Nullable<int> SettingInGroupOrder { get; set; }
         public string SettingTypeKey { get; set; }
         public string SettingTypeDescription { get; set; }
+        public Nullable<int> SettingGroupOrder { get; set; }
     
         public virtual ICollection<SettingConfigDetail> SettingConfigDetails { get; set; }
     }

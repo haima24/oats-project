@@ -140,6 +140,58 @@ namespace OATS_Capstone.Models
             });
             return upComingTests;
         }
+        private class LambdaComparer<T> : IEqualityComparer<T>
+        {
+            private readonly Func<T, T, bool> _lambdaComparer;
+            private readonly Func<T, int> _lambdaHash;
+
+            public LambdaComparer(Func<T, T, bool> lambdaComparer) :
+                this(lambdaComparer, o => 0)
+            {
+            }
+
+            public LambdaComparer(Func<T, T, bool> lambdaComparer, Func<T, int> lambdaHash)
+            {
+                if (lambdaComparer == null)
+                    throw new ArgumentNullException("lambdaComparer");
+                if (lambdaHash == null)
+                    throw new ArgumentNullException("lambdaHash");
+
+                _lambdaComparer = lambdaComparer;
+                _lambdaHash = lambdaHash;
+            }
+
+            public bool Equals(T x, T y)
+            {
+                return _lambdaComparer(x, y);
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return _lambdaHash(obj);
+            }
+        }
+        public static IEnumerable<TSource> Distinct<TSource>(this IEnumerable<TSource> enumerable, Func<TSource, TSource, bool> comparer)
+        {
+            return enumerable.Distinct(new LambdaComparer<TSource>(comparer));
+        }
+        public static List<UserInTest> FilterValidMaxAttend(this IEnumerable<UserInTest> inTests) 
+        {
+            var groups = from i in inTests
+                         group i by i.UserID into InTestGroup
+                         select new { UserId = InTestGroup.Key, MaxAttend = InTestGroup.Max(i => i.NumberOfAttend) };
+            var result = new List<UserInTest>();
+            foreach (var item in groups)
+            {
+                var id = item.UserId;
+                var attend = item.MaxAttend;
+                var inTest = inTests.FirstOrDefault(i => i.UserID == id&&i.NumberOfAttend==attend);
+                if (inTest != null) {
+                    result.Add(inTest);
+                }
+            }
+            return result;
+        }
     }
 
 }
