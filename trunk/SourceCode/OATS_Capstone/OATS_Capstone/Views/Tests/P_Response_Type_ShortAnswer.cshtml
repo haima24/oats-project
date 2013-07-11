@@ -1,4 +1,11 @@
 ﻿@model OATS_Capstone.Models.AbsResponseQuestion
+@{
+    var canEdit = false;
+    if (ViewBag.canEdit != null)
+    {
+        canEdit = ViewBag.canEdit;
+    }
+}
 <div class="nt-qitem nt-qitem-review">
     <div class="nt-qnum">4.</div>
     <div class="nt-qtext">
@@ -6,7 +13,7 @@
     </div>
     <div class="nt-qhctrls">
         <label class="checkbox">
-            <input class="nt-scored" type="checkbox" checked="checked" />Scored</label>
+            <input class="nt-scored" type="checkbox" disabled="disabled" checked="checked" />Scored</label>
     </div>
     <div class="nt-qmiddle" style="">
         @if (Model.IsOneIdChecked)
@@ -19,20 +26,30 @@
         }
     </div>
     <div class="nt-qfoot">
-        @if(!Model.IsOneIdChecked){
-        <div class="nt-qrep" style="">
-            <span>Average Point:</span><span class="nt-crate">@Model.CorrectPraction</span>
-        </div>
-        }else{
+        @if (!Model.IsOneIdChecked)
+        {
+            <div class="nt-qrep" style="">
+                <span>Average Point:</span><span class="nt-crate">@Model.CorrectPraction</span>
+            </div>
+        }
+        else
+        {
             <button class="nt-btn-text nt-qcomm-toggle" style="display: none;">Comment</button>
 
-        <div class="nt-qoepts">
-            <span>Points:</span>
-            <span class="nt-pts">@Model.UserNonChoiceScore</span>
-            <span>of @Model.NonChoiceScore</span>
-            <span class="nt-ok"><i class="icon-ok"></i></span>
-            <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
-        </div>
+            <div class="nt-qoepts">
+                <span>Points:</span>
+                @if (canEdit)
+                {
+                    <input type="text" value="@(Model.UserNonChoiceScore ?? 0)" class="nt-pts"/>
+                }
+                else
+                {
+                    <span class="nt-pts">@(Model.UserNonChoiceScore ?? 0)</span>
+                }
+                <span>of @(Model.NonChoiceScore ?? 0)</span>
+                <span class="nt-ok"><i class="icon-ok"></i></span>
+                <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
+            </div>
         }
     </div>
     <div class="nt-qcomm" style="display: none;">

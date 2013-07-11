@@ -2438,5 +2438,32 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+
+        public void ModalTestHistoryPopup(int testid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    if (OnRenderPartialViewToString != null)
+                    {
+                        success = true;
+                        var authen = AuthenticationSessionModel.Instance();
+                        var listIds=new List<int>(){authen.UserId};
+                        var resTest = new ResponseTest(test, listIds);
+                        generatedHtml = OnRenderPartialViewToString.Invoke(resTest);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
     }
 }

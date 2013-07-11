@@ -394,6 +394,7 @@ namespace OATS_Capstone.Controllers
                 var result = String.Empty;
                 try
                 {
+                    ViewBag.canEdit = true;
                     result = this.RenderPartialViewToString("P_ResponseTab", model);
                 }
                 catch (Exception)
@@ -677,6 +678,7 @@ namespace OATS_Capstone.Controllers
                 var result = String.Empty;
                 try
                 {
+                    ViewBag.canEdit = true;
                     result = this.RenderPartialViewToString("P_ResponseTab_Inner", model);
                 }
                 catch (Exception)
@@ -873,6 +875,25 @@ namespace OATS_Capstone.Controllers
             var common = new CommonService();
             common.UpdateTestIntroduction(testid, introduction);
             return Json(new { common.success,common.message});
+        }
+
+        public JsonResult ModalTestHistoryPopup(int testid) {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_Test_History", model);
+                }
+                catch (Exception)
+                {
+                    common.message = Constants.DefaultExceptionMessage;
+                    common.success = false;
+                }
+                return result;
+            };
+            common.ModalTestHistoryPopup(testid);
+            return Json(new { common.success, common.message, common.generatedHtml });
         }
     }
 }

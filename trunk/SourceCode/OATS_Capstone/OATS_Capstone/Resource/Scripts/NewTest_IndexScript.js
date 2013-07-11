@@ -96,11 +96,11 @@ $(function () {
             
         },
         select: function (item) {
-            //if (item.isCurrentUserOwnTest) {
-            //    window.location.href = "/Tests/NewTest/" + item.id;
-            //} else {
-            //    window.location.href = "/Tests/DoTest/" + item.id;
-            //}
+            if (item.isCurrentUserOwnTest) {
+                window.location.href = "/Tests/NewTest/" + item.id;
+            } else {
+                window.location.href = "/Tests/DoTest/" + item.id;
+            }
         },
         source: function (req, res, addedTagIds) {
             $.ajax({
@@ -166,10 +166,26 @@ $(function () {
             }
         });
     });
-
-
-    
-    
+    //separator
+    $(".btn-test-history").live("click", function () {
+        var button = $(this);
+        var testIdString = button.attr("test-id");
+        var testid = parseInt(testIdString);
+        $.post("/Tests/ModalTestHistoryPopup", { testid: testid }, function (res) {
+            if (res.success) {
+                var html = res.generatedHtml;
+                if (!$("#modalPopupTestHistory").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalPopupTestHistory").replaceWith($(html));
+                }
+                initReplyAreas();
+                $("#modalPopupTestHistory").modal("show");
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
     //separator
     $(".reply-container[toggle-header]").live("click", function () {
         var cur = $(this);
