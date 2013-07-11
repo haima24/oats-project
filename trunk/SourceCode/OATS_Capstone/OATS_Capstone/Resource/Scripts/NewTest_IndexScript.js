@@ -241,14 +241,16 @@ $(function () {
             var container = button.closest(".reply-container");
             var area=$(".reply-area", container);
             var text = area.val();
-            var place = $(".reply-details", container);
-            $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
-                if (res.success) {
-                    if (area) { area.val(""); }
-                } else {
-                    showMessage("error", res.message);
-                }
-            });
+            if (text) {
+                var place = $(".reply-details", container);
+                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
+                    if (res.success) {
+                        if (area) { area.val(""); }
+                    } else {
+                        showMessage("error", res.message);
+                    }
+                });
+            }
 
         });
     });

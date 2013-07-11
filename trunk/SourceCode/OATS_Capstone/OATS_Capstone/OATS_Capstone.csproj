@@ -355,6 +355,7 @@
     <Content Include="Style\img\tag.png" />
     <Content Include="Style\img\teachers.png" />
     <Content Include="Style\img\tests.png" />
+    <Content Include="Style\img\test_history.png" />
     <Content Include="Style\img\text.png" />
     <Content Include="Style\img\user.png" />
     <Content Include="Style\img\white_paper_texture_background_seamless_pattern.jpg" />
@@ -485,6 +486,7 @@
     <Content Include="Views\Tests\P_SettingTab_ConfigDetail.cshtml" />
     <Content Include="Views\Tests\AccessCode.cshtml" />
     <Content Include="Views\Tests\P_FeedBack_Form_Item_Reply.cshtml" />
+    <Content Include="Views\Tests\P_Modal_Test_History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

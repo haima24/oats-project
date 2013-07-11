@@ -78,7 +78,10 @@
                                 <div class="nt-name">
                                      <i class="t-icon i-student"></i>
                                     <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
-                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
+                                    <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
+                                        <i class="t-icon i-test-history"></i>
+                                    </button>
+                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback" data-toggle="tooltip" data-placement="top" data-original-title="Give Feedback">
                                         <i class="t-icon i-feedback"></i>
                                     </button>
                                 </div>
@@ -163,7 +166,10 @@
                                 <div class="nt-name">
                                     <i class="t-icon i-student"></i>
                                     <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
-                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback">
+                                    <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
+                                        <i class="t-icon i-test-history"></i>
+                                    </button>
+                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback" data-toggle="tooltip" data-placement="top" data-original-title="Give Feedback">
                                         <i class="t-icon i-feedback"></i>
                                     </button>
                                 </div>

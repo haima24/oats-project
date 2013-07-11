@@ -16,7 +16,7 @@ namespace OATS_Capstone.Models
         public ScoreStatistics Overall { get; set; }
         public List<ScoreOnUser> UsersScores { get; set; }
         public ScoreTest(Test test) {
-            var details = test.UserInTests.Select(i => i.UserID).ToList();
+            var details = test.UserInTests.FilterValidMaxAttend().Select(i => i.UserID).ToList();
             InitScoreTest(test, details);
         }
         public ScoreTest(Test test, List<int> checkIds)
@@ -31,7 +31,7 @@ namespace OATS_Capstone.Models
             {
                 return i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
             });
-            var details = test.UserInTests.ToList();
+            var details = test.UserInTests.FilterValidMaxAttend();
             ScoreUserList = new List<ScoreUserItem>();
             details.ForEach(i =>
             {
@@ -56,13 +56,13 @@ namespace OATS_Capstone.Models
                 Overall = new ScoreStatistics();
                 Overall.Name = "Overall";
                 var totalScore = test.Questions.TotalScore();
-                var groupScoreList = test.UserInTests.Select(i =>
+                var groupScoreList = test.UserInTests.FilterValidMaxAttend().Select(i =>
                 {
                     return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
                 });
                 var stdevScore = groupScoreList.StandardDeviation();
                 var averageScore = groupScoreList.Average();
-                var userScoreList = test.UserInTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
+                var userScoreList = test.UserInTests.FilterValidMaxAttend().Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
                     return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
                 });
@@ -74,7 +74,7 @@ namespace OATS_Capstone.Models
                 Overall.GroupSTDEVScore = new ScoreStatistic(stdevScore, 1);
                 Overall.ScoreList = userScoreList.ToList();
 
-                UsersScores = test.UserInTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
+                UsersScores = test.UserInTests.FilterValidMaxAttend().Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
                     var userScore = new ScoreOnUser();
                     userScore.Name = i.User.FirstName ?? i.User.LastName ?? i.User.UserMail;

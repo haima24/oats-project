@@ -2,18 +2,19 @@
 @{
     var settingConfig = Model.SettingConfig;
     var groups = from settings in settingConfig.SettingConfigDetails
-                 group settings by settings.SettingType.SettingGroupName into settingGroup
-                 select new { GroupName = settingGroup.Key, Items = settingGroup };
+                 group settings by new {KeyName=settings.SettingType.SettingGroupName,KeyOrder=settings.SettingType.SettingGroupOrder} into settingGroup
+                 select new { GroupKey= settingGroup.Key, Items = settingGroup };
+    var groupsSorted = groups.OrderBy(i => i.GroupKey.KeyOrder);
     var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
     var isOwner = authen.UserId == Model.CreatedUserID;
     ViewBag.isOwner = isOwner;
 }
 <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
     <div class="nt-panel">
-        @foreach (var setting in groups)
+        @foreach (var setting in groupsSorted)
         { 
             <div class="nt-section">
-                <div class="nt-header">@setting.GroupName</div>
+                <div class="nt-header">@setting.GroupKey.KeyName</div>
                 <ul>
                     @{
             var sortedItems = setting.Items.OrderBy(k => k.SettingType.SettingInGroupOrder);

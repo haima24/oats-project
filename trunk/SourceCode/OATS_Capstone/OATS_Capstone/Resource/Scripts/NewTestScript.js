@@ -581,7 +581,8 @@ function initSearchTests() {
                     }
                     $(html).tooltip();
                     if (obj.intro) {
-                        $(html).popover({
+                        $(".pop-over", html).popover({
+                            placement: "left",
                             trigger: "hover",
                             html: true,
                             content: function () {
@@ -1760,14 +1761,16 @@ $(function () {
             var container = button.closest(".reply-container");
             var area = $(".reply-area", container);
             var text = area.val();
-            var place = $(".reply-details", container);
-            $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
-                if (res.success) {
-                    if (area) { area.val(""); }
-                } else {
-                    showMessage("error", res.message);
-                }
-            });
+            if (text) {
+                var place = $(".reply-details", container);
+                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
+                    if (res.success) {
+                        if (area) { area.val(""); }
+                    } else {
+                        showMessage("error", res.message);
+                    }
+                });
+            }
         });
     });
 });

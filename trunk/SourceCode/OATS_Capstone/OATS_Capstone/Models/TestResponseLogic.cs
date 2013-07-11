@@ -62,7 +62,7 @@ namespace OATS_Capstone.Models
         {
             var inTestDetails = question.UserInTestDetails;
             var test = question.Test;
-            _totalUsersInTest = test.UserInTests.Count;
+            _totalUsersInTest = test.UserInTests.FilterValidMaxAttend().Count;
             _ids = inTestDetails.Where(k => checkids.Contains(k.UserInTest.UserID)).Select(i =>
             {
                 var idStrings = i.AnswerIDs.Split(new String[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -132,7 +132,7 @@ namespace OATS_Capstone.Models
         {
             var inTestDetails = question.UserInTestDetails;
             var test = question.Test;
-            _totalUsersInTest = test.UserInTests.Count;
+            _totalUsersInTest = test.UserInTests.FilterValidMaxAttend().Count;
             _ids = inTestDetails.Where(k => checkids.Contains(k.UserInTest.UserID)).Select(i =>
             {
                 var idStrings = i.AnswerIDs.Split(new String[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -473,7 +473,7 @@ namespace OATS_Capstone.Models
         public List<ResponseUserItem> ResponseUserList { get; set; }
         public ResponseTest(Test test)
         {
-            var details = test.UserInTests.Select(i => i.UserID).ToList();
+            var details = test.UserInTests.FilterValidMaxAttend().Select(i => i.UserID).ToList();
             InitResponseTest(test, details);
         }
         public ResponseTest(Test test, List<int> checkIds)
@@ -486,7 +486,7 @@ namespace OATS_Capstone.Models
             CheckedUserIds = checkIds;
             if (checkIds.Count == 1) { 
                 var id=checkIds.FirstOrDefault();
-                var inTest=test.UserInTests.FirstOrDefault(i=>i.UserID==id);
+                var inTest=test.UserInTests.FilterValidMaxAttend().FirstOrDefault(i=>i.UserID==id);
                 if(inTest!=null)
                 {
                     testTakenDate = String.Format("{0:dd MMM yyyy HH:mm tt}",inTest.TestTakenDate );
@@ -497,7 +497,7 @@ namespace OATS_Capstone.Models
             {
                 return i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score??0);
             });
-            var details = test.UserInTests.ToList();
+            var details = test.UserInTests.FilterValidMaxAttend();
             ResponseUserList = new List<ResponseUserItem>();
             details.ForEach(i =>
             {
