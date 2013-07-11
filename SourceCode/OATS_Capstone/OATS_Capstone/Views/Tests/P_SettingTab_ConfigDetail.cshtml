@@ -33,7 +33,7 @@
             }
             else
             {
-        <input id="asm_time_limit" type="text" disabled="disabled" value="15"><span>mins</span>
+        <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
             }
 
         }
@@ -42,11 +42,11 @@
     {
         if (Model.IsActive)
         {
-        <div id="asm_access_code" class="nt-access-code">@Model.TextValue</div>
+        <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code" value="@Model.TextValue"/>
         }
         else
         {
-        <div id="asm_access_code" class="nt-access-code hide"></div>
+            <input type="text" id="asm_access_code"  disabled="disabled" class="nt-access-code hide"/>
         }
     }
     else if (Model.SettingType.SettingTypeKey == "MTP")
@@ -57,7 +57,7 @@
         }
         else
         {
-        <input id="asm_max_point" type="text" disabled="disabled" value="15"><span>Pts</span>
+        <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
         }
     }
 }else{
@@ -86,7 +86,7 @@
             }
             else
             {
-        <input id="asm_time_limit" type="text" disabled="disabled" value="15"><span>mins</span>
+        <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
             }
 
         }
@@ -95,11 +95,11 @@
     {
         if (Model.IsActive)
         {
-        <div id="asm_access_code" class="nt-access-code">@Model.TextValue</div>
+       <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code" value="@Model.TextValue"/>
         }
         else
         {
-        <div id="asm_access_code" class="nt-access-code hide"></div>
+        <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code hide"/>
         }
     }else if (Model.SettingType.SettingTypeKey == "MTP")
     {
@@ -109,7 +109,7 @@
         }
         else
         {
-        <input id="asm_max_point" type="text" disabled="disabled" value="10"><span>Pts</span>
+        <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
         }
     }
 }

@@ -301,6 +301,7 @@ i.t-icon.i-teachers {
 i.t-icon.i-test-history {
     background: url(./img/test_history.png) no-repeat;
 }
+
 i.t-icon.i-tests {
     background: url(./img/tests.png) no-repeat;
 }
@@ -1710,9 +1711,11 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     border-top: 1px solid #ececec;
     font-size: 12px;
 }
+
     .nt-asms-list .nt-list-row .popover-introduction {
-        display:none;
+        display: none;
     }
+
     .nt-asms-list .nt-list-row.nt-upcoming:first-child {
         border-top: 0;
     }
@@ -1749,16 +1752,19 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         text-align: left;
         width: 31%;
     }
+
         .nt-asms-list .nt-list-head > div.nt-name button {
             position: absolute;
             top: 9px;
             right: 15px;
         }
-        .nt-asms-list .nt-list-row > div.nt-name button.btn-test-history{
+
+        .nt-asms-list .nt-list-row > div.nt-name button.btn-test-history {
             position: absolute;
             top: 9px;
             right: 28px;
         }
+
         .nt-asms-list .nt-list-row > div.nt-name button.btn-feedback {
             position: absolute;
             top: 9px;
@@ -2648,13 +2654,21 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
                 #eventTab > div.nt-asm-settings .nt-panel .nt-section ul li {
                     min-height: 30px;
                 }
+
             #eventTab > div.nt-asm-settings .nt-panel .nt-section label.checkbox {
-                float:left;
+                float: left;
             }
+
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_time_limit,
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_max_point {
                 width: 35px;
-                margin: 0 3px;
+                margin: 0 10px;
+                padding: 2px;
+            }
+
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_access_code {
+                width: 80px;
+                margin: 0 10px;
                 padding: 2px;
             }
 
@@ -3474,12 +3488,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 #comments .comment .comment-body textarea {
     margin-bottom: 0px;
     margin-right: 5px;
-    resize:none;
+    resize: none;
 }
+
 #comments .comment .comment-body button.btn {
-    position:relative;
-    top:10px;
+    position: relative;
+    top: 10px;
 }
+
 #comments .comment-body {
     padding: 10px 90px 0 0;
     padding-left: 200px;
@@ -3594,6 +3610,21 @@ article, time {
     #modalPopupFeedback .modal-body .comment-body p {
         margin: 0 0 10px;
     }
+
+#modalPopupTestHistory.modal {
+    width: auto;
+    left: 42%;
+}
+
+#modalPopupTestHistory .modal-body {
+    padding: 20px;
+    max-height: 520px;
+}
+
+#modalPopupTestHistory.modal.fade.in {
+    top: 4%;
+}
+
 
 .reply-container {
     background-color: #f0f1f3;

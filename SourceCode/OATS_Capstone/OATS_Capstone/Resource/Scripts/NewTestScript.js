@@ -1158,7 +1158,7 @@ $(function () {
         handleImportText(text);
     });
     //separator
-    $("#checklist[content-tab=true] .nt-qitem[question-type=Essay],[question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
+    $("#checklist[content-tab=true] .nt-qitem[question-type=Essay] .nt-qoepts input[type=text],#checklist[content-tab=true] .nt-qitem[question-type=Essay][question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
         var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
         var questionid = parseInt(questionIdString);
         var scoreString = $(this).val();

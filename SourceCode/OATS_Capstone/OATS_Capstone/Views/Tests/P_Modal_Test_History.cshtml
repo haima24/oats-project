@@ -1,1 +1,14 @@
-﻿
+﻿@model OATS_Capstone.Models.ResponseTest
+<div id="modalPopupTestHistory" class="modal hide fade">
+    <div class="modal-header">
+        <div class="modal-title">@Model.TestTitle</div>
+    </div>
+    <div class="modal-body">
+        <div class="controls">
+            @Html.Partial("P_ResponseTab_Inner",Model)
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Close</button>
+    </div>
+</div>

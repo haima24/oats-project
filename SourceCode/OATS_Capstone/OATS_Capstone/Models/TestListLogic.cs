@@ -70,8 +70,8 @@ namespace OATS_Capstone.Models
         {
             get { return _Average; }
         }
-        public string AverageString { get { return Average.HasValue ?Average.ToString(): "-"; } }
-        public string STDEVString { get { return STDEV.HasValue ? STDEV.ToString() : "-"; } }
+        public string AverageString { get { return Average.HasValue ?string.Format("{0:#0.#}",Average): "-"; } }
+        public string STDEVString { get { return STDEV.HasValue ? string.Format("{0:#0.#}", STDEV) : "-"; } }
         private decimal? _STDEV=null;
 
         public decimal? STDEV

@@ -471,6 +471,7 @@ namespace OATS_Capstone.Models
         public int ResponseUserListCount { get { return ResponseUserList.Count; } }
         public int CheckedUserIdsCount { get { return CheckedUserIds.Count; } }
         public List<ResponseUserItem> ResponseUserList { get; set; }
+        public string TestTitle { get; set; }
         public ResponseTest(Test test)
         {
             var details = test.UserInTests.FilterValidMaxAttend().Select(i => i.UserID).ToList();
@@ -483,6 +484,7 @@ namespace OATS_Capstone.Models
         private void InitResponseTest(Test test, List<int> checkIds)
         {
             db = SingletonDb.Instance();
+            TestTitle = test.TestTitle;
             CheckedUserIds = checkIds;
             if (checkIds.Count == 1) { 
                 var id=checkIds.FirstOrDefault();
