@@ -167,18 +167,9 @@ $(function () {
         });
     });
 
-    $("#contact-submit").live("click", function () {
-        var testid = parseInt($("#test-id").val());
-        var text = $("#message").val();
-        $.post("/Tests/StudentCommentFeedBack", { testid: testid, fbDetail: text }, function (res) {
-            if (res.success) {
-                var html = $(res.generatedHtml);
-                $("#modalPopupFeedback .nt-panel").prepend(html);
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
+
+    
+    
     //separator
     $(".reply-container[toggle-header]").live("click", function () {
         var cur = $(this);
@@ -194,6 +185,23 @@ $(function () {
     });
 
     var hub = $.connection.generalHub;
+    hub.client.R_commentFeedback = function (tid, generatedHtml) {
+        var popTestIdString = $("#modalPopupFeedback #test-id").val();
+        var popTestId = parseInt(popTestIdString);
+        if (tid && generatedHtml) {
+            if (!isNaN(popTestId)) {
+                if (tid == popTestId) {
+                    var comments = $("#comments");
+                    if (comments.length > 0) {
+                        var ele = $(generatedHtml);
+                        comments.prepend(ele);
+                        var articleCount = $("article", comments).length;
+                        $("#modalPopupFeedback .comment-count").html("All Comments " + articleCount );
+                    }
+                }
+            }
+        }
+    }
     hub.client.R_replyFeedback = function (tid, parentFeedBackId, generatedHtml) {
         var popTestIdString = $("#modalPopupFeedback #test-id").val();
         var popTestId = parseInt(popTestIdString);
@@ -211,7 +219,21 @@ $(function () {
             }
         }
     }
+   
     $.connection.hub.start().done(function () {
+        $("#contact-submit").live("click", function () {
+            var testid = parseInt($("#test-id").val());
+            var text = $("#message").val(); //get text
+            if (text) {
+                $.post("/Tests/StudentCommentFeedBack", { testid: testid, fbDetail: text }, function (res) {
+                    if (res.success) {
+                        $("#message").val(""); //clear text
+                    } else {
+                        showMessage("error", res.message);
+                    }
+                });
+            }
+        });
         $("#modalPopupFeedback .reply-button").live("click", function () {
             var button = $(this);
             var testid = parseInt($("#test-id").val());

@@ -2349,6 +2349,8 @@ namespace OATS_Capstone.Models
                         {
                             success = true;
                             generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
+                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                            context.Clients.All.R_commentFeedback(testid, generatedHtml);
                         }
                     }
 

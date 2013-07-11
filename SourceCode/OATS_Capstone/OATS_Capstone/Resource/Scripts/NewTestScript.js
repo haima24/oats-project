@@ -1703,7 +1703,25 @@ $(function () {
     //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
+
+
+
+
     var hub = $.connection.generalHub;
+    hub.client.R_commentFeedback = function (tid, generatedHtml) {
+        if (tid && generatedHtml) {
+            if (tid == testid) {
+                    var comments = $("#comments");
+                    if (comments.length > 0) {
+                        var ele = $(generatedHtml);
+                        comments.prepend(ele);
+                        var articleCount = $("article", comments).length;
+                        $(".comment-count").html("All Comments " + articleCount);
+                    }
+                }
+        }
+    }
+
     hub.client.R_replyFeedback = function (tid, parentFeedBackId, generatedHtml) {
         if (tid && parentFeedBackId && generatedHtml) {
             if (tid == testid) {
@@ -1734,6 +1752,8 @@ $(function () {
                 }
             });
         });
+
+
         $("#comments .reply-button").live("click", function () {
             var button = $(this);
             var parentFeedbackID = parseInt(button.val());
