@@ -192,6 +192,18 @@ namespace OATS_Capstone.Models
             }
             return result;
         }
+        public static String createHashMD5(IEnumerable<Object> keys)
+        {
+            // Get a byte array containing the combined password + salt.
+            string authDetails = keys.Select(i=>i.ToString()).Aggregate((f,n)=>f+n);
+            byte[] authBytes = System.Text.Encoding.ASCII.GetBytes(authDetails);
+            // Use MD5 to compute the hash of the byte array, and return the hash as
+            // a Base64-encoded string.
+            var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] hashedBytes = md5.ComputeHash(authBytes);
+            string hash = Convert.ToBase64String(hashedBytes);
+            return hash;
+        }
     }
 
 }

@@ -413,7 +413,7 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
-                var authenUserId=authen.UserId;
+                var authenUserId = authen.UserId;
                 if (!string.IsNullOrEmpty(term))
                 {
                     if (tagids == null) { tagids = new List<int>(); }
@@ -578,6 +578,8 @@ namespace OATS_Capstone.Models
                         if (user != null)
                         {
                             var invitation = new Invitation();
+                            var key = GenerateInvitationAccessToken(test.TestID, id);
+                            invitation.AccessToken = key;
                             invitation.User = user;
                             invitation.Role = userRole;
                             invitation.InvitationDateTime = DateTime.Now;
@@ -1331,7 +1333,7 @@ namespace OATS_Capstone.Models
                         }
                         else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
                         {
-                            detail.TextValue = GenerateAccessKey();
+                            detail.TextValue = GenerateAccessKey(8);
                         }
                         if (db.SaveChanges() >= 0)
                         {
@@ -1499,7 +1501,7 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
 
                 var oldUserInTest = db.UserInTests.Where(i => i.TestID == userInTest.TestID && i.UserID == userInTest.UserID);
-                if (oldUserInTest.Count()>0)
+                if (oldUserInTest.Count() > 0)
                 {
                     userInTest.NumberOfAttend = oldUserInTest.Max(i => i.NumberOfAttend) + 1;
                 }
@@ -1693,6 +1695,8 @@ namespace OATS_Capstone.Models
                 if (user != null && test != null)
                 {
                     var invitation = new Invitation();
+                    var key = GenerateInvitationAccessToken(test.TestID, user.UserID);
+                    invitation.AccessToken = key;
                     invitation.Test = test;
                     invitation.Role = userRole;
                     invitation.InvitationDateTime = DateTime.Now;
@@ -1728,6 +1732,8 @@ namespace OATS_Capstone.Models
                 if (user != null && test != null)
                 {
                     var invitation = new Invitation();
+                    var key = GenerateInvitationAccessToken(test.TestID, user.UserID);
+                    invitation.AccessToken = key;
                     invitation.Test = test;
                     invitation.Role = userRole;
                     invitation.InvitationDateTime = DateTime.Now;
@@ -2234,68 +2240,6 @@ namespace OATS_Capstone.Models
             }
 
         }
-        private void RecalculateUserInTestScore(IEnumerable<Answer> answers)
-        {
-            var groupAnswers = from ans in answers
-                               group ans by ans.Question into GroupAnswers
-                               select new { Key = GroupAnswers.Key };
-            foreach (var item in groupAnswers)
-            {
-                if (item.Key != null)
-                {
-                    var question = item.Key;
-                    var inTestDetails = question.UserInTestDetails.ToList();
-                    var inTests = from d in inTestDetails
-                                  group d by d.UserInTest into InTestGroup
-                                  select new { Key = InTestGroup.Key };
-                    foreach (var intest in inTests)
-                    {
-                        var inTestObj = intest.Key;
-                        var details = inTestObj.UserInTestDetails.Where(k => k.QuestionID == question.QuestionID).ToList();
-                        details.ForEach(i =>
-                        {
-                            if (question != null)
-                            {
-                                if (i.AnswerIDs != null)
-                                {
-                                    var IDs = i.AnswerIDs.Split(',');
-                                    var score = IDs.Sum(k =>
-                                    {
-                                        var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
-                                        return answer.Score < 0 ? 0 : answer.Score;
-                                    });
-                                    i.ChoiceScore = score;
-                                }
-                                else
-                                {
-                                    if (question.QuestionType.Type == "ShortAnswer")
-                                    {
-                                        if (!string.IsNullOrEmpty(i.AnswerContent))
-                                        {
-                                            var userAnswers = i.AnswerContent.Split(',');
-                                            if (!string.IsNullOrEmpty(question.TextDescription))
-                                            {
-                                                var questionAnswers = question.TextDescription.Split(',');
-
-                                                if (questionAnswers.All(o => userAnswers.Contains(o)))
-                                                {
-                                                    i.NonChoiceScore = question.NoneChoiceScore;
-                                                }
-                                                else
-                                                {
-                                                    i.NonChoiceScore = 0;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        inTestObj.Score = inTestObj.UserInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
-                    }
-                }
-            }
-        }
         public void ModalFeedBackPopup(int testid)
         {
             success = false;
@@ -2404,15 +2348,27 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        private string GenerateAccessKey()
+        private string GenerateAccessKey(int length)
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
             var random = new Random();
             var result = new string(
-                Enumerable.Repeat(chars, 8)
+                Enumerable.Repeat(chars, length)
                           .Select(s => s[random.Next(s.Length)])
                           .ToArray());
             return result;
+        }
+        private string GenerateInvitationAccessToken(int testid, int userid)
+        {
+            var keys = new List<Object>();
+            keys.Add(testid);
+            keys.Add(userid);
+            var key = ExtensionModel.createHashMD5(keys);
+            var specialUrlChars = new List<string>() {
+                "/","=","?"
+            };
+            specialUrlChars.ForEach(i => key = key.Replace(i, string.Empty));
+            return key;
         }
         public void UpdateTestIntroduction(int testid, string introduction)
         {
@@ -2438,7 +2394,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
         public void ModalTestHistoryPopup(int testid)
         {
             success = false;
@@ -2453,7 +2408,7 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         var authen = AuthenticationSessionModel.Instance();
-                        var listIds=new List<int>(){authen.UserId};
+                        var listIds = new List<int>() { authen.UserId };
                         var resTest = new ResponseTest(test, listIds);
                         generatedHtml = OnRenderPartialViewToString.Invoke(resTest);
                     }
@@ -2464,6 +2419,124 @@ namespace OATS_Capstone.Models
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
+        }
+        private void RecalculateUserInTestScore(IEnumerable<Answer> answers)
+        {
+            var groupAnswers = from ans in answers
+                               group ans by ans.Question into GroupAnswers
+                               select new { Key = GroupAnswers.Key };
+            foreach (var item in groupAnswers)
+            {
+                if (item.Key != null)
+                {
+                    var question = item.Key;
+                    var inTestDetails = question.UserInTestDetails.ToList();
+                    var inTests = from d in inTestDetails
+                                  group d by d.UserInTest into InTestGroup
+                                  select new { Key = InTestGroup.Key };
+                    foreach (var intest in inTests)
+                    {
+                        var inTestObj = intest.Key;
+                        var details = inTestObj.UserInTestDetails.Where(k => k.QuestionID == question.QuestionID).ToList();
+                        details.ForEach(i =>
+                        {
+                            if (question != null)
+                            {
+                                if (i.AnswerIDs != null)
+                                {
+                                    var IDs = i.AnswerIDs.Split(',');
+                                    var score = IDs.Sum(k =>
+                                    {
+                                        var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                        return answer.Score < 0 ? 0 : answer.Score;
+                                    });
+                                    i.ChoiceScore = score;
+                                }
+                                else
+                                {
+                                    if (question.QuestionType.Type == "ShortAnswer")
+                                    {
+                                        if (!string.IsNullOrEmpty(i.AnswerContent))
+                                        {
+                                            var userAnswers = i.AnswerContent.Split(',');
+                                            if (!string.IsNullOrEmpty(question.TextDescription))
+                                            {
+                                                var questionAnswers = question.TextDescription.Split(',');
+
+                                                if (questionAnswers.All(o => userAnswers.Contains(o)))
+                                                {
+                                                    i.NonChoiceScore = question.NoneChoiceScore;
+                                                }
+                                                else
+                                                {
+                                                    i.NonChoiceScore = 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        inTestObj.Score = inTestObj.UserInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
+                    }
+                }
+            }
+        }
+        private void RecalculateUserInTestScore(UserInTest userInTest)
+        {
+            var details = userInTest.UserInTestDetails;
+            var score = details.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
+            userInTest.Score = score;
+        }
+        public void UpdateUserNoneChoiceScore(int questionid, int userid, decimal score)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null)
+                {
+                    var detail = question.UserInTestDetails.FirstOrDefault(i => i.UserInTest.UserID == userid);
+                    var type = question.QuestionType.Type;
+                    if (detail != null && (type == "Essay" || type == "ShortAnswer"))
+                    {
+                        detail.NonChoiceScore = score;
+                        var userInTest = detail.UserInTest;
+                        RecalculateUserInTestScore(userInTest);
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                            message = Constants.DefaultSuccessMessage;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = true;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public Invitation AnonymousDoTest(string key)
+        {
+            Invitation invitation = null;
+            try
+            {
+                var db = SingletonDb.Instance();
+                invitation = db.Invitations.FirstOrDefault(i => i.AccessToken == key);
+                if (invitation != null) { 
+                    //anonymous login
+                    var authen = AuthenticationSessionModel.Instance();
+                    authen.UserId = invitation.UserID;
+                }
+            }
+            catch (Exception)
+            {
+                invitation = null;
+            }
+            return invitation;
         }
     }
 }
