@@ -1724,6 +1724,13 @@ $(function () {
         }
     });
     //separator
+    $("#btn-download-score").live("click", function () {
+        var checkIds = $("#respUsers input[type=checkbox][user-id]:checked").map(function (i, e) {
+            return $(e).attr("user-id");
+        }).convertJqueryArrayToJSArray();
+        var ids = checkIds.join("&userids=");
+        window.location = "/Tests/ScoreToExcel?testid="+testid+"&&userids="+ids;
+    });
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using OATS_Capstone.Hubs;
 using OATS_Capstone.Mailers;
+using OfficeOpenXml;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -2526,7 +2527,8 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 invitation = db.Invitations.FirstOrDefault(i => i.AccessToken == key);
-                if (invitation != null) { 
+                if (invitation != null)
+                {
                     //anonymous login
                     var authen = AuthenticationSessionModel.Instance();
                     authen.UserId = invitation.UserID;
@@ -2537,6 +2539,25 @@ namespace OATS_Capstone.Models
                 invitation = null;
             }
             return invitation;
+        }
+        public ExcelPackage ScoreToExcel(int testid, List<int> userids)
+        {
+            ExcelPackage pack = null;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null) {
+                    var scoreTest = new ScoreTest(test, userids);
+                    pack = scoreTest.ToExcelPackage();
+                }
+            }
+            catch (Exception)
+            {
+
+                pack = null;
+            }
+            return pack;
         }
     }
 }

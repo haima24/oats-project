@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,7 +8,8 @@ namespace OATS_Capstone.Models
 {
     public static class ExtensionModel
     {
-        public static String ToPercent(this decimal? praction) {
+        public static String ToPercent(this decimal? praction)
+        {
             var percent = String.Empty;
             try
             {
@@ -16,7 +18,7 @@ namespace OATS_Capstone.Models
             }
             catch (Exception)
             {
-                percent="0";
+                percent = "0";
             }
             return percent;
         }
@@ -37,7 +39,7 @@ namespace OATS_Capstone.Models
         }
         public static decimal? RoundTwo(this decimal? value)
         {
-            return Math.Round(value??0, 2);
+            return Math.Round(value ?? 0, 2);
         }
         public static decimal RoundTwo(this decimal value)
         {
@@ -48,15 +50,15 @@ namespace OATS_Capstone.Models
             decimal? score = 0;
             try
             {
-                score = questions.Sum(i => 
+                score = questions.Sum(i =>
                 {
-                    var temp= i.NoneChoiceScore??0 + i.Answers.Sum(k => k.Score??0);
+                    var temp = i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
                     return temp;
                 });
             }
             catch (Exception)
             {
-                score = 0;   
+                score = 0;
             }
             return score;
         }
@@ -175,7 +177,7 @@ namespace OATS_Capstone.Models
         {
             return enumerable.Distinct(new LambdaComparer<TSource>(comparer));
         }
-        public static List<UserInTest> FilterValidMaxAttend(this IEnumerable<UserInTest> inTests) 
+        public static List<UserInTest> FilterValidMaxAttend(this IEnumerable<UserInTest> inTests)
         {
             var groups = from i in inTests
                          group i by i.UserID into InTestGroup
@@ -185,8 +187,9 @@ namespace OATS_Capstone.Models
             {
                 var id = item.UserId;
                 var attend = item.MaxAttend;
-                var inTest = inTests.FirstOrDefault(i => i.UserID == id&&i.NumberOfAttend==attend);
-                if (inTest != null) {
+                var inTest = inTests.FirstOrDefault(i => i.UserID == id && i.NumberOfAttend == attend);
+                if (inTest != null)
+                {
                     result.Add(inTest);
                 }
             }
@@ -195,7 +198,7 @@ namespace OATS_Capstone.Models
         public static String createHashMD5(IEnumerable<Object> keys)
         {
             // Get a byte array containing the combined password + salt.
-            string authDetails = keys.Select(i=>i.ToString()).Aggregate((f,n)=>f+n);
+            string authDetails = keys.Select(i => i.ToString()).Aggregate((f, n) => f + n);
             byte[] authBytes = System.Text.Encoding.ASCII.GetBytes(authDetails);
             // Use MD5 to compute the hash of the byte array, and return the hash as
             // a Base64-encoded string.
@@ -205,5 +208,26 @@ namespace OATS_Capstone.Models
             return hash;
         }
     }
+}
 
+namespace System.Web.Mvc
+{
+    public class ExcelResult : ActionResult
+    {
+        public ExcelPackage Package { get; set; }
+        public String FileName { get; set; }
+
+        public override void ExecuteResult(ControllerContext context)
+        {
+            if (Package != null)
+            {
+                context.HttpContext.Response.Buffer = true;
+                context.HttpContext.Response.Clear();
+                Package.SaveAs(context.HttpContext.Response.OutputStream);
+                context.HttpContext.Response.AddHeader("content-disposition", "attachment; filename=" + FileName);
+                context.HttpContext.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            }
+            //context.HttpContext.Response.WriteFile(context.HttpContext.Server.MapPath(Path));
+        }
+    }
 }
