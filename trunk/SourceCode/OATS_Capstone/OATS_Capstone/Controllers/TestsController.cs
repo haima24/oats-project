@@ -888,7 +888,6 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
-
         public JsonResult UpdateTestIntroduction(int testid, string introduction)
         {
             var common = new CommonService();
@@ -922,6 +921,16 @@ namespace OATS_Capstone.Controllers
             var common = new CommonService();
             common.UpdateUserNoneChoiceScore(questionid, userid, score);
             return Json(new { common.message, common.success });
+        }
+
+        public ActionResult ScoreToExcel(int testid, List<int> userids)
+        {
+            var common = new CommonService();
+            var package= common.ScoreToExcel(testid, userids);
+            var result = new ExcelResult();
+            result.Package = package;
+            result.FileName = "OATS_StudentScore.xlsx";
+            return result;
         }
     }
 }
