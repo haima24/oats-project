@@ -1702,6 +1702,28 @@ $(function () {
         }
     });
     //separator
+    $("#checklist[response-tab=true] .nt-qitem .nt-qoepts input[type=text].nt-pts").live("change", function () {
+        var valueString = $(this).val();
+        var value = parseFloat(valueString);
+        var questionIdString = $(this).attr("question-id");
+        var questionid = parseInt(questionIdString);
+        var checkedUserCb = $("#respUsers input[type=checkbox]:checked");
+        var userid;
+        if (checkedUserCb) {
+            userid = parseInt( checkedUserCb.attr("user-id"));
+        }
+        if (!isNaN(value) && questionid && !isNaN(questionid) && userid && !isNaN(userid)) {
+            statusSaving();
+            $.post("/Tests/UpdateUserNoneChoiceScore", { questionid: questionid, userid: userid, score: value }, function (res) {
+                if (res.success) {
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
 

@@ -21,7 +21,9 @@ namespace OATS_Capstone
         {
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName.ToLower();
             var actionName = filterContext.ActionDescriptor.ActionName.ToLower();
-            if (!(controllerName.Contains("account") ))
+            if (!(controllerName.Contains("account") ||
+                (controllerName.Contains("tests") && actionName.Contains("anonymousdotest"))
+                ))
             {
                 var authen = AuthenticationSessionModel.Instance();
 

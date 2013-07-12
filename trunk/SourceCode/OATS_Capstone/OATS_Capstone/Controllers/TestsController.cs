@@ -136,7 +136,7 @@ namespace OATS_Capstone.Controllers
             common.CloneQuestion(targetTestID, questionid);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
-        public JsonResult ReuseSearchQuestionTemplate(string term,List<int> tagids)
+        public JsonResult ReuseSearchQuestionTemplate(string term, List<int> tagids)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -164,7 +164,7 @@ namespace OATS_Capstone.Controllers
         }
 
 
-        public JsonResult TestsSearch(string term,List<int> tagids)
+        public JsonResult TestsSearch(string term, List<int> tagids)
         {
             var common = new CommonService();
             common.TestsSearch(term, tagids);
@@ -310,7 +310,7 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
-        public ActionResult DoTest(int id, string accesscode, bool check=false)
+        public ActionResult DoTest(int id, string accesscode = "", bool check = false)
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
@@ -321,14 +321,14 @@ namespace OATS_Capstone.Controllers
                 {
                     return View(test);
                 }
-                else 
+                else
                 {
                     return RedirectToAction("AccessCode", new { id = id });
                 }
             }
             else
             {
-                
+
                 if (detail.IsActive)
                 {
                     return RedirectToAction("AccessCode", new { id = id });
@@ -339,6 +339,24 @@ namespace OATS_Capstone.Controllers
                 }
             }
 
+        }
+        public ActionResult AnonymousDoTest(string id)
+        {
+            ActionResult action = RedirectToActionPermanent("Index", "Account");
+            try
+            {
+                var common = new CommonService();
+                var invitation= common.AnonymousDoTest(id);
+                if (invitation!=null) {
+                    action = RedirectToActionPermanent("DoTest", new { id = invitation.TestID });
+                }
+            }
+            catch (Exception)
+            {
+                action = RedirectToActionPermanent("Index", "Account");
+            }
+            return action;
+            
         }
         public JsonResult TestCalendarObjectResult()
         {
@@ -626,7 +644,7 @@ namespace OATS_Capstone.Controllers
         public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToStringWithParameter += (model,isOwner) =>
+            common.OnRenderPartialViewToStringWithParameter += (model, isOwner) =>
             {
                 var result = string.Empty;
                 try
@@ -724,7 +742,7 @@ namespace OATS_Capstone.Controllers
             common.SearchTagsOnTest(testid, term, maxrows);
             return Json(new { common.success, common.message, common.resultlist });
         }
-        public JsonResult AddTagToTest(int testid, int tagid,string tagname)
+        public JsonResult AddTagToTest(int testid, int tagid, string tagname)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -741,7 +759,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.AddTagToTest(testid, tagid,tagname);
+            common.AddTagToTest(testid, tagid, tagname);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult RemoveTagToTest(int testid, int tagid)
@@ -762,7 +780,7 @@ namespace OATS_Capstone.Controllers
             common.SearchTagsOnQuestion(questionid, term, maxrows);
             return Json(new { common.success, common.message, common.resultlist });
         }
-        public JsonResult AddTagToQuestion(int questionid, int tagid,string tagname)
+        public JsonResult AddTagToQuestion(int questionid, int tagid, string tagname)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -779,7 +797,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.AddTagToQuestion(questionid, tagid,tagname);
+            common.AddTagToQuestion(questionid, tagid, tagname);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult RemoveTagToQuestion(int questionid, int tagid)
@@ -844,7 +862,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.StudentCommentFeedBack(testid,fbDetail);
+            common.StudentCommentFeedBack(testid, fbDetail);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
@@ -871,15 +889,18 @@ namespace OATS_Capstone.Controllers
         }
 
 
-        public JsonResult UpdateTestIntroduction(int testid, string introduction) {
+        public JsonResult UpdateTestIntroduction(int testid, string introduction)
+        {
             var common = new CommonService();
             common.UpdateTestIntroduction(testid, introduction);
-            return Json(new { common.success,common.message});
+            return Json(new { common.success, common.message });
         }
 
-        public JsonResult ModalTestHistoryPopup(int testid) {
+        public JsonResult ModalTestHistoryPopup(int testid)
+        {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -894,6 +915,13 @@ namespace OATS_Capstone.Controllers
             };
             common.ModalTestHistoryPopup(testid);
             return Json(new { common.success, common.message, common.generatedHtml });
+        }
+
+        public JsonResult UpdateUserNoneChoiceScore(int questionid, int userid, decimal score)
+        {
+            var common = new CommonService();
+            common.UpdateUserNoneChoiceScore(questionid, userid, score);
+            return Json(new { common.message, common.success });
         }
     }
 }
