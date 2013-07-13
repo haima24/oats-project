@@ -212,7 +212,7 @@ $(function () {
                         var ele = $(generatedHtml);
                         comments.prepend(ele);
                         var articleCount = $("article", comments).length;
-                        $("#modalPopupFeedback .comment-count").html("All Comments " + articleCount );
+                        $("#modalPopupFeedback .comment-count").html("All Feedbacks " + articleCount );
                     }
                 }
             }

@@ -425,7 +425,7 @@ namespace OATS_Capstone.Controllers
             common.NewTest_ResponseTab(testid);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
-        public JsonResult NewTest_ScoreTab(int testid)
+        public JsonResult NewTest_ScoreTab(int testid,string tab)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -433,6 +433,7 @@ namespace OATS_Capstone.Controllers
                 var result = String.Empty;
                 try
                 {
+                    ViewBag.Tab = tab;
                     result = this.RenderPartialViewToString("P_ScoreTab", model);
                 }
                 catch (Exception)
@@ -447,7 +448,7 @@ namespace OATS_Capstone.Controllers
 
         }
 
-        public JsonResult NewTest_FeedBackTab(int testid)
+        public JsonResult NewTest_FeedBackTab(int testid,string feedbacktab)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -455,6 +456,7 @@ namespace OATS_Capstone.Controllers
                 var result = String.Empty;
                 try
                 {
+                    ViewBag.Tab = feedbacktab;
                     result = this.RenderPartialViewToString("P_FeedBackTab", model);
                 }
                 catch (Exception e)
@@ -463,7 +465,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.NewTest_FeedBackTab(testid);
+            common.NewTest_FeedBackTab(testid, feedbacktab);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
 
