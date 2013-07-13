@@ -11,19 +11,23 @@
 }
 else
 {
-    <div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
+    <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
         <div class="nt-panel">
             <div class="comment-count">
                 All Feedbacks
             <span>@Model.Parents.Count</span>
             </div>
 
-            <div id="comments" style="height: 400px; overflow-y: auto">
+            <div id="comments" style="height: 320px; overflow-y: auto">
                 @foreach (var feedback in Model.Parents)
                 {
                     @Html.Partial("P_FeedBack_Form_Item", feedback) 
                 }
             </div>
         </div>
+    </div>
+    <div class="teacher-feedback-controls">
+        <textarea id="teacher-feedback-content" placeholder="Your Feedback" class="span8 pull-left"></textarea>
+        <button id="teacher-feedback-submit" class="btn btn-primary input-medium pull-right">Send</button>
     </div>
 }
