@@ -106,10 +106,11 @@ namespace OATS_Capstone.Models
                 var columnName = dt.Columns.Add("Name");
                 //init columns
                 var fObj = checkedUsers.FirstOrDefault();
-                var columnOverall= dt.Columns.Add(fObj.Overall.Name);
+                var columnOverall = dt.Columns.Add(fObj.Overall.Name);
                 var otherColumns = new Dictionary<DataColumn, String>();
-                fObj.Statistics.ForEach(i => {
-                    var column=dt.Columns.Add(i.Name);
+                fObj.Statistics.ForEach(i =>
+                {
+                    var column = dt.Columns.Add(i.Name);
                     var name = i.Name;
                     otherColumns.Add(column, name);
                 });
@@ -121,12 +122,13 @@ namespace OATS_Capstone.Models
                     row[columnOverall] = i.Overall.Percent;
                     foreach (var item in otherColumns)
                     {
-                        var obj=i.Statistics.FirstOrDefault(k => k.Name == item.Value);
+                        var obj = i.Statistics.FirstOrDefault(k => k.Name == item.Value);
                         if (obj != null)
                         {
                             row[item.Key] = obj.Percent.RoundTwo();
                         }
-                        else {
+                        else
+                        {
                             row[item.Key] = 0;
                         }
                     }
@@ -295,7 +297,7 @@ namespace OATS_Capstone.Models
             decimal percent = 0;
             if (totalScore.HasValue)
             {
-                percent = score / totalScore.Value;
+                percent = score * 100 / totalScore.Value;
             }
             Percent = percent;
         }

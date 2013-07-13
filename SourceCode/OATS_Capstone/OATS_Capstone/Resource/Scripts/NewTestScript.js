@@ -5,6 +5,7 @@ var events;
 var testid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
+var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
 function updateTestIntroduction() {
@@ -944,7 +945,7 @@ $(function () {
         var li = $(link).closest("li");
         nav.find("li").removeClass("active");
         li.addClass("active");
-        $.post(action, { testid: testid, sorttype: 0 }, function (res) {
+        $.post(action, { testid: testid, tab: currentScoreDetailTab, feedbacktab: currentFeedBackTab }, function (res) {
             if (res.success) {
                 var tabcontent = $("#eventTab");
                 if (tabcontent && res.generatedHtml) {
@@ -966,70 +967,6 @@ $(function () {
             } else { showMessage("error", res.message); }
         });
     });
-
-
-    //Was used in P_FeedBackTab for choose type of sort Date
-    //$('#sortby li').each(function () {
-
-    //    var sorttype = ($(this).attr('id') === 'sortbydate') ? 0 : 1;
-    //    alert(sorttype);
-
-    //    $(this).find('a').click(function () {
-
-    //        var url = $(this).attr('href'),
-    //            data = { testid: 3, sorttype: 1 };
-    //        $.post(url, data, function (res) {
-    //            console.debug(res);
-    //            if (res.success) {
-    //                var tabcontent = $("#eventTab");
-    //                if (tabcontent && res.generatedHtml) {
-    //                    tabcontent.html(res.generatedHtml);
-    //                    $("#sidebar[content-tab=true]").accordion();
-    //                }
-    //            } else { showMessage("error", res.message); }
-    //        });
-
-    //        return false;
-    //    });
-    //});
-    $("#sortbyname a,#sortbydate a").live("click", function (e) {
-        e.preventDefault();
-        var sortType = parseInt($(this).attr("sort-type"));
-        if (!isNaN(sortType)) {
-            var url = $(this).attr('href'),
-                data = { testid: testid, sorttype: sortType };
-
-            $.post(url, data, function (res) {
-                console.debug(res);
-                if (res.success) {
-                    var tabcontent = $("#eventTab");
-                    if (tabcontent && res.generatedHtml) {
-                        tabcontent.html(res.generatedHtml);
-                        initReplyAreas();
-                    }
-                } else { showMessage("error", res.message); }
-            });
-        }
-    });
-
-
-    $("#sortbydate a").live("click", function (e) {
-        var url = $(this).attr('href'),
-            data = { testid: testid, sorttype: 0 };
-
-        $.post(url, data, function (res) {
-            console.debug(res);
-            if (res.success) {
-                var tabcontent = $("#eventTab");
-                if (tabcontent && res.generatedHtml) {
-                    tabcontent.html(res.generatedHtml);
-                }
-            } else { showMessage("error", res.message); }
-        });
-
-        return false;
-    });
-
     //separator
     $.post("/Tests/QuestionTypes", function (res) {
         if (res.success) {
@@ -1580,6 +1517,22 @@ $(function () {
         }
     });
     //separator
+    $(".feedback-tab li a[tab]").live("click", function (ev) {
+        ev.preventDefault();
+        var tab = $(this).attr("tab");
+        if (tab) {
+            currentScoreDetailTab = tab;
+            $.post("/Tests/NewTest_FeedBackTab", { testid: testid, feedbacktab: currentScoreDetailTab }, function (res) {
+                if (res.success) {
+                    var evTab = $("#eventTab");
+                    if (evTab) { evTab.html(res.generatedHtml);}
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    //separator
     $(".reply-container[toggle-header]").live("click", function () {
         var cur = $(this);
         var detail = cur.siblings(".reply-container[toggle-detail]");
@@ -1746,7 +1699,7 @@ $(function () {
                         var ele = $(generatedHtml);
                         comments.prepend(ele);
                         var articleCount = $("article", comments).length;
-                        $(".comment-count").html("All Comments " + articleCount);
+                        $(".comment-count").html("All Feedbacks " + articleCount);
                     }
                 }
         }

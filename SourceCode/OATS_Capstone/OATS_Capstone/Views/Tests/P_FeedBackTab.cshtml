@@ -1,35 +1,32 @@
 ﻿@model OATS_Capstone.Models.AbsFeedBackUser
-<ul class="nav nav-tabs">
-    <li><a href="#home" data-toggle="tab">Home</a></li>
-    <li><a href="#profile" data-toggle="tab">Profile</a></li>
-    <li><a href="#messages" data-toggle="tab">Messages</a></li>
-    <li><a href="#settings" data-toggle="tab">Settings</a></li>
-</ul>
-@if (Model.Parents.Count == 0)
-{
-    <div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
-        <div class="nt-panel">
-            <div class="nt-checklist-ctrl">
-                <div class="nt-msg">No feedback found: no student give their feedbacks.</div>
-            </div>
-        </div>
-    </div>
+@{
+    var tab = string.Empty;
+    if (ViewBag.Tab != null)
+    {
+        tab = ViewBag.Tab;
+    }
 }
-else
+@switch (tab)
 {
-    <div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
-        <div class="nt-panel">
-            <div class="comment-count">
-                All Comments
-            <span>@Model.Parents.Count</span>
-            </div>
-
-            <div id="comments" style="height: 400px; overflow-y: auto">
-                @foreach (var feedback in Model.Parents)
-                {
-                    @Html.Partial("P_FeedBack_Form_Item", feedback) 
-                }
-            </div>
-        </div>
-    </div>
+    case "student":
+    <ul class="nav nav-tabs feedback-tab">
+        <li class="active"><a tab="student" href="#" data-toggle="tab">Student Feedbacks</a></li>
+        <li><a tab="teacher" href="#" data-toggle="tab">Teacher Feedbacks</a></li>
+    </ul>
+    @Html.Partial("P_FeedBackTab_Student", Model)
+        break;
+    case "teacher":
+    <ul class="nav nav-tabs feedback-tab">
+        <li><a tab="student" href="#" data-toggle="tab">Student Feedbacks</a></li>
+        <li class="active"><a tab="teacher" href="#" data-toggle="tab">Teacher Feedbacks</a></li>
+    </ul>
+    @Html.Partial("P_FeedBackTab_Teacher", Model)
+        break;
+    default:
+    <ul class="nav nav-tabs feedback-tab">
+        <li class="active"><a tab="student" href="#" data-toggle="tab">Student Feedbacks</a></li>
+        <li><a tab="teacher" href="#" data-toggle="tab">Teacher Feedbacks</a></li>
+    </ul>
+    @Html.Partial("P_FeedBackTab_Student", Model)
+        break;
 }

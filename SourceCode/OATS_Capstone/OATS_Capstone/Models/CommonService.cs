@@ -800,7 +800,7 @@ namespace OATS_Capstone.Models
 
         }
 
-        public void NewTest_FeedBackTab(int testid)
+        public void NewTest_FeedBackTab(int testid, string feedbacktab)
         {
             try
             {
@@ -813,7 +813,19 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         message = Constants.DefaultSuccessMessage;
-                        var feedbacksLogic = new FeedBackStudent(test);
+                        AbsFeedBackUser feedbacksLogic = null;
+                        switch (feedbacktab)
+                        {
+                            case "student":
+                                feedbacksLogic = new FeedBackStudent(test);
+                                break;
+                            case "teacher":
+                                feedbacksLogic = new FeedBackTeacher(test);
+                                break;
+                            default:
+                                feedbacksLogic = new FeedBackStudent(test);
+                                break;
+                        }
                         generatedHtml = OnRenderPartialViewToString.Invoke(feedbacksLogic);
                     }
                 }

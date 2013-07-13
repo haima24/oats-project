@@ -30,7 +30,7 @@
                 <div class="nt-desc">Recent Tests</div>
             </a>
         </div>
-        <div id="recent" class="accordion-body" style="max-height: 400px">
+        <div id="recent" class="accordion-body" style="max-height: 350px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <a>
                     <div class="nt-list-head">
@@ -63,32 +63,16 @@
                     {
                         foreach (var item in Model.RecentTests)
                         {
-                        <div class="nt-list-row">
 
-                            @if (item.IsCurrentUserOwnTest)
+
+                            if (item.IsCurrentUserOwnTest)
                             {
-                                <div class="nt-name">
-                                    <i class="t-icon i-teachers"></i>
-                                    <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test">@item.TestTitle</a>
-                                </div>
-                                <div class="popover-introduction">@item.Introduction</div>
-                            }
-                            else
-                            {
-                                <div class="nt-name">
-                                     <i class="t-icon i-student"></i>
-                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
-                                    <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
-                                        <i class="t-icon i-test-history"></i>
-                                    </button>
-                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback" data-toggle="tooltip" data-placement="top" data-original-title="Give Feedback">
-                                        <i class="t-icon i-feedback"></i>
-                                    </button>
-                                </div>
-                                <div class="popover-introduction">@item.Introduction</div>
-                            }
-
-
+                        <div class="nt-list-row teacher">
+                            <div class="nt-name">
+                                <i class="t-icon i-teachers"></i>
+                                <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test">@item.TestTitle</a>
+                            </div>
+                            <div class="popover-introduction">@item.Introduction</div>
                             <div class="nt-date">
                                 @item.Start
                             </div>
@@ -102,6 +86,36 @@
                             <div class="nt-perc">@item.AverageString</div>
                             <div class="nt-perc">@item.STDEVString</div>
                         </div>
+                            }
+                            else
+                            {
+                        <div class="nt-list-row student">
+                            <div class="nt-name">
+                                <i class="t-icon i-student"></i>
+                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
+                                <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
+                                    <i class="t-icon i-test-history"></i>
+                                </button>
+                                <button test-id="@item.TestID" class="nt-btn-icon btn-feedback" data-toggle="tooltip" data-placement="top" data-original-title="Give Feedback">
+                                    <i class="t-icon i-feedback"></i>
+                                </button>
+                            </div>
+                            <div class="popover-introduction">@item.Introduction</div>
+                            <div class="popover-introduction">@item.Introduction</div>
+                            <div class="nt-date">
+                                @item.Start
+                            </div>
+                            <div class="nt-date">
+                                @item.End
+                            </div>
+
+
+                            <div class="nt-rate ">@item.Rate</div>
+
+                            <div class="nt-perc">@item.AverageString</div>
+                            <div class="nt-perc">@item.STDEVString</div>
+                        </div>
+                            }
                         }
                     }
                 </div>
@@ -119,7 +133,7 @@
                 <div class="nt-desc">Running Tests</div>
             </a>
         </div>
-        <div class="accordion-body" style="max-height: 400px">
+        <div class="accordion-body" style="max-height: 350px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <a>
                     <div class="nt-list-head">
@@ -152,35 +166,44 @@
                     {
                         foreach (var item in Model.RunningTests)
                         {
-                        <div class="nt-list-row">
-                            @if (item.IsCurrentUserOwnTest)
+
+                            if (item.IsCurrentUserOwnTest)
                             {
-                                <div class="nt-name">
-                                    <i class="t-icon i-teachers"></i>
-                                    <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test">@item.TestTitle</a>
-                                </div>
-                                <div class="popover-introduction">@item.Introduction</div>
-                            }
-                            else
-                            {
-                                <div class="nt-name">
-                                    <i class="t-icon i-student"></i>
-                                    <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
-                                    <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
-                                        <i class="t-icon i-test-history"></i>
-                                    </button>
-                                    <button test-id="@item.TestID" class="nt-btn-icon btn-feedback" data-toggle="tooltip" data-placement="top" data-original-title="Give Feedback">
-                                        <i class="t-icon i-feedback"></i>
-                                    </button>
-                                </div>
-                                <div class="popover-introduction">@item.Introduction</div>
-                            }
+                        <div class="nt-list-row teacher">
+                            <div class="nt-name">
+                                <i class="t-icon i-teachers"></i>
+                                <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test">@item.TestTitle</a>
+                            </div>
+                            <div class="popover-introduction">@item.Introduction</div>
                             <div class="nt-date">@item.Start</div>
                             <div class="nt-date">@item.End</div>
                             <div class="nt-rate">@item.Rate</div>
                             <div class="nt-perc">@item.AverageString</div>
                             <div class="nt-perc">@item.STDEVString</div>
                         </div>
+                            }
+                            else
+                            {
+                        <div class="nt-list-row student">
+                            <div class="nt-name">
+                                <i class="t-icon i-student"></i>
+                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="Take This Test">@item.TestTitle</a>
+                                <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
+                                    <i class="t-icon i-test-history"></i>
+                                </button>
+                                <button test-id="@item.TestID" class="nt-btn-icon btn-feedback" data-toggle="tooltip" data-placement="top" data-original-title="Give Feedback">
+                                    <i class="t-icon i-feedback"></i>
+                                </button>
+                            </div>
+                            <div class="popover-introduction">@item.Introduction</div>
+                            <div class="nt-date">@item.Start</div>
+                            <div class="nt-date">@item.End</div>
+                            <div class="nt-rate">@item.Rate</div>
+                            <div class="nt-perc">@item.AverageString</div>
+                            <div class="nt-perc">@item.STDEVString</div>
+                        </div>
+                            }
+
                         }
                     }
                 </div>
@@ -198,7 +221,7 @@
                 <div class="nt-desc">Upcoming Tests</div>
             </a>
         </div>
-        <div class="accordion-body" style="max-height: 400px">
+        <div class="accordion-body" style="max-height: 350px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <div class="nt-list-cont">
                     @foreach (var item in Model.UpComingTests)
@@ -233,6 +256,6 @@
         </div>
     </div>
 </div>
+</div>
 <div id="asmsOverview">
 </div>
-

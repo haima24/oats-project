@@ -1,4 +1,11 @@
 ﻿@model OATS_Capstone.Models.ScoreTest
+@{
+    var tab = string.Empty;
+    if (ViewBag.Tab != null)
+    {
+        tab = ViewBag.Tab;
+    }
+}
 @if (Model.CheckedUserIdsCount == 0)
 { 
     <div class="nt-scores-msg" style="height: 244px; overflow-y: hidden;">Please select one or more students!</div>
@@ -11,7 +18,7 @@ else
             <li><a tab="chart" href="#chart">Scores Chart</a></li>
         </ul>
         <div id="score-detail-container">
-            @switch ((String)ViewBag.Tab)
+            @switch (tab)
             {
                 case "statistic":
                 @Html.Partial("P_ScoreTab_Statistic", Model)
@@ -23,7 +30,7 @@ else
                 @Html.Partial("P_ScoreTab_Statistic", Model)
                     break;
             }
-            
+
         </div>
         <div class="nt-scores-footer">
             @*   <div class="notreptags">

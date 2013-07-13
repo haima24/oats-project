@@ -623,6 +623,25 @@ i, cite, em, var, address, dfn {
     position: relative;
 }
 
+    #eventTab .feedback-tab.nav > li > a {
+        background-color: white;
+    }
+
+    #eventTab .feedback-tab.nav-tabs > .active > a, #eventTab .feedback-tab.nav-tabs > .active > a:hover, #eventTab .feedback-tab.nav-tabs > .active > a:focus {
+        background-size: 100%;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #F8FAFC), color-stop(100%, #EAEFFA));
+        background-image: -webkit-linear-gradient(top, #F8FAFC, #EAEFFA);
+        background-image: -moz-linear-gradient(top, #F8FAFC, #EAEFFA);
+        background-image: -o-linear-gradient(top, #F8FAFC, #EAEFFA);
+        background-image: linear-gradient(top, #F8FAFC, #EAEFFA);
+        text-shadow: none;
+    }
+
+
+    #eventTab .nav-tabs {
+        margin-bottom: 0px;
+    }
+
     #eventTab > div {
         float: left;
     }
@@ -630,6 +649,7 @@ i, cite, em, var, address, dfn {
     #eventTab .nt-checklist-ctrl {
         height: 37px;
         margin-right: 17px;
+        margin-top: 10px;
     }
 
         #eventTab .nt-checklist-ctrl .nt-msg {
@@ -1711,6 +1731,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     border-top: 1px solid #ececec;
     font-size: 12px;
 }
+
+    .nt-asms-list .nt-list-row.teacher:hover {
+        background-color: #EAEFFA;
+    }
+
+    .nt-asms-list .nt-list-row.student:hover {
+        background-color: #FAEAEA;
+    }
 
     .nt-asms-list .nt-list-row .popover-introduction {
         display: none;
