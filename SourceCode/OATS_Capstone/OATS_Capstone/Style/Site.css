@@ -636,8 +636,12 @@ i, cite, em, var, address, dfn {
         background-image: linear-gradient(top, #F8FAFC, #EAEFFA);
         text-shadow: none;
     }
-
-
+.teacher-feedback-controls {
+    width:100%;
+}
+#teacher-feedback-content {
+    min-height:initial;
+}
     #eventTab .nav-tabs {
         margin-bottom: 0px;
     }
