@@ -1740,11 +1740,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     font-size: 12px;
 }
 
-    .nt-asms-list .nt-list-row.teacher:hover {
+    .nt-asms-list .nt-list-row.locked {
+        background-color: lightgray;
+    }
+    .nt-asms-list .nt-list-row:not(.locked).teacher:hover {
         background-color: #EAEFFA;
     }
 
-    .nt-asms-list .nt-list-row.student:hover {
+    .nt-asms-list .nt-list-row:not(.locked).student:hover {
         background-color: #FAEAEA;
     }
 

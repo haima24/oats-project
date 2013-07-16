@@ -222,6 +222,113 @@ namespace OATS_Capstone.Models
             }
             return result;
         }
+        public static IEnumerable<Question> Random(this IEnumerable<Question> questions, bool isRandomAnswers = false)
+        {
+            //sorting
+            var sortedQuestions = questions.OrderBy(i => i.SerialOrder);
+            var sortedCount = sortedQuestions.Count();
+            var questionsResult = new List<Question>();
+            //grouping
+            var groupList = new List<List<Question>>();
+            var currentList = new List<Question>();
+            var isBeginAnchor = false;
+            for (int i = 0; i < sortedCount; i++)
+            {
+                var item = sortedQuestions.ElementAt(i);
+                var previousItem = sortedQuestions.ElementAtOrDefault(i - 1);
+                if (item.IsTextOrImage())
+                {
+                    isBeginAnchor = true;
+                    var isPreviousIsTextOrImage = false;
+                    if (previousItem != null)
+                    {
+                        if (previousItem.IsTextOrImage())
+                        {
+                            isPreviousIsTextOrImage = true;
+                        }
+                    }
+                    if (!isPreviousIsTextOrImage)
+                    {
+                        if (currentList.Count > 0)
+                        {
+                            groupList.Add(currentList);
+                        }
+                        currentList = new List<Question>();
+                        currentList.Add(item);
+                    }
+                    else
+                    {
+                        currentList.Add(item);
+                    }
+                }
+                else
+                {
+                    if (!isBeginAnchor)
+                    {
+                        currentList.Add(item);
+                        groupList.Add(currentList);
+                        currentList = new List<Question>();
+                    }
+                    else
+                    {
+                        currentList.Add(item);
+                    }
+                }
+
+                if ((i + 1) == sortedCount && currentList.Count > 0)
+                {
+                    var last = groupList.LastOrDefault();
+                    if (last != null) {
+                        last.AddRange(currentList);
+                    }
+                }
+            }
+
+            //randomize
+            groupList.ForEach(i =>
+            {
+                i = i.Shuffle().ToList();
+            });
+            groupList = groupList.Shuffle().ToList();
+
+            questionsResult = groupList.SelectMany(i => i.Select(k => k)).ToList();
+
+            if (isRandomAnswers)
+            {
+                questionsResult.ForEach(i =>
+                {
+                    i.Answers = i.Answers.Shuffle().ToList();
+                });
+            }
+            return questionsResult;
+        }
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+        {
+            List<T> buffer = source.ToList();
+            var rng = new Random();
+            for (int i = 0; i < buffer.Count; i++)
+            {
+                int j = rng.Next(i, buffer.Count);
+                yield return buffer[j];
+                buffer[j] = buffer[i];
+            }
+        }
+        public static bool IsTextOrImage(this Question question)
+        {
+            var result = false;
+            if (question != null)
+            {
+                var qType = question.QuestionType;
+                if (qType != null)
+                {
+                    if (qType.Type == "Text" || qType.Type == "Image")
+                    {
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
 

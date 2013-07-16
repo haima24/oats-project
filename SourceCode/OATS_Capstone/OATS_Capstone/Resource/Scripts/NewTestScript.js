@@ -493,11 +493,18 @@ function initEditable() {
         "onBlur": function (element) {
             statusSaving();
             var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
-            $.post("/Tests/UpdateTestTitle", { testid: testid, text: text }, function (res) {
-                if (!res.success) {
-                    showMessage("error", res.message);
-                } else {
-                    statusSaved();
+            $.ajax({
+                type: "POST",
+                url: "/Tests/UpdateTestTitle",
+                data: JSON.stringify({ testid: testid, text: text }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (!res.success) {
+                        showMessage("error", res.message);
+                    } else {
+                        statusSaved();
+                    }
                 }
             });
         },
@@ -596,9 +603,17 @@ function initSearchTests() {
                 if (html && obj) {
                     $(html).attr("data-toggle", "tooltip");
                     if (obj.isCurrentUserOwnTest) {
-                        $(html).attr("data-original-title", "Open This Test");
+                        if (obj.running) {
+                            $(html).attr("data-original-title", "Open This Test");
+                        } else {
+                            $(html).attr("data-original-title", "Open This Test - This Test Locked due to compatitle problem");
+                        }
                     } else {
-                        $(html).attr("data-original-title", "Take This Test");
+                        if (obj.running) {
+                            $(html).attr("data-original-title", "Take This Test");
+                        } else {
+                            $(html).attr("data-original-title", "This Test Locked");
+                        }
                     }
                     $(html).tooltip();
                     if (obj.intro) {
@@ -614,13 +629,14 @@ function initSearchTests() {
                     }
                 }
             });
-
         },
         select: function (item) {
             if (item.isCurrentUserOwnTest) {
                 window.location.href = "/Tests/NewTest/" + item.id;
             } else {
-                window.location.href = "/Tests/DoTest/" + item.id;
+                if (item.running) {
+                    window.location.href = "/Tests/DoTest/" + item.id;
+                }
             }
         },
         source: function (req, res, addedTagIds) {
@@ -870,12 +886,20 @@ function addListQuestion(list, onAfterAddListQuestion) {
 function updateQuestionTitle(questionidString, newtext) {
     var questionid = parseInt(questionidString);
     statusSaving();
-    $.post("/Tests/UpdateQuestionTitle", { questionid: questionid, newtext: newtext }, function (res) {
-        if (!res.success) {
-            showMessage("error", res.message);
-        } else {
-            statusSaved();
+    $.ajax({
+        type: "POST",
+        url: "/Tests/UpdateQuestionTitle",
+        data: JSON.stringify({ questionid: questionid, newtext: newtext }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if (!res.success) {
+                showMessage("error", res.message);
+            } else {
+                statusSaved();
+            }
         }
+
     });
 }
 function deleteQuestion(questionidString, onsuccess) {

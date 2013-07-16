@@ -75,9 +75,17 @@ $(function () {
                 if (html && obj) {
                     $(html).attr("data-toggle", "tooltip");
                     if (obj.isCurrentUserOwnTest) {
-                        $(html).attr("data-original-title", "Open This Test");
+                        if (obj.running) {
+                            $(html).attr("data-original-title", "Open This Test");
+                        } else {
+                            $(html).attr("data-original-title", "Open This Test - This Test Locked due to compatitle problem");
+                        }
                     } else {
-                        $(html).attr("data-original-title", "Take This Test");
+                        if (obj.running) {
+                            $(html).attr("data-original-title", "Take This Test");
+                        } else {
+                            $(html).attr("data-original-title", "This Test Locked");
+                        }
                     }
                     $(html).tooltip();
                     if (obj.intro) {
@@ -93,13 +101,14 @@ $(function () {
                     }
                 }
             });
-            
         },
         select: function (item) {
             if (item.isCurrentUserOwnTest) {
                 window.location.href = "/Tests/NewTest/" + item.id;
             } else {
-                window.location.href = "/Tests/DoTest/" + item.id;
+                if (item.running) {
+                    window.location.href = "/Tests/DoTest/" + item.id;
+                }
             }
         },
         source: function (req, res, addedTagIds) {
@@ -113,7 +122,7 @@ $(function () {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction };
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);

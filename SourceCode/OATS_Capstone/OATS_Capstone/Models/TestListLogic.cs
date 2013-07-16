@@ -32,13 +32,19 @@ namespace OATS_Capstone.Models
             var authen = AuthenticationSessionModel.Instance();
             var invitedTest = tests.Where(i => i.Invitations.Select(t => t.UserID).Contains(authen.UserId));
             var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId);
-            recentTests = invitedTest.FilterByRecents().Select(i => new TestListItem(i)).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true })).ToList();
-            runningTests = invitedTest.FilterByRuning().Select(i => new TestListItem(i)).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true })).ToList();
-            upComingTests = invitedTest.FilterByUpcoming().Select(i => new TestListItem(i)).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true })).ToList();
+            recentTests = invitedTest.FilterByRecents().Select(i => new TestListItem(i) { IsRunning = i.IsRunning }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
+            runningTests = invitedTest.FilterByRuning().Select(i => new TestListItem(i) { IsRunning = i.IsRunning }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
+            upComingTests = invitedTest.FilterByUpcoming().Select(i => new TestListItem(i) { IsRunning = i.IsRunning }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
         }
     }
     public class TestListItem
     {
+        private bool isRunning = true;
+        public bool IsRunning
+        {
+            get { return isRunning; }
+            set { isRunning = value; }
+        }
         private bool isCurrentUserOwnTest = false;
         public string Introduction { get; set; }
         public bool IsCurrentUserOwnTest
@@ -64,34 +70,39 @@ namespace OATS_Capstone.Models
         {
             get { return allInvitedCount; }
         }
-        private decimal? _Average=null;
+        private decimal? _Average = null;
 
         public decimal? Average
         {
             get { return _Average; }
         }
-        public string AverageString { get { return Average.HasValue ?string.Format("{0:#0.#}",Average): "-"; } }
+        public string AverageString { get { return Average.HasValue ? string.Format("{0:#0.#}", Average) : "-"; } }
         public string STDEVString { get { return STDEV.HasValue ? string.Format("{0:#0.#}", STDEV) : "-"; } }
-        private decimal? _STDEV=null;
+        private decimal? _STDEV = null;
 
         public decimal? STDEV
         {
             get { return _STDEV; }
         }
-        public string Rate { get {
-            var r = "N/A";
-            if (allInvitedCount!=0&&resultedOnInvitedCount!=0) {
-                r = string.Format("{0} out of {1}", resultedOnInvitedCount, allInvitedCount);
+        public string Rate
+        {
+            get
+            {
+                var r = "N/A";
+                if (allInvitedCount != 0 && resultedOnInvitedCount != 0)
+                {
+                    r = string.Format("{0} out of {1}", resultedOnInvitedCount, allInvitedCount);
+                }
+                return r;
             }
-            return r;
-        } }
+        }
         public TestListItem(Test test)
         {
             TestID = test.TestID;
             TestTitle = test.TestTitle;
             Introduction = test.Introduction;
             Start = test.StartDateTime.ToDateDefaultFormat();
-            End = test.EndDateTime.ToDateDefaultFormat() ;
+            End = test.EndDateTime.ToDateDefaultFormat();
             if (test.UserInTests.Count > 0)
             {
                 var groupScoreList = test.UserInTests.Select(i =>

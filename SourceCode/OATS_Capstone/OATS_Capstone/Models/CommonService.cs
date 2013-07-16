@@ -447,6 +447,7 @@ namespace OATS_Capstone.Models
                                 testTemplate.DateDescription = dateDes;
                                 testTemplate.IsCurrentUserOwnTest = test.CreatedUserID == authenUserId;
                                 testTemplate.Introduction = test.Introduction;
+                                testTemplate.IsRunning = test.IsRunning;
                                 resultlist.Add(testTemplate);
                             }
                         }

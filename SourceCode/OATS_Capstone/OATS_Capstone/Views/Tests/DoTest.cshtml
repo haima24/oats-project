@@ -1,86 +1,79 @@
-﻿@using OATS_Capstone.Models
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
-@model OATS_Capstone.Models.Test
-@{
-    var authen=AuthenticationSessionModel.Instance();
-    var user = authen.User;
-}
+@model OATS_Capstone.Models.TestLogic
 @if (Model != null)
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
-}
-
-<script src="~/Resource/Scripts/DoTestScript.js"></script>
-<div class="navbar navbar-static-top">
-    <div class="navbar-inner">
-        <div id="savestatus" style="display: none;">
-            <span class="nt-desc" style="display: inline;"></span>
+    <script src="~/Resource/Scripts/DoTestScript.js"></script>
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div id="savestatus" style="display: none;">
+                <span class="nt-desc" style="display: inline;"></span>
+            </div>
+            <div class="container">
+                <a id="logo" class="brand" href="@Url.Action("Index", "Tests")">OATS</a>
+                <div class="nt-test-header">@Model.TestTitle</div>
+                <!-- /.nav-collapse -->
+            </div>
         </div>
-        <div class="container">
-            <a id="logo" class="brand" href="@Url.Action("Index","Tests")">OATS</a>
-            <div class="nt-test-header">@Model.TestTitle</div>
-            <!-- /.nav-collapse -->
-        </div>
+        <!-- /navbar-inner -->
     </div>
-    <!-- /navbar-inner -->
-</div>
-<div id="container" class="container wrapper nt-de-cont">
-    @*<div class="nt-header">Demo to copy</div>*@
-    <div class="nt-checklist-cont" style="max-height: 560px; overflow-y: auto;">
-        <div class="introduction">
-            <span class="summary">Introduction : </span>
-            <span>@Model.Introduction</span>
-        </div>
-        <div class="nt-username">Admin User</div>
-        @*<div class="nt-asm-title">Demo to copy</div>*@
-        <div id="checklist">
-            @if (Model == null)
-            { @Html.Partial("P_Type_Empty_Template") }
-            else
-            {
-                if (Model.Questions.Count == 0)
-                {
-                @Html.Partial("P_Type_Empty_Template")
-                }
+    <div id="container" class="container wrapper nt-de-cont">
+        @*<div class="nt-header">Demo to copy</div>*@
+        <div class="nt-checklist-cont" style="max-height: 560px; overflow-y: auto;">
+            <div class="introduction">
+                <span class="summary">Introduction : </span>
+                <span>@Model.Introduction</span>
+            </div>
+            <div class="nt-username">Admin User</div>
+            @*<div class="nt-asm-title">Demo to copy</div>*@
+            <div id="checklist">
+                @if (Model == null)
+                { @Html.Partial("P_Type_Empty_Template") }
                 else
                 {
-                    var orderedQuestions = Model.Questions.OrderBy(i => i.SerialOrder);
-                    foreach (var question in orderedQuestions)
+                    if (Model.Questions.Count() == 0)
                     {
+                    @Html.Partial("P_Type_Empty_Template")
+                    }
+                    else
+                    {
+                        foreach (var question in Model.Questions)
+                        {
                     @Html.Partial("P_Question_Instance_DoTest", question)
+                        }
                     }
                 }
-            }
-        </div>
-    </div>
-    <div class="nt-footer" style="display: block;">
-        <div class="nt-footer-cont">
-            <div class="nt-resp-stat">
-                <div class="nt-resp-stat-desc">0 of 4 answered - 0% complete</div>
-                <div class="nt-resp-stat-bar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
-                    <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="display: none; width: 0%;"></div>
-                </div>
-            </div>
-            <button id="submit-btn" class="nt-btn-submit nt-submit">Submit</button>
-            <div class="nt-footer-right">
-                <div class="nt-time-remaining" id="c427">
-                    <div class="nt-time-remaining-text">Time remaining:</div>
-                    <div class="nt-time-remaining-value nt-full">
-                        <div class="nt-time-digits">1</div>
-                        <div class="nt-hour">hour</div>
-                        <div class="nt-time-digits">46</div>
-                        <div class="nt-minute">minutes</div>
-                    </div>
-                    <div class="nt-time-remaining-value nt-abbr">
-                        <div class="nt-time-digits">1</div>
-                        <div class="nt-hour">hr</div>
-                        <div class="nt-time-digits">46</div>
-                        <div class="nt-minute">mins</div>
-                    </div>
-                </div>
             </div>
         </div>
+        <div class="nt-footer" style="display: block;">
+            <div class="nt-footer-cont">
+                <div class="nt-resp-stat">
+                    <div class="nt-resp-stat-desc">0 of 4 answered - 0% complete</div>
+                    <div class="nt-resp-stat-bar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+                        <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="display: none; width: 0%;"></div>
+                    </div>
+                </div>
+                <button id="submit-btn" class="nt-btn-submit nt-submit">Submit</button>
+                <div class="nt-footer-right">
+                    <div class="nt-time-remaining" id="c427">
+                        <div class="nt-time-remaining-text">Time remaining:</div>
+                        <div class="nt-time-remaining-value nt-full">
+                            <div class="nt-time-digits">1</div>
+                            <div class="nt-hour">hour</div>
+                            <div class="nt-time-digits">46</div>
+                            <div class="nt-minute">minutes</div>
+                        </div>
+                        <div class="nt-time-remaining-value nt-abbr">
+                            <div class="nt-time-digits">1</div>
+                            <div class="nt-hour">hr</div>
+                            <div class="nt-time-digits">46</div>
+                            <div class="nt-minute">mins</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+}
