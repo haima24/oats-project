@@ -201,30 +201,30 @@ $(function () {
     });
 
     var hub = $.connection.generalHub;
-    hub.client.R_commentFeedback = function (tid, generatedHtml) {
+    hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {
         var popTestIdString = $("#modalPopupFeedback #test-id").val();
         var popTestId = parseInt(popTestIdString);
         if (tid && generatedHtml) {
             if (!isNaN(popTestId)) {
                 if (tid == popTestId) {
-                    var comments = $("#comments");
+                    var comments = $("#comments[student]");
                     if (comments.length > 0) {
                         var ele = $(generatedHtml);
                         comments.prepend(ele);
                         var articleCount = $("article", comments).length;
-                        $("#modalPopupFeedback .comment-count").html("All Feedbacks " + articleCount );
+                        $("#modalPopupFeedback .comment-count span").html(articleCount );
                     }
                 }
             }
         }
     }
-    hub.client.R_replyFeedback = function (tid, parentFeedBackId, generatedHtml) {
+    hub.client.R_studentAndTeacherReplyFeedback = function (tid, parentFeedBackId, generatedHtml) {
         var popTestIdString = $("#modalPopupFeedback #test-id").val();
         var popTestId = parseInt(popTestIdString);
         if (tid && parentFeedBackId && generatedHtml) {
             if (!isNaN(popTestId)) {
                 if (tid == popTestId) {
-                    var article = $("#comments article[parent-id=" + parentFeedBackId + "]");
+                    var article = $("#comments[student] article[parent-id=" + parentFeedBackId + "]");
                     if (article.length > 0) {
                         var ele = $(generatedHtml);
                         $(".reply-details", article).append(ele);
@@ -241,7 +241,7 @@ $(function () {
             var testid = parseInt($("#test-id").val());
             var text = $("#message").val(); //get text
             if (text) {
-                $.post("/Tests/StudentCommentFeedBack", { testid: testid, fbDetail: text }, function (res) {
+                $.post("/Tests/UserCommentFeedBack", { testid: testid, fbDetail: text, role: "StudentAndTeacher" }, function (res) {
                     if (res.success) {
                         $("#message").val(""); //clear text
                     } else {
@@ -259,7 +259,7 @@ $(function () {
             var text = area.val();
             if (text) {
                 var place = $(".reply-details", container);
-                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
+                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text,role:"StudentAndTeacher" }, function (res) {
                     if (res.success) {
                         if (area) { area.val(""); }
                     } else {

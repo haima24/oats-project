@@ -346,8 +346,9 @@ namespace OATS_Capstone.Controllers
             try
             {
                 var common = new CommonService();
-                var invitation= common.AnonymousDoTest(id);
-                if (invitation!=null) {
+                var invitation = common.AnonymousDoTest(id);
+                if (invitation != null)
+                {
                     action = RedirectToActionPermanent("DoTest", new { id = invitation.TestID });
                 }
             }
@@ -356,7 +357,7 @@ namespace OATS_Capstone.Controllers
                 action = RedirectToActionPermanent("Index", "Account");
             }
             return action;
-            
+
         }
         public JsonResult TestCalendarObjectResult()
         {
@@ -425,7 +426,7 @@ namespace OATS_Capstone.Controllers
             common.NewTest_ResponseTab(testid);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
-        public JsonResult NewTest_ScoreTab(int testid,string tab)
+        public JsonResult NewTest_ScoreTab(int testid, string tab)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -448,7 +449,7 @@ namespace OATS_Capstone.Controllers
 
         }
 
-        public JsonResult NewTest_FeedBackTab(int testid,string feedbacktab)
+        public JsonResult NewTest_FeedBackTab(int testid, string feedbacktab)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -847,7 +848,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
-        public JsonResult StudentCommentFeedBack(int testid, string fbDetail)
+        public JsonResult UserCommentFeedBack(int testid, string fbDetail, string role)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -864,12 +865,12 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.StudentCommentFeedBack(testid, fbDetail);
+            common.UserCommentFeedBack(testid, fbDetail, role);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
 
-        public JsonResult UserReplyFeedBack(int testid, int parentFeedBackId, string replyDetail)
+        public JsonResult UserReplyFeedBack(int testid, int parentFeedBackId, string replyDetail, string role)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -886,7 +887,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.UserReplyFeedBack(testid, parentFeedBackId, replyDetail);
+            common.UserReplyFeedBack(testid, parentFeedBackId, replyDetail, role);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
@@ -928,11 +929,34 @@ namespace OATS_Capstone.Controllers
         public ActionResult ScoreToExcel(int testid, List<int> userids)
         {
             var common = new CommonService();
-            var package= common.ScoreToExcel(testid, userids);
+            var package = common.ScoreToExcel(testid, userids);
             var result = new ExcelResult();
             result.Package = package;
             result.FileName = "OATS_StudentScore.xlsx";
             return result;
+        }
+
+        public JsonResult UpdateMaxScoreSetting(int testid, int score)
+        {
+            var common = new CommonService();
+            common.UpdateMaxScoreSetting(testid, score);
+            return Json(new { common.success,common.message});
+        }
+
+        public JsonResult CheckMaxScoreAndTotalScore(int testid)
+        {
+            var common = new CommonService();
+            TotalAndMaxScore carier = null;
+            common.CheckMaxScoreAndTotalScore(testid,ref carier);
+            Object json = null;
+            if (carier == null)
+            {
+                json = new { common.success, common.message };
+            }
+            else {
+                json = new { common.success, common.message, carier.MaxScoreSetting, carier.TotalScore, carier.IsRunning };
+            }
+            return Json(json);
         }
     }
 }

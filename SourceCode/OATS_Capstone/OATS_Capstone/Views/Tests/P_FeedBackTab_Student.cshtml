@@ -11,14 +11,14 @@
 }
 else
 {
-    <div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
+    <div class="nt-asm-settings" style="height: 480px; overflow-y: auto;">
         <div class="nt-panel">
             <div class="comment-count">
                 All Feedbacks
             <span>@Model.Parents.Count</span>
             </div>
 
-            <div id="comments" style="height: 400px; overflow-y: auto">
+            <div id="comments" style="height: 400px; overflow-y: auto" student="true">
                 @foreach (var feedback in Model.Parents)
                 {
                     @Html.Partial("P_FeedBack_Form_Item", feedback) 

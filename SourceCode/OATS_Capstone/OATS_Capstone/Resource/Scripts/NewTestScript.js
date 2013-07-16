@@ -8,6 +8,25 @@ var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
+function checkMaxScoreAndTotalScore() {
+    $.post("/Tests/CheckMaxScoreAndTotalScore", { testid: testid }, function (res) {
+        if (res.success) {
+            var obj = $("#message-max-score");
+            if (typeof (res.IsRunning) != "undefined") {
+                if (res.IsRunning) {
+                    obj.hide();
+                } else {
+                    $(".total", obj).html(res.TotalScore);
+                    $(".max", obj).html(res.MaxScoreSetting);
+                    obj.show();
+                }
+            }
+        }
+        else {
+            showMessage("error", res.message);
+        }
+    });
+}
 function updateTestIntroduction() {
     var text = $("#intro-detail").val();
     statusSaving();
@@ -29,6 +48,7 @@ function postSetting(li) {
             var html = $(res.generatedHtml);
             if (li) {
                 li.html(html);
+                checkMaxScoreAndTotalScore();
             }
         } else {
             showMessage("error", res.message);
@@ -755,6 +775,7 @@ function updateAnswer(lineElement, target) {
             } else {
                 answers
                 statusSaved();
+                checkMaxScoreAndTotalScore();
             }
         }
 
@@ -932,6 +953,8 @@ $(function () {
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
 
+    checkMaxScoreAndTotalScore();
+
     //separator
     initPopover();
     initSearchTests();
@@ -1105,6 +1128,7 @@ $(function () {
             $.post("/Tests/UpdateNoneChoiceScore", { questionid: questionid, score: score }, function (res) {
                 if (res.success) {
                     statusSaved();
+                    checkMaxScoreAndTotalScore();
                 }
                 else {
                     showMessage("error", res.message);
@@ -1525,7 +1549,7 @@ $(function () {
             $.post("/Tests/NewTest_FeedBackTab", { testid: testid, feedbacktab: currentScoreDetailTab }, function (res) {
                 if (res.success) {
                     var evTab = $("#eventTab");
-                    if (evTab) { evTab.html(res.generatedHtml);}
+                    if (evTab) { evTab.html(res.generatedHtml); }
                 } else {
                     showMessage("error", res.message);
                 }
@@ -1663,7 +1687,7 @@ $(function () {
         var checkedUserCb = $("#respUsers input[type=checkbox]:checked");
         var userid;
         if (checkedUserCb) {
-            userid = parseInt( checkedUserCb.attr("user-id"));
+            userid = parseInt(checkedUserCb.attr("user-id"));
         }
         if (!isNaN(value) && questionid && !isNaN(questionid) && userid && !isNaN(userid)) {
             statusSaving();
@@ -1682,8 +1706,25 @@ $(function () {
             return $(e).attr("user-id");
         }).convertJqueryArrayToJSArray();
         var ids = checkIds.join("&userids=");
-        window.location = "/Tests/ScoreToExcel?testid="+testid+"&&userids="+ids;
+        window.location = "/Tests/ScoreToExcel?testid=" + testid + "&&userids=" + ids;
     });
+    //separator
+    $("#asm_max_point").live("change", function () {
+        var valueString = $(this).val();
+        var value = parseInt(valueString);
+        if (!isNaN(value)) {
+            statusSaving();
+            $.post("/Tests/UpdateMaxScoreSetting", { testid: testid, score: value }, function (res) {
+                if (res.success) {
+                    statusSaved();
+                    checkMaxScoreAndTotalScore();
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
 
@@ -1691,24 +1732,49 @@ $(function () {
 
 
     var hub = $.connection.generalHub;
-    hub.client.R_commentFeedback = function (tid, generatedHtml) {
+    hub.client.R_teacherAndTeacherCommentFeedback = function (tid, generatedHtml) {
         if (tid && generatedHtml) {
             if (tid == testid) {
-                    var comments = $("#comments");
-                    if (comments.length > 0) {
-                        var ele = $(generatedHtml);
-                        comments.prepend(ele);
-                        var articleCount = $("article", comments).length;
-                        $(".comment-count").html("All Feedbacks " + articleCount);
-                    }
+                var comments = $("#comments[teacher]");
+                if (comments.length > 0) {
+                    var ele = $(generatedHtml);
+                    comments.prepend(ele);
+                    var articleCount = $("article", comments).length;
+                    $(".comment-count span").html(articleCount);
                 }
+            }
         }
     }
-
-    hub.client.R_replyFeedback = function (tid, parentFeedBackId, generatedHtml) {
+    hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {
+        if (tid && generatedHtml) {
+            if (tid == testid) {
+                var comments = $("#comments[student]");
+                if (comments.length > 0) {
+                    var ele = $(generatedHtml);
+                    comments.prepend(ele);
+                    var articleCount = $("article", comments).length;
+                    $(".comment-count").html("All Feedbacks " + articleCount);
+                }
+            }
+        }
+    }
+    hub.client.R_teacherAndTeacherReplyFeedback = function (tid, parentFeedBackId, generatedHtml) {
         if (tid && parentFeedBackId && generatedHtml) {
             if (tid == testid) {
-                var article = $("#comments article[parent-id=" + parentFeedBackId + "]");
+                var article = $("#comments[teacher] article[parent-id=" + parentFeedBackId + "]");
+                if (article.length > 0) {
+                    var ele = $(generatedHtml);
+                    $(".reply-details", article).append(ele);
+                    var count = $(".reply-detail", article).length;
+                    $(".reply-count-link span[data-count]", article).html(count);
+                }
+            }
+        }
+    }
+    hub.client.R_studentAndTeacherReplyFeedback = function (tid, parentFeedBackId, generatedHtml) {
+        if (tid && parentFeedBackId && generatedHtml) {
+            if (tid == testid) {
+                var article = $("#comments[student] article[parent-id=" + parentFeedBackId + "]");
                 if (article.length > 0) {
                     var ele = $(generatedHtml);
                     $(".reply-details", article).append(ele);
@@ -1720,7 +1786,7 @@ $(function () {
     }
     hub.client.R_deactivetest = function (id, mail) {
         if (id && id == testid) {
-            showCountDownMessage("info", "User with email:" + mail + " disabled this test","Redirect to Homepage", function () {
+            showCountDownMessage("info", "User with email:" + mail + " disabled this test", "Redirect to Homepage", function () {
                 window.location = "/Tests";
             });
         }
@@ -1744,10 +1810,32 @@ $(function () {
             var area = $(".reply-area", container);
             var text = area.val();
             if (text) {
+                var type = "";
+                var comments = $("#comments");
+                if (comments.attr("student") == "true") {
+                    type = "StudentAndTeacher";
+                }
+                else if (comments.attr("teacher") == "true") {
+                    type = "TeacherAndTeacher";
+                }
                 var place = $(".reply-details", container);
-                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text }, function (res) {
+                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text, role: type }, function (res) {
                     if (res.success) {
                         if (area) { area.val(""); }
+                    } else {
+                        showMessage("error", res.message);
+                    }
+                });
+            }
+        });
+
+        $("#teacher-feedback-submit").live("click", function () {
+            var area = $("#teacher-feedback-content");
+            var text = area.val(); //get text
+            if (text) {
+                $.post("/Tests/UserCommentFeedBack", { testid: testid, fbDetail: text, role: "TeacherAndTeacher" }, function (res) {
+                    if (res.success) {
+                        area.val(""); //clear text
                     } else {
                         showMessage("error", res.message);
                     }

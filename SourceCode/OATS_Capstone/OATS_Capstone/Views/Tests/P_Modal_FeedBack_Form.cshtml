@@ -7,9 +7,10 @@
     <div class="modal-body">
         <div class="controls">
             <div class="comment-count">
-            <span>All Feedbacks @Model.FeedBackCount</span>
+                All Feedbacks 
+            <span>@Model.FeedBackCount</span>
             </div>
-            <div id="comments" class="nt-panel" style="height: 280px; width: 950px; overflow-y: auto">
+            <div id="comments" student class="nt-panel" style="height: 280px; width: 950px; overflow-y: auto">
                 @foreach (var feedback in @Model.Parents)
                 {
                     @Html.Partial("P_FeedBack_Form_Item",feedback)
