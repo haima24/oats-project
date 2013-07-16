@@ -7,12 +7,13 @@ namespace OATS_Capstone.Models
 {
     public class TestLogic
     {
-        public string CurrentUserName{get;set;}
+        public string CurrentUserName { get; set; }
         public string TestTitle { get; set; }
         public IEnumerable<Question> Questions { get; set; }
         public string Introduction { get; set; }
         public int TestID { get; set; }
-        public TestLogic(Test test) {
+        public TestLogic(Test test)
+        {
             if (test != null)
             {
                 TestID = test.TestID;
@@ -24,8 +25,14 @@ namespace OATS_Capstone.Models
                 {
                     CurrentUserName = user.FirstName ?? user.LastName ?? user.UserMail;
                 }
-                Questions = test.Questions.OrderBy(i=>i.SerialOrder);
-                //Questions = Questions.Random(true);
+                Questions = test.Questions.OrderBy(i => i.SerialOrder);
+                var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RAO");
+                if (settingDetail.IsActive)
+                {
+                    Questions = Questions.RandomAnswers();
+                }
+
+                //Questions = Questions.RandomQuestion();
             }
         }
     }

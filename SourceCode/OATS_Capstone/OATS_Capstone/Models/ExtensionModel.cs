@@ -222,7 +222,7 @@ namespace OATS_Capstone.Models
             }
             return result;
         }
-        public static IEnumerable<Question> Random(this IEnumerable<Question> questions, bool isRandomAnswers = false)
+        public static IEnumerable<Question> RandomQuestion(this IEnumerable<Question> questions)
         {
             //sorting
             var sortedQuestions = questions.OrderBy(i => i.SerialOrder);
@@ -293,14 +293,13 @@ namespace OATS_Capstone.Models
 
             questionsResult = groupList.SelectMany(i => i.Select(k => k)).ToList();
 
-            if (isRandomAnswers)
-            {
-                questionsResult.ForEach(i =>
-                {
-                    i.Answers = i.Answers.Shuffle().ToList();
-                });
-            }
             return questionsResult;
+        }
+        public static IEnumerable<Question> RandomAnswers(this IEnumerable<Question> questions)
+        {
+            var randomAns = questions.ToList();
+            randomAns.ForEach(i => i.Answers = i.Answers.Shuffle().ToList());
+            return randomAns;
         }
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
         {
