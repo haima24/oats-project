@@ -1,8 +1,4 @@
 ﻿@model OATS_Capstone.Models.Question
-@{
-    var sortedAns = Model.Answers.OrderBy(i => i.SerialOrder);
-}
-
 <div class="nt-qitem" question-type="Multiple" question-id=@Model.QuestionID>
     <div class="nt-qnum "></div>
     <a class="nt-qanchor" name="Qundefined"></a>
@@ -19,7 +15,7 @@
     </div>
 
     <div class="nt-qanscont nt-sortable">
-        @foreach (var ans in sortedAns)
+        @foreach (var ans in Model.Answers)
         { 
             <div class="nt-qans nt-qans-hover">
                 <!-- TODO: consistent editable / fillable display -->

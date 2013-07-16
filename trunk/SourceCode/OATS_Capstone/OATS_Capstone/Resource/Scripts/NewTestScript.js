@@ -42,7 +42,8 @@ function postSetting(li) {
     var cb = $("input[type=checkbox]", li);
     var settingKey = cb.attr("setting-key");
     var isactive = cb.attr("checked") ? true : false;
-    var testtime = $("#asm_time_limit").val();
+    var timeValue = parseInt( $("#asm_time_limit").val());
+    var testtime = isNaN(timeValue) ? 0 : timeValue;
     $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive, testtime: testtime }, function (res) {
         if (res.success) {
             var html = $(res.generatedHtml);
