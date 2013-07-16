@@ -224,6 +224,7 @@
       <DependentUpon>OATSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TestListLogic.cs" />
+    <Compile Include="Models\TestLogic.cs" />
     <Compile Include="Models\TestResponseLogic.cs" />
     <Compile Include="Models\TestScoreLogic.cs" />
     <Compile Include="Models\User.cs">

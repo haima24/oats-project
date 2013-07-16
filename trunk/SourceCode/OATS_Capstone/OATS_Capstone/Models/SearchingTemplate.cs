@@ -12,6 +12,7 @@ namespace OATS_Capstone.Models
         public string DateDescription { get; set; }
         public bool IsCurrentUserOwnTest { get; set; }
         public string Introduction { get; set; }
+        public bool IsRunning { get; set; }
     }
 
     public class SearchingUsers

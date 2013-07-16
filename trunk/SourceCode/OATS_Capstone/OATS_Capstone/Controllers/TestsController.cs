@@ -314,29 +314,40 @@ namespace OATS_Capstone.Controllers
         {
             var db = SingletonDb.Instance();
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
-            var detail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
-            if (check)
+
+            //code for checking invitation and number of attemp
+
+            if (test.IsRunning && test.IsActive)
             {
-                if (detail.TextValue == accesscode)
+                var detail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+                if (check)
                 {
-                    return View(test);
+                    if (detail.TextValue == accesscode)
+                    {
+                        var testLogic = new TestLogic(test);
+                        return View(testLogic);
+                    }
+                    else
+                    {
+                        return RedirectToAction("AccessCode", new { id = id });
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("AccessCode", new { id = id });
+
+                    if (detail.IsActive)
+                    {
+                        return RedirectToAction("AccessCode", new { id = id });
+                    }
+                    else
+                    {
+                        var testLogic = new TestLogic(test);
+                        return View(testLogic);
+                    }
                 }
             }
-            else
-            {
-
-                if (detail.IsActive)
-                {
-                    return RedirectToAction("AccessCode", new { id = id });
-                }
-                else
-                {
-                    return View(test);
-                }
+            else {
+                return RedirectToActionPermanent("Index");
             }
 
         }
