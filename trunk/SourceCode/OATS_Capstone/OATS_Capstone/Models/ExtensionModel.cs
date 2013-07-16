@@ -207,6 +207,21 @@ namespace OATS_Capstone.Models
             string hash = Convert.ToBase64String(hashedBytes);
             return hash;
         }
+        public static bool IsTotalScoreEqualMaxScore(this Test test)
+        {
+            var result = false;
+            if (test != null)
+            {
+                var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                if (settingDetail != null)
+                {
+                    var total = test.Questions.TotalScore();
+                    var max = settingDetail.NumberValue;
+                    result = total == max;
+                }
+            }
+            return result;
+        }
     }
 }
 

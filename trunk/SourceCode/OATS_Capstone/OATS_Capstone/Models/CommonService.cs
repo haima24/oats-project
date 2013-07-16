@@ -17,6 +17,7 @@ namespace OATS_Capstone.Models
     public delegate String OnRenderPartialViewHandlerWithParameter(object model, object parameter);
     public class CommonService
     {
+
         private IUserMailer _userMailer = new UserMailer();
         public IUserMailer UserMailer
         {
@@ -554,6 +555,7 @@ namespace OATS_Capstone.Models
                 test.StartDateTime = DateTime.Now;
                 test.SettingConfigID = 1;
                 test.IsActive = true;
+                test.IsRunning = true;
                 db.Tests.Add(test);
                 db.SaveChanges();
                 generatedId = test.TestID;
@@ -1146,6 +1148,28 @@ namespace OATS_Capstone.Models
                         dbAnswers.Add(ansDb);
                     }
                 });
+
+                var dbAns = dbAnswers.FirstOrDefault();
+                if (dbAns != null) {
+                    var test = dbAns.Question.Test;
+                    var totalScore = test.Questions.TotalScore();
+                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                    if (settingDetail != null)
+                    {
+                        if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
+                        {
+                            if ((totalScore ?? 0) != (settingDetail.NumberValue??0))
+                            {
+                                test.IsRunning = false;
+                            }
+                            else
+                            {
+                                test.IsRunning = true;
+                            }
+                        }
+                    }
+                }
+
                 RecalculateUserInTestScore(dbAnswers);
                 if (db.SaveChanges() >= 0)
                 {
@@ -1347,6 +1371,16 @@ namespace OATS_Capstone.Models
                         else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
                         {
                             detail.TextValue = GenerateAccessKey(8);
+                        }
+                        else if (detail.SettingType.SettingTypeKey == "MTP") {
+                            if (isactive)
+                            {
+                                var isEqual = test.IsTotalScoreEqualMaxScore();
+                                test.IsRunning = isEqual;
+                            }
+                            else {
+                                test.IsRunning = true;
+                            }
                         }
                         if (db.SaveChanges() >= 0)
                         {
@@ -2218,6 +2252,26 @@ namespace OATS_Capstone.Models
                     if (question.QuestionType.Type == "Essay" || question.QuestionType.Type == "ShortAnswer")
                     {
                         question.NoneChoiceScore = score;
+
+                        //update running status
+                        var test = question.Test;
+                        var totalScore = test.Questions.TotalScore();
+                        var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                        if (settingDetail != null)
+                        {
+                            if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
+                            {
+                                if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
+                                {
+                                    test.IsRunning = false;
+                                }
+                                else
+                                {
+                                    test.IsRunning = true;
+                                }
+                            }
+                        }
+
                         if (db.SaveChanges() > 0)
                         {
                             success = true;
@@ -2277,7 +2331,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void StudentCommentFeedBack(int testid, string fbDetail)
+        public void UserCommentFeedBack(int testid, string fbDetail, string role)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2285,13 +2339,14 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
+                var userId = authen.UserId;
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid); //#1
                 if (test != null)
                 {
                     //new a FeedBack
                     var feedback = new FeedBack();
                     //assign attribute
-                    feedback.UserID = authen.UserId;
+                    feedback.UserID = userId;
                     feedback.FeedBackDetail = fbDetail;
                     feedback.FeedBackDateTime = DateTime.Now;
                     feedback.ParentID = null;
@@ -2306,8 +2361,24 @@ namespace OATS_Capstone.Models
                         {
                             success = true;
                             generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
-                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
-                            context.Clients.All.R_commentFeedback(testid, generatedHtml);
+
+                            if (!string.IsNullOrEmpty(role))
+                            {
+
+                                var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                                switch (role)
+                                {
+                                    case "StudentAndTeacher":
+                                        context.Clients.All.R_studentAndTeacherCommentFeedback(testid, generatedHtml);
+                                        break;
+                                    case "TeacherAndTeacher":
+                                        context.Clients.All.R_teacherAndTeacherCommentFeedback(testid, generatedHtml);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
                         }
                     }
 
@@ -2319,7 +2390,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void UserReplyFeedBack(int testid, int parentFeedBackId, string replyDetail)
+        public void UserReplyFeedBack(int testid, int parentFeedBackId, string replyDetail, string role)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2348,8 +2419,24 @@ namespace OATS_Capstone.Models
                         {
                             success = true;
                             generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
-                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
-                            context.Clients.All.R_replyFeedback(testid, parentFeedBackId, generatedHtml);
+                            if (!string.IsNullOrEmpty(role))
+                            {
+
+                                var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                                switch (role)
+                                {
+                                    case "StudentAndTeacher":
+                                        context.Clients.All.R_studentAndTeacherReplyFeedback(testid, parentFeedBackId, generatedHtml);
+                                        break;
+                                    case "TeacherAndTeacher":
+                                        context.Clients.All.R_teacherAndTeacherReplyFeedback(testid, parentFeedBackId, generatedHtml);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+
                         }
                     }
 
@@ -2559,7 +2646,8 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null) {
+                if (test != null)
+                {
                     var scoreTest = new ScoreTest(test, userids);
                     pack = scoreTest.ToExcelPackage();
                 }
@@ -2570,6 +2658,70 @@ namespace OATS_Capstone.Models
                 pack = null;
             }
             return pack;
+        }
+        public void UpdateMaxScoreSetting(int testid, int score)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                    if (settingDetail != null)
+                    {
+                        settingDetail.NumberValue = score;
+                        var totalScore = test.Questions.TotalScore();
+                        if (totalScore.HasValue && score !=0)
+                        {
+                            if ((totalScore ?? 0) != score)
+                            {
+                                test.IsRunning = false;
+                            }
+                            else {
+                                test.IsRunning = true;
+                            }
+                        }
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void CheckMaxScoreAndTotalScore(int testid,ref TotalAndMaxScore carier)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null) {
+                    carier = new TotalAndMaxScore();
+                    carier.TotalScore = test.Questions.TotalScore();
+                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                    if (settingDetail != null)
+                    {
+                        carier.MaxScoreSetting = settingDetail.NumberValue??0;
+                        carier.IsRunning = test.IsRunning;
+                    }
+                    success = true;
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
         }
     }
 }

@@ -54,15 +54,21 @@ namespace OATS_Capstone.Models
         {
             parents = test.FeedBacks.Where(i =>
             {
-
-                var invitation = test.Invitations.FirstOrDefault(k => k.UserID == i.UserID);
-                if (invitation != null)
+                if (test.CreatedUserID == i.UserID)
                 {
-                    return invitation.Role.RoleDescription == "Teacher" && !i.ParentID.HasValue;
+                    return true;
                 }
                 else
                 {
-                    return false;
+                    var invitation = test.Invitations.FirstOrDefault(k => k.UserID == i.UserID);
+                    if (invitation != null)
+                    {
+                        return invitation.Role.RoleDescription == "Teacher" && !i.ParentID.HasValue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }).ToList();
 

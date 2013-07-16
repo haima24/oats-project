@@ -236,6 +236,7 @@
           <Property Name="Duration" Type="int" />
           <Property Name="SettingConfigID" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsRunning" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -793,6 +794,7 @@
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Test_User" FromRole="Test" ToRole="User" />
           <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_Test" FromRole="Test" ToRole="UserInTest" />
           <Property Type="String" Name="Introduction" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsRunning" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -1227,6 +1229,7 @@
           <EntitySetMapping Name="Tests">
             <EntityTypeMapping TypeName="OATSDBModel.Test">
               <MappingFragment StoreEntitySet="Test">
+                <ScalarProperty Name="IsRunning" ColumnName="IsRunning" />
                 <ScalarProperty Name="Introduction" ColumnName="Introduction" />
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
                 <ScalarProperty Name="TestTitle" ColumnName="TestTitle" />
