@@ -17,7 +17,10 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-
+        public ActionResult DetailRegister()
+        {
+            return View();
+        }
         public JsonResult Login(string email, string password, bool remembered)
         {
             var common = new CommonService();
@@ -27,7 +30,8 @@ namespace OATS_Capstone.Controllers
         public JsonResult SignUp(User user)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString+=(model)=>{
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -48,5 +52,6 @@ namespace OATS_Capstone.Controllers
             AuthenticationSessionModel.TerminateAuthentication();
             return View("Index");
         }
+
     }
 }

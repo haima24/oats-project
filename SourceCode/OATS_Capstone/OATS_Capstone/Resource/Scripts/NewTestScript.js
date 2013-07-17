@@ -3,6 +3,7 @@ var emptylist;
 var listkey = "listquestion";
 var events;
 var testid;
+var userid;
 var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
@@ -978,6 +979,9 @@ $(function () {
     var testidString = $("#test-id").val();
     testid = parseInt(testidString);
 
+    var useridString = $("#user-id").val();
+    userid = parseInt(useridString);
+
     checkMaxScoreAndTotalScore();
 
     //separator
@@ -1757,6 +1761,22 @@ $(function () {
 
 
     var hub = $.connection.generalHub;
+    hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount) {
+        if (uid && uid == userid) {
+            if (typeof (initMailCount) != "undefined" && typeof (sentCount) != "undefined" && typeof (unSentCount) != "undefined") {
+                var message = "";
+                var type = "";
+                if (unSentCount) {
+                    type = "error";
+                    message = "Unable to send all emails from invitation.</br>" + "Total : " + initMailCount + "</br>" + sentCount + " was sent.</br>" + unSentCount + " was Un-sent.";
+                } else {
+                    type = "info";
+                    message = "Sent " + sentCount + " invitation emails.";
+                }
+                showMessage(type, message);
+            }
+        }
+    }
     hub.client.R_teacherAndTeacherCommentFeedback = function (tid, generatedHtml) {
         if (tid && generatedHtml) {
             if (tid == testid) {

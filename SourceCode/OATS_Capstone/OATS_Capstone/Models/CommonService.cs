@@ -18,13 +18,6 @@ namespace OATS_Capstone.Models
     public class CommonService
     {
 
-        private IUserMailer _userMailer = new UserMailer();
-        public IUserMailer UserMailer
-        {
-            get { return _userMailer; }
-            set { _userMailer = value; }
-        }
-
         public event OnRenderPartialViewHandler OnRenderPartialViewToString;
         public event OnRenderPartialViewHandlerWithParameter OnRenderPartialViewToStringWithParameter;
 
@@ -574,6 +567,7 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 var userRole = db.Roles.FirstOrDefault(k => k.RoleDescription == role);
+                var invitationMails = new List<Invitation>();
                 if (count > 0)
                 {
                     userids.ForEach(delegate(int id)
@@ -588,6 +582,7 @@ namespace OATS_Capstone.Models
                             invitation.Role = userRole;
                             invitation.InvitationDateTime = DateTime.Now;
                             test.Invitations.Add(invitation);
+                            invitationMails.Add(invitation);
                         }
                     });
                 }
@@ -599,8 +594,9 @@ namespace OATS_Capstone.Models
                         generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
                     }
                     //send mail
-                    //var invitations = test.Invitations.ToList();
-                    //UserMailer.InviteUsers(invitations);
+                    var authen=AuthenticationSessionModel.Instance();
+                    IUserMailer userMailer = new UserMailer(authen.UserId);
+                    userMailer.InviteUsers(invitationMails);
                 }
             }
             catch (SmtpException)
@@ -640,8 +636,9 @@ namespace OATS_Capstone.Models
                                 invitations.Add(invitation);
                             }
                         });
-                        IUserMailer mailer = new UserMailer();
-                        mailer.ReInviteUsers(invitations);
+                        //send mail
+                        IUserMailer userMailer = new UserMailer(authen.UserId);
+                        userMailer.ReInviteUsers(invitations);
                     }
                 }
             }

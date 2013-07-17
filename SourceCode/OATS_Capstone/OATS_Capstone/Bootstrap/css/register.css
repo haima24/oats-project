@@ -245,27 +245,29 @@ h3.why-signup-title {
         font-style: italic;
         font-size: 14px;
     }
-#login-container .forgot{
-    padding: 0px 5px 0px 5px;
-    text-decoration:underline;
-margin: 10px 0px 0px 20px;
-}
+
+    #login-container .forgot {
+        padding: 0px 5px 0px 5px;
+        text-decoration: underline;
+        margin: 10px 0px 0px 20px;
+    }
+
 h3.login-title {
-   font-size: 35px;
-color: white;
-font-weight: 100;
-font-style: italic;
-margin: 0px 0px 3px 0px;
-padding: 5px 30px 5px 0px;
-background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
-background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
-background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
-background-image: -o-linear-gradient(top, #5993e7, #3365cb);
-background-image: linear-gradient(top, #5993e7, #3365cb);
-text-align: right;
+    font-size: 35px;
+    color: white;
+    font-weight: 100;
+    font-style: italic;
+    margin: 0px 0px 3px 0px;
+    padding: 5px 30px 5px 0px;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
+    background-image: -webkit-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -moz-linear-gradient(top, #5993e7, #3365cb);
+    background-image: -o-linear-gradient(top, #5993e7, #3365cb);
+    background-image: linear-gradient(top, #5993e7, #3365cb);
+    text-align: right;
 }
 
-    /*h3.login-title span {
+/*h3.login-title span {
         font-size: 14px;
         padding: 0px 5px 0px 0px;
     }*/
@@ -308,8 +310,35 @@ text-align: right;
         min-height: 30px;
         overflow-y: auto;
     }
+
     #test-holder .nt-qsearch .nt-qsearch-content {
-width: 80%;
+        width: 80%;
+    }
+
+.register-container {
+    width: 360px;
+    margin: 20px auto;
+    padding: 0px 0px 15px 0px;
+    box-shadow: 0px 0px 10px black;
+    border-bottom: 5px solid #2b95bc;
 }
+
+    .register-container .login-textbox {
+        margin: 10px 0px;
+        width: 92%;
+        padding: 10px;
+    }
+
+    .register-container .login-btn {
+        margin: 10px 0px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .register-container .border {
+        margin: 20px 40px;
+        padding: 10px 0px;
+        width: auto;
+    }
 /* END MIDDLE CONTENT */
 

@@ -798,6 +798,10 @@ i, cite, em, var, address, dfn {
             border-radius: 4px;
         }
 
+        #checklist .nt-qitem.nt-qitem-review .nt-qnum.nt-qnum-letter{
+            display:block
+        }
+
         #checklist .nt-qitem.nt-qitem-review {
             border-top: 1px solid #c7c7c7;
         }
