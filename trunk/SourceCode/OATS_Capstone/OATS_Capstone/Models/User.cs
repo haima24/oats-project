@@ -30,6 +30,8 @@ namespace OATS_Capstone.Models
         public string FirstName { get; set; }
         public string UserCountry { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
+        public bool IsRegistered { get; set; }
+        public string AccessToken { get; set; }
     
         public virtual ICollection<FeedBack> FeedBacks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }

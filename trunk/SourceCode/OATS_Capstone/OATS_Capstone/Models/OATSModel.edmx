@@ -250,6 +250,8 @@
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
           <Property Name="UserCountry" Type="nvarchar" MaxLength="50" />
           <Property Name="LastLogin" Type="datetime" />
+          <Property Name="IsRegistered" Type="bit" Nullable="false" />
+          <Property Name="AccessToken" Type="varchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="UserInTest">
           <Key>
@@ -812,6 +814,8 @@
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_User" FromRole="User" ToRole="Invitation" />
           <NavigationProperty Name="Tests" Relationship="OATSDBModel.FK_Test_User" FromRole="User" ToRole="Test" />
           <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_User" FromRole="User" ToRole="UserInTest" />
+          <Property Type="Boolean" Name="IsRegistered" Nullable="false" />
+          <Property Type="String" Name="AccessToken" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UserInTest">
           <Key>
@@ -1246,6 +1250,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="OATSDBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
+                <ScalarProperty Name="IsRegistered" ColumnName="IsRegistered" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserMail" ColumnName="UserMail" />
