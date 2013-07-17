@@ -42,7 +42,7 @@
             success: function (res) {
                 if (res.success) {
                     showCountDownMessage("info", res.message,"Redirect to Homepage", function () {
-                        window.location = "/Tests";
+                        window.location.href = "/Tests";
                     });
                 } else {
                     showMessage("error", res.message);

@@ -43,7 +43,7 @@ function postSetting(li) {
     var cb = $("input[type=checkbox]", li);
     var settingKey = cb.attr("setting-key");
     var isactive = cb.attr("checked") ? true : false;
-    var timeValue = parseInt( $("#asm_time_limit").val());
+    var timeValue = parseInt($("#asm_time_limit").val());
     var testtime = isNaN(timeValue) ? 0 : timeValue;
     $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive, testtime: testtime }, function (res) {
         if (res.success) {
@@ -1326,6 +1326,39 @@ $(function () {
         if ($(this).attr("checked")) { pr.addClass("nt-clb-item-sel"); }
         else { pr.removeClass("nt-clb-item-sel"); }
     });
+    $("#modalPopupUser .nt-btn-outside").live("click", function () {
+        var btn = $(this);
+        var toggle = btn.attr("toggle");
+        var tb = btn.siblings(".nt-invite-outside");
+        var icon = $("i", btn);
+        if (toggle) {
+            switch (toggle) {
+                case "inactive":
+                    icon.removeClass("icon-plus").addClass("icon-minus");
+                    tb.show("slide", { direction: "left" });
+                    btn.attr("toggle", "active");
+                    break;
+                case "active":
+                    icon.removeClass("icon-minus").addClass("icon-plus");
+                    tb.hide("slide", { direction: "left" });
+                    btn.attr("toggle", "inactive");
+                    break;
+                default:
+                    break;
+            }
+        }
+    });
+    $("#modalPopupUser input[type=text].nt-email-outside").live("keydown", function (ev) {
+        var keyCode = ev.keyCode;
+        if (keyCode == 13) {
+            $.validity.start();
+            $(this).require().match("email");
+            var result = $.validity.end();
+            if (result.valid) {
+
+            }
+        }
+    });
     //separator
     $(".nt-qitem .nt-qans").live("change", function (ev) {
         updateAnswer($(this).closest(".nt-qans"), ev.target);
@@ -1334,7 +1367,7 @@ $(function () {
     $("#eventDuplicate").live("click", function (ev) {
         $.post("/Tests/DuplicateTest", { testid: testid }, function (res) {
             if (res.success && res.id) {
-                window.location = "/Tests/NewTest/" + res.id;
+                window.location.href = "/Tests/NewTest/" + res.id;
             } else {
                 showMessage("error", res.message);
             }
@@ -1735,7 +1768,7 @@ $(function () {
             return $(e).attr("user-id");
         }).convertJqueryArrayToJSArray();
         var ids = checkIds.join("&userids=");
-        window.location = "/Tests/ScoreToExcel?testid=" + testid + "&&userids=" + ids;
+        window.location.href = "/Tests/ScoreToExcel?testid=" + testid + "&&userids=" + ids;
     });
     //separator
     $("#asm_max_point").live("change", function () {
@@ -1832,7 +1865,7 @@ $(function () {
     hub.client.R_deactivetest = function (id, mail) {
         if (id && id == testid) {
             showCountDownMessage("info", "User with email:" + mail + " disabled this test", "Redirect to Homepage", function () {
-                window.location = "/Tests";
+                window.location.href = "/Tests";
             });
         }
     }

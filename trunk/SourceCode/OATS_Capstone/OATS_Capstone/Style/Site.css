@@ -2650,6 +2650,17 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     left: auto;
     right: 9px;
 }
+.nt-ctrl-foot .nt-btn-outside {
+    float:left;
+}
+.nt-ctrl-foot .nt-invite-outside input[type=text] {
+    margin-bottom:0px;
+}
+.nt-ctrl-foot .nt-invite-outside {
+    float:left;
+    display:none;
+    margin-left:10px;
+}
 
 #eventTab > div.nt-asm-settings {
     float: none;

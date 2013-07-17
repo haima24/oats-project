@@ -325,6 +325,7 @@
     <Content Include="Resource\Scripts\AccountScript.js" />
     <Content Include="Resource\Scripts\AuthenticatedScript.js" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
+    <Content Include="Resource\Scripts\DetailRegisterScript.js" />
     <Content Include="Resource\Scripts\DoTestScript.js" />
     <Content Include="Resource\Scripts\NewTeacherScript.js" />
     <Content Include="Resource\Scripts\NewTest_IndexScript.js" />
@@ -496,6 +497,7 @@
     <Content Include="Views\Tests\P_FeedBackTab_Student.cshtml" />
     <Content Include="Views\Tests\P_FeedBackTab_Teacher.cshtml" />
     <Content Include="Views\Account\DetailRegister.cshtml" />
+    <Content Include="Views\UserMailer\ForgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

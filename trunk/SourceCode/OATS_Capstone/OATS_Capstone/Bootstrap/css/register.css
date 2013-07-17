@@ -135,13 +135,13 @@ h3.signup-title {
     font-style: italic;
 }
 /* webkit solution */
-::-webkit-input-placeholder {
+/*::-webkit-input-placeholder {
     text-align: right;
-}
+}*/
 /* mozilla solution */
-input:-moz-placeholder {
+/*input:-moz-placeholder {
     text-align: right;
-}
+}*/
 
 
 select.register-input {
@@ -276,10 +276,8 @@ h3.login-title {
     width: 170px;
     padding: 0px 5px 0px 5px;
     margin: 10px 0px 0px 20px;
-    text-align: right;
     border: 1px solid #CCC;
     height: 30px;
-    text-align: right;
     color: #2b95bc;
     font-size: 12px;
     border-radius: 4px;
@@ -341,4 +339,12 @@ h3.login-title {
         width: auto;
     }
 /* END MIDDLE CONTENT */
+
+#forgotEmailError {
+    display:none;
+}
+#forgotEmail {
+    padding:10px;
+    margin:10px 0px 20px 10px;
+}
 

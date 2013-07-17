@@ -3,7 +3,7 @@
 }
 @section additionheader{
     <link href="~/Bootstrap/css/register.css" rel="stylesheet" />
-        <script src="~/Resource/Scripts/AccountScript.js"></script>
+    <script src="~/Resource/Scripts/AccountScript.js"></script>
 
 }
 
@@ -20,11 +20,26 @@
             <input type="text" id="email" class="login-textbox" placeholder="Email Address" required="">
             <input type="checkbox" id="remember-checkbox" class="remember-checkbox">
             <span>Remember</span>
-            <br/>
+            <br />
             <input type="password" id="password" class="login-textbox" placeholder="Password" required="">
             <input type="button" id="login-btn" class="login-btn btn" value="LOGIN">
             <br />
-            <a href="#" class="forgot">Forgot Password?</a>
+            <a href="#forgotModal" data-toggle="modal" class="forgot">Forgot Password?</a>
         </div>
+    </div>
+</div>
+
+<div id="forgotModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Modal header</h3>
+    </div>
+    <div class="modal-body">
+        <input id="forgotEmail" type="text" class="span5" placeholder="Email Address" required="" />
+        <p id="forgotEmailError" class="help-inline hide">Unable to send email in order to reset your password. Please try again later.</p>
+    </div>
+    <div class="modal-footer">
+        <a id="forgot-btn-send" href="#" class="btn btn-primary">Send</a>
+        <a href="#" data-dismiss="modal" class="btn">Cancel</a>
     </div>
 </div>

@@ -21,7 +21,14 @@
     // Return whether it's okay to proceed with the Ajax:
     return result.valid;
 }
-function checkLogin(email, pass,remembered, onsuccess) {
+function validateForgotEmail() {
+    $.validity.start();
+    $("#forgotEmail").require()
+        .match("email");
+    var result = $.validity.end();
+    return result.valid;
+}
+function checkLogin(email, pass, remembered, onsuccess) {
     $.post("/Account/Login", { email: email, password: pass, remembered: remembered }, function (res) {
         if (res.success) {
             if (onsuccess && typeof (onsuccess) === "function") {
@@ -38,12 +45,12 @@ function login() {
     var pass = $("#password").val();
     var checkedElement = $("#test-holder input[type=radio][name=test_holder_radio]:checked");
     var remembered = $("#remember-checkbox").attr("checked") ? true : false;
-    checkLogin(email, pass,remembered, function () {
+    checkLogin(email, pass, remembered, function () {
         window.location.href = "/Tests";
     });
 }
 $(function () {
-   
+
     $("#submit-btn").live("click", function (ev) {
         if (ValidateSignupFields()) {
             var obj = new Object();
@@ -63,7 +70,7 @@ $(function () {
                     if (res.success) {
                         if (res.generatedHtml) { $("#signup-container").html(res.generatedHtml); }
                         showCountDownMessage("success", res.message, "Redirect to Homepage", function () {
-                            window.location = "/Tests";
+                            window.location.href = "/Tests";
                         });
                     } else {
                         showMessage("error", res.message);
@@ -81,4 +88,36 @@ $(function () {
         }
     });
    
+    var hub = $.connection.generalHub;
+    hub.client.R_forgotCallBack = function (isSuccess)
+    {
+        if (typeof(isSuccess)!="undefined") {
+            if (isSuccess) {
+                $("#forgotModal").modal("hide");
+                showMessage("success", "Success on sending reset password email, check your mail-box and folowing instructions.");
+            } else {
+                $("#forgotEmailError").show();
+            }
+        }
+    }
+    $.connection.hub.start().done(function (con) {
+        var conid = con.id;
+        if (conid) {
+            $("#forgot-btn-send").live("click", function () {
+                if (validateForgotEmail()) {
+                    var tb = $("#forgotEmail");
+                    var email = tb.val();
+                    $("#forgotEmailError").hide();
+
+                    $.post("/Account/ForgotPassword", { email: email,connectionid:conid}, function (res) {
+                        if (res.success) {
+                            showMessage("info", res.message);
+                        } else {
+                            showMessage("error", res.message);
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
