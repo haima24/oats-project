@@ -6,6 +6,7 @@
 <h2>OATS Test Invitation</h2>
 <div>
     <p>Welcome @ViewBag.UserName</p>
-<p>You have invited to a test which created by @ViewBag.TeacherName</p>
-<p>Please follow this link @ViewBag.Link to do the test.</p>
+    <p>You have invited to a test which created by @ViewBag.TeacherName</p>
+    <p>Please sign-in and follow this link <a href="@ViewBag.Link">@ViewBag.Link</a> to do the test.</p>
+    <p><b>Note:</b> During this test, you can access anonymously by following: <a href="@ViewBag.AnonymousLink">@ViewBag.AnonymousLink</a></p>
 </div>

@@ -34,15 +34,21 @@ namespace OATS_Capstone.Mailers
             get { return unSentMailCount; }
         }
 
+        public event ForgotPasswordEmailCallbackDelegate OnForgotPasswordCallback;
+
         public UserMailer(int ownId)
         {
             MasterName = "_Layout";
             ownUserId = ownId;
         }
-
+        public UserMailer()
+        {
+            MasterName = "_Layout";
+        }
         private void AcknowledgeCallback()
         {
-            if (tempMailCount == 0) {
+            if (tempMailCount == 0)
+            {
                 var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
                 context.Clients.All.R_AcknowledgeEmailCallback(ownUserId, initMailCount, sentMailCount, unSentMailCount);
             }
@@ -68,14 +74,17 @@ namespace OATS_Capstone.Mailers
             }
             ViewBag.UserName = userName;
             var link = string.Empty;
+            var anonymousLink = string.Empty;
             if (invitation.Test != null)
             {
                 link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/DoTest/" + invitation.Test.TestID;
+                anonymousLink = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/AnonymousDoTest/" + CurrentHttpContext.Server.HtmlEncode(invitation.AccessToken);
             }
             ViewBag.Link = link;
+            ViewBag.AnonymousLink = anonymousLink;
             return Populate(x =>
             {
-                x.Subject = "Invite User Demo Subject";
+                x.Subject = "OATS Invite User";
                 x.ViewName = "InviteUser";
                 x.To.Add(email);
             });
@@ -105,7 +114,6 @@ namespace OATS_Capstone.Mailers
                 this.InviteUser(invitations.FirstOrDefault()).SendAsync("oats", client);
             });
         }
-
         public virtual void ReInviteUsers(List<Invitation> invitations)
         {
             invitations.ForEach(i =>
@@ -113,5 +121,44 @@ namespace OATS_Capstone.Mailers
                 this.InviteUser(i).Send();
             });
         }
+        public virtual void ForgotPassword(User user)
+        {
+            if (user != null)
+            {
+                var mail = user.UserMail;
+                var link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/Index";
+                if (!string.IsNullOrEmpty(user.AccessToken))
+                {
+                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.HtmlEncode(user.AccessToken);
+                }
+                ViewBag.Mail = mail;
+                ViewBag.Link = link;
+
+                var mailObj = Populate(x =>
+                {
+                    x.Subject = "OATS Reset Forgot Password";
+                    x.ViewName = "ForgotPassword";
+                    x.To.Add(user.UserMail);
+                });
+                var client = new SmtpClientWrapperOATS();
+                client.OnSendingError += (ex) =>
+                {
+                    if (OnForgotPasswordCallback != null)
+                    {
+                        OnForgotPasswordCallback.Invoke(false);
+                    }
+                };
+                client.SendCompleted += (sender, e) =>
+                {
+                    if (OnForgotPasswordCallback != null)
+                    {
+                        OnForgotPasswordCallback.Invoke(true);
+                    }
+                };
+                mailObj.SendAsync("oats", client);
+            }
+        }
+
+
     }
 }

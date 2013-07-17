@@ -594,7 +594,7 @@ namespace OATS_Capstone.Models
                         generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
                     }
                     //send mail
-                    var authen=AuthenticationSessionModel.Instance();
+                    var authen = AuthenticationSessionModel.Instance();
                     IUserMailer userMailer = new UserMailer(authen.UserId);
                     userMailer.InviteUsers(invitationMails);
                 }
@@ -1148,7 +1148,8 @@ namespace OATS_Capstone.Models
                 });
 
                 var dbAns = dbAnswers.FirstOrDefault();
-                if (dbAns != null) {
+                if (dbAns != null)
+                {
                     var test = dbAns.Question.Test;
                     var totalScore = test.Questions.TotalScore();
                     var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
@@ -1156,7 +1157,7 @@ namespace OATS_Capstone.Models
                     {
                         if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
                         {
-                            if ((totalScore ?? 0) != (settingDetail.NumberValue??0))
+                            if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
                             {
                                 test.IsRunning = false;
                             }
@@ -1370,13 +1371,15 @@ namespace OATS_Capstone.Models
                         {
                             detail.TextValue = GenerateAccessKey(8);
                         }
-                        else if (detail.SettingType.SettingTypeKey == "MTP") {
+                        else if (detail.SettingType.SettingTypeKey == "MTP")
+                        {
                             if (isactive)
                             {
                                 var isEqual = test.IsTotalScoreEqualMaxScore();
                                 test.IsRunning = isEqual;
                             }
-                            else {
+                            else
+                            {
                                 test.IsRunning = true;
                             }
                         }
@@ -2462,10 +2465,14 @@ namespace OATS_Capstone.Models
             keys.Add(testid);
             keys.Add(userid);
             var key = ExtensionModel.createHashMD5(keys);
-            var specialUrlChars = new List<string>() {
-                "/","=","?"
-            };
-            specialUrlChars.ForEach(i => key = key.Replace(i, string.Empty));
+            return key;
+        }
+        private string GenerateUserToken(int userid)
+        {
+            var keys = new List<Object>();
+            keys.Add(userid);
+            keys.Add(DateTime.Now.Ticks);
+            var key = ExtensionModel.createHashMD5(keys);
             return key;
         }
         public void UpdateTestIntroduction(int testid, string introduction)
@@ -2622,8 +2629,9 @@ namespace OATS_Capstone.Models
             Invitation invitation = null;
             try
             {
+                var keyDecode = HttpContext.Current.Server.HtmlDecode(key);
                 var db = SingletonDb.Instance();
-                invitation = db.Invitations.FirstOrDefault(i => i.AccessToken == key);
+                invitation = db.Invitations.FirstOrDefault(i => i.AccessToken == keyDecode);
                 if (invitation != null)
                 {
                     //anonymous login
@@ -2672,13 +2680,14 @@ namespace OATS_Capstone.Models
                     {
                         settingDetail.NumberValue = score;
                         var totalScore = test.Questions.TotalScore();
-                        if (totalScore.HasValue && score !=0)
+                        if (totalScore.HasValue && score != 0)
                         {
                             if ((totalScore ?? 0) != score)
                             {
                                 test.IsRunning = false;
                             }
-                            else {
+                            else
+                            {
                                 test.IsRunning = true;
                             }
                         }
@@ -2695,7 +2704,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void CheckMaxScoreAndTotalScore(int testid,ref TotalAndMaxScore carier)
+        public void CheckMaxScoreAndTotalScore(int testid, ref TotalAndMaxScore carier)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2703,13 +2712,14 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null) {
+                if (test != null)
+                {
                     carier = new TotalAndMaxScore();
                     carier.TotalScore = test.Questions.TotalScore();
                     var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
                     if (settingDetail != null)
                     {
-                        carier.MaxScoreSetting = settingDetail.NumberValue??0;
+                        carier.MaxScoreSetting = settingDetail.NumberValue ?? 0;
                         carier.IsRunning = test.IsRunning;
                     }
                     success = true;
@@ -2718,6 +2728,94 @@ namespace OATS_Capstone.Models
             catch (Exception)
             {
                 success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public User DetailRegister(string key)
+        {
+            User user = null;
+            try
+            {
+                var keyDecode = HttpContext.Current.Server.HtmlDecode(key);
+                var db = SingletonDb.Instance();
+                user = db.Users.FirstOrDefault(i => i.AccessToken == keyDecode);
+            }
+            catch (Exception)
+            {
+                user = null;
+            }
+            return user;
+        }
+        public void ForgotPassword(string email,string connectionid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                if (!string.IsNullOrEmpty(email))
+                {
+                    var tempEmail = email.Trim();
+                    var db = SingletonDb.Instance();
+                    var user = db.Users.FirstOrDefault(i => i.UserMail.Trim() == email);
+                    if (user != null)
+                    {
+                        //generate token
+                        var token = GenerateUserToken(user.UserID);
+                        user.AccessToken = token;
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            message = "Sending Email.";
+                            //send token via email
+                            IUserMailer mailer = new UserMailer();
+                            mailer.OnForgotPasswordCallback += (isSuccess) =>
+                            {
+                                if (!string.IsNullOrEmpty(connectionid))
+                                {
+                                    var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                                    var client = context.Clients.Client(connectionid);
+                                    if (client != null)
+                                    {
+                                        client.R_forgotCallBack(isSuccess);
+                                    }
+                                }
+                            };
+                            mailer.ForgotPassword(user);
+                        }
+                    }
+                    else
+                    {
+                        success = false;
+                        message = "Email that you have entered is not exist.";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void UpdateUserPasswordOnRegisterDetail(int userid, string password) {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                if (user != null) {
+                    user.Password = password;
+                    if (db.SaveChanges() > 0) {
+                        var authen = AuthenticationSessionModel.Instance();
+                        authen.UserId = user.UserID;
+                        success = true;
+                        message = Constants.DefaultSuccessMessage;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = true;
                 message = Constants.DefaultExceptionMessage;
             }
         }

@@ -1,6 +1,6 @@
 ﻿$(function () {
     searchUsers(".navbar-search .nt-search-input", function (id) {
-        window.location = "/Teachers/NewTeacher/" + id;
+        window.location.href = "/Teachers/NewTeacher/" + id;
     });
     var userid = parseInt($('#user-id').val());
     if ($("#container .nt-search-input ").length > 0) {
