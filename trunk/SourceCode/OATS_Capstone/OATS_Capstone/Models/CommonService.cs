@@ -152,6 +152,7 @@ namespace OATS_Capstone.Models
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User.UserID);
                     users = db.Users.Where(i => !invitedUsers.Contains(i.UserID) && !invitedUsers.Contains(test.CreatedUserID)).Where(k => k.UserID != authen.UserId).ToList();
+                    
                 }
 
                 if (OnRenderPartialViewToString != null)
@@ -307,6 +308,46 @@ namespace OATS_Capstone.Models
             catch (Exception)
             {
 
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
+        public void SearchUserInvitation(string term)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            resultlist = new List<Object>();
+
+            try
+            {
+                var db = SingletonDb.Instance();
+                if (!string.IsNullOrEmpty(term))
+                {
+                    var lower = term.ToLower();
+                    var users = db.Users.ToList();
+                    users.ForEach(delegate(User user)
+                    {
+                        var first = false;
+                        var last = false;
+                        var mail = false;
+                        if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
+                        if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                        if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
+                        if (first || last || mail)
+                        {
+                            if (OnRenderPartialViewToString != null) {
+                                var html = OnRenderPartialViewToString.Invoke(user);
+                                resultlist.Add(html);
+                            }
+                        }
+                    });
+                }
+                success = true;
+                message = String.Empty;
+            }
+            catch (Exception)
+            {
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }

@@ -21,6 +21,7 @@ namespace OATS_Capstone.Models
         public int? RoleID;
         public string LastName;
         public string FirstName;
+        public string Usermail;
     }
 
 }

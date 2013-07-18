@@ -36,15 +36,7 @@
 
                         @foreach (var user in Model)
                         {
-                            <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
-                                <div class="nt-clb-item-control">
-                                    <input type="checkbox" checked="checked" user-id="@user.UserID"/>
-                                </div>
-                                <div class="nt-clb-item-content ">
-                                    <div class="nt-clb-item-label">@user.LastName <span class="nt-hl-sort"> - @user.FirstName</span></div>
-                                    <div class="nt-clb-item-desc">@user.UserMail</div>
-                                </div>
-                            </div>
+                            @Html.Partial("P_Modal_Invitation_User_Item",user)
                         }
 
 

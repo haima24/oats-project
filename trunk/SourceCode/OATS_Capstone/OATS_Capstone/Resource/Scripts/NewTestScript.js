@@ -58,7 +58,7 @@ function postSetting(li) {
     });
 }
 function initReuseDragAndDrop() {
-    $("#sidebar[content-tab=true] .nt-qsearch").draggable({
+    $("#sidebar[content-tab=true] .nt-qsearch", "#modalPopupUser[content-tab=true] .nt-qsearch").draggable({
         connectToSortable: "#checklist[content-tab=true]",
         helper: "clone",
         revert: "invalid"
@@ -1469,7 +1469,31 @@ $(function () {
                     $("#modalPopupUser").replaceWith($(html));
                 }
                 $("#modalPopupUser").modal("show");
+                //separator
 
+                $("#modalPopupUser .nt-ctrl-search input[type=text]").autocomplete({
+                    minLength: 0,
+                    source: function (req, res) {
+                            $.ajax({
+                                type: "POST",
+                                url: "/Tests/SearchUserInvitation",
+                                data: JSON.stringify({ term: req.term}),
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                success: function (r) {
+                                    if (r.success) {
+                                        var list = $("#modalPopupUser .nt-clb-list");
+                                        list.empty();
+                                        $(r.resultlist).each(function (i, o) {
+                                            list.append(o);
+                                        });
+                                    } else {
+                                        showMessage("error", r.message);
+                                    }
+                                }
+                            });
+                    }
+                });
             } else {
                 showMessage("error", res.message);
             }
@@ -1684,6 +1708,9 @@ $(function () {
         },
         excepts: "#eventIntroduction",
     });
+    
+
+    //separator
     var reuseAutoComplete = $("#sidebar .nt-ctrl-search input[type=text]").autocomplete({
         minLength: 0,
         source: function (req, res) {

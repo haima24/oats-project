@@ -496,9 +496,9 @@
     <Content Include="Views\Tests\P_Modal_Test_History.cshtml" />
     <Content Include="Views\Tests\P_FeedBackTab_Student.cshtml" />
     <Content Include="Views\Tests\P_FeedBackTab_Teacher.cshtml" />
-    <Content Include="Views\Account\DetailRegister.cshtml" />
-    <Content Include="Views\UserMailer\ForgotPassword.cshtml" />
-  </ItemGroup>
+	<Content Include="Views\Tests\P_Modal_Invitation_User_Item.cshtml" />
+	<Content Include="Views\Account\DetailRegister.cshtml" />
+    <Content Include="Views\UserMailer\ForgotPassword.cshtml" />  </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Resource\Images\" />
