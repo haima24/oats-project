@@ -24,8 +24,15 @@
                     <div class="nt-clb-header-label">
                         <span>Name</span>
                     </div>
-                    <div class="nt-clb-header-desc">
-                        <span>Email Address</span>
+ <div class="nt-ctrl-line"></div>
+                    <div class="nt-clb-empty"></div>
+                    <div class="nt-clb-list">
+
+                        @foreach (var user in Model)
+                        {
+                            @Html.Partial("P_Modal_Invitation_User_Item",user)
+                        }
+
                     </div>
                 </div>
                 <div class="nt-loader" style="display: none;"></div>

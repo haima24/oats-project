@@ -136,6 +136,28 @@ namespace OATS_Capstone.Controllers
             common.CloneQuestion(targetTestID, questionid);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
+
+        public JsonResult SearchUserInvitation(string term)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_Invitation_User_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.SearchUserInvitation(term);
+            return Json(new { common.success, common.message, common.resultlist });
+        }
+
         public JsonResult ReuseSearchQuestionTemplate(string term, List<int> tagids)
         {
             var common = new CommonService();
