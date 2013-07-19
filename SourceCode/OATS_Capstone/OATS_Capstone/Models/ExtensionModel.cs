@@ -74,12 +74,23 @@ namespace OATS_Capstone.Models
         }
         public static string ToDateDefaultFormat(this DateTime datetime)
         {
-            return String.Format("{0:dd MMM yyyy}", datetime);
+            var s = string.Empty;
+            if (datetime != null)
+            {
+                s = String.Format("{0:dd MMM yyyy}", datetime);
+            }
+            else {
+                s = "N/A";
+            }
+            return s;
         }
         public static string ToDateDefaultFormat(this DateTime? datetime)
         {
             var s = string.Empty;
             if (datetime.HasValue) { s = String.Format("{0:dd MMM yyyy}", datetime.Value); }
+            else {
+                s = "N/A";
+            }
             return s;
         }
         public static IEnumerable<Test> FilterByRecents(this IEnumerable<Test> tests)

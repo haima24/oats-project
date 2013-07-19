@@ -17,7 +17,7 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-        public ActionResult DetailRegister(string id)
+        public ActionResult DetailRegister(string id,string forward="")
         {
             ActionResult action = RedirectToActionPermanent("Index", "Account");
             try
@@ -26,6 +26,7 @@ namespace OATS_Capstone.Controllers
                 var user = common.DetailRegister(id);
                 if (user != null)
                 {
+                    ViewBag.Forward = forward;
                     action = View(user);
                 }
             }

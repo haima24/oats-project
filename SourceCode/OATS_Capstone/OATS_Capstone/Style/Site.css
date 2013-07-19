@@ -165,7 +165,7 @@ audio, canvas, video {
     z-index: 1;
     position: absolute;
     top: 50px;
-    left:0px;
+    left: 0px;
     width: 100%;
     text-align: center;
 }
@@ -438,7 +438,9 @@ i, cite, em, var, address, dfn {
         -o-border-radius: 10px;
         border-radius: 10px;
     }
-
+    #container .nt-dnd-example-text.active pre{
+        border:1px dashed #5993e7;
+    }
 #test-introduction {
     color: white;
     background-color: rgba(255, 255, 255, 0.9);
@@ -584,7 +586,7 @@ i, cite, em, var, address, dfn {
         font-size: 16px;
         line-height: 30px;
         height: 30px;
-        width: 120px;
+        min-width:120px;
     }
 
     .test-larger-custom > .nav > li:not(.active) > a:hover {
@@ -798,8 +800,8 @@ i, cite, em, var, address, dfn {
             border-radius: 4px;
         }
 
-        #checklist .nt-qitem.nt-qitem-review .nt-qnum.nt-qnum-letter{
-            display:block
+        #checklist .nt-qitem.nt-qitem-review .nt-qnum.nt-qnum-letter {
+            display: block;
         }
 
         #checklist .nt-qitem.nt-qitem-review {
@@ -1699,6 +1701,10 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     min-height: 100px;
 }
 
+.nt-list-cont .nt-empty-list-ph {
+    padding: 20px;
+}
+
 #asmsList .accordion-group:last-child {
     border-top: 0;
     -webkit-border-radius: 0 0 4px 4px;
@@ -1747,6 +1753,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     .nt-asms-list .nt-list-row.locked {
         background-color: lightgray;
     }
+
     .nt-asms-list .nt-list-row:not(.locked).teacher:hover {
         background-color: #EAEFFA;
     }
@@ -2144,8 +2151,8 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 }
 
 .nt-clb-item {
-    cursor: pointer;
     padding: 3px 5px 4px 5px;
+    position: relative;
 }
 
     .nt-clb-item > div {
@@ -2173,8 +2180,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     width: 30px;
 }
 
+.nt-clb-item .button.nt-clb-item-control {
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    right: 10px;
+}
+
 .nt-clb-item button {
-    visibility: hidden;
     background: transparent;
     border: 0;
     height: 18px;
@@ -2253,9 +2266,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
     border-radius: 10px;
-    -webkit-box-shadow: 1px 2px #c7c7c7;
-    -moz-box-shadow: 1px 2px #c7c7c7;
-    box-shadow: 1px 2px #c7c7c7;
+    -webkit-box-shadow: 1px 2px 5px 2px #c7c7c7;
+    -moz-box-shadow: 1px 2px 5px 2px #c7c7c7;
+    box-shadow: 1px 2px 5px 2px #c7c7c7;
 }
 
     .nt-search-results .nt-tags div {
@@ -2650,16 +2663,19 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     left: auto;
     right: 9px;
 }
+
 .nt-ctrl-foot .nt-btn-outside {
-    float:left;
+    float: left;
 }
+
 .nt-ctrl-foot .nt-invite-outside input[type=text] {
-    margin-bottom:0px;
+    margin-bottom: 0px;
 }
+
 .nt-ctrl-foot .nt-invite-outside {
-    float:left;
-    display:none;
-    margin-left:10px;
+    float: left;
+    display: none;
+    margin-left: 10px;
 }
 
 #eventTab > div.nt-asm-settings {
@@ -3719,8 +3735,8 @@ article, time {
     }
 
 #message-max-score {
-    min-width:200px;
-    max-width:300px;
+    min-width: 200px;
+    max-width: 300px;
     position: fixed;
     bottom: 0px;
     margin-left: 20px;

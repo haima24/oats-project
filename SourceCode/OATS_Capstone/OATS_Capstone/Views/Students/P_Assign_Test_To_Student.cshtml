@@ -1,18 +1,17 @@
 ﻿@model OATS_Capstone.Models.User
+@using OATS_Capstone.Models
 @{
     var invitations = Model.Invitations.Where(i => i.Role.RoleDescription == "Student");
 }
 <div class="accordion-group nt-acc-group nt-asms-list-cont upandrunning nt-acc-open">
-    <div class="nt-asms-list nt-guide">
+    <div class="nt-asms-list">
         <a>
             <div class="nt-list-head">
-
                 <div class="nt-name">
                     Running And Upcoming Tests
                 </div>
                 <div class="nt-date">Start</div>
                 <div class="nt-date">End</div>
-
                 <i class="t-icon arrow-up"></i>
                 <div>&nbsp;</div>
             </div>
@@ -29,7 +28,7 @@
             {
                 foreach (var invitation in invitations)
                 {
-                <div class="nt-list-row nt-guide" test-id ="@invitation.Test.TestID">
+                <div class="nt-list-row" test-id ="@invitation.Test.TestID">
                     <div class="nt-name">
                         <span>@invitation.Test.TestTitle
 
@@ -43,10 +42,10 @@
 
 
                     <div class="nt-date">
-                        13 May 2013
+                        @invitation.Test.StartDateTime.ToDateDefaultFormat()
                     </div>
                     <div class="nt-date">
-                        28 May 2013
+                        @invitation.Test.EndDateTime.ToDateDefaultFormat()
                     </div>
 
 

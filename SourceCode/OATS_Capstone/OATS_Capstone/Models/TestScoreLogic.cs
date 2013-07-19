@@ -260,6 +260,7 @@ namespace OATS_Capstone.Models
     }
     public class ScoreUserItem
     {
+        public Test Test { get; set; }
         public string UserLabel { get; set; }
         public string UserPercent { get; set; }
         public int UserID { get; set; }
@@ -278,6 +279,7 @@ namespace OATS_Capstone.Models
                 var item = new ScoreUserItemStatistic(i, inTest, totalScoreOfTest);
                 Statistics.Add(item);
             });
+            Test = inTest.Test;
         }
     }
     public class ScoreUserItemStatistic
@@ -300,6 +302,39 @@ namespace OATS_Capstone.Models
                 percent = score * 100 / totalScore.Value;
             }
             Percent = percent;
+        }
+    }
+    public class OverviewScoreTests
+    {
+        private List<ScoreUserItem> originalOverviewScoreTestsUserList = null;
+        public List<int> CheckedUserIds { get; set; }
+        public ExcelPackage ToExcelPackage()
+        {
+            return null;
+        }
+        private void InitOverviewScoreTests(IEnumerable<Test> tests)
+        {
+            var listTests = tests.ToList();
+            originalOverviewScoreTestsUserList = new List<ScoreUserItem>();
+            listTests.ForEach(i =>
+            {
+                var scoreTest = new ScoreTest(i);
+                if (scoreTest.ScoreUserList != null)
+                {
+                    originalOverviewScoreTestsUserList.AddRange(scoreTest.ScoreUserList);
+                }
+            });
+        }
+        public OverviewScoreTests(IEnumerable<Test> tests)
+        {
+            InitOverviewScoreTests(tests);
+            var allIds = this.originalOverviewScoreTestsUserList.Select(i => i.UserID).GroupBy(k => k).Select(t => t.Key);
+            CheckedUserIds = allIds.ToList();
+        }
+        public OverviewScoreTests(IEnumerable<Test> tests, List<int> ids)
+        {
+            InitOverviewScoreTests(tests);
+            CheckedUserIds = ids;
         }
     }
 }

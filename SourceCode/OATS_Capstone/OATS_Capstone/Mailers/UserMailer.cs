@@ -34,7 +34,9 @@ namespace OATS_Capstone.Mailers
             get { return unSentMailCount; }
         }
 
-        public event ForgotPasswordEmailCallbackDelegate OnForgotPasswordCallback;
+        public event EmailCallbackDelegate OnForgotPasswordCallback;
+
+        public event EmailCallbackDelegate OnNotifyNewUserCallback;
 
         public UserMailer(int ownId)
         {
@@ -56,7 +58,9 @@ namespace OATS_Capstone.Mailers
 
         private MvcMailMessage InviteUser(Invitation invitation)
         {
+
             var teacherName = string.Empty;
+
             if (invitation.Test != null)
             {
                 if (invitation.Test.User != null)
@@ -67,27 +71,50 @@ namespace OATS_Capstone.Mailers
             var userName = string.Empty;
             ViewBag.TeacherName = teacherName;
             var email = string.Empty;
+            var linkReg = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/Index";
             if (invitation.User != null)
             {
                 email = invitation.User.UserMail;
                 userName = invitation.User.FirstName ?? invitation.User.LastName ?? invitation.User.UserMail;
+
+
+                if (!string.IsNullOrEmpty(invitation.User.AccessToken))
+                {
+                    linkReg = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.UrlEncode(invitation.User.AccessToken);
+                }
             }
             ViewBag.UserName = userName;
+            ViewBag.LinkRegister = linkReg;
             var link = string.Empty;
             var anonymousLink = string.Empty;
             if (invitation.Test != null)
             {
                 link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/DoTest/" + invitation.Test.TestID;
-                anonymousLink = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/AnonymousDoTest/" + CurrentHttpContext.Server.HtmlEncode(invitation.AccessToken);
+                anonymousLink = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/AnonymousDoTest/" + CurrentHttpContext.Server.UrlEncode(invitation.AccessToken);
             }
             ViewBag.Link = link;
             ViewBag.AnonymousLink = anonymousLink;
-            return Populate(x =>
+
+            MvcMailMessage obj = null;
+            if (invitation.User.IsRegistered)
+            {
+                obj = Populate(x =>
+                {
+                    x.Subject = "OATS Invite User";
+                    x.ViewName = "InviteUser";
+                    x.To.Add(email);
+                });
+            }
+            else
+            {
+                obj = Populate(x =>
             {
                 x.Subject = "OATS Invite User";
-                x.ViewName = "InviteUser";
+                x.ViewName = "InviteNonRegisteredUser";
                 x.To.Add(email);
             });
+            }
+            return obj;
         }
         public virtual void InviteUsers(List<Invitation> invitations)
         {
@@ -116,9 +143,27 @@ namespace OATS_Capstone.Mailers
         }
         public virtual void ReInviteUsers(List<Invitation> invitations)
         {
+            initMailCount = invitations.Count;
+            tempMailCount = initMailCount;
             invitations.ForEach(i =>
             {
-                this.InviteUser(i).Send();
+                var client = new SmtpClientWrapperOATS();
+                client.OnSendingError += (ex) =>
+                {
+                    unSentMailCount++;
+                    tempMailCount--;
+                    AcknowledgeCallback();
+                };
+                client.SendCompleted += (sender, e) =>
+                {
+                    sentMailCount++;
+                    tempMailCount--;
+                    AcknowledgeCallback();
+                    //if (e.Error != null || e.Cancelled)
+                    //{
+                    //}
+                };
+                this.InviteUser(invitations.FirstOrDefault()).SendAsync("oats", client);
             });
         }
         public virtual void ForgotPassword(User user)
@@ -129,7 +174,7 @@ namespace OATS_Capstone.Mailers
                 var link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/Index";
                 if (!string.IsNullOrEmpty(user.AccessToken))
                 {
-                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.HtmlEncode(user.AccessToken);
+                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.UrlEncode(user.AccessToken);
                 }
                 ViewBag.Mail = mail;
                 ViewBag.Link = link;
@@ -158,7 +203,56 @@ namespace OATS_Capstone.Mailers
                 mailObj.SendAsync("oats", client);
             }
         }
+        public virtual void NofityNewUser(User user, User invitor)
+        {
+            if (user != null)
+            {
+                var mail = user.UserMail;
+                var link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/Index";
+                var invitorName = string.Empty;
+                if (invitor != null)
+                {
+                    if (string.IsNullOrEmpty(invitor.FirstName) && string.IsNullOrEmpty(invitor.LastName))
+                    {
+                        invitorName = invitor.UserMail;
+                    }
+                    else
+                    {
+                        invitorName = invitor.FirstName ?? invitor.LastName + " (Email: " + invitor.UserMail + " )";
+                    }
+                }
+                if (!string.IsNullOrEmpty(user.AccessToken))
+                {
+                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.UrlEncode(user.AccessToken);
+                }
+                ViewBag.Invitor = invitorName;
+                ViewBag.Mail = mail;
+                ViewBag.Link = link;
 
+                var mailObj = Populate(x =>
+                {
+                    x.Subject = "OATS Notify for New User";
+                    x.ViewName = "NotifyNewUser";
+                    x.To.Add(user.UserMail);
+                });
+                var client = new SmtpClientWrapperOATS();
+                client.OnSendingError += (ex) =>
+                {
+                    if (OnNotifyNewUserCallback != null)
+                    {
+                        OnNotifyNewUserCallback.Invoke(false);
+                    }
+                };
+                client.SendCompleted += (sender, e) =>
+                {
+                    if (OnNotifyNewUserCallback != null)
+                    {
+                        OnNotifyNewUserCallback.Invoke(true);
+                    }
+                };
+                mailObj.SendAsync("oats", client);
+            }
+        }
 
     }
 }

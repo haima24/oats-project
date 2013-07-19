@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<OATS_Capstone.Models.User>
-<div id="modalPopupUser" class="modal hide fade" role="@ViewBag.Role">
+<div id="modalPopupUser" class="modal hide fade">
+    <input id="role" type="hidden" value="@ViewBag.Role" />
     <div class="modal-header">
         <div class="modal-title">Invite More @ViewBag.Role</div>
     </div>
     <div class="modal-body">
         <div class="nt-ctrl-search ui-droppable">
             <div class="nt-search-box">
-                <input type="text" placeholder="Search" class="nt-search-input ">
+                <input type="text" placeholder="Search" class="nt-search-input" autocomplete="off"/>
                 <i class="t-icon search"></i>
                 <button class="nt-btn-icon nt-btn-clear " style="display: none;">
                     <i class="icon-remove-sign"></i>
@@ -24,15 +25,8 @@
                     <div class="nt-clb-header-label">
                         <span>Name</span>
                     </div>
- <div class="nt-ctrl-line"></div>
-                    <div class="nt-clb-empty"></div>
-                    <div class="nt-clb-list">
-
-                        @foreach (var user in Model)
-                        {
-                            @Html.Partial("P_Modal_Invitation_User_Item",user)
-                        }
-
+                    <div class="nt-clb-header-desc">
+                        <span>Email Address</span>
                     </div>
                 </div>
                 <div class="nt-loader" style="display: none;"></div>
@@ -43,15 +37,7 @@
 
                 @foreach (var user in Model)
                 {
-                    <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
-                        <div class="nt-clb-item-control">
-                            <input type="checkbox" checked="checked" user-id="@user.UserID"/>
-                        </div>
-                        <div class="nt-clb-item-content ">
-                            <div class="nt-clb-item-label">@user.LastName <span class="nt-hl-sort">- @user.FirstName</span></div>
-                            <div class="nt-clb-item-desc">@user.UserMail</div>
-                        </div>
-                    </div>
+                    @Html.Partial("P_Modal_Invitation_User_Item",user)
                 }
 
 

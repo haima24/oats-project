@@ -8,9 +8,10 @@
     }
 @model OATS_Capstone.Models.User
 <script src="~/Resource/Scripts/NewStudentScript.js"></script>
-<script src="~/Resource/Scripts/SearchUsers.js"></script>
+<script src="~/Resource/Scripts/UsersScript.js"></script>
 <script src="~/Resource/Scripts/SearchStudents.js"></script>
 <input type="hidden" id="user-id" value="@Model.UserID" />
+<input type="hidden" id="current-user-id" value="@authen.UserId" />
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div id="savestatus" style="display: none;">
@@ -24,7 +25,7 @@
                     <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
                     <li class="active"><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
                     <li>
-                        <button class="btn oval" onclick="window.location='@Url.Action("MakeStudent")'">New</button></li>
+                         <button id="makeStudent" class="btn oval">New</button></li>
                 </ul>
 
                <ul class="nav pull-right">
@@ -72,12 +73,10 @@
             <div class="nt-asms-unrelated-label">Add:</div>
             <div class="nt-asms-search">
                 <div class="nt-rolldown-search">
-                    <div class="nt-search ui-droppable">
+                    <div class="nt-search">
                         <div class="nt-search-box">
-                            <input type="text" placeholder="Select a Test to Assign to." class="nt-search-input ">
+                            <input type="text" placeholder="Select a Test to Assign to." class="nt-search-input "/>
                             <i class="t-icon icon-search"></i>
-
-
                             <button class="nt-btn-icon nt-btn-clear ">
                                 <i class="icon-remove-sign"></i>
                             </button>

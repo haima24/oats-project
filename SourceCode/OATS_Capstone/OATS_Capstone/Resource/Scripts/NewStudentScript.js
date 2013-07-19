@@ -2,7 +2,7 @@
 
     //Update User Email on Blur Event
     $("#headerUserEmail").contentEditable({
-        "placeholder": "Enter Required Email Address",
+        "placeholder": "<i>Enter Required Email Address</i>",
         "onBlur": function (element) {
             var email = element.content;
             var userIdString = $("#user-id").val();
@@ -17,7 +17,7 @@
     });
     //Update UserName on Blur Event
     $("#headerUserName").contentEditable({
-        "placeholder": "Enter Required User Name",
+        "placeholder": "<i>Enter Required User Name</i>",
         "onBlur": function (element) {
             var username = element.content;
             var userIdString = $("#user-id").val();

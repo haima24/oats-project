@@ -30,12 +30,19 @@ namespace OATS_Capstone.Controllers
         public JsonResult RemoveUser(int testid, int userid)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) =>
+            common.RemoveUser(testid, userid);
+            return Json(new { common.success, common.message });
+        }
+
+        public JsonResult ModalPopupUser(int testid, string role = "", string term = "")
+        {
+            var common = new CommonService();
+            common.OnRenderSubPartialViewToString += (model) =>
             {
                 var result = String.Empty;
                 try
                 {
-                    result = this.RenderPartialViewToString("P_InvitationTab", model);
+                    result = this.RenderPartialViewToString("P_Modal_Invitation_User_Item", model);
                 }
                 catch (Exception)
                 {
@@ -44,13 +51,6 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.RemoveUser(testid, userid);
-            return Json(new { common.generatedHtml, common.success, common.message });
-        }
-
-        public JsonResult ModalPopupUser(int testid, string role)
-        {
-            var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
             {
                 ViewBag.Role = role;
@@ -66,13 +66,27 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.ModalPopupUser(testid, role);
-            return Json(new { common.message, common.success, common.generatedHtml });
+            common.ModalPopupUser(testid, term);
+            return Json(new { common.message, common.success, common.generatedHtml, common.resultlist });
         }
 
-        public JsonResult ModalRemovePopupUser(int testid, string role)
+        public JsonResult ModalRemovePopupUser(int testid, string role, string term = "")
         {
             var common = new CommonService();
+            common.OnRenderSubPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_Invitation_User_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
             common.OnRenderPartialViewToString += (model) =>
             {
                 var result = String.Empty;
@@ -89,13 +103,27 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.ModalRemovePopupUser(testid, role);
-            return Json(new { common.success, common.message, common.generatedHtml });
+            common.ModalRemovePopupUser(testid, role, term);
+            return Json(new { common.success, common.message, common.generatedHtml, common.resultlist });
         }
 
-        public JsonResult ModalReinvitePopupUser(int testid, string role)
+        public JsonResult ModalReinvitePopupUser(int testid, string role, string term = "")
         {
             var common = new CommonService();
+            common.OnRenderSubPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_Invitation_User_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
             common.OnRenderPartialViewToString += (model) =>
             {
                 var result = String.Empty;
@@ -112,8 +140,8 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.ModalReinvitePopupUser(testid, role);
-            return Json(new { common.success, common.message, common.generatedHtml });
+            common.ModalReinvitePopupUser(testid, role, term);
+            return Json(new { common.success, common.message, common.generatedHtml, common.resultlist });
         }
 
         public JsonResult CloneQuestion(int targetTestID, int questionid)
@@ -137,27 +165,6 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
-        public JsonResult SearchUserInvitation(string term)
-        {
-            var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) =>
-            {
-                var result = string.Empty;
-                try
-                {
-                    result = this.RenderPartialViewToString("P_Modal_Invitation_User_Item", model);
-                }
-                catch (Exception)
-                {
-                    common.success = false;
-                    common.message = Constants.DefaultExceptionMessage;
-                }
-                return result;
-            };
-            common.SearchUserInvitation(term);
-            return Json(new { common.success, common.message, common.resultlist });
-        }
-
         public JsonResult ReuseSearchQuestionTemplate(string term, List<int> tagids)
         {
             var common = new CommonService();
@@ -178,10 +185,10 @@ namespace OATS_Capstone.Controllers
             common.ReuseSearchQuestionTemplate(term, tagids);
             return Json(new { common.success, common.message, common.resultlist });
         }
-        public JsonResult TestsAssignUserSearch(int userid, string letter)
+        public JsonResult TestsAssignUserSearch(int userid,List<int> tagids, string letter)
         {
             var common = new CommonService();
-            common.TestsAssignUserSearch(userid, letter);
+            common.TestsAssignUserSearch(userid,tagids, letter);
             return Json(new { common.resultlist, common.success, common.message });
         }
 
@@ -200,8 +207,9 @@ namespace OATS_Capstone.Controllers
             return Json(new { common.resultlist, common.success, common.message });
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string id = "")
         {
+            ViewBag.Tab = id;
             return View();
         }
         public ActionResult MakeTest()
@@ -368,7 +376,8 @@ namespace OATS_Capstone.Controllers
                     }
                 }
             }
-            else {
+            else
+            {
                 return RedirectToActionPermanent("Index");
             }
 
@@ -382,7 +391,14 @@ namespace OATS_Capstone.Controllers
                 var invitation = common.AnonymousDoTest(id);
                 if (invitation != null)
                 {
-                    action = RedirectToActionPermanent("DoTest", new { id = invitation.TestID });
+                    if (common.isregistered)
+                    {
+                        action = RedirectToActionPermanent("DoTest", new { id = invitation.TestID });
+                    }
+                    else
+                    {
+                        action = RedirectToActionPermanent("DetailRegister", "Account", new { id = common.accessToken, forward = Url.Action("DoTest", new { id = invitation.TestID }) });
+                    }
                 }
             }
             catch (Exception)
@@ -973,23 +989,50 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.UpdateMaxScoreSetting(testid, score);
-            return Json(new { common.success,common.message});
+            return Json(new { common.success, common.message });
         }
 
         public JsonResult CheckMaxScoreAndTotalScore(int testid)
         {
             var common = new CommonService();
             TotalAndMaxScore carier = null;
-            common.CheckMaxScoreAndTotalScore(testid,ref carier);
+            common.CheckMaxScoreAndTotalScore(testid, ref carier);
             Object json = null;
             if (carier == null)
             {
                 json = new { common.success, common.message };
             }
-            else {
+            else
+            {
                 json = new { common.success, common.message, carier.MaxScoreSetting, carier.TotalScore, carier.IsRunning };
             }
             return Json(json);
+        }
+
+        public JsonResult InviteUserOutSide(int testid, string email)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Modal_Invitation_User_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.InviteUserOutSide(testid, email);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
+
+        public JsonResult Index_OverViewTab()
+        {
+            return null;
         }
     }
 }

@@ -318,8 +318,18 @@
         <div class="accordion-body" style="max-height: 350px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <div class="nt-list-cont">
-                    @foreach (var item in Model.UpComingTests)
+                    @if (Model.UpComingTests.Count == 0)
+                    { 
+                        <div class="nt-list-row">
+                            <div class="nt-name">
+                                <span>No Tests Available.</span>
+                            </div>
+                        </div>
+                    }
+                    else
                     {
+                        foreach (var item in Model.UpComingTests)
+                        {
                         <div class="nt-list-row nt-upcoming">
                             <div class="nt-name">
                                 <div>demo test</div>
@@ -343,13 +353,12 @@
                                 <button class="nt-btn-circle nt-delbtn"><i class="nt-icon remove"></i></button>
                             </div>
                         </div>
+                        }
                     }
-
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <div id="asmsOverview">
 </div>

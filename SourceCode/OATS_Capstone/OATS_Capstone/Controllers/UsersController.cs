@@ -61,6 +61,23 @@ namespace OATS_Capstone.Controllers
             var ismatch = common.IsMatchOldPass(pass);
             return Json(new { ismatch, common.message, common.success });
         }
-        
+        public JsonResult RemoveNonRegisteredUser(int userid)
+        {
+            var common = new CommonService();
+            common.RemoveNonRegisteredUser(userid);
+            return Json(new { common.success, common.message });
+        }
+        public JsonResult MakeUser(string email)
+        {
+            var common = new CommonService();
+            var generatedId=common.MakeUser(email);
+            return Json(new { common.success, common.message, generatedId });
+        }
+        public JsonResult EmailInput(string role)
+        {
+            ViewBag.Role = role;
+            var generatedHtml=this.RenderPartialViewToString("P_Email_Input");
+            return Json(new { generatedHtml });
+        }
     }
 }

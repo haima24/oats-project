@@ -3,56 +3,96 @@
         window.location.href = "/Teachers/NewTeacher/" + id;
     });
     var userid = parseInt($('#user-id').val());
-    if ($("#container .nt-search-input ").length > 0) {
-        $("#container .nt-search-input ").autocomplete({
-            minLength: 0,
-            source: function (req, res) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Tests/TestsAssignUserSearch",
-                    data: JSON.stringify({ userid: userid, letter: req.term }),
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (r) {
-                        if (r.success) {
-                            var result = $(r.resultlist).map(function (index, element) {
-                                if (element && element.TestTitle && element.Id) {
-                                    return { label: element.TestTitle, value: element.TestTitle, id: element.Id };
-                                }
-                            }).convertJqueryArrayToJSArray();
-                            res(result);
+
+    $("#container input[type=text].nt-search-input").oatsSearch({
+        rendermenu: function (items) {
+            $(items).each(function () {
+                var html = this.key;
+                var obj = this.value;
+                if (html && obj) {
+                    $(html).attr("data-toggle", "tooltip");
+                    if (obj.isCurrentUserOwnTest) {
+                        if (obj.running) {
+                            $(html).attr("data-original-title", "Assign This Test");
                         } else {
-                            showMessage("error", r.message);
+                            $(html).attr("data-original-title", "Assign This Test - This Test Locked due to compatitle problem");
                         }
-
                     }
-
-                });
-                //res([{ label: 'Example', value: 'ex' }]);
-            },
-
-            select: function (ev, ui) {
+                    $(html).tooltip();
+                    if (obj.intro) {
+                        $(".pop-over", html).popover({
+                            placement: "left",
+                            trigger: "hover",
+                            html: true,
+                            content: function () {
+                                var div = $("<div>").html(obj.intro);
+                                return div;
+                            }
+                        });
+                    }
+                }
+            });
+        },
+        select: function (item, element) {
+            if (item.isCurrentUserOwnTest && item.running) {
                 var data = {
-                    testID: parseInt(ui.item.id),
+                    testID: parseInt(item.id),
                     userID: userid
                 };
-                $.post('/Teachers/AssignTestToTeacher', data, function (response) {
-                    if (response.generatedHtml) {
-                        $("#asmsList").html(response.generatedHtml);
-                    }
+                $.post('/Teachers/AssignTestToTeacher', data, function (res) {
+                    if (res.success) {
+                        if (res.generatedHtml) {
+                            $("#asmsList").html(res.generatedHtml);
+                            $(element).fadeOut("slow", function () { $(this).remove(); });
+                        }
+                    } else { showMessage("error", res.message); }
                 });
-                return false;
             }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
-            var li = $("<li>").append("<a>" + item.label + "</a>");
+        },
+        source: function (req, res, addedTagIds) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsAssignUserSearch",
+                data: JSON.stringify({ userid: userid, tagids: addedTagIds, letter: req }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TestTitle && obj.TestTitle != "") {
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        },
+        tagsource: function (req, res) {
+            $.ajax({
+                type: "POST",
+                url: "/Tests/TestsSearchTag",
+                data: JSON.stringify({ term: req }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r.success) {
+                        var result = $(r.resultlist).map(function (index, obj) {
+                            if (obj.TagName && obj.TagName != "") {
+                                return { id: obj.TagID, name: obj.TagName };
+                            }
+                        }).convertJqueryArrayToJSArray();
+                        res(result);
+                    } else {
+                        showMessage("error", r.message);
+                    }
+                }
+            });
+        }
+    });
 
-            if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
-
-            li.appendTo(ul);
-            return li;
-        };
-    }
     $(".nt-unassignbtn").live("click", function (ev) {
         var test_id = $(this).closest(".nt-list-row").attr("test-id");
         $.post("/Teachers/UnassignTest", { userId: userid, testId: parseInt(test_id) }, function (res) {

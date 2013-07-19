@@ -17,21 +17,6 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-        public ActionResult MakeTeacher()
-        {
-
-            var db = SingletonDb.Instance();
-            var generateId=0;
-            var user = new User();
-            user.UserMail = string.Empty;
-            db.Users.Add(user);
-            if (db.SaveChanges() > 0)
-            {
-                generateId = user.UserID;
-            }
-            
-            return RedirectToAction("NewTeacher", new { id = generateId});
-        }
         public ActionResult NewTeacher(int id)
         {
             var db = SingletonDb.Instance();
