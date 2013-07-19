@@ -261,7 +261,7 @@ $.fn.extend({
                 if (!isExcept) {
                     if (!$(e.target).is(self) && $(e.target).closest(self).length == 0) {
                         if (options.callback && typeof (options.callback) === "function") {
-                            options.callback(e);
+                            options.callback(e,self);
                         }
                     }
                 }
@@ -373,8 +373,8 @@ $.fn.extend({
             var self = $(this);
             var parent = $(element).parent();
             parent.append(dropdown);
-            $("input[type=text]", dropdown).on("keydown", function (ev) {
-                var text = $(this).val() + String.fromCharCode(ev.keyCode);
+            $("input[type=text]", dropdown).on("keyup", function (ev) {
+                var text = $(this).val();
                 $(".nt-tag-hitlist .nt-item", dropdown).remove();
                 if (options.tagsource && typeof (options.tagsource) === "function") {
                     
@@ -385,8 +385,8 @@ $.fn.extend({
             $(element).live("focus", function () {
                 dropdown.show();
             });
-            $(element).live("keydown", function (ev) {
-                text= $(this).val() + String.fromCharCode(ev.keyCode);
+            $(element).live("keyup", function (ev) {
+                text = $(this).val();
                 reSearch();
             });
             $(document).live("click", function (e) {
@@ -452,7 +452,7 @@ $.fn.extend({
                         });
                         if (item.length>0) {
                             if (options.select && typeof (options.select) === "function") {
-                                options.select(item.attr("value"));
+                                options.select(item.attr("value"), clickItem);
                             }
                         }
                     }
@@ -513,12 +513,12 @@ $.fn.extend({
             }
         };
         $(this).each(function (index, element) {
-            $(element).live("keydown", function (ev) {
+            $(element).live("keyup", function (ev) {
                 if (options.container) {
                     container = $(this).closest(options.container);
                 }
                 curElement = $(this);
-                var text = $(this).val() + String.fromCharCode(ev.keyCode);
+                var text = $(this).val();
                 if (options.tagsource && typeof (options.tagsource) === "function") {
                     options.tagsource(text, restag);
                 }

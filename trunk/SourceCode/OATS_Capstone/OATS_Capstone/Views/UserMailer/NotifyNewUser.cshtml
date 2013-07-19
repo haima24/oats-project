@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "NotifyNewUser";
+    Layout = "~/Views/UserMailer/_Layout.cshtml";
+}
+
+<h2>OATS Notify for New User</h2>
+    <div>
+        <p>Dear @ViewBag.Mail,</p>
+        <p>You received this email because you are invited by @ViewBag.Invitor to join Online Analysis and Testing System as new user.</p>
+        <p>Please follow this link <a href="@ViewBag.Link">@ViewBag.Link</a>  and enter your password to access Online Analysis and Testing System.</p>
+        <p>Thanks and best regard,</p>
+        <p>Admin of OATS.</p>
+    </div>

@@ -333,7 +333,7 @@
     <Content Include="Resource\Scripts\NewStudentScript.js" />
     <Content Include="Resource\Scripts\NewTestScript.js" />
     <Content Include="Resource\Scripts\SearchStudents.js" />
-    <Content Include="Resource\Scripts\SearchUsers.js" />
+    <Content Include="Resource\Scripts\UsersScript.js" />
     <Content Include="Resource\Scripts\Tests_Layout.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
@@ -496,9 +496,15 @@
     <Content Include="Views\Tests\P_Modal_Test_History.cshtml" />
     <Content Include="Views\Tests\P_FeedBackTab_Student.cshtml" />
     <Content Include="Views\Tests\P_FeedBackTab_Teacher.cshtml" />
-	<Content Include="Views\Tests\P_Modal_Invitation_User_Item.cshtml" />
-	<Content Include="Views\Account\DetailRegister.cshtml" />
-    <Content Include="Views\UserMailer\ForgotPassword.cshtml" />  </ItemGroup>
+    <Content Include="Views\Tests\P_Modal_Invitation_User_Item.cshtml" />
+    <Content Include="Views\UserMailer\ForgotPassword.cshtml" />
+    <Content Include="Views\Tests\P_TestsOverview.cshtml" />
+    <Content Include="Views\Account\DetailRegister.cshtml" />
+    <Content Include="Views\UserMailer\InviteNonRegisteredUser.cshtml" />
+    <Content Include="Views\Shared\P_Email_Input.cshtml" />
+    <Content Include="Views\UserMailer\NotifyNewUser.cshtml" />
+    <Content Include="Views\Tests\P_OverviewTab.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Resource\Images\" />

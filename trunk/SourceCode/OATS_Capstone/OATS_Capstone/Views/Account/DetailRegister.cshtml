@@ -5,22 +5,27 @@
 
 @section additionheader{
     <link href="~/Bootstrap/css/register.css" rel="stylesheet" />
+    <script src="~/Resource/Scripts/DetailRegisterScript.js"></script>
+}
+@if (!string.IsNullOrEmpty(ViewBag.Forward))
+{ 
+    <input type="hidden" id="forward" value="@ViewBag.Forward" />    
 }
 <input type="hidden" id="user-id" value="@Model.UserID" />
 <div class="header">
     <a id="logo" class="logo" href="#">OATS</a>
 </div>
 <div id="signup-login-container">
-   <div class="register-container">
+    <div class="register-container">
         <h3 class="login-title">Account</h3>
         <div class="border">
             <input id="detail-mail" type="text" class="login-textbox" placeholder="Email Address" required="" value="@Model.UserMail" disabled="disabled"/>
-            <br/>
-            <input id="detail-pass" type="password" class="login-textbox" placeholder="Password" required=""/>
             <br />
-            <input type="password" class="login-textbox" placeholder="Re-Password" required=""/>
+            <input id="detail-pass" type="password" class="login-textbox" placeholder="Password" required="" />
             <br />
-            <input id="detail-login" type="button" class="login-btn btn" value="LOGIN"/>
+            <input type="password" class="login-textbox" placeholder="Re-Password" required="" />
+            <br />
+            <input id="detail-login" type="button" class="login-btn btn" value="LOGIN" />
         </div>
     </div>
 </div>

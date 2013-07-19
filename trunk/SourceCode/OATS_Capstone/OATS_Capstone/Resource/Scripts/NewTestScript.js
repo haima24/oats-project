@@ -652,7 +652,7 @@ function initSearchTests() {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction };
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);
@@ -1290,9 +1290,136 @@ $(function () {
         }
     });
     //separator
+    $(".nt-qitem .nt-qans").live("change", function (ev) {
+        updateAnswer($(this).closest(".nt-qans"), ev.target);
+    });
+    //separator
+    $("#eventDuplicate").live("click", function (ev) {
+        $.post("/Tests/DuplicateTest", { testid: testid }, function (res) {
+            if (res.success && res.id) {
+                window.location.href = "/Tests/NewTest/" + res.id;
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+    //separator
+    $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("change", function (ev) {
+        var li = $(this).closest("li");
+        postSetting(li);
+    });
+    $("#asm_time_limit").live("blur", function (ev) {
+        var li = $(this).closest("li");
+        postSetting(li);
+    });
+    //separator
+    $("button.nt-btn-rm").live("click", function (ev) {
+        var row=$(this).closest("tr");
+        var userid = parseInt(row.attr("user-id"));
+        $.post("/Tests/RemoveUser", { testid: testid, userid: userid }, function (res) {
+            if (res.success) {
+                row.fadeOut("slow", function () { $(this).remove();});
+                statusSaved();
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+    //separator
+    $("#btn-remove-student,#btn-remove-teacher").live("click", function (ev) {
+        var role = "";
+        if ($(this).attr("id") == "btn-remove-teacher") { role = "Teacher"; } else { role = "Student"; }
+        $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: role }, function (res) {
+            if (res.success) {
+                var html = res.generatedHtml;
+                if (!$("#modalRemovePopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalRemovePopupUser").html($(html).html());
+                }
+                $("#modalRemovePopupUser").modal("show");
+
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
+    $("#modalRemovePopupUser button.nt-btn-ok").live("click", function (ev) {
+        var container = $("#modalRemovePopupUser .nt-clb-list");
+        var checkedCheckbox = $("input[type=checkbox]:checked", container);
+        var chekcedIds = checkedCheckbox.map(function (index, element) {
+            return parseInt($(element).attr("user-id"));
+
+        }).convertJqueryArrayToJSArray();
+        statusSaving();
+        $.ajax({
+            type: "POST",
+            url: "/Tests/RemoveUserToInvitationTest",
+            data: JSON.stringify({ testid: testid, count: chekcedIds.length, userids: chekcedIds }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.success) {
+                    $("#eventTab").html($(res.generatedHtml));
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            }
+
+        });
+        $("#modalRemovePopupUser").modal('hide');
+
+    });
+    $("#modalRemovePopupUser").live("shown", function () {
+        var container = $(this);
+        var role = $("#role", container).val();
+        $(".nt-ctrl-search input[type=text]", container).autocomplete({
+            minLength: 0,
+            source: function (req, res) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/ModalRemovePopupUser",
+                    data: JSON.stringify({ testid: testid, role: role, term: req.term }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var list = $(".nt-clb-list", container);
+                            list.empty();
+                            $(r.resultlist).each(function (i, o) {
+                                list.append(o);
+                            });
+                        } else {
+                            showMessage("error", r.message);
+                        }
+                    }
+                });
+            }
+        });
+    });
+    //separator
+    $("#btn-invite-more-teacher,#btn-invite-more-student").live("click", function (ev) {
+        var role = "";
+        if ($(this).attr("id") == "btn-invite-more-teacher") { role = "Teacher"; } else { role = "Student"; }
+        $.post("/Tests/ModalPopupUser", { testid: testid, role: role }, function (res) {
+            if (res.success) {
+                var html = res.generatedHtml;
+                if (!$("#modalPopupUser").length > 0) {
+                    $(html).modal();
+                } else {
+                    $("#modalPopupUser").html($(html).html());
+                }
+                $("#modalPopupUser").modal("show");
+                //separator
+            } else {
+                showMessage("error", res.message);
+            }
+        });
+    });
     $("#modalPopupUser button.nt-btn-ok").live("click", function (ev) {
         var container = $("#modalPopupUser .nt-clb-list");
-        var role = $("#modalPopupUser").attr("role");
+        var role = $("#modalPopupUser #role").val();
         var checkedCheckbox = $("input[type=checkbox]:checked", container);
         var chekcedIds = checkedCheckbox.map(function (index, element) {
             return parseInt($(element).attr("user-id"));
@@ -1351,163 +1478,81 @@ $(function () {
     $("#modalPopupUser input[type=text].nt-email-outside").live("keydown", function (ev) {
         var keyCode = ev.keyCode;
         if (keyCode == 13) {
+            var tb = $(this);
             $.validity.start();
-            $(this).require().match("email");
+            tb.require().match("email");
             var result = $.validity.end();
             if (result.valid) {
-
+                var container = tb.closest(".modal");
+                var email = tb.val();
+                $.post("/Tests/InviteUserOutSide", { testid: testid, email: email }, function (res) {
+                    if (res.success) {
+                        tb.val("");
+                        var html = $(res.generatedHtml);
+                        var list = $(".nt-clb-list", container);
+                        list.append(html);
+                        list.scrollToElement(html);
+                    }
+                    else {
+                        showMessage("error", res.message);
+                    }
+                });
             }
         }
     });
-    //separator
-    $(".nt-qitem .nt-qans").live("change", function (ev) {
-        updateAnswer($(this).closest(".nt-qans"), ev.target);
-    });
-    //separator
-    $("#eventDuplicate").live("click", function (ev) {
-        $.post("/Tests/DuplicateTest", { testid: testid }, function (res) {
-            if (res.success && res.id) {
-                window.location.href = "/Tests/NewTest/" + res.id;
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
-    //separator
-    $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("change", function (ev) {
-        var li = $(this).closest("li");
-        postSetting(li);
-    });
-    $("#asm_time_limit").live("blur", function (ev) {
-        var li = $(this).closest("li");
-        postSetting(li);
-    });
-    //separator
-    $(".nt-btn-rm").live("click", function (ev) {
-        var userid = parseInt($(this).closest("tr").attr("user-id"));
-        $.post("/Tests/RemoveUser", { testid: testid, userid: userid }, function (res) {
-            if (res.success) {
-                $("#eventTab").html($(res.generatedHtml));
-                statusSaved();
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
-    //separator
-    $("#btn-remove-student").live("click", function (ev) {
-        $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Student" }, function (res) {
-            if (res.success) {
-                var html = res.generatedHtml;
-                if (!$("#modalRemovePopupUser").length > 0) {
-                    $(html).modal();
-                } else {
-                    $("#modalRemovePopupUser").replaceWith($(html));
-                }
-                $("#modalRemovePopupUser").modal("show");
-
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
-    //Separator
-    $("#btn-remove-teacher").live("click", function (ev) {
-        $.post("/Tests/ModalRemovePopupUser", { testid: testid, role: "Teacher" }, function (res) {
-            if (res.success) {
-                var html = res.generatedHtml;
-                if (!$("#modalRemovePopupUser").length > 0) {
-                    $(html).modal();
-                } else {
-                    $("#modalRemovePopupUser").replaceWith($(html));
-                }
-                $("#modalRemovePopupUser").modal("show");
-
-            } else {
-                showMessage("error", res.message);
-            }
-        });
-    });
-    //Separator
-    $("#modalRemovePopupUser button.nt-btn-ok").live("click", function (ev) {
-        var container = $("#modalRemovePopupUser .nt-clb-list");
-        var checkedCheckbox = $("input[type=checkbox]:checked", container);
-        var chekcedIds = checkedCheckbox.map(function (index, element) {
-            return parseInt($(element).attr("user-id"));
-
-        }).convertJqueryArrayToJSArray();
-        statusSaving();
-        $.ajax({
-            type: "POST",
-            url: "/Tests/RemoveUserToInvitationTest",
-            data: JSON.stringify({ testid: testid, count: chekcedIds.length, userids: chekcedIds }),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (res) {
-                if (res.success) {
-                    $("#eventTab").html($(res.generatedHtml));
-                    statusSaved();
-                } else {
-                    showMessage("error", res.message);
-                }
-            }
-
-        });
-        $("#modalRemovePopupUser").modal('hide');
-
-    });
-    //separator
-    $("#btn-invite-more-teacher,#btn-invite-more-student").live("click", function (ev) {
-        var role = "";
-        if ($(this).attr("id") == "btn-invite-more-teacher") { role = "Teacher"; } else { role = "Student"; }
-        $.post("/Tests/ModalPopupUser", { testid: testid, role: role }, function (res) {
-            if (res.success) {
-                var html = res.generatedHtml;
-                if (!$("#modalPopupUser").length > 0) {
-                    $(html).modal();
-                } else {
-                    $("#modalPopupUser").replaceWith($(html));
-                }
-                $("#modalPopupUser").modal("show");
-                //separator
-
-                $("#modalPopupUser .nt-ctrl-search input[type=text]").autocomplete({
-                    minLength: 0,
-                    source: function (req, res) {
-                            $.ajax({
-                                type: "POST",
-                                url: "/Tests/SearchUserInvitation",
-                                data: JSON.stringify({ term: req.term}),
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                success: function (r) {
-                                    if (r.success) {
-                                        var list = $("#modalPopupUser .nt-clb-list");
-                                        list.empty();
-                                        $(r.resultlist).each(function (i, o) {
-                                            list.append(o);
-                                        });
-                                    } else {
-                                        showMessage("error", r.message);
-                                    }
-                                }
+    $("#modalPopupUser").live("shown", function () {
+        var container = $(this);
+        var role = $("#role", container).val();
+        $(".nt-ctrl-search input[type=text]", container).autocomplete({
+            minLength: 0,
+            source: function (req, res) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/ModalPopupUser",
+                    data: JSON.stringify({ testid: testid, term: req.term }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var list = $(".nt-clb-list", container);
+                            list.empty();
+                            $(r.resultlist).each(function (i, o) {
+                                list.append(o);
                             });
+                        } else {
+                            showMessage("error", r.message);
+                        }
                     }
                 });
-            } else {
-                showMessage("error", res.message);
             }
         });
     });
+    $("#modalPopupUser .button button").live("click", function () {
+        var btn = $(this);
+        var userid = parseInt(btn.attr("user-id"));
+        if (!isNaN(userid)) {
+            $.post("/Users/RemoveNonRegisteredUser", { userid: userid }, function (res) {
+                if (res.success) {
+                    var item = $(btn).closest(".nt-clb-item");
+                    item.fadeOut("slow", function () { $(this).remove(); });
+                }
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
     //Separator
-    $("#btn-reinvite-student").live("click", function (ev) {
-        $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Student" }, function (res) {
+    $("#btn-reinvite-student,#btn-reinvite-teacher").live("click", function (ev) {
+        var role = "";
+        if ($(this).attr("id") == "btn-reinvite-teacher") { role = "Teacher"; } else { role = "Student"; }
+        $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: role }, function (res) {
             if (res.success) {
                 var html = res.generatedHtml;
                 if (!$("#modalReinvitePopupUser").length > 0) {
                     $(html).modal();
                 } else {
-                    $("#modalReinvitePopupUser").replaceWith($(html));
+                    $("#modalReinvitePopupUser").html($(html).html());
                 }
                 $("#modalReinvitePopupUser").modal("show");
 
@@ -1516,7 +1561,6 @@ $(function () {
             }
         });
     });
-    //Separator
     $("#modalReinvitePopupUser button.nt-btn-ok").live("click", function (ev) {
         var container = $("#modalReinvitePopupUser .nt-clb-list");
         var checkedCheckbox = $("input[type=checkbox]:checked", container);
@@ -1533,7 +1577,6 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             success: function (res) {
                 if (res.success) {
-                    $("#eventTab").html($(res.generatedHtml));
                     statusSaved();
                 } else {
                     showMessage("error", res.message);
@@ -1542,20 +1585,30 @@ $(function () {
         });
         $("#modalReinvitePopupUser").modal('hide');
     });
-    //Separator
-    $("#btn-reinvite-teacher").live("click", function (ev) {
-        $.post("/Tests/ModalReinvitePopupUser", { testid: testid, role: "Teacher" }, function (res) {
-            if (res.success) {
-                var html = res.generatedHtml;
-                if (!$("#modalReinvitePopupUser").length > 0) {
-                    $(html).modal();
-                } else {
-                    $("#modalReinvitePopupUser").replaceWith($(html));
-                }
-                $("#modalReinvitePopupUser").modal("show");
-
-            } else {
-                showMessage("error", res.message);
+    $("#modalReinvitePopupUser").live("shown", function () {
+        var container = $(this);
+        var role = $("#role", container).val();
+        $(".nt-ctrl-search input[type=text]", container).autocomplete({
+            minLength: 0,
+            source: function (req, res) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/ModalReinvitePopupUser",
+                    data: JSON.stringify({ testid: testid, role: role, term: req.term }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var list = $(".nt-clb-list", container);
+                            list.empty();
+                            $(r.resultlist).each(function (i, o) {
+                                list.append(o);
+                            });
+                        } else {
+                            showMessage("error", r.message);
+                        }
+                    }
+                });
             }
         });
     });
@@ -1708,7 +1761,7 @@ $(function () {
         },
         excepts: "#eventIntroduction",
     });
-    
+
 
     //separator
     var reuseAutoComplete = $("#sidebar .nt-ctrl-search input[type=text]").autocomplete({

@@ -1,10 +1,10 @@
 ﻿@using OATS_Capstone.Models
 @model IEnumerable<OATS_Capstone.Models.Invitation>
 @{
-    var studentsInvited = Model.Where(i => i.Role.RoleDescription == "Student").Select(k=>k.User);
-    var teachersInvited = Model.Where(i => i.Role.RoleDescription == "Teacher").Select(k=>k.User);
+    var studentsInvited = Model.Where(i => i.Role.RoleDescription == "Student").Select(k => k.User);
+    var teachersInvited = Model.Where(i => i.Role.RoleDescription == "Teacher").Select(k => k.User);
     
-    }
+}
 <div class="nt-asm-inv">
     <div class="nt-asm-inv-cont" style="height: 500px; overflow-y: auto;">
         <div class="nt-asm-inv-table-cont nt-learner">
@@ -23,7 +23,16 @@
                     @foreach (var invitations in studentsInvited)
                     {
                         <tr user-id="@invitations.UserID">
-                            <td class="nt-desc nt-name">@invitations.LastName<span class="nt-hl-sort">-@invitations.FirstName</span></td>
+                            <td class="nt-desc nt-name">
+                                @if (!string.IsNullOrEmpty(invitations.FirstName) || !string.IsNullOrEmpty(invitations.LastName))
+                                {
+                                    <span class="nt-hl-sort">@invitations.FirstName</span><span>@(!string.IsNullOrEmpty(invitations.LastName) ? (!string.IsNullOrEmpty(invitations.FirstName) ? " - " + invitations.LastName : invitations.LastName) : string.Empty)</span>
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            </td>
                             <td class="nt-desc nt-email">@invitations.UserMail</td>
                             <td class="nt-ctrl">
                                 <button class="nt-btn-icon nt-btn-rm">
@@ -70,7 +79,16 @@
                     @foreach (var invitation in teachersInvited)
                     {
                         <tr user-id="@invitation.UserID">
-                            <td class="nt-desc nt-name"><span class="nt-hl-sort">@invitation.FirstName</span></td>
+                            <td class="nt-desc nt-name">
+                                @if (!string.IsNullOrEmpty(invitation.FirstName) || !string.IsNullOrEmpty(invitation.LastName))
+                                {
+                                    <span class="nt-hl-sort">@invitation.FirstName</span><span>@(!string.IsNullOrEmpty(invitation.LastName) ? (!string.IsNullOrEmpty(invitation.FirstName) ? " - " + invitation.LastName : invitation.LastName) : string.Empty)</span>
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            </td>
                             <td class="nt-desc nt-email">@invitation.UserMail</td>
                             <td class="nt-ctrl">
                                 <button class="nt-btn-icon nt-btn-rm">
@@ -87,7 +105,7 @@
                                 <i class="icon-envelope"></i>
                                 Invite More Educators
                             </button>
-                            <button id="btn-remove-teacher" style="visibility: visible; display: block;" class="nt-btn-light t-icon-left" >
+                            <button id="btn-remove-teacher" style="visibility: visible; display: block;" class="nt-btn-light t-icon-left">
                                 <i class="icon-remove"></i>
                                 Remove
                             </button>

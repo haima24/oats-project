@@ -19,7 +19,23 @@ namespace OATS_Capstone.Models
     {
 
         public event OnRenderPartialViewHandler OnRenderPartialViewToString;
+        public event OnRenderPartialViewHandler OnRenderSubPartialViewToString;
         public event OnRenderPartialViewHandlerWithParameter OnRenderPartialViewToStringWithParameter;
+
+        string _accessToken = string.Empty;
+
+        public string accessToken
+        {
+            get { return _accessToken; }
+            set { _accessToken = value; }
+        }
+
+        bool _isregistered = true;
+        public bool isregistered
+        {
+            get { return _isregistered; }
+            set { _isregistered = value; }
+        }
 
         bool _success = false;
         public bool success
@@ -119,14 +135,17 @@ namespace OATS_Capstone.Models
                 var inv = test.Invitations.FirstOrDefault(k => k.UserID == userid);
                 test.Invitations.Remove(inv);
                 db.Invitations.Remove(inv);
+                var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                if (user != null)
+                {
+                    if (!user.IsRegistered)
+                    {
+                        db.Users.Remove(user);
+                    }
+                }
                 if (db.SaveChanges() >= 0)
                 {
-                    if (OnRenderPartialViewToString != null)
-                    {
-                        success = true;
-                        generatedHtml = OnRenderPartialViewToString(test.Invitations);
-                    }
-
+                    success = true;
                 }
             }
             catch (Exception ex)
@@ -136,7 +155,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void ModalPopupUser(int testid, string role)
+        public void ModalPopupUser(int testid, string term = "")
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -146,21 +165,45 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var users = new List<User>();
                 var authen = AuthenticationSessionModel.Instance();
-                //filter users
+
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
                 {
                     var invitedUsers = test.Invitations.Select(i => i.User.UserID);
                     users = db.Users.Where(i => !invitedUsers.Contains(i.UserID) && !invitedUsers.Contains(test.CreatedUserID)).Where(k => k.UserID != authen.UserId).ToList();
-                    
+                    if (!string.IsNullOrEmpty(term))
+                    {
+                        success = true;
+                        var lower = term.ToLower();
+                        users.ForEach(delegate(User user)
+                        {
+                            var first = false;
+                            var last = false;
+                            var mail = false;
+                            if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
+                            if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                            if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
+                            if (first || last || mail)
+                            {
+                                if (OnRenderSubPartialViewToString != null)
+                                {
+                                    var html = OnRenderSubPartialViewToString.Invoke(user);
+                                    resultlist.Add(html);
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            //sort
+                            users = users.OrderBy(i => i.UserMail).ToList();
+                            generatedHtml = OnRenderPartialViewToString.Invoke(users);
+                        }
+                    }
                 }
-
-                if (OnRenderPartialViewToString != null)
-                {
-                    success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(users);
-                }
-
             }
             catch (Exception)
             {
@@ -169,7 +212,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void ModalRemovePopupUser(int testid, string role)
+        public void ModalRemovePopupUser(int testid, string role, string term)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -194,12 +237,40 @@ namespace OATS_Capstone.Models
                         default:
                             break;
                     }
+                    //sort
+                    users = users.OrderBy(i => i.UserMail).ToList();
+                    if (!string.IsNullOrEmpty(term))
+                    {
+                        success = true;
+                        var lower = term.ToLower();
+                        users.ForEach(delegate(User user)
+                        {
+                            var first = false;
+                            var last = false;
+                            var mail = false;
+                            if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
+                            if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                            if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
+                            if (first || last || mail)
+                            {
+                                if (OnRenderSubPartialViewToString != null)
+                                {
+                                    var html = OnRenderSubPartialViewToString.Invoke(user);
+                                    resultlist.Add(html);
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            generatedHtml = OnRenderPartialViewToString.Invoke(users);
+                        }
+                    }
                 }
-                if (OnRenderPartialViewToString != null)
-                {
-                    success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(users);
-                }
+
             }
             catch (Exception)
             {
@@ -208,7 +279,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void ModalReinvitePopupUser(int testid, string role)
+        public void ModalReinvitePopupUser(int testid, string role, string term)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -233,11 +304,39 @@ namespace OATS_Capstone.Models
                         default:
                             break;
                     }
-                }
-                if (OnRenderPartialViewToString != null)
-                {
-                    success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(users);
+                    //sort
+                    users = users.OrderBy(i => i.UserMail).ToList();
+
+                    if (!string.IsNullOrEmpty(term))
+                    {
+                        success = true;
+                        var lower = term.ToLower();
+                        users.ForEach(delegate(User user)
+                        {
+                            var first = false;
+                            var last = false;
+                            var mail = false;
+                            if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
+                            if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                            if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
+                            if (first || last || mail)
+                            {
+                                if (OnRenderSubPartialViewToString != null)
+                                {
+                                    var html = OnRenderSubPartialViewToString.Invoke(user);
+                                    resultlist.Add(html);
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            success = true;
+                            generatedHtml = OnRenderPartialViewToString.Invoke(users);
+                        }
+                    }
                 }
 
             }
@@ -313,46 +412,6 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void SearchUserInvitation(string term)
-        {
-            success = false;
-            message = Constants.DefaultProblemMessage;
-            resultlist = new List<Object>();
-
-            try
-            {
-                var db = SingletonDb.Instance();
-                if (!string.IsNullOrEmpty(term))
-                {
-                    var lower = term.ToLower();
-                    var users = db.Users.ToList();
-                    users.ForEach(delegate(User user)
-                    {
-                        var first = false;
-                        var last = false;
-                        var mail = false;
-                        if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
-                        if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
-                        if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
-                        if (first || last || mail)
-                        {
-                            if (OnRenderPartialViewToString != null) {
-                                var html = OnRenderPartialViewToString.Invoke(user);
-                                resultlist.Add(html);
-                            }
-                        }
-                    });
-                }
-                success = true;
-                message = String.Empty;
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-        }
-
         public void ReuseSearchQuestionTemplate(string term, List<int> tagids)
         {
             success = false;
@@ -401,7 +460,7 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void TestsAssignUserSearch(int userid, string letter)
+        public void TestsAssignUserSearch(int userid, List<int> tagids, string letter)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -409,26 +468,56 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
+                var authen = AuthenticationSessionModel.Instance();
+                var authenUserId = authen.UserId;
+                var curUser = authen.User;
+
                 var user = db.Users.FirstOrDefault(i => i.UserID == userid);
                 var testsInInvitation = user.Invitations.Select(i => i.Test);
-                var tests = db.Tests.ToList();
-                var filteredTest = tests.Where(i => !testsInInvitation.Contains(i));
-                var finalResult = filteredTest.Where(i => i.TestTitle.ToLower().Contains(letter.ToLower()));
-                foreach (var item in finalResult)
+                var tests = curUser.Tests;
+                var filteredTests = tests.Where(i => {
+                    return !testsInInvitation.Select(k=>k.TestID).Contains(i.TestID);
+                }).ToList();
+
+                if (!string.IsNullOrEmpty(letter))
                 {
-                    var search = new SearchingTests();
-                    search.TestTitle = item.TestTitle;
-                    search.Id = item.TestID;
-                    var dateDes = item.StartDateTime.ToDateDefaultFormat();
-                    if (item.EndDateTime.HasValue)
+                    if (tagids == null) { tagids = new List<int>(); }
+                    var tags = db.Tags.Where(i => tagids.Contains(i.TagID));
+                    var lower = letter.Trim().ToLower();
+
+                    if (tagids.Count > 0)
                     {
-                        dateDes += " - " + item.EndDateTime.ToDateDefaultFormat();
+                        var rawTests = tags.SelectMany(i => i.TagInTests.Select(k => k.Test));
+                        var groupTests = from t in rawTests
+                                         group t by t into GroupTests
+                                         select GroupTests.Key;
+                        filteredTests = groupTests.ToList();
                     }
-                    search.DateDescription = dateDes;
-                    resultlist.Add(search);
+                    filteredTests.ForEach(delegate(Test test)
+                    {
+                        if (test.TestTitle != null)
+                        {
+                            if (test.TestTitle.ToLower().Contains(lower))
+                            {
+                                var testTemplate = new SearchingTests();
+                                testTemplate.Id = test.TestID;
+                                testTemplate.TestTitle = test.TestTitle;
+                                var dateDes = test.StartDateTime.ToDateDefaultFormat();
+                                if (test.EndDateTime.HasValue)
+                                {
+                                    dateDes += " - " + test.EndDateTime.ToDateDefaultFormat();
+                                }
+                                testTemplate.DateDescription = dateDes;
+                                testTemplate.IsCurrentUserOwnTest = test.CreatedUserID == authenUserId;
+                                testTemplate.Introduction = test.Introduction;
+                                testTemplate.IsRunning = test.IsRunning;
+                                resultlist.Add(testTemplate);
+                            }
+                        }
+                    });
                 }
                 success = true;
-                message = string.Empty;
+                message = String.Empty;
             }
 
             catch (Exception)
@@ -543,10 +632,11 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
+                var curUserId=authen.UserId;
                 if (!string.IsNullOrEmpty(term))
                 {
                     var lower = term.ToLower();
-                    var users = db.Users.ToList();
+                    var users = db.Users.Where(i => i.UserID != curUserId).ToList();
                     users.ForEach(delegate(User user)
                     {
                         var first = false;
@@ -681,6 +771,7 @@ namespace OATS_Capstone.Models
                         IUserMailer userMailer = new UserMailer(authen.UserId);
                         userMailer.ReInviteUsers(invitations);
                     }
+                    success = true;
                 }
             }
             catch (Exception)
@@ -712,6 +803,10 @@ namespace OATS_Capstone.Models
                                 var inv = test.Invitations.FirstOrDefault(k => k.UserID == id);
                                 test.Invitations.Remove(inv);
                                 db.Invitations.Remove(inv);
+                                if (!user.IsRegistered)
+                                {
+                                    db.Users.Remove(user);
+                                }
                             }
                         });
                     }
@@ -1549,24 +1644,33 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
-                var newUser = new User();
-                newUser.FirstName = user.FirstName;
-                newUser.LastName = user.LastName;
-                newUser.Password = user.Password;
-                newUser.UserMail = user.UserMail;
-                newUser.UserPhone = user.UserPhone;
-                newUser.UserCountry = user.UserCountry;
-                db.Users.Add(newUser);
-                if (db.SaveChanges() > 0)
+                var checkUser = db.Users.FirstOrDefault(i => i.UserMail == user.UserMail);
+                if (checkUser == null)
                 {
-                    success = true;
-                    message = Constants.DefaultSignUpSuccessMessage;
-                    var authen = AuthenticationSessionModel.Instance();
-                    authen.UserId = newUser.UserID;
-                    if (OnRenderPartialViewToString != null)
+                    var newUser = new User();
+                    newUser.FirstName = user.FirstName;
+                    newUser.LastName = user.LastName;
+                    newUser.Password = user.Password;
+                    newUser.UserMail = user.UserMail;
+                    newUser.UserPhone = user.UserPhone;
+                    newUser.UserCountry = user.UserCountry;
+                    db.Users.Add(newUser);
+                    if (db.SaveChanges() > 0)
                     {
-                        generatedHtml = OnRenderPartialViewToString.Invoke(null);
+                        success = true;
+                        message = Constants.DefaultSignUpSuccessMessage;
+                        var authen = AuthenticationSessionModel.Instance();
+                        authen.UserId = newUser.UserID;
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            generatedHtml = OnRenderPartialViewToString.Invoke(null);
+                        }
                     }
+                }
+                else
+                {
+                    success = false;
+                    message = Constants.DefaultDuplicateEmail;
                 }
             }
             catch (Exception)
@@ -1669,15 +1773,28 @@ namespace OATS_Capstone.Models
             message = Constants.DefaultProblemMessage;
             try
             {
-                var db = SingletonDb.Instance();
-                var user = db.Users.FirstOrDefault(i => i.UserID == userId);//may be null
-                if (user != null)
+                if (!string.IsNullOrEmpty(userEmail))
                 {
-                    user.UserMail = userEmail;
-                    if (db.SaveChanges() >= 0) //SaveChanges return affected rows
+                    userEmail = userEmail.Trim();
+                    var db = SingletonDb.Instance();
+                    var user = db.Users.FirstOrDefault(i => i.UserID == userId);//may be null
+                    if (user != null)
                     {
-                        success = true;
-                        message = string.Empty;
+                        var checkUser = db.Users.FirstOrDefault(i => i.UserID != userId && i.UserMail == userEmail);
+                        if (checkUser == null)
+                        {
+                            user.UserMail = userEmail;
+                            if (db.SaveChanges() >= 0) //SaveChanges return affected rows
+                            {
+                                success = true;
+                                message = string.Empty;
+                            }
+                        }
+                        else
+                        {
+                            success = false;
+                            message = Constants.DefaultDuplicateEmail;
+                        }
                     }
                 }
             }
@@ -1721,21 +1838,31 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
-                var user = db.Users.FirstOrDefault(i => i.UserID == authen.UserId);
-                if (user != null)
+                var authenUserId = authen.UserId;
+                var checkUser = db.Users.FirstOrDefault(i => i.UserID != authenUserId && i.UserMail == profile.UserMail);
+                if (checkUser == null)
                 {
-                    user.FirstName = profile.FirstName;
-                    user.LastName = profile.LastName;
-                    user.UserMail = profile.UserMail;
-                    if (!string.IsNullOrEmpty(profile.Password))
+                    var user = db.Users.FirstOrDefault(i => i.UserID == authenUserId);
+                    if (user != null)
                     {
-                        user.Password = profile.Password;
+                        user.FirstName = profile.FirstName;
+                        user.LastName = profile.LastName;
+                        user.UserMail = profile.UserMail;
+                        if (!string.IsNullOrEmpty(profile.Password))
+                        {
+                            user.Password = profile.Password;
+                        }
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                            message = "Success on save your profile.";
+                        }
                     }
-                    if (db.SaveChanges() >= 0)
-                    {
-                        success = true;
-                        message = "Success on save your profile.";
-                    }
+                }
+                else
+                {
+                    success = false;
+                    message = Constants.DefaultDuplicateEmail;
                 }
             }
             catch (Exception)
@@ -2668,16 +2795,30 @@ namespace OATS_Capstone.Models
         public Invitation AnonymousDoTest(string key)
         {
             Invitation invitation = null;
+            isregistered = true;
+            accessToken = string.Empty;
             try
             {
-                var keyDecode = HttpContext.Current.Server.HtmlDecode(key);
+                var keyDecode = HttpContext.Current.Server.UrlDecode(key);
                 var db = SingletonDb.Instance();
                 invitation = db.Invitations.FirstOrDefault(i => i.AccessToken == keyDecode);
                 if (invitation != null)
                 {
-                    //anonymous login
-                    var authen = AuthenticationSessionModel.Instance();
-                    authen.UserId = invitation.UserID;
+                    var user = invitation.User;
+                    if (user.IsRegistered)
+                    {
+                        isregistered = true;
+                        accessToken = string.Empty;
+                        //anonymous login
+                        var authen = AuthenticationSessionModel.Instance();
+                        authen.IsCookieEnable = true;
+                        authen.UserId = invitation.UserID;
+                    }
+                    else
+                    {
+                        isregistered = false;
+                        accessToken = user.AccessToken;
+                    }
                 }
             }
             catch (Exception)
@@ -2777,9 +2918,12 @@ namespace OATS_Capstone.Models
             User user = null;
             try
             {
-                var keyDecode = HttpContext.Current.Server.HtmlDecode(key);
-                var db = SingletonDb.Instance();
-                user = db.Users.FirstOrDefault(i => i.AccessToken == keyDecode);
+                if (!string.IsNullOrEmpty(key))
+                {
+                    var keyDecode = HttpContext.Current.Server.UrlDecode(key);
+                    var db = SingletonDb.Instance();
+                    user = db.Users.FirstOrDefault(i => i.AccessToken == keyDecode && !string.IsNullOrEmpty(i.AccessToken));
+                }
             }
             catch (Exception)
             {
@@ -2787,7 +2931,7 @@ namespace OATS_Capstone.Models
             }
             return user;
         }
-        public void ForgotPassword(string email,string connectionid)
+        public void ForgotPassword(string email, string connectionid)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2837,17 +2981,23 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void UpdateUserPasswordOnRegisterDetail(int userid, string password) {
+        public void UpdateUserPasswordOnRegisterDetail(int userid, string password)
+        {
             success = false;
             message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
                 var user = db.Users.FirstOrDefault(i => i.UserID == userid);
-                if (user != null) {
+                if (user != null)
+                {
                     user.Password = password;
-                    if (db.SaveChanges() > 0) {
+                    user.AccessToken = null;
+                    user.IsRegistered = true;
+                    if (db.SaveChanges() > 0)
+                    {
                         var authen = AuthenticationSessionModel.Instance();
+                        authen.IsCookieEnable = true;
                         authen.UserId = user.UserID;
                         success = true;
                         message = Constants.DefaultSuccessMessage;
@@ -2859,6 +3009,151 @@ namespace OATS_Capstone.Models
                 success = true;
                 message = Constants.DefaultExceptionMessage;
             }
+        }
+        public void Index_OverViewTab()
+        {
+            //success = false;
+            //message = Constants.DefaultProblemMessage;
+            //try
+            //{
+            //}
+            //catch (Exception)
+            //{
+            //    success = false;
+            //    message = Constants.DefaultExceptionMessage;
+            //}
+        }
+        public void InviteUserOutSide(int testid, string email)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                if (!string.IsNullOrEmpty(email))
+                {
+                    email = email.Trim();
+                    var db = SingletonDb.Instance();
+                    var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                    if (test != null)
+                    {
+                        //check to see this email exist or not
+                        var checkUser = db.Users.FirstOrDefault(i => i.UserMail.Trim() == email);
+                        if (checkUser == null)
+                        {
+                            //create a user and assign them NOT isregister
+                            var user = new User();
+                            user.UserMail = email;
+                            user.IsRegistered = false;
+                            //generate token
+                            var token = GenerateUserToken(user.UserID);
+                            user.AccessToken = token;
+                            db.Users.Add(user);
+                            if (db.SaveChanges() > 0)
+                            {
+                                success = true;
+                                message = Constants.DefaultSuccessMessage;
+                                if (OnRenderPartialViewToString != null)
+                                {
+                                    generatedHtml = OnRenderPartialViewToString.Invoke(user);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            success = false;
+                            message = Constants.DefaultDuplicateEmail;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void RemoveNonRegisteredUser(int userid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                if (user != null)
+                {
+                    if (!user.IsRegistered)
+                    {
+                        db.Users.Remove(user);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            message = Constants.DefaultSuccessMessage;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public int MakeUser(string email)
+        {
+            var generatedId = 0;
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                if (!string.IsNullOrEmpty(email))
+                {
+                    email = email.Trim();
+                    var checkUser = db.Users.FirstOrDefault(i => i.UserMail.Trim() == email);
+                    if (checkUser == null)
+                    {
+                        var user = new User();
+                        user.UserMail = email;
+                        user.IsRegistered = false;
+                        //generate token
+                        var token = GenerateUserToken(user.UserID);
+                        user.AccessToken = token;
+                        db.Users.Add(user);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            message = Constants.DefaultSuccessMessage;
+                            generatedId = user.UserID;
+
+                            var authen = AuthenticationSessionModel.Instance();
+                            //send mail notify new user here
+                            IUserMailer mailer = new UserMailer();
+                            var curId = authen.UserId;
+                            var userMail = user.UserMail;
+                            mailer.OnNotifyNewUserCallback += (isSuccess) =>
+                            {
+                                var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                                context.Clients.All.R_notifyNewUserCallBack(curId, generatedId, userMail, isSuccess);
+
+                            };
+                            mailer.NofityNewUser(user, authen.User);
+                        }
+                    }
+                    else
+                    {
+                        success = false;
+                        message = Constants.DefaultDuplicateEmail;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            return generatedId;
         }
     }
 }
