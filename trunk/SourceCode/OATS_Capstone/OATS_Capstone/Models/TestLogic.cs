@@ -32,7 +32,7 @@ namespace OATS_Capstone.Models
                     Questions = Questions.RandomAnswers();
                 }
 
-                //Questions = Questions.RandomQuestion();
+                Questions = Questions.RandomQuestion();
             }
         }
     }
