@@ -9,50 +9,34 @@ namespace OATS_Capstone.Mailers
 {
     public class UserMailer : MailerBase, IUserMailer
     {
-        private int ownUserId = 0;
+        private List<int> listSent = null;
 
         private int tempMailCount = 0;
 
         private int initMailCount = 0;
 
-        public int InitMailCount
-        {
-            get { return initMailCount; }
-        }
-
         private int sentMailCount = 0;
 
-        public int SentMailCount
-        {
-            get { return sentMailCount; }
-        }
-
         private int unSentMailCount = 0;
-
-        public int UnSentMailCount
-        {
-            get { return unSentMailCount; }
-        }
 
         public event EmailCallbackDelegate OnForgotPasswordCallback;
 
         public event EmailCallbackDelegate OnNotifyNewUserCallback;
 
-        public UserMailer(int ownId)
-        {
-            MasterName = "_Layout";
-            ownUserId = ownId;
-        }
+        public event AcknowledgeDelegate OnAcknowledInvitationEmail;
+
         public UserMailer()
         {
             MasterName = "_Layout";
+            listSent = new List<int>();
         }
         private void AcknowledgeCallback()
         {
             if (tempMailCount == 0)
             {
-                var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
-                context.Clients.All.R_AcknowledgeEmailCallback(ownUserId, initMailCount, sentMailCount, unSentMailCount);
+                if (OnAcknowledInvitationEmail != null) {
+                    OnAcknowledInvitationEmail.Invoke(initMailCount, sentMailCount, unSentMailCount, listSent);
+                }
             }
         }
 
@@ -131,14 +115,23 @@ namespace OATS_Capstone.Mailers
                 };
                 client.SendCompleted += (sender, e) =>
                 {
-                    sentMailCount++;
+                    if (e.Error != null || e.Cancelled)
+                    {
+                        unSentMailCount++;
+                    }
+                    else {
+                        sentMailCount++;
+                        var invitationIdObj = e.UserState;
+                        if (invitationIdObj != null&&invitationIdObj is int) {
+                            var invitationId = (int)invitationIdObj;
+                            listSent.Add(invitationId);
+
+                        }
+                    }
                     tempMailCount--;
                     AcknowledgeCallback();
-                    //if (e.Error != null || e.Cancelled)
-                    //{
-                    //}
                 };
-                this.InviteUser(invitations.FirstOrDefault()).SendAsync("oats", client);
+                this.InviteUser(invitations.FirstOrDefault()).SendAsync(i.InvitationID, client);
             });
         }
         public virtual void ReInviteUsers(List<Invitation> invitations)
@@ -156,14 +149,25 @@ namespace OATS_Capstone.Mailers
                 };
                 client.SendCompleted += (sender, e) =>
                 {
-                    sentMailCount++;
+                    if (e.Error != null || e.Cancelled)
+                    {
+                        unSentMailCount++;
+                    }
+                    else
+                    {
+                        sentMailCount++;
+                        var invitationIdObj = e.UserState;
+                        if (invitationIdObj != null && invitationIdObj is int)
+                        {
+                            var invitationId = (int)invitationIdObj;
+                            listSent.Add(invitationId);
+
+                        }
+                    }
                     tempMailCount--;
                     AcknowledgeCallback();
-                    //if (e.Error != null || e.Cancelled)
-                    //{
-                    //}
                 };
-                this.InviteUser(invitations.FirstOrDefault()).SendAsync("oats", client);
+                this.InviteUser(invitations.FirstOrDefault()).SendAsync(i.InvitationID, client);
             });
         }
         public virtual void ForgotPassword(User user)
@@ -253,5 +257,8 @@ namespace OATS_Capstone.Mailers
             }
         }
 
+
+
+        
     }
 }

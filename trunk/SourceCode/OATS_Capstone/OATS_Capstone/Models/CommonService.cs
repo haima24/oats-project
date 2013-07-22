@@ -675,6 +675,7 @@ namespace OATS_Capstone.Models
                         {
                             var invitation = new Invitation();
                             var key = GenerateInvitationAccessToken(test.TestID, id);
+                            invitation.IsMailSent = false;
                             invitation.AccessToken = key;
                             invitation.User = user;
                             invitation.Role = userRole;
@@ -693,7 +694,23 @@ namespace OATS_Capstone.Models
                     }
                     //send mail
                     var authen = AuthenticationSessionModel.Instance();
-                    IUserMailer userMailer = new UserMailer(authen.UserId);
+                    var userid = authen.UserId;
+                    IUserMailer userMailer = new UserMailer();
+                    userMailer.OnAcknowledInvitationEmail += (init, sent, unsent, list) => {
+                        if (list.Count > 0) {
+                            list.ForEach(i => {
+                                var invitation = db.Invitations.FirstOrDefault(k => k.InvitationID == i);
+                                if (invitation != null)
+                                {
+                                    invitation.IsMailSent = true;
+                                }
+                            });
+                            db.SaveChanges();
+                        }
+                        var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                        context.Clients.All.R_AcknowledgeEmailCallback(userid, init, sent, unsent, list);
+                    };
+
                     userMailer.InviteUsers(invitationMails);
                 }
             }
@@ -721,6 +738,7 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 var authen = AuthenticationSessionModel.Instance();
+                var userid = authen.UserId;
                 var invitations = new List<Invitation>();
                 if (test != null)
                 {
@@ -735,7 +753,24 @@ namespace OATS_Capstone.Models
                             }
                         });
                         //send mail
-                        IUserMailer userMailer = new UserMailer(authen.UserId);
+                        IUserMailer userMailer = new UserMailer();
+                        userMailer.OnAcknowledInvitationEmail += (init, sent, unsent, list) =>
+                        {
+                            if (list.Count > 0)
+                            {
+                                list.ForEach(i =>
+                                {
+                                    var invitation = db.Invitations.FirstOrDefault(k => k.InvitationID == i);
+                                    if (invitation != null)
+                                    {
+                                        invitation.IsMailSent = true;
+                                    }
+                                });
+                                db.SaveChanges();
+                            }
+                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                            context.Clients.All.R_AcknowledgeEmailCallback(userid, init, sent, unsent, list);
+                        };
                         userMailer.ReInviteUsers(invitations);
                     }
                     success = true;
@@ -1921,6 +1956,7 @@ namespace OATS_Capstone.Models
                     invitation.Test = test;
                     invitation.Role = userRole;
                     invitation.InvitationDateTime = DateTime.Now;
+                    invitation.IsMailSent = false;
                     user.Invitations.Add(invitation);
                     if (db.SaveChanges() > 0)
                     {
@@ -1958,6 +1994,7 @@ namespace OATS_Capstone.Models
                     invitation.Test = test;
                     invitation.Role = userRole;
                     invitation.InvitationDateTime = DateTime.Now;
+                    invitation.IsMailSent = false;
                     user.Invitations.Add(invitation);
                     if (db.SaveChanges() > 0)
                     {

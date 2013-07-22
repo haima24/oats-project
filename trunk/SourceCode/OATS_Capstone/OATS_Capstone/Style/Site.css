@@ -2802,7 +2802,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
             }
 
             #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table th.nt-ctrl, #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table td.nt-ctrl {
-                width: 20px;
+                width: 40px;
                 text-align: right;
             }
 
@@ -2817,6 +2817,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
             #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table tbody tr {
                 border-top: 1px solid gainsboro;
             }
+
+                #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table tbody tr.sent:hover {
+                    background-color: #EAEFFA;
+                }
+
+                #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table tbody tr.unsent:hover {
+                    background-color: #FAEAEA;
+                }
 
             #eventTab > div.nt-asm-inv .nt-asm-inv-cont .nt-asm-inv-table-cont table tfoot tr td {
                 padding: 20px 0 0 0;
@@ -3767,4 +3775,3 @@ article, time {
     margin: 10px 20px 5px 20px;
     border-bottom: 1px solid #ececec;
 }
-

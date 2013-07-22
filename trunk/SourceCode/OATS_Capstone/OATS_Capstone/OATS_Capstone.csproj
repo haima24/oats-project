@@ -510,6 +510,7 @@
     <Content Include="Views\UserMailer\NotifyNewUser.cshtml" />
     <Content Include="Views\Tests\P_OverviewTab.cshtml" />
     <Content Include="Views\Shared\ErrorDetail.cshtml" />
+    <Content Include="Views\Tests\P_InvitationTab_Invitation_Item.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
