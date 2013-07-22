@@ -138,6 +138,7 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="RoleID" Type="int" />
           <Property Name="InvitationDateTime" Type="datetime" />
+          <Property Name="IsMailSent" Type="bit" Nullable="false" />
           <Property Name="AccessToken" Type="varchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="Question">
@@ -243,12 +244,11 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Password" Type="varchar" MaxLength="50" />
-          <Property Name="UserMail" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="UserPhone" Type="varchar" MaxLength="50" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="UserCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="128" />
+          <Property Name="UserMail" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="UserPhone" Type="varchar" MaxLength="128" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="UserCountry" Type="nvarchar" MaxLength="128" />
           <Property Name="LastLogin" Type="datetime" />
           <Property Name="IsRegistered" Type="bit" Nullable="false" />
           <Property Name="AccessToken" Type="varchar" MaxLength="128" />
@@ -674,6 +674,7 @@
           <NavigationProperty Name="Role" Relationship="OATSDBModel.FK_Invitation_Role" FromRole="Invitation" ToRole="Role" />
           <NavigationProperty Name="Test" Relationship="OATSDBModel.FK_Invitation_Test" FromRole="Invitation" ToRole="Test" />
           <NavigationProperty Name="User" Relationship="OATSDBModel.FK_Invitation_User" FromRole="Invitation" ToRole="User" />
+          <Property Type="Boolean" Name="IsMailSent" Nullable="false" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -803,12 +804,10 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="Password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="UserMail" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="UserPhone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="UserCountry" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Password" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="UserMail" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="UserPhone" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="UserCountry" Type="String" MaxLength="128" Unicode="true" FixedLength="false" />
           <Property Name="LastLogin" Type="DateTime" Precision="3" />
           <NavigationProperty Name="FeedBacks" Relationship="OATSDBModel.FK_FeedBack_User" FromRole="User" ToRole="FeedBack" />
           <NavigationProperty Name="Invitations" Relationship="OATSDBModel.FK_Invitation_User" FromRole="User" ToRole="Invitation" />
@@ -816,6 +815,7 @@
           <NavigationProperty Name="UserInTests" Relationship="OATSDBModel.FK_UserInTest_User" FromRole="User" ToRole="UserInTest" />
           <Property Type="Boolean" Name="IsRegistered" Nullable="false" />
           <Property Type="String" Name="AccessToken" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="UserInTest">
           <Key>
@@ -1130,6 +1130,7 @@
           <EntitySetMapping Name="Invitations">
             <EntityTypeMapping TypeName="OATSDBModel.Invitation">
               <MappingFragment StoreEntitySet="Invitation">
+                <ScalarProperty Name="IsMailSent" ColumnName="IsMailSent" />
                 <ScalarProperty Name="InvitationID" ColumnName="InvitationID" />
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -1250,14 +1251,13 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="OATSDBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
                 <ScalarProperty Name="IsRegistered" ColumnName="IsRegistered" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserMail" ColumnName="UserMail" />
                 <ScalarProperty Name="UserPhone" ColumnName="UserPhone" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserCountry" ColumnName="UserCountry" />
                 <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
               </MappingFragment>

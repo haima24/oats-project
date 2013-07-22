@@ -19,8 +19,7 @@ namespace OATS_Capstone.Models
     {
         public int UserID;
         public int? RoleID;
-        public string LastName;
-        public string FirstName;
+        public string Name;
         public string Usermail;
     }
 

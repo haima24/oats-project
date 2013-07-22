@@ -248,7 +248,13 @@
     <Content Include="Bootstrap\css\bootstrap.min.css" />
     <Content Include="Bootstrap\css\fullcalendar.print.css" />
     <Content Include="Bootstrap\css\fullcalendar.css" />
+    <Content Include="Bootstrap\css\GridviewScroll.css" />
     <Content Include="Bootstrap\css\jqbar.css" />
+    <Content Include="Bootstrap\img\arrowhl.png" />
+    <Content Include="Bootstrap\img\arrowhr.png" />
+    <Content Include="Bootstrap\img\arrowvb.png" />
+    <Content Include="Bootstrap\img\arrowvt.png" />
+    <Content Include="Bootstrap\js\gridviewScroll.min.js" />
     <Content Include="Bootstrap\js\jqbar.js" />
     <Content Include="Bootstrap\css\jquery.validity.css" />
     <Content Include="Bootstrap\css\kalendae.css" />
@@ -498,12 +504,12 @@
     <Content Include="Views\Tests\P_FeedBackTab_Teacher.cshtml" />
     <Content Include="Views\Tests\P_Modal_Invitation_User_Item.cshtml" />
     <Content Include="Views\UserMailer\ForgotPassword.cshtml" />
-    <Content Include="Views\Tests\P_TestsOverview.cshtml" />
     <Content Include="Views\Account\DetailRegister.cshtml" />
     <Content Include="Views\UserMailer\InviteNonRegisteredUser.cshtml" />
     <Content Include="Views\Shared\P_Email_Input.cshtml" />
     <Content Include="Views\UserMailer\NotifyNewUser.cshtml" />
     <Content Include="Views\Tests\P_OverviewTab.cshtml" />
+    <Content Include="Views\Shared\ErrorDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -506,7 +506,7 @@ namespace OATS_Capstone.Models
                 if (i.User != null)
                 {
                     var item = new ResponseUserItem();
-                    item.UserLabel = i.User.FirstName ?? i.User.LastName ?? i.User.UserMail;
+                    item.UserLabel = !string.IsNullOrEmpty(i.User.Name) ?i.User.Name: i.User.UserMail;
                     item.UserPercent = ((decimal)i.Score / TotalScoreOfTest).ToPercent();
                     item.UserID = i.User.UserID;
                     ResponseUserList.Add(item);

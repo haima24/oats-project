@@ -26,12 +26,11 @@ namespace OATS_Capstone.Models
         public string Password { get; set; }
         public string UserMail { get; set; }
         public string UserPhone { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
         public string UserCountry { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
         public bool IsRegistered { get; set; }
         public string AccessToken { get; set; }
+        public string Name { get; set; }
     
         public virtual ICollection<FeedBack> FeedBacks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }

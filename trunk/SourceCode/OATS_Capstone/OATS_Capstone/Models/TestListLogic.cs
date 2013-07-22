@@ -30,11 +30,36 @@ namespace OATS_Capstone.Models
         public TestList(IEnumerable<Test> tests)
         {
             var authen = AuthenticationSessionModel.Instance();
-            var invitedTest = tests.Where(i => i.Invitations.Select(t => t.UserID).Contains(authen.UserId));
-            var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId);
-            recentTests = invitedTest.FilterByRecents().Select(i => new TestListItem(i) { IsRunning = i.IsRunning }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
-            runningTests = invitedTest.FilterByRuning().Select(i => new TestListItem(i) { IsRunning = i.IsRunning }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
-            upComingTests = invitedTest.FilterByUpcoming().Select(i => new TestListItem(i) { IsRunning = i.IsRunning }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
+            var curUserId=authen.UserId;
+
+            var studentInvited = tests.Where(i =>
+            {
+                var condition = false;
+                var invitation = i.Invitations.FirstOrDefault(t => t.UserID == curUserId);
+                if (invitation != null) {
+                    if (invitation.Role.RoleDescription == "Student") {
+                        condition = true;
+                    }
+                }
+                return condition;
+            });
+            var teacherInvited = tests.Where(i =>
+            {
+                var condition = false;
+                var invitation = i.Invitations.FirstOrDefault(t => t.UserID == curUserId);
+                if (invitation != null)
+                {
+                    if (invitation.Role.RoleDescription == "Teacher")
+                    {
+                        condition = true;
+                    }
+                }
+                return condition;
+            });
+            var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId).Concat(teacherInvited);
+            recentTests = studentInvited.FilterByRecents().Select(i => new TestListItem(i) {IsCurrentUserOwnTest=false, IsRunning = i.IsRunning }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
+            runningTests = studentInvited.FilterByRuning().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
+            upComingTests = studentInvited.FilterByUpcoming().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
         }
     }
     public class TestListItem

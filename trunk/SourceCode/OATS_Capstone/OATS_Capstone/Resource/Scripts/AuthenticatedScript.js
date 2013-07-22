@@ -9,7 +9,7 @@
     $("#userPwd,#userConfPwd")
         .match(/^.{8,20}$/, "Passwords must be at least 8 characters.")
         .equal("Passwords do not match.");
-    $("#userFirstName,#userLastName").match(/^([\sa-zA-Z0-9_-]+){1,30}$/, "Input must be text.");
+    $("#userName").match(/^([\sa-zA-Z0-9_-]+){1,30}$/, "Input must be text.");
     var result = $.validity.end();
     return result.valid;
 }
@@ -62,8 +62,7 @@ $(function () {
     $("#popup-profile .nt-save-btn").live("click", function (ev) {
         if (IsValidProfileFields()) {
             var profile = new Object();
-            profile.FirstName = $("#userFirstName").val();
-            profile.LastName = $("#userLastName").val();
+            profile.Name = $("#userName").val();
             profile.UserMail = $("#userEmail").val();
             profile.Password = $("#userPwd").val();
             $.post("/Users/UpdateProfile", profile, function (res) {

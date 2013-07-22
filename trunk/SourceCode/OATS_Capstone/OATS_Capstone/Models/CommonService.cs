@@ -22,6 +22,14 @@ namespace OATS_Capstone.Models
         public event OnRenderPartialViewHandler OnRenderSubPartialViewToString;
         public event OnRenderPartialViewHandlerWithParameter OnRenderPartialViewToStringWithParameter;
 
+        bool _isHavePermission = false;
+
+        public bool IsHavePermission
+        {
+            get { return _isHavePermission; }
+            set { _isHavePermission = value; }
+        }
+
         string _accessToken = string.Empty;
 
         public string accessToken
@@ -122,39 +130,6 @@ namespace OATS_Capstone.Models
             }
         }
 
-        public void RemoveUser(int testid, int userid)
-        {
-            success = false;
-            message = Constants.DefaultProblemMessage;
-            generatedHtml = String.Empty;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                //var user = db.Users.FirstOrDefault(i => i.UserID == userid);
-                var inv = test.Invitations.FirstOrDefault(k => k.UserID == userid);
-                test.Invitations.Remove(inv);
-                db.Invitations.Remove(inv);
-                var user = db.Users.FirstOrDefault(i => i.UserID == userid);
-                if (user != null)
-                {
-                    if (!user.IsRegistered)
-                    {
-                        db.Users.Remove(user);
-                    }
-                }
-                if (db.SaveChanges() >= 0)
-                {
-                    success = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-        }
-
         public void ModalPopupUser(int testid, string term = "")
         {
             success = false;
@@ -177,13 +152,11 @@ namespace OATS_Capstone.Models
                         var lower = term.ToLower();
                         users.ForEach(delegate(User user)
                         {
-                            var first = false;
-                            var last = false;
+                            var name = false;
                             var mail = false;
-                            if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
-                            if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                            if (user.Name != null) { if (user.Name.ToLower().Contains(lower)) { name = true; } }
                             if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
-                            if (first || last || mail)
+                            if (name || mail)
                             {
                                 if (OnRenderSubPartialViewToString != null)
                                 {
@@ -245,13 +218,11 @@ namespace OATS_Capstone.Models
                         var lower = term.ToLower();
                         users.ForEach(delegate(User user)
                         {
-                            var first = false;
-                            var last = false;
+                            var name = false;
                             var mail = false;
-                            if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
-                            if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                            if (user.Name != null) { if (user.Name.ToLower().Contains(lower)) { name = true; } }
                             if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
-                            if (first || last || mail)
+                            if (name || mail)
                             {
                                 if (OnRenderSubPartialViewToString != null)
                                 {
@@ -313,13 +284,11 @@ namespace OATS_Capstone.Models
                         var lower = term.ToLower();
                         users.ForEach(delegate(User user)
                         {
-                            var first = false;
-                            var last = false;
+                            var name = false;
                             var mail = false;
-                            if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
-                            if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                            if (user.Name != null) { if (user.Name.ToLower().Contains(lower)) { name = true; } }
                             if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
-                            if (first || last || mail)
+                            if (name || mail)
                             {
                                 if (OnRenderSubPartialViewToString != null)
                                 {
@@ -475,8 +444,9 @@ namespace OATS_Capstone.Models
                 var user = db.Users.FirstOrDefault(i => i.UserID == userid);
                 var testsInInvitation = user.Invitations.Select(i => i.Test);
                 var tests = curUser.Tests;
-                var filteredTests = tests.Where(i => {
-                    return !testsInInvitation.Select(k=>k.TestID).Contains(i.TestID);
+                var filteredTests = tests.Where(i =>
+                {
+                    return !testsInInvitation.Select(k => k.TestID).Contains(i.TestID);
                 }).ToList();
 
                 if (!string.IsNullOrEmpty(letter))
@@ -632,25 +602,22 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
-                var curUserId=authen.UserId;
+                var curUserId = authen.UserId;
                 if (!string.IsNullOrEmpty(term))
                 {
                     var lower = term.ToLower();
                     var users = db.Users.Where(i => i.UserID != curUserId).ToList();
                     users.ForEach(delegate(User user)
                     {
-                        var first = false;
-                        var last = false;
+                        var name = false;
                         var mail = false;
-                        if (user.FirstName != null) { if (user.FirstName.ToLower().Contains(lower)) { first = true; } }
-                        if (user.LastName != null) { if (user.LastName.ToLower().Contains(lower)) { last = true; } }
+                        if (user.Name != null) { if (user.Name.ToLower().Contains(lower)) { name = true; } }
                         if (user.UserMail != null) { if (user.UserMail.ToLower().Contains(lower)) { mail = true; } }
-                        if (first || last || mail)
+                        if (name || mail)
                         {
                             var userTemplate = new SearchingUsers();
                             userTemplate.UserID = user.UserID;
-                            userTemplate.LastName = user.LastName;
-                            userTemplate.FirstName = user.FirstName;
+                            userTemplate.Name = user.Name;
                             resultlist.Add(userTemplate);
                         }
                     });
@@ -722,7 +689,7 @@ namespace OATS_Capstone.Models
                     if (OnRenderPartialViewToString != null)
                     {
                         success = true;
-                        generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
+                        generatedHtml = OnRenderPartialViewToString.Invoke(test);
                     }
                     //send mail
                     var authen = AuthenticationSessionModel.Instance();
@@ -781,6 +748,44 @@ namespace OATS_Capstone.Models
             }
         }
 
+        public void RemoveUser(int testid, int userid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            generatedHtml = String.Empty;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    //var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                    var inv = test.Invitations.FirstOrDefault(k => k.UserID == userid);
+                    test.Invitations.Remove(inv);
+                    db.Invitations.Remove(inv);
+                    var user = db.Users.FirstOrDefault(i => i.UserID == userid);
+                    if (user != null)
+                    {
+                        if (!user.IsRegistered)
+                        {
+                            db.Users.Remove(user);
+                        }
+                    }
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                        context.Clients.All.R_removeInvitation(testid, new List<int> { userid});
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
         public void RemoveUserToInvitationTest(int testid, int count, List<int> userids)
         {
             success = false;
@@ -815,8 +820,10 @@ namespace OATS_Capstone.Models
                         if (OnRenderPartialViewToString != null)
                         {
                             success = true;
-                            generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
+                            generatedHtml = OnRenderPartialViewToString.Invoke(test);
                         }
+                        var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                        context.Clients.All.R_removeInvitation(testid, userids);
                     }
                 }
             }
@@ -1008,7 +1015,7 @@ namespace OATS_Capstone.Models
                 if (OnRenderPartialViewToString != null)
                 {
                     success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(test.Invitations);
+                    generatedHtml = OnRenderPartialViewToString.Invoke(test);
                 }
             }
             catch (Exception)
@@ -1648,8 +1655,7 @@ namespace OATS_Capstone.Models
                 if (checkUser == null)
                 {
                     var newUser = new User();
-                    newUser.FirstName = user.FirstName;
-                    newUser.LastName = user.LastName;
+                    newUser.Name = user.Name;
                     newUser.Password = user.Password;
                     newUser.UserMail = user.UserMail;
                     newUser.UserPhone = user.UserPhone;
@@ -1816,7 +1822,7 @@ namespace OATS_Capstone.Models
                 var user = db.Users.FirstOrDefault(i => i.UserID == userId);
                 if (user != null)
                 {
-                    user.FirstName = userName;
+                    user.Name = userName;
                     if (db.SaveChanges() >= 0)
                     {
                         success = true;
@@ -1845,8 +1851,7 @@ namespace OATS_Capstone.Models
                     var user = db.Users.FirstOrDefault(i => i.UserID == authenUserId);
                     if (user != null)
                     {
-                        user.FirstName = profile.FirstName;
-                        user.LastName = profile.LastName;
+                        user.Name = profile.Name;
                         user.UserMail = profile.UserMail;
                         if (!string.IsNullOrEmpty(profile.Password))
                         {
@@ -2530,7 +2535,6 @@ namespace OATS_Capstone.Models
                         {
                             success = true;
                             generatedHtml = OnRenderPartialViewToString.Invoke(feedback);
-
                             if (!string.IsNullOrEmpty(role))
                             {
 
@@ -3012,18 +3016,26 @@ namespace OATS_Capstone.Models
         }
         public void Index_OverViewTab()
         {
-            //success = false;
-            //message = Constants.DefaultProblemMessage;
-            //try
-            //{
-            //}
-            //catch (Exception)
-            //{
-            //    success = false;
-            //    message = Constants.DefaultExceptionMessage;
-            //}
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var authen=AuthenticationSessionModel.Instance();
+                var user=authen.User;
+                var tests=user.Tests;
+                var overview=new OverviewScoreTests(tests);
+                if (OnRenderPartialViewToString != null) {
+                    success = true;
+                    generatedHtml = OnRenderPartialViewToString.Invoke(overview);
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
         }
-        public void InviteUserOutSide(int testid, string email)
+        public void InviteUserOutSide(int testid, string email,string name)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -3044,6 +3056,13 @@ namespace OATS_Capstone.Models
                             var user = new User();
                             user.UserMail = email;
                             user.IsRegistered = false;
+                            if (!string.IsNullOrEmpty(name))
+                            {
+                                user.Name = name;
+                            }
+                            else {
+                                user.Name = string.Empty;
+                            }
                             //generate token
                             var token = GenerateUserToken(user.UserID);
                             user.AccessToken = token;
@@ -3154,6 +3173,36 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
             return generatedId;
+        }
+        public Test NewTest(int testid)
+        {
+            Test test = null;
+            IsHavePermission = false;
+            try
+            {
+                var db = SingletonDb.Instance();
+                test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                var authen = AuthenticationSessionModel.Instance();
+                var curUserId = authen.UserId;
+                if (curUserId == test.CreatedUserID) {
+                    IsHavePermission = true;
+                }
+                var invitation = test.Invitations.FirstOrDefault(i => i.UserID == curUserId);
+                if (invitation != null) {
+                    var role = invitation.Role;
+                    if (role != null) {
+                        if (role.RoleDescription == "Teacher") {
+                            IsHavePermission = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                test = null;
+                IsHavePermission = false;
+            }
+            return test;
         }
     }
 }

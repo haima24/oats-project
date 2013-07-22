@@ -50,7 +50,6 @@ h3.signup-title {
     font-size: 35px;
     color: white;
     font-weight: 100;
-    font-style: italic;
     margin: 0px 0px 3px 0px;
     padding: 5px 30px 5px 0px;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
@@ -209,7 +208,6 @@ h3.why-signup-title {
     color: white;
     text-transform: lowercase;
     font-weight: 100;
-    font-style: italic;
     text-align: right;
     width: 200px;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));
@@ -256,7 +254,6 @@ h3.login-title {
     font-size: 35px;
     color: white;
     font-weight: 100;
-    font-style: italic;
     margin: 0px 0px 3px 0px;
     padding: 5px 30px 5px 0px;
     background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));

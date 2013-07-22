@@ -16,9 +16,6 @@ namespace OATS_Capstone.Controllers
     public class TestsController : Controller
     {
 
-
-        //
-        // GET: /Tests/
         [HttpPost]
         public ActionResult UploadFiles(IEnumerable<HttpPostedFileBase> files, int questionid)
         {
@@ -185,10 +182,10 @@ namespace OATS_Capstone.Controllers
             common.ReuseSearchQuestionTemplate(term, tagids);
             return Json(new { common.success, common.message, common.resultlist });
         }
-        public JsonResult TestsAssignUserSearch(int userid,List<int> tagids, string letter)
+        public JsonResult TestsAssignUserSearch(int userid, List<int> tagids, string letter)
         {
             var common = new CommonService();
-            common.TestsAssignUserSearch(userid,tagids, letter);
+            common.TestsAssignUserSearch(userid, tagids, letter);
             return Json(new { common.resultlist, common.success, common.message });
         }
 
@@ -220,9 +217,18 @@ namespace OATS_Capstone.Controllers
         }
         public ActionResult NewTest(int id)
         {
-            var db = SingletonDb.Instance();
-            var test = db.Tests.FirstOrDefault(i => i.TestID == id);
-            return View(test);
+            var common = new CommonService();
+            var test = common.NewTest(id);
+            ActionResult action = null;
+            if (common.IsHavePermission && test != null)
+            {
+                action = View(test);
+            }
+            else
+            {
+                action = View("ErrorDetail", (object)Constants.DetaultNoPermission);
+            }
+            return action;
         }
         public JsonResult AddUserToInvitationTest(int testid, int count, List<int> userids, string role)
         {
@@ -248,20 +254,6 @@ namespace OATS_Capstone.Controllers
         public JsonResult ReinviteUserToInvitationTest(int testid, int count, List<int> userids, string role)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) =>
-            {
-                var result = String.Empty;
-                try
-                {
-                    result = this.RenderPartialViewToString("P_InvitationTab", model);
-                }
-                catch (Exception)
-                {
-                    common.success = false;
-                    common.message = Constants.DefaultExceptionMessage;
-                }
-                return result;
-            };
             common.ReinviteUserToInvitationTest(testid, count, userids);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
@@ -343,44 +335,63 @@ namespace OATS_Capstone.Controllers
         public ActionResult DoTest(int id, string accesscode = "", bool check = false)
         {
             var db = SingletonDb.Instance();
+            ActionResult action = View("ErrorDetail", (object)Constants.DefaultTestNotExist);
+
+            //NEED: code for checking number of attemp
+
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
-
-            //code for checking invitation and number of attemp
-
-            if (test.IsRunning && test.IsActive)
+            if (test != null)
             {
-                var detail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
-                if (check)
+                var testLogic = new TestLogic(test);
+                if (testLogic.IsRunning && testLogic.IsRunning)
                 {
-                    if (detail.TextValue == accesscode)
+                    if (!testLogic.IsDateTimeNotValid)
                     {
-                        var testLogic = new TestLogic(test);
-                        return View(testLogic);
+                        if (testLogic.IsInInvitationRoleStudent)
+                        {
+                            if (testLogic.RequireAccessCodeSetting != null)
+                            {
+                                if (check)
+                                {
+                                    if (testLogic.RequireAccessCodeSetting.TextValue == accesscode)
+                                    {
+                                        action = View(testLogic);
+                                    }
+                                    else
+                                    {
+                                        action = RedirectToAction("AccessCode", new { id = id });
+                                    }
+                                }
+                                else
+                                {
+                                    if (testLogic.RequireAccessCodeSetting.IsActive)
+                                    {
+                                        action = RedirectToAction("AccessCode", new { id = id });
+                                    }
+                                    else
+                                    {
+                                        action = View(testLogic);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            action = View("ErrorDetail", (object)Constants.DetaultNoPermission);
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("AccessCode", new { id = id });
+                        action = View("ErrorDetail", (object)Constants.DefaultTestInInvalidDateTime);
                     }
                 }
                 else
                 {
-
-                    if (detail.IsActive)
-                    {
-                        return RedirectToAction("AccessCode", new { id = id });
-                    }
-                    else
-                    {
-                        var testLogic = new TestLogic(test);
-                        return View(testLogic);
-                    }
+                    action = View("ErrorDetail", (object)Constants.DefaultTestNotRunningOrActive);
                 }
             }
-            else
-            {
-                return RedirectToActionPermanent("Index");
-            }
 
+            return action;
         }
         public ActionResult AnonymousDoTest(string id)
         {
@@ -1009,7 +1020,7 @@ namespace OATS_Capstone.Controllers
             return Json(json);
         }
 
-        public JsonResult InviteUserOutSide(int testid, string email)
+        public JsonResult InviteUserOutSide(int testid, string email,string name)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -1026,13 +1037,28 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.InviteUserOutSide(testid, email);
+            common.InviteUserOutSide(testid, email,name);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
         public JsonResult Index_OverViewTab()
         {
-            return null;
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_OverviewTab", model);
+                }
+                catch (Exception)
+                {
+                    common.message = Constants.DefaultExceptionMessage;
+                    common.success = false;
+                }
+                return result;
+            };
+            common.Index_OverViewTab();
+            return Json(new {common.success,common.message,common.generatedHtml });
         }
     }
 }

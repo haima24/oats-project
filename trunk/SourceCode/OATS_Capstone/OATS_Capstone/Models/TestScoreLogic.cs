@@ -83,7 +83,7 @@ namespace OATS_Capstone.Models
                 UsersScores = test.UserInTests.FilterValidMaxAttend().Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
                     var userScore = new ScoreOnUser();
-                    userScore.Name = i.User.FirstName ?? i.User.LastName ?? i.User.UserMail;
+                    userScore.Name = !string.IsNullOrEmpty(i.User.Name) ? i.User.Name : i.User.UserMail;
                     decimal? percent = 0;
                     if (totalScore != 0) { percent = (i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0) / totalScore).RoundTwo() * 100; }
                     userScore.Percent = percent;
@@ -264,14 +264,16 @@ namespace OATS_Capstone.Models
         public string UserLabel { get; set; }
         public string UserPercent { get; set; }
         public int UserID { get; set; }
+        public User User{get;set;}
         public ScoreUserItemStatistic Overall { get; set; }
         public List<ScoreUserItemStatistic> Statistics { get; set; }
         public ScoreUserItem(List<Tag> tags, UserInTest inTest, decimal? totalScoreOfTest)
         {
-            UserLabel = inTest.User.FirstName ?? inTest.User.LastName ?? inTest.User.UserMail;
+            UserLabel = !string.IsNullOrEmpty(inTest.User.Name) ? inTest.User.Name : inTest.User.UserMail;
             var percent = (decimal)inTest.Score / totalScoreOfTest;
             UserPercent = (percent).ToPercent();
             UserID = inTest.User.UserID;
+            User=inTest.User;
             Overall = new ScoreUserItemStatistic() { Name = "Overall Score", Percent = percent.RoundTwo() ?? 0 };
             Statistics = new List<ScoreUserItemStatistic>();
             tags.ForEach(i =>
@@ -306,17 +308,22 @@ namespace OATS_Capstone.Models
     }
     public class OverviewScoreTests
     {
+        public List<Test> AllTests { get; set; }
+        public List<User> AllUsers { get; set; }
         private List<ScoreUserItem> originalOverviewScoreTestsUserList = null;
         public List<int> CheckedUserIds { get; set; }
+        public List<int> CheckedTestIds { get; set; }
         public ExcelPackage ToExcelPackage()
         {
             return null;
         }
-        private void InitOverviewScoreTests(IEnumerable<Test> tests)
+        private void InitOverviewScoreTests(IEnumerable<Test> tests, List<int> userids,List<int> testids)
         {
-            var listTests = tests.ToList();
+            CheckedUserIds = userids;
+            CheckedTestIds = testids;
+            AllTests = tests.ToList();
             originalOverviewScoreTestsUserList = new List<ScoreUserItem>();
-            listTests.ForEach(i =>
+            AllTests.ForEach(i =>
             {
                 var scoreTest = new ScoreTest(i);
                 if (scoreTest.ScoreUserList != null)
@@ -324,17 +331,14 @@ namespace OATS_Capstone.Models
                     originalOverviewScoreTestsUserList.AddRange(scoreTest.ScoreUserList);
                 }
             });
+            AllUsers = originalOverviewScoreTestsUserList.GroupBy(i => i.User).Select(t=>t.Key).ToList();
         }
-        public OverviewScoreTests(IEnumerable<Test> tests)
+        public OverviewScoreTests(IEnumerable<Test> tests, List<int> userids,List<int> testids)
         {
-            InitOverviewScoreTests(tests);
-            var allIds = this.originalOverviewScoreTestsUserList.Select(i => i.UserID).GroupBy(k => k).Select(t => t.Key);
-            CheckedUserIds = allIds.ToList();
+            InitOverviewScoreTests(tests,userids,testids);
         }
-        public OverviewScoreTests(IEnumerable<Test> tests, List<int> ids)
-        {
-            InitOverviewScoreTests(tests);
-            CheckedUserIds = ids;
+        public OverviewScoreTests(IEnumerable<Test> tests) {
+            InitOverviewScoreTests(tests, new List<int>(),new List<int>());
         }
     }
 }

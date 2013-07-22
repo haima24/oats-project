@@ -3,6 +3,7 @@
     $.validity.start();
 
     // Validate fields
+    $("#reg-name").require();
     $("#reg-email")
         .require()
         .match("email");
@@ -54,8 +55,7 @@ $(function () {
     $("#submit-btn").live("click", function (ev) {
         if (ValidateSignupFields()) {
             var obj = new Object();
-            obj.FirstName = $("#reg-firstname").val();
-            obj.LastName = $("#reg-lastname").val();
+            obj.Name = $("#reg-name").val();
             obj.UserMail = $("#reg-email").val();
             obj.Password = $("#reg-password").val();
             obj.UserCountry = $("#reg-country").val();

@@ -1475,19 +1475,26 @@ $(function () {
             }
         }
     });
-    $("#modalPopupUser input[type=text].nt-email-outside").live("keydown", function (ev) {
+    $("#modalPopupUser input[type=text].nt-email-outside,#modalPopupUser input[type=text].nt-name-outside").live("keydown", function (ev) {
         var keyCode = ev.keyCode;
         if (keyCode == 13) {
-            var tb = $(this);
+            var control = $(this).closest(".nt-invite-outside");
+            var tbName = $(".nt-name-outside", control);
+            var tbEmail = $(".nt-email-outside", control);
             $.validity.start();
-            tb.require().match("email");
+            $.validity.settings.position = "top";
+            tbName.require();
+            tbEmail.require().match("email");
+            $.validity.settings.position = "left";
             var result = $.validity.end();
             if (result.valid) {
-                var container = tb.closest(".modal");
-                var email = tb.val();
-                $.post("/Tests/InviteUserOutSide", { testid: testid, email: email }, function (res) {
+                var container = control.closest(".modal");
+                var name = tbName.val();
+                var email = tbEmail.val();
+                $.post("/Tests/InviteUserOutSide", { testid: testid, email: email,name:name }, function (res) {
                     if (res.success) {
-                        tb.val("");
+                        tbName.val("");
+                        tbEmail.val("");
                         var html = $(res.generatedHtml);
                         var list = $(".nt-clb-list", container);
                         list.append(html);
@@ -1874,6 +1881,18 @@ $(function () {
 
 
     var hub = $.connection.generalHub;
+    hub.client.R_removeInvitation = function (tid, userids) {
+        if (tid && userids) {
+            if (tid == testid) {
+                var isIn = $.inArray(userid, userids) >= 0;
+                if (isIn) {
+                    showCountDownMessage("info", "You are current removed from invitation of this test", "Redirect to Homepage", function () {
+                        window.location.href = "/Tests";
+                    });
+                }
+            }
+        }
+    }
     hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount) {
         if (uid && uid == userid) {
             if (typeof (initMailCount) != "undefined" && typeof (sentCount) != "undefined" && typeof (unSentCount) != "undefined") {
@@ -1893,6 +1912,12 @@ $(function () {
     hub.client.R_teacherAndTeacherCommentFeedback = function (tid, generatedHtml) {
         if (tid && generatedHtml) {
             if (tid == testid) {
+                var empty = $("#eventTab .nt-checklist-ctrl");
+                if (empty.length > 0) {
+                    empty.siblings(".comment-count").show();
+                    empty.siblings("#comments[teacher]").show();
+                    empty.remove();
+                }
                 var comments = $("#comments[teacher]");
                 if (comments.length > 0) {
                     var ele = $(generatedHtml);
@@ -1906,12 +1931,13 @@ $(function () {
     hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {
         if (tid && generatedHtml) {
             if (tid == testid) {
+                
                 var comments = $("#comments[student]");
                 if (comments.length > 0) {
                     var ele = $(generatedHtml);
                     comments.prepend(ele);
                     var articleCount = $("article", comments).length;
-                    $(".comment-count").html("All Feedbacks " + articleCount);
+                    $(".comment-count span").html(articleCount);
                 }
             }
         }
@@ -2001,4 +2027,5 @@ $(function () {
             }
         });
     });
+
 });

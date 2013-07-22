@@ -5,22 +5,16 @@
     </div>
     <div class="nt-clb-item-content ">
         <div class="nt-clb-item-label">
-            @if (!string.IsNullOrEmpty(Model.FirstName) || !string.IsNullOrEmpty(Model.LastName))
-            {
-                <span class="nt-hl-sort">@Model.FirstName</span><span>@(!string.IsNullOrEmpty(Model.LastName) ? (!string.IsNullOrEmpty(Model.FirstName) ? " - " + Model.LastName : Model.LastName) : string.Empty)</span>
-            }
-            else
-            {
-                <span>N/A</span>
-            }
+            <span>@(string.IsNullOrEmpty(Model.Name) ? "N/A" : Model.Name)</span>
         </div>
         <div class="nt-clb-item-desc">@Model.UserMail</div>
     </div>
-    @if (!Model.IsRegistered) { 
-    <div class="nt-clb-item-control button">
-        <button user-id="@Model.UserID">
-            <i class="icon-remove"></i>
-        </button>
-    </div>
+    @if (!Model.IsRegistered)
+    { 
+        <div class="nt-clb-item-control button">
+            <button user-id="@Model.UserID">
+                <i class="icon-remove"></i>
+            </button>
+        </div>
     }
 </div>

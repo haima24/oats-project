@@ -42,7 +42,14 @@
     <div class="arrow"></div>
     <h3 class="popover-title">Introduction</h3>
     <div class="popover-content">
-        <textarea id="intro-detail" rows="4" class="span5">@Model.Introduction</textarea>
+        @if (isOwner)
+        {
+            <textarea id="intro-detail" rows="4" class="span5">@Model.Introduction</textarea>
+        }
+        else
+        {
+            <textarea id="intro-detail" rows="4" class="span5" disabled="disabled">@Model.Introduction</textarea>
+        }
     </div>
 </div>
 <div id="eventTags">
