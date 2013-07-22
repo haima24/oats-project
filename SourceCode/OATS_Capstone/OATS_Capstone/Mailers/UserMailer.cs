@@ -65,7 +65,7 @@ namespace OATS_Capstone.Mailers
             {
                 if (invitation.Test.User != null)
                 {
-                    teacherName = invitation.Test.User.FirstName ?? invitation.Test.User.LastName ?? invitation.Test.User.UserMail;
+                    teacherName = !string.IsNullOrEmpty(invitation.Test.User.Name) ? invitation.Test.User.Name : invitation.Test.User.UserMail;
                 }
             }
             var userName = string.Empty;
@@ -75,7 +75,7 @@ namespace OATS_Capstone.Mailers
             if (invitation.User != null)
             {
                 email = invitation.User.UserMail;
-                userName = invitation.User.FirstName ?? invitation.User.LastName ?? invitation.User.UserMail;
+                userName = !string.IsNullOrEmpty(invitation.User.Name) ? invitation.User.Name : invitation.User.UserMail;
 
 
                 if (!string.IsNullOrEmpty(invitation.User.AccessToken))
@@ -212,13 +212,12 @@ namespace OATS_Capstone.Mailers
                 var invitorName = string.Empty;
                 if (invitor != null)
                 {
-                    if (string.IsNullOrEmpty(invitor.FirstName) && string.IsNullOrEmpty(invitor.LastName))
+                    if (string.IsNullOrEmpty(invitor.Name))
                     {
                         invitorName = invitor.UserMail;
                     }
-                    else
-                    {
-                        invitorName = invitor.FirstName ?? invitor.LastName + " (Email: " + invitor.UserMail + " )";
+                    else {
+                        invitorName = invitor.Name + " (Email: "+invitor.UserMail+" )";
                     }
                 }
                 if (!string.IsNullOrEmpty(user.AccessToken))

@@ -1,24 +1,30 @@
 ﻿@model OATS_Capstone.Models.AbsFeedBackUser
 @if (Model.Parents.Count == 0)
 {
-    <div class="nt-asm-settings" style="height: 500px; overflow-y: auto;">
+    <div class="nt-asm-settings" style="max-height: 400px; overflow-y: auto;">
         <div class="nt-panel">
             <div class="nt-checklist-ctrl">
                 <div class="nt-msg">No feedback found: no teacher give their feedbacks.</div>
+            </div>
+            <div class="comment-count" style="display: none;">
+                All Feedbacks
+            <span></span>
+            </div>
+            <div id="comments" style="display:none; max-height: 320px; overflow-y: auto" teacher="true">
             </div>
         </div>
     </div>
 }
 else
 {
-    <div class="nt-asm-settings" style="height: 400px; overflow-y: auto;">
+    <div class="nt-asm-settings" style="max-height: 400px; overflow-y: auto;">
         <div class="nt-panel">
             <div class="comment-count">
                 All Feedbacks
             <span>@Model.Parents.Count</span>
             </div>
 
-            <div id="comments" style="height: 320px; overflow-y: auto" teacher="true">
+            <div id="comments" style="max-height: 320px; overflow-y: auto" teacher="true">
                 @foreach (var feedback in Model.Parents)
                 {
                     @Html.Partial("P_FeedBack_Form_Item", feedback) 
@@ -26,8 +32,8 @@ else
             </div>
         </div>
     </div>
-    <div class="teacher-feedback-controls">
-        <textarea id="teacher-feedback-content" placeholder="Your Feedback" class="span8 pull-left"></textarea>
-        <button id="teacher-feedback-submit" class="btn btn-primary input-medium pull-right">Send</button>
-    </div>
 }
+<div class="teacher-feedback-controls">
+    <textarea id="teacher-feedback-content" placeholder="Your Feedback" class="span8 pull-left"></textarea>
+    <button id="teacher-feedback-submit" class="btn btn-primary input-medium pull-right">Send</button>
+</div>

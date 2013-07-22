@@ -1,9 +1,10 @@
 ﻿@using OATS_Capstone.Models
-@model IEnumerable<OATS_Capstone.Models.Invitation>
+@model OATS_Capstone.Models.Test
 @{
-    var studentsInvited = Model.Where(i => i.Role.RoleDescription == "Student").Select(k => k.User);
-    var teachersInvited = Model.Where(i => i.Role.RoleDescription == "Teacher").Select(k => k.User);
-    
+    var studentsInvited = Model.Invitations.Where(i => i.Role.RoleDescription == "Student").Select(k => k.User);
+    var teachersInvited = Model.Invitations.Where(i => i.Role.RoleDescription == "Teacher").Select(k => k.User);
+    var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
+    var isOwner = Model.CreatedUserID == authen.UserId;
 }
 <div class="nt-asm-inv">
     <div class="nt-asm-inv-cont" style="height: 500px; overflow-y: auto;">
@@ -24,14 +25,7 @@
                     {
                         <tr user-id="@invitations.UserID">
                             <td class="nt-desc nt-name">
-                                @if (!string.IsNullOrEmpty(invitations.FirstName) || !string.IsNullOrEmpty(invitations.LastName))
-                                {
-                                    <span class="nt-hl-sort">@invitations.FirstName</span><span>@(!string.IsNullOrEmpty(invitations.LastName) ? (!string.IsNullOrEmpty(invitations.FirstName) ? " - " + invitations.LastName : invitations.LastName) : string.Empty)</span>
-                                }
-                                else
-                                {
-                                    <span>N/A</span>
-                                }
+                                    <span>@(string.IsNullOrEmpty(invitations.Name)?"N/A":invitations.Name)</span>
                             </td>
                             <td class="nt-desc nt-email">@invitations.UserMail</td>
                             <td class="nt-ctrl">
@@ -42,6 +36,7 @@
                         </tr>
                     }
                 </tbody>
+                @if(isOwner){
                 <tfoot>
                     <tr>
                         <td colspan="3">
@@ -60,6 +55,7 @@
                         </td>
                     </tr>
                 </tfoot>
+                }
             </table>
 
         </div>
@@ -80,14 +76,7 @@
                     {
                         <tr user-id="@invitation.UserID">
                             <td class="nt-desc nt-name">
-                                @if (!string.IsNullOrEmpty(invitation.FirstName) || !string.IsNullOrEmpty(invitation.LastName))
-                                {
-                                    <span class="nt-hl-sort">@invitation.FirstName</span><span>@(!string.IsNullOrEmpty(invitation.LastName) ? (!string.IsNullOrEmpty(invitation.FirstName) ? " - " + invitation.LastName : invitation.LastName) : string.Empty)</span>
-                                }
-                                else
-                                {
-                                    <span>N/A</span>
-                                }
+                               <span>@(string.IsNullOrEmpty(invitation.Name)?"N/A":invitation.Name)</span>
                             </td>
                             <td class="nt-desc nt-email">@invitation.UserMail</td>
                             <td class="nt-ctrl">
@@ -98,6 +87,7 @@
                         </tr>
                     }
                 </tbody>
+                 @if(isOwner){
                 <tfoot>
                     <tr>
                         <td colspan="3">
@@ -116,6 +106,7 @@
                         </td>
                     </tr>
                 </tfoot>
+                 }
             </table>
         </div>
     </div>

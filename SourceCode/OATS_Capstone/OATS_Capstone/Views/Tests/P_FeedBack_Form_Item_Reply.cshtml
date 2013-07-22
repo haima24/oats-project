@@ -2,7 +2,7 @@
 
 
 <div class="reply-detail">
-    <span class="name">@(Model.User.FirstName ?? Model.User.LastName ?? Model.User.UserMail)</span>
+    <span class="name">@(string.IsNullOrEmpty(Model.User.Name)?Model.User.UserMail:Model.User.Name)</span>
     <span>@Model.FeedBackDetail</span>
 
 </div>

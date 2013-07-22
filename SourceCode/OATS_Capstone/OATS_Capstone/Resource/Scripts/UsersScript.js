@@ -21,10 +21,8 @@
                 success: function (r) {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
-                            if (obj.FirstName || obj.LastName) {
-                                var fName = obj.FirstName ? obj.FirstName : "";
-                                var lName = obj.LastName ? obj.LastName : "";
-                                return { label: fName + " " + lName, value: fName + " " + lName, id: obj.UserID, rolename: obj.RoleName };
+                            if (obj.Name) {
+                                return { label: obj.Name, value: obj.Name, id: obj.UserID, rolename: obj.RoleName };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);
@@ -63,7 +61,6 @@ function createUser() {
     var result = $.validity.end();
     if (result.valid) {
         var email = tb.val();
-
         $.post("/Users/MakeUser", { email: email }, function (res) {
             if (res.success && res.generatedId) {
                 modal.modal("hide");

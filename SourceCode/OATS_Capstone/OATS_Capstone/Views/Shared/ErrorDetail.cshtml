@@ -1,30 +1,18 @@
-﻿@using OATS_Capstone.Models
-@section additionheader{
-    <link href="~/Bootstrap/css/jqbar.css" rel="stylesheet" />
-    <script src="~/Bootstrap/js/jqbar.js"></script>
-    <script src="~/Resource/Scripts/Tests_Layout.js"></script>
+﻿@model string
+@{
+    ViewBag.Title = "ErrorDetail";
 }
 @{
-    ViewBag.Title = "Index";
-}
-@model OATS_Capstone.Models.Test
-@{
-    var authen = AuthenticationSessionModel.Instance();
+    var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
     var user = authen.User;
 }
-<script src="~/Resource/Scripts/NewTestScript.js"></script>
-@if (Model != null)
-{
-    <input id="test-id" type="hidden" value="@Model.TestID" />
-}
-<input id="user-id" type="hidden" value="@user.UserID" />
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
         <div id="savestatus" style="display: none;">
             <span class="nt-desc" style="display: inline;"></span>
         </div>
         <div class="container">
-            <a id="logo" class="brand" href="@Url.Action("Index","Tests")">OATS</a>
+            <a id="logo" class="brand" href="@Url.Action("Index", "Tests")">OATS</a>
             <div class="nav-collapse collapse navbar-responsive-collapse">
                 <ul class="nav">
                     <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
@@ -57,34 +45,12 @@
     </div>
     <!-- /navbar-inner -->
 </div>
-@if (!Model.IsActive)
-{
-    <div id="eventActiveTest" class="nt-message-info">
-        <div class="nt-message-info-cont nt-hover">
-            <div>This test is currently
-                <p class="nt-uc">disable</p>
-            </div>
-            <div class="nt-enable">- Enable!</div>
-        </div>
-    </div>}
-else
-{
-    <div id="eventActiveTest" class="nt-message-info" style="display: none;">
-        <div class="nt-message-info-cont nt-hover">
-            <div>This test is currently
-                <p class="nt-uc">disable</p>
-            </div>
-            <div class="nt-enable">- Enable!</div>
-        </div>
+<div id="container" class="container wrapper nt-de-cont">
+    <div class="error-detail">
+        <h3>@Model</h3>
     </div>
-}
+    <div class="home-page-link">
+        <a href="@Url.Action("Index", "Tests")" class="btn btn-primary">Home Page</a>
+    </div>
+</div>
 
-<div id="container" class="container wrapper">
-    @Html.Partial("P_Inner_Container", Model)
-</div>
-<div id="message-max-score" class="alert" style="display:none;">
-    <h4 class="alert-heading">Max score compatibility</h4>
-    <div class="detail">The max score setting and total score of this test have compatibility problem.</div>
-    <div>Total Score: <span class="total"></span></div>
-    <div>Max Score Setting:<span class="max"></span></div>
-</div>

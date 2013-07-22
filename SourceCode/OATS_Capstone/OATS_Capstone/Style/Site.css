@@ -425,7 +425,7 @@ i, cite, em, var, address, dfn {
 }
 
     #container.wrapper {
-        min-height: 600px;
+        min-height: 500px;
         position: relative;
         background: rgba(255, 255, 255, 0.3);
         padding: 20px 20px 1px 20px;
@@ -438,9 +438,27 @@ i, cite, em, var, address, dfn {
         -o-border-radius: 10px;
         border-radius: 10px;
     }
-    #container .nt-dnd-example-text.active pre{
-        border:1px dashed #5993e7;
+
+    #container .error-detail {
+        text-align: center;
+        width: 700px;
+        margin: auto;
     }
+
+    #container .home-page-link {
+        text-align: center;
+        padding: 80px;
+    }
+
+        #container .home-page-link a {
+            padding: 10px 50px;
+            text-align: center;
+        }
+
+    #container .nt-dnd-example-text.active pre {
+        border: 1px dashed #5993e7;
+    }
+
 #test-introduction {
     color: white;
     background-color: rgba(255, 255, 255, 0.9);
@@ -586,7 +604,7 @@ i, cite, em, var, address, dfn {
         font-size: 16px;
         line-height: 30px;
         height: 30px;
-        min-width:120px;
+        min-width: 120px;
     }
 
     .test-larger-custom > .nav > li:not(.active) > a:hover {
@@ -641,6 +659,7 @@ i, cite, em, var, address, dfn {
     }
 
 .teacher-feedback-controls {
+    margin-top: 10px;
     width: 100%;
 }
 
@@ -1478,7 +1497,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
 .nt-scores-cont .nt-scores-footer {
-    padding: 20px;
+    padding: 15px 20px;
     margin: 0px;
     float: left;
     position: relative;
@@ -3742,3 +3761,10 @@ article, time {
     margin-left: 20px;
     margin-bottom: 0px;
 }
+
+.nt-overview-list .nt-user {
+    padding: 5px 0;
+    margin: 10px 20px 5px 20px;
+    border-bottom: 1px solid #ececec;
+}
+

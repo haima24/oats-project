@@ -20,6 +20,7 @@ namespace OATS_Capstone.Models
         public Nullable<int> RoleID { get; set; }
         public Nullable<System.DateTime> InvitationDateTime { get; set; }
         public string AccessToken { get; set; }
+        public bool IsMailSent { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual Test Test { get; set; }

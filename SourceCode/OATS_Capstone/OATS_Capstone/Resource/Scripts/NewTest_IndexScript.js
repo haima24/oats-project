@@ -1,4 +1,23 @@
-﻿function initPopover() {
+﻿function initFrezen() {
+    $('#overview').gridviewScroll({
+        width: 695,
+        height: 380,
+        railcolor: "#F0F0F0",
+        barcolor: "#CDCDCD",
+        barhovercolor: "#606060",
+        bgcolor: "#F0F0F0",
+        varrowtopimg: "Bootstrap/img/arrowvt.png",
+        varrowbottomimg: "Bootstrap/img/arrowvb.png",
+        harrowleftimg: "Bootstrap/img/arrowhl.png",
+        harrowrightimg: "Bootstrap/img/arrowhr.png",
+        freezesize: 1,
+        arrowsize: 30,
+        headerrowcount: 2,
+        railsize: 16,
+        barsize: 8
+    });
+}
+function initPopover() {
     $(".nt-asms-list .nt-list-row .nt-name").popover({
         trigger: "hover",
         html: true,
@@ -63,6 +82,8 @@ $(function () {
                     initCalendar();
                     $("[data-toggle=tooltip]").tooltip();
                     initPopover();
+                    initFrezen();
+                    
                 }
             } else { showMessage("error", res.message); }
         });
@@ -279,4 +300,6 @@ $(function () {
 
         });
     });
+
+    
 });

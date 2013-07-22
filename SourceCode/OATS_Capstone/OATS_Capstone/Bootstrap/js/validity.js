@@ -14,6 +14,9 @@
 
     var
         defaults = {
+
+            position: "left",
+
             // The default output mode is tooltip because it requires no 
             // dependencies:
             outputMode: "tooltip",
@@ -922,7 +925,7 @@
             return this.assert(false, msg);
         }
 
-        
+
     });
 
     // Private utilities:
@@ -1060,7 +1063,7 @@
             sz;
     }
 
-    function convertToUnsign (text) {
+    function convertToUnsign(text) {
         var signedChars = "àảãáạăằẳẵắặâầẩẫấậđèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬĐÈẺẼÉẸÊỀỂỄẾỆÌỈĨÍỊÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢÙỦŨÚỤƯỪỬỮỨỰỲỶỸÝỴ";
         var unsignedChars = "aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyAAAAAAAAAAAAAAAAADEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYY";
         var pattern = new RegExp("[" + signedChars + "]", "g");
@@ -1110,25 +1113,43 @@
         },
 
         raise: function ($obj, msg) {
+            var element;
             var pos = $obj.offset();
-            pos.left += $obj.width() + 18;
-            pos.top += -5;
 
-            $(
-                "<div class=\"popover validity-tooltip fade right in\" style=\"top: 5.5px; left: 415px; display: block;\"><div class=\"arrow\"></div><div class=\"tooltip-popover-content\">"
-                + msg +
-                "</div></div>"
-                //"<div class=\"validity-tooltip\">" + 
-                //    msg +
-                //    "<div class=\"validity-tooltip-outer\">" +
-                //        "<div class=\"validity-tooltip-inner\"></div>" + 
-                //    "</div>" +
-                //"</div>"
-            )
-                .click(function () {
-                    $obj.focus();
-                    $(this).fadeOut();
-                })
+            if ($.validity.settings.position == "top") {
+                pos.top += -($obj.height()+20);
+                element = $(
+                    "<div class=\"popover validity-tooltip fade top in\" style=\"top: 5.5px; left: 415px; display: block;\"><div class=\"arrow\"></div><div class=\"tooltip-popover-content\">"
+                    + msg +
+                    "</div></div>"
+                    //"<div class=\"validity-tooltip\">" + 
+                    //    msg +
+                    //    "<div class=\"validity-tooltip-outer\">" +
+                    //        "<div class=\"validity-tooltip-inner\"></div>" + 
+                    //    "</div>" +
+                    //"</div>"
+                );
+            } else {
+                pos.left += $obj.width() + 18;
+                pos.top += -5;
+                element = $(
+                    "<div class=\"popover validity-tooltip fade right in\" style=\"top: 5.5px; left: 415px; display: block;\"><div class=\"arrow\"></div><div class=\"tooltip-popover-content\">"
+                    + msg +
+                    "</div></div>"
+                    //"<div class=\"validity-tooltip\">" + 
+                    //    msg +
+                    //    "<div class=\"validity-tooltip-outer\">" +
+                    //        "<div class=\"validity-tooltip-inner\"></div>" + 
+                    //    "</div>" +
+                    //"</div>"
+                );
+            }
+            
+
+            element.click(function () {
+                $obj.focus();
+                $(this).fadeOut();
+            })
                 .css(pos)
                 .hide()
                 .appendTo("body")

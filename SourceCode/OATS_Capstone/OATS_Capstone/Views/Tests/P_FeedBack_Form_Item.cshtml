@@ -2,7 +2,7 @@
 
 <article class="comment" parent-id="@Model.FeedBackID">
     <div class="comment-meta">
-        <a href="#" class="url">@(Model.User.FirstName??Model.User.LastName??Model.User.UserMail)</a> says<time>@Model.FeedBackDateTime</time>
+        <a href="#" class="url">@(string.IsNullOrEmpty(Model.User.Name)?Model.User.UserMail:Model.User.Name)</a> says<time>@Model.FeedBackDateTime</time>
     </div>
     <div class="comment-body">
         <p>
