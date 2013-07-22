@@ -247,6 +247,20 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
+            common.OnRenderSubPartialViewToString += (model) =>
+            {
+                var result = String.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_InvitationTab_Invitation_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
             common.AddUserToInvitationTest(testid, count, userids, role);
             return Json(new { common.success, common.message, common.generatedHtml });
         }

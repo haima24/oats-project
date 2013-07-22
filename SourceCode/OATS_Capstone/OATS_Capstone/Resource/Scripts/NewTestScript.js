@@ -1313,6 +1313,27 @@ $(function () {
         postSetting(li);
     });
     //separator
+    $("button.nt-btn-ri").live("click", function (ev) {
+        var row = $(this).closest("tr");
+        var userid = parseInt(row.attr("user-id"));
+        var userids = new Array();
+        userids.push(userid);
+        statusSaving();
+        $.ajax({
+            type: "POST",
+            url: "/Tests/ReinviteUserToInvitationTest",
+            data: JSON.stringify({ testid: testid, count: userids.length, userids: userids }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.success) {
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            }
+        });
+    });
     $("button.nt-btn-rm").live("click", function (ev) {
         var row=$(this).closest("tr");
         var userid = parseInt(row.attr("user-id"));
@@ -1893,9 +1914,9 @@ $(function () {
             }
         }
     }
-    hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount) {
+    hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount, listSent) {
         if (uid && uid == userid) {
-            if (typeof (initMailCount) != "undefined" && typeof (sentCount) != "undefined" && typeof (unSentCount) != "undefined") {
+            if (typeof (initMailCount) != "undefined" && typeof (sentCount) != "undefined" && typeof (unSentCount) != "undefined" && typeof (listSent) != "undefined") {
                 var message = "";
                 var type = "";
                 if (unSentCount) {
@@ -1905,6 +1926,23 @@ $(function () {
                     type = "info";
                     message = "Sent " + sentCount + " invitation emails.";
                 }
+                //re-render
+                $(listSent).each(function () {
+                    var id = this;
+                    if (id) {
+                        var r = $(".nt-asm-inv-cont table tr[invitation-id=" + id + "]");
+                        if (r.length > 0) {
+                            r.fadeOut("fast", function () {
+                                var row = $(this);
+                                row.addClass("sent").removeClass("unsent");
+                                var status = $("span.label", row);
+                                status.removeClass("label-important").addClass("label-info");
+                                status.html("Mail Sent");
+                                row.fadeIn("fast");
+                            });
+                        }
+                    }
+                });
                 showMessage(type, message);
             }
         }

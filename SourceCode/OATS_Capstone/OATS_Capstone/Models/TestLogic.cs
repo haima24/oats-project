@@ -10,7 +10,7 @@ namespace OATS_Capstone.Models
         public bool IsRunning { get; set; }
         public bool IsActive { get; set; }
         public bool IsDateTimeNotValid { get; set; }
-        public SettingConfigDetail RequireAccessCodeSetting{get;set;}
+        public SettingConfigDetail RequireAccessCodeSetting { get; set; }
         public string CurrentUserName { get; set; }
         public string TestTitle { get; set; }
         public IEnumerable<Question> Questions { get; set; }
@@ -21,7 +21,8 @@ namespace OATS_Capstone.Models
         {
             if (test != null)
             {
-                RequireAccessCodeSetting = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+                var settingDetails = test.SettingConfig.SettingConfigDetails;
+                RequireAccessCodeSetting = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
 
                 var now = DateTime.Now;
                 IsDateTimeNotValid = false;
@@ -40,7 +41,7 @@ namespace OATS_Capstone.Models
                 }
 
                 IsActive = test.IsActive;
-                IsRunning=test.IsRunning;
+                IsRunning = test.IsRunning;
                 TestID = test.TestID;
                 TestTitle = test.TestTitle;
                 Introduction = test.Introduction;
@@ -53,20 +54,32 @@ namespace OATS_Capstone.Models
                 }
 
                 var invitation = test.Invitations.FirstOrDefault(i => i.UserID == userId);
-                if (invitation != null) {
-                    if (invitation.Role.RoleDescription == "Student") {
+                if (invitation != null)
+                {
+                    if (invitation.Role.RoleDescription == "Student")
+                    {
                         IsInInvitationRoleStudent = true;
                     }
                 }
 
                 Questions = test.Questions.OrderBy(i => i.SerialOrder);
-                var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RAO");
-                if (settingDetail.IsActive)
+                var settingRandomAnswer = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RAO");
+                if (settingRandomAnswer != null)
                 {
-                    Questions = Questions.RandomAnswers();
+                    if (settingRandomAnswer.IsActive)
+                    {
+                        Questions = Questions.RandomAnswers();
+                    }
                 }
 
-                Questions = Questions.RandomQuestion();
+                var settingRandomQuestion = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "ROQ");
+                if (settingRandomQuestion != null)
+                {
+                    if (settingRandomQuestion.IsActive)
+                    {
+                        Questions = Questions.RandomQuestion();
+                    }
+                }
             }
         }
     }
