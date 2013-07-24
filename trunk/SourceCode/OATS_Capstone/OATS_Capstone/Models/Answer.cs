@@ -14,13 +14,21 @@ namespace OATS_Capstone.Models
     
     public partial class Answer
     {
+        public Answer()
+        {
+            this.AnswerChilds = new HashSet<Answer>();
+        }
+    
         public int AnswerID { get; set; }
         public string AnswerContent { get; set; }
         public int QuestionID { get; set; }
         public bool IsRight { get; set; }
         public Nullable<int> Score { get; set; }
         public Nullable<int> SerialOrder { get; set; }
+        public Nullable<int> DependencyAnswerID { get; set; }
     
         public virtual Question Question { get; set; }
+        public virtual ICollection<Answer> AnswerChilds { get; set; }
+        public virtual Answer AnswerParent { get; set; }
     }
 }

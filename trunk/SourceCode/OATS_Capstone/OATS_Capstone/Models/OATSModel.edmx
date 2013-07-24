@@ -22,6 +22,10 @@
           <EntitySet Name="User" EntityType="OATSDBModel.Store.User" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTest" EntityType="OATSDBModel.Store.UserInTest" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserInTestDetail" EntityType="OATSDBModel.Store.UserInTestDetail" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Answer_Answer" Association="OATSDBModel.Store.FK_Answer_Answer">
+            <End Role="Answer" EntitySet="Answer" />
+            <End Role="Answer1" EntitySet="Answer" />
+          </AssociationSet>
           <AssociationSet Name="FK_Answer_Question" Association="OATSDBModel.Store.FK_Answer_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="Answer" EntitySet="Answer" />
@@ -117,6 +121,7 @@
           <Property Name="IsRight" Type="bit" Nullable="false" />
           <Property Name="Score" Type="int" />
           <Property Name="SerialOrder" Type="int" />
+          <Property Name="DependencyAnswerID" Type="int" />
         </EntityType>
         <EntityType Name="FeedBack">
           <Key>
@@ -276,6 +281,18 @@
           <Property Name="ChoiceScore" Type="decimal" Scale="2" />
           <Property Name="NonChoiceScore" Type="decimal" Scale="2" />
         </EntityType>
+        <Association Name="FK_Answer_Answer">
+          <End Role="Answer" Type="OATSDBModel.Store.Answer" Multiplicity="0..1" />
+          <End Role="Answer1" Type="OATSDBModel.Store.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Answer">
+              <PropertyRef Name="AnswerID" />
+            </Principal>
+            <Dependent Role="Answer1">
+              <PropertyRef Name="DependencyAnswerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Answer_Question">
           <End Role="Question" Type="OATSDBModel.Store.Question" Multiplicity="1" />
           <End Role="Answer" Type="OATSDBModel.Store.Answer" Multiplicity="*" />
@@ -633,6 +650,10 @@
             <End Role="UserInTest" EntitySet="UserInTests" />
             <End Role="UserInTestDetail" EntitySet="UserInTestDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_Answer_Answer" Association="OATSDBModel.FK_Answer_Answer">
+            <End Role="Answer" EntitySet="Answers" />
+            <End Role="Answer1" EntitySet="Answers" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Answer">
           <Key>
@@ -645,6 +666,9 @@
           <Property Name="Score" Type="Int32" />
           <Property Name="SerialOrder" Type="Int32" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+          <Property Type="Int32" Name="DependencyAnswerID" />
+          <NavigationProperty Name="AnswerChilds" Relationship="OATSDBModel.FK_Answer_Answer" FromRole="Answer" ToRole="Answer1" />
+          <NavigationProperty Name="AnswerParent" Relationship="OATSDBModel.FK_Answer_Answer" FromRole="Answer1" ToRole="Answer" />
         </EntityType>
         <EntityType Name="FeedBack">
           <Key>
@@ -1097,6 +1121,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Answer_Answer">
+          <End Type="OATSDBModel.Answer" Role="Answer" Multiplicity="0..1" />
+          <End Type="OATSDBModel.Answer" Role="Answer1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Answer">
+              <PropertyRef Name="AnswerID" />
+            </Principal>
+            <Dependent Role="Answer1">
+              <PropertyRef Name="DependencyAnswerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1106,6 +1142,7 @@
           <EntitySetMapping Name="Answers">
             <EntityTypeMapping TypeName="OATSDBModel.Answer">
               <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="DependencyAnswerID" ColumnName="DependencyAnswerID" />
                 <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
                 <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
