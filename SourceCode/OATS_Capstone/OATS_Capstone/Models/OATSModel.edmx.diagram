@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c88d754c64a1425086ec0b34506f916f" Name="Diagram1">
-        <EntityTypeShape EntityType="OATSDBModel.Answer" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OATSDBModel.Answer" Width="1.5" PointX="7.5" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.FeedBack" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.Invitation" Width="1.5" PointX="6" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="OATSDBModel.Question" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
@@ -42,6 +42,7 @@
         <AssociationConnector Association="OATSDBModel.FK_UserInTest_Test" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTest_User" ManuallyRouted="false" />
         <AssociationConnector Association="OATSDBModel.FK_UserInTestDetail_UserInTest" ManuallyRouted="false" />
+        <AssociationConnector Association="OATSDBModel.FK_Answer_Answer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
