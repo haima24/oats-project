@@ -699,6 +699,47 @@ i, cite, em, var, address, dfn {
     margin-right: 18px;
 }
 
+    #sidebar .nt-clb-item {
+        font-family: "Open Sans", sans-serif;
+        color: #444444;
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    #sidebar .ui-state-active, #sidebar .ui-widget-content .ui-state-active, #sidebar .ui-widget-header .ui-state-active,
+    #sidebar .ui-state-default, #sidebar .ui-widget-content .ui-state-default, #sidebar .ui-widget-header .ui-state-default {
+        border: none;
+        background: transparent;
+        font-weight: bold;
+        font-family: "Open Sans", sans-serif;
+    }
+
+    #sidebar .ui-widget-content {
+        border: none;
+        background: transparent;
+    }
+
+    #sidebar.ui-accordion .ui-accordion-header {
+        cursor: inherit;
+    }
+
+        #sidebar.ui-accordion .ui-accordion-header:not(.ui-state-active) {
+            cursor: pointer;
+        }
+
+    #sidebar.ui-accordion .ui-accordion-icons {
+        padding: 10px;
+    }
+
+    #sidebar.ui-accordion .ui-accordion-content {
+        padding: 0;
+        border-top: 0;
+    }
+
+    #sidebar.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+        display: none;
+    }
+
 .t-accord-header.ui-state-active {
     cursor: default;
     border-bottom: 0;
@@ -943,7 +984,30 @@ i, cite, em, var, address, dfn {
     min-height: 28px;
     border-bottom: 1px solid white;
 }
+#checklist .nt-qitem .nt-qmatching {
 
+}
+#checklist .nt-qitem .nt-qmatching .nt-qans .nt-qansdesc {
+    width:inherit;
+}
+#checklist .nt-qitem .nt-qmatching .begin{
+    float:left;
+    width:40%
+}
+    #checklist .nt-qitem .nt-qmatching .nt-conted-ph-cont {
+        width:90%;
+    }
+    #checklist .nt-qitem .nt-qmatching .begin>div:first-child,#checklist .nt-qitem .nt-qmatching .end>div:first-child {
+        float:left;
+    }
+    #checklist .nt-qitem .nt-qmatching .begin>div:last-child,#checklist .nt-qitem .nt-qmatching .end>div:last-child {
+        float: right;
+    }
+    
+#checklist .nt-qitem .nt-qmatching .end{
+    float:right;
+    width:40%;
+}
 .nt-qans-edit > div {
     float: left;
 }
@@ -3774,4 +3838,7 @@ article, time {
     padding: 5px 0;
     margin: 10px 20px 5px 20px;
     border-bottom: 1px solid #ececec;
+}
+.nt-empty-msg {
+    padding:20px;
 }

@@ -1187,7 +1187,6 @@ $(function () {
                 }
             });
         }
-
     });
 
     $.initCheckboxAllSub({

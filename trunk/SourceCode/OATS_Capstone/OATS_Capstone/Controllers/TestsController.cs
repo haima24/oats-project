@@ -226,7 +226,7 @@ namespace OATS_Capstone.Controllers
             }
             else
             {
-                action = View("ErrorDetail", (object)Constants.DetaultNoPermission);
+                action = View("ErrorDetail", (object)Constants.DefaultNoPermission);
             }
             return action;
         }
@@ -391,7 +391,7 @@ namespace OATS_Capstone.Controllers
                         }
                         else
                         {
-                            action = View("ErrorDetail", (object)Constants.DetaultNoPermission);
+                            action = View("ErrorDetail", (object)Constants.DefaultNoPermission);
                         }
                     }
                     else
@@ -422,7 +422,7 @@ namespace OATS_Capstone.Controllers
                     }
                     else
                     {
-                        action = RedirectToActionPermanent("DetailRegister", "Account", new { id = common.accessToken, forward = Url.Action("DoTest", new { id = invitation.TestID }) });
+                        action = RedirectToActionPermanent("DetailRegister", "Account", new { id = HttpContext.Server.UrlEncode( common.accessToken), forward = Url.Action("DoTest", new { id = invitation.TestID }) });
                     }
                 }
             }
@@ -1002,12 +1002,16 @@ namespace OATS_Capstone.Controllers
 
         public ActionResult ScoreToExcel(int testid, List<int> userids)
         {
+            ActionResult action = View("ErrorDetail",(object)Constants.DefaultCannotExportFile);
             var common = new CommonService();
             var package = common.ScoreToExcel(testid, userids);
-            var result = new ExcelResult();
-            result.Package = package;
-            result.FileName = "OATS_StudentScore.xlsx";
-            return result;
+            if (package != null) {
+                var result = new ExcelResult();
+                result.Package = package;
+                result.FileName = "OATS_StudentScore_Test_" + testid + ".xlsx";
+                action = result;
+            }
+            return action;
         }
 
         public JsonResult UpdateMaxScoreSetting(int testid, int score)
@@ -1034,7 +1038,7 @@ namespace OATS_Capstone.Controllers
             return Json(json);
         }
 
-        public JsonResult InviteUserOutSide(int testid, string email,string name)
+        public JsonResult InviteUserOutSide(int testid, string email, string name)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -1051,14 +1055,30 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.InviteUserOutSide(testid, email,name);
+            common.InviteUserOutSide(testid, email, name);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
 
-        public JsonResult Index_OverViewTab()
+        public JsonResult Index_OverViewTab(string type, List<int> userids = null, List<int> testids = null)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderSubPartialViewToString += (model) =>
+            {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_OverviewTab_Inner", model);
+                }
+                catch (Exception)
+                {
+                    common.message = Constants.DefaultExceptionMessage;
+                    common.success = false;
+                }
+                return result;
+
+            };
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -1071,8 +1091,24 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.Index_OverViewTab();
-            return Json(new {common.success,common.message,common.generatedHtml });
+            common.Index_OverViewTab(type, userids, testids);
+            return Json(new { common.success, common.message, common.generatedHtml });
+        }
+
+        public ActionResult AllScoreToExcel(List<int> userids, List<int> testids)
+        {
+            ActionResult action = View("ErrorDetail", (object)Constants.DefaultCannotExportFile);
+            var common = new CommonService();
+            var package = common.AllScoreToExcel(userids, testids);
+            if (package != null)
+            {
+                var result = new ExcelResult();
+                result.Package = package;
+                result.FileName = "OATS_ScoresOfStudent.xlsx";
+                action = result;
+            }
+            return action;
+
         }
     }
 }

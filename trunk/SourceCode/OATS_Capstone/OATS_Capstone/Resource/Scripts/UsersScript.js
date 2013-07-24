@@ -55,13 +55,18 @@ function initPopup(role) {
 }
 function createUser() {
     var modal = $("#emailInputModal");
-    var tb = $("#emailInput");
+    var tbEmail = $("#emailInput");
+    var tbName = $("#nameInput");
     $.validity.start();
-    tb.require().match("email");
+    $.validity.settings.position = "top";
+    tbName.require();
+    tbEmail.require().match("email");
+    $.validity.settings.position = "left";
     var result = $.validity.end();
     if (result.valid) {
-        var email = tb.val();
-        $.post("/Users/MakeUser", { email: email }, function (res) {
+        var name = tbName.val();
+        var email = tbEmail.val();
+        $.post("/Users/MakeUser", { name:name,email: email }, function (res) {
             if (res.success && res.generatedId) {
                 modal.modal("hide");
                 showMessage("Sending email")

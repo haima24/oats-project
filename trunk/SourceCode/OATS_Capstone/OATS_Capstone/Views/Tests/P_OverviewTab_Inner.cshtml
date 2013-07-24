@@ -1,0 +1,41 @@
+﻿@model OATS_Capstone.Models.OverviewScoreTests
+@if (Model.CheckedTestsSorted.Count == 0 && Model.CheckedUsersSorted.Count == 0)
+{
+    <div class="nt-empty-msg">No data match your selection</div>
+}
+else
+{
+    <div class="nt-user">
+        <div class="nt-name">
+            <span class="nt-title">Name:</span>
+            <span class="nt-descr">@Model.ScoreUsersNameLabel</span>
+        </div>
+
+    </div>
+    <table id="overview" style="width: 100%; border-collapse: collapse;">
+        <tr class="GridviewScrollHeader">
+            <td colspan="2">Student</td>
+            @foreach (var item in Model.CheckedTestsSorted)
+            {
+                <td rowspan="2">@item.TestTitle</td>    
+            }
+
+        </tr>
+        <tr class="GridviewScrollHeader">
+            <td>Name</td>
+            <td>Overall</td>
+        </tr>
+        @foreach (var item in Model.OverviewScores)
+        {
+            <tr class="GridviewScrollItem">
+                <td style="background-color: #EFEFEF;">@item.Name</td>
+                <td style="background-color: #EFEFEF;">@item.Overall</td>
+                @foreach (var score in item.Scores)
+                {
+                    <td>@score.UserPercent</td>        
+                }
+            </tr>
+        }
+
+    </table>
+}
