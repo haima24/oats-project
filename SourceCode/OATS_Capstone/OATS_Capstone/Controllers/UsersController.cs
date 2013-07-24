@@ -67,10 +67,10 @@ namespace OATS_Capstone.Controllers
             common.RemoveNonRegisteredUser(userid);
             return Json(new { common.success, common.message });
         }
-        public JsonResult MakeUser(string email)
+        public JsonResult MakeUser(string name,string email)
         {
             var common = new CommonService();
-            var generatedId=common.MakeUser(email);
+            var generatedId=common.MakeUser(name,email);
             return Json(new { common.success, common.message, generatedId });
         }
         public JsonResult EmailInput(string role)

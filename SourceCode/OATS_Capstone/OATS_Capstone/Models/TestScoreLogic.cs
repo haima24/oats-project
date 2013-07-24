@@ -106,11 +106,11 @@ namespace OATS_Capstone.Models
                 var columnName = dt.Columns.Add("Name");
                 //init columns
                 var fObj = checkedUsers.FirstOrDefault();
-                var columnOverall = dt.Columns.Add(fObj.Overall.Name);
+                var columnOverall = dt.Columns.Add(fObj.Overall.Name, typeof(decimal));
                 var otherColumns = new Dictionary<DataColumn, String>();
                 fObj.Statistics.ForEach(i =>
                 {
-                    var column = dt.Columns.Add(i.Name);
+                    var column = dt.Columns.Add(i.Name, typeof(decimal));
                     var name = i.Name;
                     otherColumns.Add(column, name);
                 });
@@ -134,7 +134,8 @@ namespace OATS_Capstone.Models
                     }
                     dt.Rows.Add(row);
                 });
-                wsScore.Cells["A2"].LoadFromDataTable(dt, true, TableStyles.Medium9);
+                var rangeBase = wsScore.Cells["A2"].LoadFromDataTable(dt, true, TableStyles.Medium9);
+                rangeBase.Style.Numberformat.Format = Constants.DefaultExcelPercentFormat;
             }
             else
             {
@@ -260,20 +261,37 @@ namespace OATS_Capstone.Models
     }
     public class ScoreUserItem
     {
+        public decimal? UserDecimalPercent { get; set; }
         public Test Test { get; set; }
         public string UserLabel { get; set; }
         public string UserPercent { get; set; }
         public int UserID { get; set; }
-        public User User{get;set;}
+        public User User { get; set; }
         public ScoreUserItemStatistic Overall { get; set; }
         public List<ScoreUserItemStatistic> Statistics { get; set; }
+        private void Initialize(User user)
+        {
+            UserID = user.UserID;
+            UserDecimalPercent = null;
+            User = user;
+            UserLabel = !string.IsNullOrEmpty(user.Name) ? user.Name : user.UserMail;
+            UserPercent = "N/A";
+        }
         public ScoreUserItem(List<Tag> tags, UserInTest inTest, decimal? totalScoreOfTest)
         {
             UserLabel = !string.IsNullOrEmpty(inTest.User.Name) ? inTest.User.Name : inTest.User.UserMail;
             var percent = (decimal)inTest.Score / totalScoreOfTest;
+            if (inTest.Score == 0)
+            {
+                UserDecimalPercent = null;
+            }
+            else {
+                UserDecimalPercent = percent;
+            }
+            
             UserPercent = (percent).ToPercent();
             UserID = inTest.User.UserID;
-            User=inTest.User;
+            User = inTest.User;
             Overall = new ScoreUserItemStatistic() { Name = "Overall Score", Percent = percent.RoundTwo() ?? 0 };
             Statistics = new List<ScoreUserItemStatistic>();
             tags.ForEach(i =>
@@ -282,6 +300,36 @@ namespace OATS_Capstone.Models
                 Statistics.Add(item);
             });
             Test = inTest.Test;
+        }
+        public ScoreUserItem(User user, Test test)
+        {
+            var inTest = test.UserInTests.FirstOrDefault(i => i.UserID == user.UserID);
+            if (inTest != null)
+            {
+                var totalScoreOfTest = inTest.Test.Questions.TotalScore();
+                UserID = inTest.User.UserID;
+                User = inTest.User;
+                UserLabel = !string.IsNullOrEmpty(inTest.User.Name) ? inTest.User.Name : inTest.User.UserMail;
+                var percent = (decimal)inTest.Score / totalScoreOfTest;
+                if (inTest.Score == 0)
+                {
+                    UserDecimalPercent = null;
+                }
+                else
+                {
+                    UserDecimalPercent = percent;
+                }
+                UserPercent = (percent).ToPercent();
+                Test = inTest.Test;
+            }
+            else
+            {
+                Initialize(user);
+            }
+        }
+        public ScoreUserItem(User user)
+        {
+            Initialize(user);
         }
     }
     public class ScoreUserItemStatistic
@@ -301,44 +349,174 @@ namespace OATS_Capstone.Models
             decimal percent = 0;
             if (totalScore.HasValue)
             {
-                percent = score * 100 / totalScore.Value;
+                percent = score / totalScore.Value;
             }
             Percent = percent;
         }
     }
     public class OverviewScoreTests
     {
+        public string ScoreUsersNameLabel { get; set; }
         public List<Test> AllTests { get; set; }
         public List<User> AllUsers { get; set; }
-        private List<ScoreUserItem> originalOverviewScoreTestsUserList = null;
-        public List<int> CheckedUserIds { get; set; }
-        public List<int> CheckedTestIds { get; set; }
+        public List<Test> CheckedTestsSorted { get; set; }
+        public List<User> CheckedUsersSorted { get; set; }
+        public List<OverviewScoreOnUser> OverviewScores { get; set; }
         public ExcelPackage ToExcelPackage()
         {
-            return null;
-        }
-        private void InitOverviewScoreTests(IEnumerable<Test> tests, List<int> userids,List<int> testids)
-        {
-            CheckedUserIds = userids;
-            CheckedTestIds = testids;
-            AllTests = tests.ToList();
-            originalOverviewScoreTestsUserList = new List<ScoreUserItem>();
-            AllTests.ForEach(i =>
+            var excelPackage = new ExcelPackage();
+            var wb = excelPackage.Workbook;
+            var wsScore = wb.Worksheets.Add("Score");
+            var stRange = wsScore.Cells[1, 1, 1, 2];
+            stRange.Merge = true;
+            stRange.Value = "Student";
+            wsScore.Cells[2, 1].Value = "Name";
+            wsScore.Cells[2, 2].Value = "Overall";
+            if (CheckedUsersSorted.Count != 0 || CheckedTestsSorted.Count != 0)
             {
-                var scoreTest = new ScoreTest(i);
-                if (scoreTest.ScoreUserList != null)
+
+                //student info
+                var beginRow = 3;
+                for (int i = 0; i < CheckedUsersSorted.Count; i++)
                 {
-                    originalOverviewScoreTestsUserList.AddRange(scoreTest.ScoreUserList);
+                    //column always 1
+                    var user = CheckedUsersSorted[i];
+                    wsScore.Cells[beginRow, 1].Value = user.Name;
+                    beginRow++;
                 }
-            });
-            AllUsers = originalOverviewScoreTestsUserList.GroupBy(i => i.User).Select(t=>t.Key).ToList();
+
+                //header tests
+                var beginColumn = 3;
+                for (int i = 0; i < CheckedTestsSorted.Count; i++)
+                {
+                    var test = CheckedTestsSorted[i];
+                    var titleRange = wsScore.Cells[1, beginColumn, 2, beginColumn];
+                    titleRange.Merge = true;
+                    titleRange.Value = test.TestTitle;
+                    ++beginColumn;
+                }
+
+                //details
+                beginRow = 3;
+                for (int i = 0; i < OverviewScores.Count; i++)
+                {
+                    var item = OverviewScores[i];
+                    var scores = item.Scores;
+                    var rOverall=wsScore.Cells[beginRow, 2];
+                    object value = null;
+                    if (item.OverallDecimalPercent.HasValue)
+                    {
+                        value = item.OverallDecimalPercent.Value;
+                    }
+                    else {
+                        value = "N/A";
+                    }
+                    rOverall.Value = value;
+                    rOverall.Style.Numberformat.Format = Constants.DefaultExcelPercentFormat;
+                    beginColumn = 3;
+                    for (int k = 0; k < scores.Count; k++)
+                    {
+                        var score = scores[k];
+                        var range = wsScore.Cells[beginRow, beginColumn];
+                        range.Style.Numberformat.Format = Constants.DefaultExcelPercentFormat;
+                        object itemValue = null;
+                        if (score.UserDecimalPercent.HasValue)
+                        {
+                            itemValue = score.UserDecimalPercent.Value;
+                        }
+                        else
+                        {
+                            itemValue = "N/A";
+                        }
+                        range.Value = itemValue;
+                        ++beginColumn;
+                    }
+                    ++beginRow;
+                }
+
+            }
+            else
+            {
+                wsScore.Cells[1, 1, 1, 2].Value = "No Data Matching Your Selection";
+            }
+            return excelPackage;
         }
-        public OverviewScoreTests(IEnumerable<Test> tests, List<int> userids,List<int> testids)
+        private void InitOverviewScoreTests(IEnumerable<Test> tests, List<int> userids, List<int> testids)
         {
-            InitOverviewScoreTests(tests,userids,testids);
+            AllTests = tests.OrderBy(t => t.TestTitle).ToList();
+            AllUsers = tests.SelectMany(i => i.UserInTests.Select(k => k.User)).GroupBy(i => i).Select(i => i.Key).OrderBy(k => k.Name).ToList();
+            var checkedTests = AllTests.Where(i => testids.Contains(i.TestID));
+            CheckedTestsSorted = checkedTests.OrderBy(i => i.TestTitle).ToList();
+            var checkedUsers = AllUsers.Where(i => userids.Contains(i.UserID));
+            CheckedUsersSorted = checkedUsers.OrderBy(i =>
+            {
+                var key = i.Name;
+                if (string.IsNullOrEmpty(key))
+                {
+                    key = i.UserMail;
+                }
+                return key;
+            }).ToList();
+            OverviewScores = new List<OverviewScoreOnUser>();
+            foreach (var u in CheckedUsersSorted)
+            {
+                var scoreOnUser = new OverviewScoreOnUser();
+                var scoreList = new List<ScoreUserItem>();
+                foreach (var t in CheckedTestsSorted)
+                {
+                    ScoreUserItem item = null;
+                    if (CheckedTestsSorted.Select(i => i.TestID).Contains(t.TestID))
+                    {
+                        item = new ScoreUserItem(u, t);
+                    }
+                    else
+                    {
+                        item = new ScoreUserItem(u);
+                    }
+                    scoreList.Add(item);
+                }
+                var totalOfAllTests = CheckedTestsSorted.Where(i => i.UserInTests.Select(t => t.UserID).Contains(u.UserID)).SelectMany(i => i.Questions).TotalScore();
+                var gainScore = CheckedTestsSorted.SelectMany(i => i.UserInTests).Where(i => i.UserID == u.UserID).Sum(i => i.Score);
+                var percentString = string.Empty;
+                if (totalOfAllTests == 0)
+                {
+                    percentString = "N/A";
+                    scoreOnUser.OverallDecimalPercent = null;
+                }
+                else
+                {
+                    percentString = (gainScore / totalOfAllTests).ToPercent();
+                    if (gainScore == 0) {
+                        scoreOnUser.OverallDecimalPercent = null;
+                    }
+                    else {
+                        scoreOnUser.OverallDecimalPercent = (gainScore / totalOfAllTests);
+                    }
+                }
+                scoreOnUser.Overall = percentString;
+                scoreOnUser.Name = u.Name;
+                scoreOnUser.Scores = scoreList;
+                OverviewScores.Add(scoreOnUser);
+                var names = CheckedUsersSorted.Select(i => i.Name).Aggregate((i, o) => i + "," + o);
+                if (names != null) { ScoreUsersNameLabel = names; }
+            }
         }
-        public OverviewScoreTests(IEnumerable<Test> tests) {
-            InitOverviewScoreTests(tests, new List<int>(),new List<int>());
+        public OverviewScoreTests(IEnumerable<Test> tests, List<int> userids, List<int> testids)
+        {
+            InitOverviewScoreTests(tests, userids, testids);
         }
+        public OverviewScoreTests(IEnumerable<Test> tests)
+        {
+            var testids = tests.Select(i => i.TestID).ToList();
+            var userids = tests.SelectMany(i => i.UserInTests.Select(k => k.User)).GroupBy(i => i).Select(i => i.Key.UserID).ToList();
+            InitOverviewScoreTests(tests, userids, testids);
+        }
+    }
+    public class OverviewScoreOnUser
+    {
+        public string Name { get; set; }
+        public string Overall { get; set; }
+        public decimal? OverallDecimalPercent { get; set; }
+        public List<ScoreUserItem> Scores { get; set; }
     }
 }

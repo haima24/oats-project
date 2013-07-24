@@ -696,9 +696,12 @@ namespace OATS_Capstone.Models
                     var authen = AuthenticationSessionModel.Instance();
                     var userid = authen.UserId;
                     IUserMailer userMailer = new UserMailer();
-                    userMailer.OnAcknowledInvitationEmail += (init, sent, unsent, list) => {
-                        if (list.Count > 0) {
-                            list.ForEach(i => {
+                    userMailer.OnAcknowledInvitationEmail += (init, sent, unsent, list) =>
+                    {
+                        if (list.Count > 0)
+                        {
+                            list.ForEach(i =>
+                            {
                                 var invitation = db.Invitations.FirstOrDefault(k => k.InvitationID == i);
                                 if (invitation != null)
                                 {
@@ -810,7 +813,7 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
-                        context.Clients.All.R_removeInvitation(testid, new List<int> { userid});
+                        context.Clients.All.R_removeInvitation(testid, new List<int> { userid });
                     }
                 }
             }
@@ -1651,7 +1654,7 @@ namespace OATS_Capstone.Models
                         var uPass = u.Password.Trim();
                         var iEmail = email.Trim();
                         var iPass = password.Trim();
-                        return uEmail.Equals(iEmail) && uPass.Equals(iPass);
+                        return uEmail.Equals(iEmail) && uPass.Equals(ExtensionModel.createHashMD5(iPass));
                     }
                     else
                     {
@@ -1691,7 +1694,7 @@ namespace OATS_Capstone.Models
                 {
                     var newUser = new User();
                     newUser.Name = user.Name;
-                    newUser.Password = user.Password;
+                    newUser.Password = ExtensionModel.createHashMD5(user.Password);
                     newUser.UserMail = user.UserMail;
                     newUser.UserPhone = user.UserPhone;
                     newUser.UserCountry = user.UserCountry;
@@ -1890,7 +1893,7 @@ namespace OATS_Capstone.Models
                         user.UserMail = profile.UserMail;
                         if (!string.IsNullOrEmpty(profile.Password))
                         {
-                            user.Password = profile.Password;
+                            user.Password = ExtensionModel.createHashMD5( profile.Password);
                         }
                         if (db.SaveChanges() >= 0)
                         {
@@ -3032,7 +3035,7 @@ namespace OATS_Capstone.Models
                 var user = db.Users.FirstOrDefault(i => i.UserID == userid);
                 if (user != null)
                 {
-                    user.Password = password;
+                    user.Password = ExtensionModel.createHashMD5( password);
                     user.AccessToken = null;
                     user.IsRegistered = true;
                     if (db.SaveChanges() > 0)
@@ -3051,20 +3054,49 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void Index_OverViewTab()
+        public void Index_OverViewTab(string type, List<int> userids, List<int> testids)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
             try
             {
-                var authen=AuthenticationSessionModel.Instance();
-                var user=authen.User;
-                var tests=user.Tests;
-                var overview=new OverviewScoreTests(tests);
-                if (OnRenderPartialViewToString != null) {
-                    success = true;
-                    generatedHtml = OnRenderPartialViewToString.Invoke(overview);
+                var authen = AuthenticationSessionModel.Instance();
+                var user = authen.User;
+                var tests = user.Tests;
+                OverviewScoreTests overview = null;
+                if (userids == null || testids == null)
+                {
+                    if (string.IsNullOrEmpty(type))
+                    {
+                        overview = new OverviewScoreTests(tests);
+                    }
+                    else if (type == "overview")
+                    {
+                        overview = new OverviewScoreTests(tests, new List<int>(), new List<int>());
+                    }
                 }
+                else
+                {
+                    overview = new OverviewScoreTests(tests, userids, testids);
+                }
+
+                if (string.IsNullOrEmpty(type))
+                {
+                    if (OnRenderPartialViewToString != null)
+                    {
+                        success = true;
+                        generatedHtml = OnRenderPartialViewToString.Invoke(overview);
+                    }
+                }
+                else if (type == "overview")
+                {
+                    if (OnRenderSubPartialViewToString != null)
+                    {
+                        success = true;
+                        generatedHtml = OnRenderSubPartialViewToString.Invoke(overview);
+                    }
+                }
+
             }
             catch (Exception)
             {
@@ -3072,7 +3104,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void InviteUserOutSide(int testid, string email,string name)
+        public void InviteUserOutSide(int testid, string email, string name)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -3097,7 +3129,8 @@ namespace OATS_Capstone.Models
                             {
                                 user.Name = name;
                             }
-                            else {
+                            else
+                            {
                                 user.Name = string.Empty;
                             }
                             //generate token
@@ -3156,7 +3189,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public int MakeUser(string email)
+        public int MakeUser(string name, string email)
         {
             var generatedId = 0;
             success = false;
@@ -3164,7 +3197,7 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
-                if (!string.IsNullOrEmpty(email))
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(name))
                 {
                     email = email.Trim();
                     var checkUser = db.Users.FirstOrDefault(i => i.UserMail.Trim() == email);
@@ -3172,6 +3205,7 @@ namespace OATS_Capstone.Models
                     {
                         var user = new User();
                         user.UserMail = email;
+                        user.Name = name;
                         user.IsRegistered = false;
                         //generate token
                         var token = GenerateUserToken(user.UserID);
@@ -3221,14 +3255,18 @@ namespace OATS_Capstone.Models
                 test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 var authen = AuthenticationSessionModel.Instance();
                 var curUserId = authen.UserId;
-                if (curUserId == test.CreatedUserID) {
+                if (curUserId == test.CreatedUserID)
+                {
                     IsHavePermission = true;
                 }
                 var invitation = test.Invitations.FirstOrDefault(i => i.UserID == curUserId);
-                if (invitation != null) {
+                if (invitation != null)
+                {
                     var role = invitation.Role;
-                    if (role != null) {
-                        if (role.RoleDescription == "Teacher") {
+                    if (role != null)
+                    {
+                        if (role.RoleDescription == "Teacher")
+                        {
                             IsHavePermission = true;
                         }
                     }
@@ -3240,6 +3278,33 @@ namespace OATS_Capstone.Models
                 IsHavePermission = false;
             }
             return test;
+        }
+        public ExcelPackage AllScoreToExcel(List<int> userids, List<int> testids)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            ExcelPackage excel = null;
+            try
+            {
+                var authen = AuthenticationSessionModel.Instance();
+                var tests = authen.User.Tests;
+                OverviewScoreTests overview = null;
+                if (userids == null || testids == null)
+                {
+                    overview = new OverviewScoreTests(tests);
+                }
+                else {
+                    overview = new OverviewScoreTests(tests, userids, testids);
+                }
+                excel = overview.ToExcelPackage();
+            }
+            catch (Exception)
+            {
+                success = true;
+                message = Constants.DefaultExceptionMessage;
+                excel = null;
+            }
+            return excel;
         }
     }
 }

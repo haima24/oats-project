@@ -1,4 +1,61 @@
-﻿function initFrezen() {
+﻿function handleOverviewCheckedUsersAndTests() {
+    var userids = $("#sidebar #menuUsers .nt-ctrl-list input[type=checkbox]:checked").map(function () { return $(this).attr("user-id"); }).convertJqueryArrayToJSArray();
+    var testids = $("#sidebar #menuTests .nt-ctrl-list input[type=checkbox]:checked").map(function () { return $(this).attr("test-id"); }).convertJqueryArrayToJSArray();
+    $.ajax({
+        type: "POST",
+        url: "/Tests/Index_OverViewTab",
+        data: JSON.stringify({type:"overview", userids: userids, testids: testids }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if (res.success) {
+                $("#overview-container").html(res.generatedHtml);
+                initFrezen();
+            }
+            else {
+                showMessage("error", res.message);
+            }
+        }
+    });
+}
+function initAccordition() {
+    $("#sidebar").accordion({ heightStyle: "content" });
+    $.initCheckboxAllSub({
+        container: "#sidebar #menuUsers .nt-ctrl-list",
+        all: "#sidebar #menuUsers .nt-clb-header-control input[type=checkbox]",
+        sub: ".detail-list .nt-clb-item input[type=checkbox]",
+        onchange: function (container) {
+            var boxes = $(".detail-list .nt-clb-item input[type=checkbox]", container);
+            boxes.each(function (index, ele) {
+                var item = $(ele).closest(".nt-clb-item");
+                if ($(ele).attr("checked")) {
+                    item.addClass("nt-clb-item-sel");
+                } else {
+                    item.removeClass("nt-clb-item-sel");
+                }
+            });
+            handleOverviewCheckedUsersAndTests();
+        }
+    });
+    $.initCheckboxAllSub({
+        container: "#sidebar #menuTests .nt-ctrl-list",
+        all: "#sidebar #menuTests .nt-clb-header-control input[type=checkbox]",
+        sub: ".detail-list .nt-clb-item input[type=checkbox]",
+        onchange: function (container) {
+            var boxes = $(".detail-list .nt-clb-item input[type=checkbox]", container);
+            boxes.each(function (index, ele) {
+                var item = $(ele).closest(".nt-clb-item");
+                if ($(ele).attr("checked")) {
+                    item.addClass("nt-clb-item-sel");
+                } else {
+                    item.removeClass("nt-clb-item-sel");
+                }
+            });
+            handleOverviewCheckedUsersAndTests();
+        }
+    });
+}
+function initFrezen() {
     $('#overview').gridviewScroll({
         width: 695,
         height: 380,
@@ -75,15 +132,15 @@ $(function () {
         $.post(action, function (res) {
             if (res.success) {
                 var tabcontent = $("#eventTab");
-                if (tabcontent && res.generatedHtml) {
+                var ele = res.generatedHtml;
+                if (tabcontent && ele) {
 
-                    tabcontent.html(res.generatedHtml);
-
+                    tabcontent.html(ele);
                     initCalendar();
                     $("[data-toggle=tooltip]").tooltip();
                     initPopover();
                     initFrezen();
-                    
+                    initAccordition();
                 }
             } else { showMessage("error", res.message); }
         });
@@ -111,7 +168,7 @@ $(function () {
                     $(html).tooltip();
                     if (obj.intro) {
                         $(".pop-over", html).popover({
-                            placement:"left",
+                            placement: "left",
                             trigger: "hover",
                             html: true,
                             content: function () {
@@ -229,7 +286,20 @@ $(function () {
         cur.hide();
         header.show();
     });
-
+    //separator
+    $("#btn-download-all-score").live("click", function () {
+        var userids = $("#sidebar #menuUsers .nt-ctrl-list input[type=checkbox]:checked").map(function () { return $(this).attr("user-id"); }).convertJqueryArrayToJSArray();
+        var testids = $("#sidebar #menuTests .nt-ctrl-list input[type=checkbox]:checked").map(function () { return $(this).attr("test-id"); }).convertJqueryArrayToJSArray();
+        if (userids && testids) {
+            var uidsString = "userids=" + userids.join("&userids=");
+            var tidsString = "testids=" + testids.join("&testids=");
+            window.location.href = "/Tests/AllScoreToExcel?" + uidsString + "&&" + tidsString;
+        }
+        else {
+            showMessage("info", "Please select users and tests");
+        }
+    });
+    //separator
     var hub = $.connection.generalHub;
     hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {
         var popTestIdString = $("#modalPopupFeedback #test-id").val();
@@ -242,7 +312,7 @@ $(function () {
                         var ele = $(generatedHtml);
                         comments.prepend(ele);
                         var articleCount = $("article", comments).length;
-                        $("#modalPopupFeedback .comment-count span").html(articleCount );
+                        $("#modalPopupFeedback .comment-count span").html(articleCount);
                     }
                 }
             }
@@ -265,7 +335,7 @@ $(function () {
             }
         }
     }
-   
+
     $.connection.hub.start().done(function () {
         $("#contact-submit").live("click", function () {
             var testid = parseInt($("#test-id").val());
@@ -285,11 +355,11 @@ $(function () {
             var testid = parseInt($("#test-id").val());
             var parentFeedbackID = parseInt(button.val());
             var container = button.closest(".reply-container");
-            var area=$(".reply-area", container);
+            var area = $(".reply-area", container);
             var text = area.val();
             if (text) {
                 var place = $(".reply-details", container);
-                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text,role:"StudentAndTeacher" }, function (res) {
+                $.post("/Tests/UserReplyFeedBack", { testid: testid, parentFeedBackId: parentFeedbackID, replyDetail: text, role: "StudentAndTeacher" }, function (res) {
                     if (res.success) {
                         if (area) { area.val(""); }
                     } else {
@@ -301,5 +371,5 @@ $(function () {
         });
     });
 
-    
+
 });

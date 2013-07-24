@@ -16,7 +16,9 @@ namespace OATS_Capstone.Models
         public const string DefaultTestInInvalidDateTime = "This test currently is not in range of start time and end time.";
         public const string DefaultTestNotRunningOrActive = "This test currently is not make as running or active.";
         public const string DefaultTestNotExist = "This test is not exist.";
-        public const string DetaultNoPermission = "Test content is not available or you have no permission to access content of this test.";
+        public const string DefaultNoPermission = "Test content is not available or you have no permission to access content of this test.";
+        public const string DefaultCannotExportFile = "Sorry, we could not export your requested file due to server problem. Try gain later.";
+        public const string DefaultExcelPercentFormat = "#0%";
 
     }
 }
