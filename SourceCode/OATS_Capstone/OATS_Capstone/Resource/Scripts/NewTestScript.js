@@ -1894,6 +1894,21 @@ $(function () {
         }
     });
     //separator
+    $("#asm_duration").live("change", function () {
+        var valueString = $(this).val();
+        var value = parseInt(valueString);
+        if (!isNaN(value)) {
+            statusSaving();
+            $.post("/Tests/UpdateTestDuration", { testid: testid, duration: value }, function (res) {
+                if (res.success) {
+                    statusSaved();
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
 
