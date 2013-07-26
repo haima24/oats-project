@@ -2930,6 +2930,35 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+
+        public void UpdateTestDuration(int testid, int duration)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
+                    if (settingDetail != null)
+                    {
+                        settingDetail.NumberValue = duration;
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+
         public void CheckMaxScoreAndTotalScore(int testid, ref TotalAndMaxScore carier)
         {
             success = false;

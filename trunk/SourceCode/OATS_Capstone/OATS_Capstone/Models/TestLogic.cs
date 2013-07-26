@@ -10,6 +10,7 @@ namespace OATS_Capstone.Models
         public bool IsRunning { get; set; }
         public bool IsActive { get; set; }
         public bool IsDateTimeNotValid { get; set; }
+        public bool IsNumberOfAttempMax { get; set; }
         public SettingConfigDetail RequireAccessCodeSetting { get; set; }
         public string CurrentUserName { get; set; }
         public string TestTitle { get; set; }
@@ -62,6 +63,37 @@ namespace OATS_Capstone.Models
                     }
                 }
 
+                //IsNumberOfAttempMax
+                var settingAttempLimit = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
+                if (settingAttempLimit.IsActive)
+                {
+                    var db = SingletonDb.Instance();
+                    var userInTest = db.UserInTests.Where(i => i.TestID == test.TestID && i.UserID == userId);
+                    if (userInTest.Count() > 0)
+                    {
+                        var numberOfAttemp = userInTest.Max(i => i.NumberOfAttend);
+                        var maxAttemp = settingAttempLimit.NumberValue;
+                        if (numberOfAttemp >= maxAttemp)
+                        {
+                            IsNumberOfAttempMax = true;
+                        }
+                        else
+                        {
+                            IsNumberOfAttempMax = false;
+                        }
+                    }
+                    else
+                    {
+                        IsNumberOfAttempMax = false;
+                    }
+                }
+                else 
+                {
+                    IsNumberOfAttempMax = false;
+                }
+                
+                
+                //Random answer
                 Questions = test.Questions.OrderBy(i => i.SerialOrder);
                 var settingRandomAnswer = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RAO");
                 if (settingRandomAnswer != null)
@@ -72,6 +104,7 @@ namespace OATS_Capstone.Models
                     }
                 }
 
+                //random question
                 var settingRandomQuestion = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "ROQ");
                 if (settingRandomQuestion != null)
                 {

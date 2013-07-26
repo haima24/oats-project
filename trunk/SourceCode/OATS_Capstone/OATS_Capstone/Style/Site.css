@@ -2597,11 +2597,6 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     padding: 5px 0 7px 0;
 }
 
-#settings .nt-panel .nt-section #asm_time_limit {
-    width: 35px;
-    margin: 0 3px;
-    padding: 2px;
-}
 
 #assignments .nt-acc-content .nt-search-input {
     width: 160px;
@@ -2813,7 +2808,8 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
             }
 
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_time_limit,
-            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_max_point {
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_max_point,
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_duration {
                 width: 35px;
                 margin: 0 10px;
                 padding: 2px;

@@ -357,36 +357,43 @@ namespace OATS_Capstone.Controllers
             if (test != null)
             {
                 var testLogic = new TestLogic(test);
-                if (testLogic.IsRunning && testLogic.IsRunning)
+                if (testLogic.IsRunning && testLogic.IsActive)
                 {
                     if (!testLogic.IsDateTimeNotValid)
                     {
                         if (testLogic.IsInInvitationRoleStudent)
                         {
-                            if (testLogic.RequireAccessCodeSetting != null)
+                            if (!testLogic.IsNumberOfAttempMax)
                             {
-                                if (check)
+                                if (testLogic.RequireAccessCodeSetting != null)
                                 {
-                                    if (testLogic.RequireAccessCodeSetting.TextValue == accesscode)
+                                    if (check)
                                     {
-                                        action = View(testLogic);
+                                        if (testLogic.RequireAccessCodeSetting.TextValue == accesscode)
+                                        {
+                                            action = View(testLogic);
+                                        }
+                                        else
+                                        {
+                                            action = RedirectToAction("AccessCode", new { id = id });
+                                        }
                                     }
                                     else
                                     {
-                                        action = RedirectToAction("AccessCode", new { id = id });
+                                        if (testLogic.RequireAccessCodeSetting.IsActive)
+                                        {
+                                            action = RedirectToAction("AccessCode", new { id = id });
+                                        }
+                                        else
+                                        {
+                                            action = View(testLogic);
+                                        }
                                     }
                                 }
-                                else
-                                {
-                                    if (testLogic.RequireAccessCodeSetting.IsActive)
-                                    {
-                                        action = RedirectToAction("AccessCode", new { id = id });
-                                    }
-                                    else
-                                    {
-                                        action = View(testLogic);
-                                    }
-                                }
+                            }
+                            else 
+                            { 
+                                action = View("ErrorDetail", (object)Constants.DefaultMaxOfAttemp);
                             }
                         }
                         else
@@ -1019,6 +1026,13 @@ namespace OATS_Capstone.Controllers
             var common = new CommonService();
             common.UpdateMaxScoreSetting(testid, score);
             return Json(new { common.success, common.message });
+        }
+
+        public JsonResult UpdateTestDuration(int testid, int duration)
+        {
+            var common = new CommonService();
+            common.UpdateTestDuration(testid, duration);
+            return Json(new { common.success, common.message});
         }
 
         public JsonResult CheckMaxScoreAndTotalScore(int testid)

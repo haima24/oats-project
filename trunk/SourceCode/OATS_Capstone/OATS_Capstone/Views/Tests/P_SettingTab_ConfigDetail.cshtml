@@ -19,48 +19,53 @@
         }
         @Model.SettingType.SettingTypeDescription
     </label>
-    if (Model.SettingType.SettingTypeKey == "OSM")
-    {
-        if (Model.IsActive)
+        if (Model.SettingType.SettingTypeKey == "OSM")
         {
-        <input id="asm_time_limit" type="text" value="@Model.NumberValue"><span>mins</span>
-        }
-        else
-        {
-            if (Model.NumberValue != null)
-            { 
-        <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
+            if (Model.IsActive)
+            {
+    <input id="asm_time_limit" type="text" value="@Model.NumberValue"><span>times</span>
             }
             else
             {
-        <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
+    <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>times</span>
             }
-
         }
-    }
-    else if (Model.SettingType.SettingTypeKey == "RTC")
-    {
-        if (Model.IsActive)
+        else if (Model.SettingType.SettingTypeKey == "RTC")
         {
-        <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code" value="@Model.TextValue"/>
+            if (Model.IsActive)
+            {
+    <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code" value="@Model.TextValue"/>
+            }
+            else
+            {
+    <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code hide" />
+            }
         }
-        else
+        else if (Model.SettingType.SettingTypeKey == "MTP")
         {
-            <input type="text" id="asm_access_code"  disabled="disabled" class="nt-access-code hide"/>
+            if (Model.IsActive)
+            {
+    <input id="asm_max_point" type="text" value="@Model.NumberValue"><span>Pts</span>
+            }
+            else
+            {
+    <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
+            }
         }
-    }
-    else if (Model.SettingType.SettingTypeKey == "MTP")
-    {
-        if (Model.IsActive)
+        else if (Model.SettingType.SettingTypeKey == "DRL")
         {
-       <input id="asm_max_point" type="text" value="@Model.NumberValue"><span>Pts</span>
+            if (Model.IsActive)
+            { 
+                <input id="asm_duration" type="text" value="@Model.NumberValue"><span>times</span>
+            }
+            else
+            {
+                <input id="asm_duration" type="text" disabled="disabled" value="@Model.NumberValue"><span>times</span>
+            }
         }
-        else
-        {
-        <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
-        }
-    }
-}else{
+}
+else
+{
     <label class="checkbox">
         @if (Model.IsActive)
         {
@@ -72,44 +77,23 @@
         }
         @Model.SettingType.SettingTypeDescription
     </label>
-    if (Model.SettingType.SettingTypeKey == "OSM")
-    {
-        if (Model.IsActive)
+        if (Model.SettingType.SettingTypeKey == "OSM")
         {
-        <input id="asm_time_limit" type="text" value="@Model.NumberValue"><span>mins</span>
+    <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
         }
-        else
+        else if (Model.SettingType.SettingTypeKey == "RTC")
         {
-            if (Model.NumberValue != null)
-            { 
-        <input id="asm_time_limit" type="text" value="@Model.NumberValue"><span>mins</span>
+            if (Model.IsActive)
+            {
+    <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code" value="@Model.TextValue"/>
             }
             else
             {
-        <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
+    <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code hide" />
             }
-
         }
-    }
-    else if (Model.SettingType.SettingTypeKey == "RTC")
-    {
-        if (Model.IsActive)
+        else if (Model.SettingType.SettingTypeKey == "MTP")
         {
-       <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code" value="@Model.TextValue"/>
+    <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
         }
-        else
-        {
-        <input type="text" id="asm_access_code" disabled="disabled" class="nt-access-code hide"/>
-        }
-    }else if (Model.SettingType.SettingTypeKey == "MTP")
-    {
-        if (Model.IsActive)
-        {
-       <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
-        }
-        else
-        {
-        <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
-        }
-    }
 }
