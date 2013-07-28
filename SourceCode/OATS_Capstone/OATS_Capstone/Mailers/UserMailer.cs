@@ -44,13 +44,21 @@ namespace OATS_Capstone.Mailers
         {
 
             var teacherName = string.Empty;
+            var test = invitation.Test;
 
-            if (invitation.Test != null)
+            if (test != null)
             {
-                if (invitation.Test.User != null)
-                {
-                    teacherName = !string.IsNullOrEmpty(invitation.Test.User.Name) ? invitation.Test.User.Name : invitation.Test.User.UserMail;
+                var accessCodeSetting = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+                if (accessCodeSetting != null) {
+                    if (accessCodeSetting.IsActive) {
+                        ViewBag.AccessCode = accessCodeSetting.TextValue;
+                    }
                 }
+                if (test.User != null)
+                {
+                    teacherName = !string.IsNullOrEmpty(test.User.Name) ? test.User.Name : test.User.UserMail;
+                }
+                ViewBag.TestTitle = test.TestTitle;
             }
             var userName = string.Empty;
             ViewBag.TeacherName = teacherName;
@@ -71,14 +79,14 @@ namespace OATS_Capstone.Mailers
             ViewBag.LinkRegister = linkReg;
             var link = string.Empty;
             var anonymousLink = string.Empty;
-            if (invitation.Test != null)
+            if (test != null)
             {
-                link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/DoTest/" + invitation.Test.TestID;
+                link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/DoTest/" + test.TestID;
                 anonymousLink = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/AnonymousDoTest/" + CurrentHttpContext.Server.UrlEncode(invitation.AccessToken);
             }
             ViewBag.Link = link;
             ViewBag.AnonymousLink = anonymousLink;
-
+            //access code
             MvcMailMessage obj = null;
             if (invitation.User.IsRegistered)
             {

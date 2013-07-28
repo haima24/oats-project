@@ -11,22 +11,31 @@
     <div class="nt-qanscont nt-sortable">
         @foreach (var item in Model.ResponseAnswers)
         {
-            <div class="nt-qans nt-qans-hover">
-                <!-- TODO: consistent editable / fillable display -->
-                <label class="checkbox nt-qans-label ">
-                    @if (Model.IsOneIdChecked && item.UserChooseThisAnswer)
-                    {
-                        <input type="checkbox" disabled="disabled" checked="checked" />
-                    }
-                    else
-                    {
-                        <input type="checkbox" disabled="disabled" />
-                    }
-                    <div class="nt-qansdesc">
-                        <p>@item.AnswerContent<br />
-                        </p>
+            <div class="nt-qmatching nt-qmatching-relative nt-qans">
+                <div class="nt-qmatching-couple">
+                    <div class="begin">
+                        <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                            <div class="redactor_box">
+                                <div class="nt-qansdesc">@item.AnswerContent</div>
+                            </div>
+                        </div>
+                        <div class="nt-qanselem">
+                            <div class="matcher"><i class="t-icon i-matching"></i></div>
+                        </div>
                     </div>
-                </label>
+                    <div class="line"></div>
+                    <div class="end">
+                        <div class="nt-qanselem">
+                            <div class="matcher"><i class="t-icon i-matching"></i></div>
+                        </div>
+                        <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                            <div class="redactor_box">
+                                <div class="nt-qansdesc">@item.AnswerMatchingContent</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="nt-qansrep">
                     @if (Model.IsOneIdChecked && item.UserChooseThisAnswer)
                     {
@@ -55,24 +64,28 @@
                     <div class="nt-qansrep-pct" style="visibility: visible;">@item.AnswerPercent</div>
                     }
                 </div>
-            </div>    
+                <div class="clearfix"></div>
+            </div>
         }
 
     </div>
     <div class="nt-qfoot">
-        @if(!Model.IsOneIdChecked){
-        <div class="nt-qrep" style="">
-            <span>Correct All:</span><span class="nt-crate">@Model.CorrectPercent (@Model.CorrectPraction)</span>
-        </div>
-        }else{
+        @if (!Model.IsOneIdChecked)
+        {
+            <div class="nt-qrep" style="">
+                <span>Correct All:</span><span class="nt-crate">@Model.CorrectPercent (@Model.CorrectPraction)</span>
+            </div>
+        }
+        else
+        {
 
-        <div class="nt-qoepts">
-            <span>Points: @Model.UserScore</span>
-            <span class="nt-pts"></span>
-            <span>out of @Model.ChoiceScore pt</span>
-            <span class="nt-ok"><i class="icon-ok"></i></span>
-            <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
-        </div>
+            <div class="nt-qoepts">
+                <span>Points: @Model.UserScore</span>
+                <span class="nt-pts"></span>
+                <span>out of @Model.ChoiceScore pt</span>
+                <span class="nt-ok"><i class="icon-ok"></i></span>
+                <span class="nt-hl-words-warn"><i class="icon-warning-sign"></i></span>
+            </div>
         }
     </div>
     <div class="nt-qcomm" style="display: none;">

@@ -38,8 +38,8 @@
     <div class="nt-qmiddle">
 
 
-        <div style="overflow: hidden; position: relative; width: 710px; height: 102px; top: auto; left: auto; margin: 0px 0px 16px; padding-bottom: 16px;">
-            <textarea class="nt-qrespinput" style="width: 670px; overflow-x: hidden; overflow-y: auto; height: 92px; margin: 0px; resize: none; position: static; zoom: 1; display: block;">@Model.TextDescription</textarea>
+        <div style="position: relative; top: auto; left: auto; margin: 0px 0px 16px; padding-bottom: 16px;">
+            <textarea class="nt-qrespinput" style="overflow-x: hidden; overflow-y: auto; height: 92px; margin: 0px; resize: none; position: static; zoom: 1; display: block;">@Model.TextDescription</textarea>
         </div>
 
 
@@ -55,16 +55,7 @@
                 <input type="text" value="@Model.NoneChoiceScore" />
             </div>
 
-            <select class="nt-qtype-sel">
-
-                <option value="Radio">Radio choice</option>
-                <option value="Multiple">Multiple Choice</option>
-                <option value="Essay" selected="">Essay</option>
-                <option value="ShortAnswer">Short answer</option>
-                <option value="Text">Text</option>
-                <option value="Image">Image</option>
-
-            </select>
+            @Html.Partial("P_Change_Question_Type","Essay")
 
             <button style="visibility: hidden" class="nt-btn-text nt-scrbtn">
                 Points

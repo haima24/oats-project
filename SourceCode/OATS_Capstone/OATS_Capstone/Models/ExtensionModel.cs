@@ -14,7 +14,7 @@ namespace OATS_Capstone.Models
             try
             {
                 var per = praction.RoundTwo() * 100;
-                percent = String.Format("{0:##}%", per);
+                percent = String.Format("{0:#0}%", per);
             }
             catch (Exception)
             {
@@ -29,7 +29,7 @@ namespace OATS_Capstone.Models
             try
             {
                 var per = praction.RoundTwo() * 100;
-                percent = String.Format("{0:##}%", per);
+                percent = String.Format("{0:#0}%", per);
             }
             catch (Exception)
             {
@@ -188,7 +188,11 @@ namespace OATS_Capstone.Models
         {
             return enumerable.Distinct(new LambdaComparer<TSource>(comparer));
         }
-        public static List<UserInTest> FilterValidMaxAttend(this IEnumerable<UserInTest> inTests)
+        public static bool Contains<TSource>(this IEnumerable<TSource> enumerable,TSource item, Func<TSource, TSource, bool> comparer)
+        {
+            return enumerable.Contains(item,new LambdaComparer<TSource>(comparer));
+        }
+        public static List<UserInTest> FilterInTestsOnAttempSetting(this IEnumerable<UserInTest> inTests)
         {
             var groups = from i in inTests
                          group i by i.UserID into InTestGroup

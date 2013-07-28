@@ -32,16 +32,7 @@
 
 
 
-            <select class="nt-qtype-sel">
-
-                <option value="Radio">Radio choice</option>
-                <option value="Multiple">Multiple Choice</option>
-                <option value="Essay">Essay</option>
-                <option value="ShortAnswer">Short answer</option>
-                <option value="Text" selected="">Text</option>
-                <option value="Image">Image</option>
-
-            </select>
+            @Html.Partial("P_Change_Question_Type","Text")
 
             <button style="visibility: hidden" class="nt-btn-text nt-scrbtn">
                 Points

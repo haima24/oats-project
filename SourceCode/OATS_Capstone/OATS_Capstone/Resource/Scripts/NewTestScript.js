@@ -1,6 +1,5 @@
 ﻿var questions;
 var emptylist;
-var listkey = "listquestion";
 var events;
 var testid;
 var userid;
@@ -83,8 +82,7 @@ function handleImportText(text) {
         $("#qpaste .nt-loader-large").show();
         //begin effect
         var questionslist = pastedText.split(/\s*\n\s*[\s*\n\s*]+/);
-        var questionGenerated = new Array();
-        $(questionslist).each(function (index, element) {
+        var allQuestions = $(questionslist).map(function (index, element) {
             var lines = element.split("\n");
             if (lines.length > 0) {
                 var question = new Object();
@@ -93,14 +91,25 @@ function handleImportText(text) {
                     //text
                     question.QuestionType = { Type: "Text" };
                     question.QuestionTitle = lines[0];
-                    htmlQuestion = $(questions.text);
                 } else {
                     //radio question
                     var trueCount = 0;
                     question.QuestionTitle = lines[0];
+                    var isMatching = false;
+                    for (var i = 0; i < lines.length; i++) {
+                        if (i > 0) {
+                            var line = lines[i];
+                            if (line.indexOf("~") >= 0) {
+                                isMatching = true;
+                            }
+                        }
+                    }
                     question.Answers = $(lines).map(function (i, o) {
                         if (i > 0) {
+                            var order = i - 1;
                             var ans = new Object();
+                            ans.SerialOrder = order;
+                            ans.Score = 0;
                             var indicator = o.substr(0, 1);
                             var length = o.length;
                             if (indicator) {
@@ -115,48 +124,47 @@ function handleImportText(text) {
                                         ans.AnswerContent = o.substr(1, length - 1);
                                         break;
                                     default:
-                                        ans.IsRight = false;
-                                        ans.AnswerContent = o;
+                                        if (isMatching) {
+                                            var begin = "";
+                                            var end = "";
+                                            var indexSymbolMatching = o.indexOf("~");
+                                            if (indexSymbolMatching >= 0) {
+                                                begin = o.substring(0, indexSymbolMatching);
+                                                end = o.substring(indexSymbolMatching + 1);
+                                            } else {
+                                                begin = o;
+                                            }
+                                            ans.IsRight = true;
+                                            ans.AnswerContent = begin;
+                                            var ansDepend = new Object();
+                                            ansDepend.IsRight = false;
+                                            ansDepend.AnswerContent = end;
+                                            ans.AnswerChilds = new Array(ansDepend);
+                                        } else {
+                                            ans.IsRight = false;
+                                            ans.AnswerContent = o;
+                                        }
                                         break;
-
                                 }
                             }
                             return ans;
                         }
                     }).convertJqueryArrayToJSArray();
                     if (trueCount <= 1) {
-                        question.QuestionType = { Type: "Radio" };
+                        if (isMatching) {
+                            question.QuestionType = { Type: "Matching" };
+                        } else {
+                            question.QuestionType = { Type: "Radio" };
+                        }
                     } else {
                         question.QuestionType = { Type: "Multiple" };
                     }
-                    htmlQuestion = $(questions.radio);
                 }
-                htmlQuestion.uniqueId();
-                var clist = $("#checklist");
-                if ($(".nt-empty-list-ph", clist).length == 1) {
-                    clist.html(htmlQuestion)
-                } else {
-                    clist.append(htmlQuestion);
-                }
-
-                var clientid = htmlQuestion.attr("id");
-                questionGenerated.push({ clientid: clientid, question: question });
+                return question;
             }
 
-        });
-        sortByNumberOrLetters();
-        var listquestion = $(questionGenerated).map(function (idex, ele) {
-            var cid = ele.clientid;
-            var ques = ele.question;
-            if (cid && ques) {
-                var obj = $("#" + cid);
-                ques.SerialOrder = obj.index();
-                ques.LabelOrder = $(".nt-qnum", obj).html();
-                return { ClientID: cid, QuestionItem: ques };
-            }
         }).convertJqueryArrayToJSArray();
-
-        addListQuestion(listquestion, function () {
+        addListQuestion(allQuestions, function () {
             //end effect
             textarea.val("");
             $("#qpaste .nt-loader-large").hide();
@@ -207,6 +215,7 @@ function initTagsOnTest() {
     $("#test-tags").autocomplete({
         minLength: 0,
         select: function (e, ui) {
+            e.stopPropagation();
             $("#test-tags").val("")
             statusSaving();
             var id = ui.item.id;
@@ -313,6 +322,7 @@ function initTagsOnQuestion() {
             $(this).autocomplete({
                 minLength: 0,
                 select: function (e, ui) {
+                    e.stopPropagation();
                     var element = $(this);
                     var line = $(this).closest(".nt-tags");
                     var container = $(".tags-container", line);
@@ -393,10 +403,21 @@ function sortByNumberOrLetters() {
 }
 function showOrHideDeleteLineAnswer() {
     $(".nt-qitem").each(function (i, o) {
-        if ($(".nt-qans.nt-qans-edit", o).length > 2) {
-            $(".nt-qansctrls .bt-delete", o).show();
-        } else {
-            $(".nt-qansctrls .bt-delete", o).hide();
+
+        var type = $(o).attr("question-type");
+        if (type == "Matching") {
+            if ($(".nt-qmatching", o).length > 2) {
+                $(".nt-qansctrls .bt-delete", o).show();
+            } else {
+                $(".nt-qansctrls .bt-delete", o).hide();
+            }
+        }
+        else {
+            if ($(".nt-qans.nt-qans-edit", o).length > 2) {
+                $(".nt-qansctrls .bt-delete", o).show();
+            } else {
+                $(".nt-qansctrls .bt-delete", o).hide();
+            }
         }
     });
 
@@ -417,7 +438,6 @@ function initDragAndDrop() {
         placeholder: 'highlight',
         cancel: "[contenteditable],input[type=text],select,textarea",
         stop: function (ev, ui) {
-            sortByNumberOrLetters();
             resortInDb();
             initImageUploadFacility();
             initEditable();
@@ -437,7 +457,6 @@ function initDragAndDrop() {
                                 cur.replaceWith(newelement);
                             }
                             resortInDb();
-                            sortByNumberOrLetters();
                             initEditable();
                             initImageUploadFacility();
                             etab.scrollToElement(newelement);
@@ -457,7 +476,6 @@ function initDragAndDrop() {
                                     cur.replaceWith(newelement);
                                 }
                                 resortInDb();
-                                sortByNumberOrLetters();
                                 initEditable();
                                 initImageUploadFacility();
                                 etab.scrollToElement(newelement);
@@ -501,7 +519,7 @@ function initEditable() {
                 data: JSON.stringify({ testid: testid, text: text }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                success: function (r) {
+                success: function (res) {
                     if (!res.success) {
                         showMessage("error", res.message);
                     } else {
@@ -748,37 +766,9 @@ function updateStartEndDate(testid, start, end) {
     });
 }
 
+
 //test facility
-function onUpdateSettingSuccess(res) {
-}
-function updateAnswer(lineElement, target) {
-    var parentContainer = lineElement.closest(".nt-qanscont");
-    if (target && target.type && target.type == "radio") {
-        $(".nt-qans", parentContainer).each(function (index, obj) {
-            if (!$(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked")) {
-                $(".nt-qansscore input[type=text]", obj).val(0);
-            }
-        });
-    }
-
-    var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
-        var answer = new Object();
-        answer.AnswerID = parseInt($(obj).attr("answer-id"));
-        answer.AnswerContent = $(".nt-qansdesc", obj).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", obj).html();
-        answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked") ? true : false;
-        var scoreString = $(".nt-qansscore input[type=text]", obj).val();
-        if (scoreString == "" || scoreString == "0") {
-            if (answer.IsRight == true) { $(".nt-qansscore input[type=text]", obj).val(1); }
-        } else if (scoreString == "1") {
-            if (answer.IsRight == false) { $(".nt-qansscore input[type=text]", obj).val(0); }
-        }
-        scoreString = $(".nt-qansscore input[type=text]", obj).val();
-        var nScore = parseFloat(scoreString);
-        answer.Score = isNaN(nScore) ? 0 : nScore;
-        answer.SerialOrder = index;
-        return answer;
-    }).convertJqueryArrayToJSArray();
-
+function ajaxUpdateAnwer(answers) {
     statusSaving();
     $.ajax({
         type: "POST",
@@ -791,15 +781,70 @@ function updateAnswer(lineElement, target) {
             if (!res.success) {
                 showMessage("error", res.message);
             } else {
-                answers
                 statusSaved();
                 checkMaxScoreAndTotalScore();
             }
         }
-
     });
 }
+function updateAnswer(lineElement, target) {
+    var parentContainer = lineElement.closest(".nt-qanscont");
+    if (target && target.type && target.type == "radio") {
+        $(".nt-qans", parentContainer).each(function (index, obj) {
+            if (!$(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked")) {
+                $(".nt-qansscore input[type=text]", obj).val(0);
+            }
+        });
+    }
+    var isMatching = parentContainer.hasAttr("data-matching");
+    var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
+        var $obj = $(obj);
+        var answer = new Object();
+        answer.AnswerID = parseInt($obj.attr("answer-id"));
+        answer.AnswerContent = $(".nt-qansdesc", obj).html() == "<i>Enter Answer</i>" ? "" : $(".nt-qansdesc", obj).html();
+
+        if (isMatching) {
+            if ($obj.hasAttr("data-matching-begin")) {
+                var matchingContainer = $obj.closest(".nt-qmatching");
+                var tb = $(".nt-qansscore input[type=text]", matchingContainer);
+                var scoreString = tb.val();
+                if (scoreString == "" || scoreString == "0") {
+                    if (answer.IsRight == true) { tb.val(1); }
+                } else if (scoreString == "1") {
+                    if (answer.IsRight == false) { tb.val(0); }
+                }
+                scoreString = tb.val();
+                var nScore = parseFloat(scoreString);
+                answer.Score = isNaN(nScore) ? 0 : nScore;
+                answer.SerialOrder = matchingContainer.index();
+                answer.IsRight = true;
+            }
+            else {
+                answer.IsRight = false;
+            }
+        }
+        else {
+            answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", $obj).attr("checked") ? true : false;
+            var tb = $(".nt-qansscore input[type=text]", $obj);
+            var scoreString = tb.val();
+            if (scoreString == "" || scoreString == "0") {
+                if (answer.IsRight == true) { tb.val(1); }
+            } else if (scoreString == "1") {
+                if (answer.IsRight == false) { tb.val(0); }
+            }
+            scoreString = tb.val();
+            var nScore = parseFloat(scoreString);
+            answer.Score = isNaN(nScore) ? 0 : nScore;
+            answer.SerialOrder = index;
+        }
+
+        return answer;
+    }).convertJqueryArrayToJSArray();
+    ajaxUpdateAnwer(answers);
+
+}
 function resortInDb() {
+    sortByNumberOrLetters();
     var questions = $("#checklist[content-tab=true] [question-id]").map(function (index, item) {
         var question = new Object();
         question.QuestionID = parseInt($(item).attr("question-id"));
@@ -865,12 +910,18 @@ function addListQuestion(list, onAfterAddListQuestion) {
         contentType: "application/json; charset=utf-8",
         success: function (res) {
             if (res.success && res.arraylist) {
+                var clist = $("#checklist");
                 $(res.arraylist).each(function (index, item) {
-                    if (item.ClientID && item.QuestionHtml) {
-                        var ele = $("#" + item.ClientID);
-                        ele.replaceWith($(item.QuestionHtml));
+                    var $item = $(item);
+                    if ($(".nt-empty-list-ph", clist).length == 1) {
+                        clist.html($item)
+                    } else {
+                        clist.append($item);
                     }
                 });
+                resortInDb();
+                initEditable();
+                initImageUploadFacility();
                 statusSaved();
                 showMessage("success", res.message);
             } else {
@@ -970,6 +1021,7 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
+    initImageUploadFacility();
     initReuseDragAndDrop();
     initDropText();
     initTagsOnTest();
@@ -1003,7 +1055,7 @@ $(function () {
                 if (tabcontent && res.generatedHtml) {
                     tabcontent.html(res.generatedHtml);
                     $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
-                    sortByNumberOrLetters();
+                    //sortByNumberOrLetters();
                     initEditable();
                     initReuseDragAndDrop();
                     initImageUploadFacility();
@@ -1040,7 +1092,6 @@ $(function () {
                     etab.append(newelement);
                 }
                 resortInDb();
-                sortByNumberOrLetters();
                 initEditable();
                 initImageUploadFacility();
                 etab.scrollToElement(newelement);
@@ -1066,7 +1117,6 @@ $(function () {
                         etab.append(newItem);
                     }
                     resortInDb();
-                    sortByNumberOrLetters();
                     initEditable();
                     initImageUploadFacility();
                     etab.scrollToElement(newItem);
@@ -1078,6 +1128,7 @@ $(function () {
         }
     });
     //separator
+
     $("#checklist[content-tab=true] .nt-qhctrls .bt-delete").live("click", function (ev) {
         var content = $(ev.target).closest(".nt-qitem.nt-qitem-edit");
         deleteQuestion($(content).attr("question-id"), function () {
@@ -1085,39 +1136,49 @@ $(function () {
             if ($("#checklist").children().length == 0) {
                 $("#checklist").html(questions.empty);
             }
-            sortByNumberOrLetters();
             resortInDb();
         });
-
-
-
     });
     //separator
     $("#checklist[content-tab=true] .nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
         if (currentEditAnswer) { $(currentEditAnswer).blur(); }
         addAnswer(parent, parent.attr("question-id"), function () {
-            sortByNumberOrLetters();
             showOrHideDeleteLineAnswer();
             initEditable();
             initDragAndDrop();
         });
     });
     //separator
-    $("#checklist[content-tab=true] .nt-qanscont .nt-qansctrls .bt-delete").live("click", function () {
+    //delete couple of matching
+    $("#checklist[content-tab=true] .nt-qanscont .nt-qmatching .nt-qansctrls .bt-delete").live("click", function () {
+        var parent = $(this).closest(".nt-qitem");
+        var ansline = $(this).closest(".nt-qmatching");
+        var ansid = ansline.attr("answer-id");
+        deleteAnswer(ansid, function () {
+            ansline.fadeOut("fast", function () {
+                $(this).remove();
+                showOrHideDeleteLineAnswer();
+            });
+
+        });
+    });
+    //delete answer of other types question
+    $("#checklist[content-tab=true] .nt-qanscont .nt-qans .nt-qansctrls .bt-delete").live("click", function () {
         var parent = $(this).closest(".nt-qitem");
         var ansline = $(this).closest(".nt-qans.nt-qans-edit");
         var ansid = ansline.attr("answer-id");
         deleteAnswer(ansid, function () {
-            ansline.remove();
-            showOrHideDeleteLineAnswer();
+            ansline.fadeOut("fast", function () {
+                $(this).remove();
+                showOrHideDeleteLineAnswer();
+            });
         });
     });
     //separator
-    $("#checklist[content-tab=true] .nt-qtype-sel-predef,.nt-qtype-sel").live("change", function (ev) {
+    $("#checklist[content-tab=true] .nt-qtype-sel").live("change", function (ev) {
         var questiontype = $(this).val();
         var itemParent = $(this).closest(".nt-qitem");
-        var itemid = itemParent.attr("id");
         var questionidString = itemParent.attr("question-id");
         if (questionidString) {
             updateQuestionType(questionidString, questiontype, function (html) {
@@ -1147,7 +1208,7 @@ $(function () {
         handleImportText(text);
     });
     //separator
-    $("#checklist[content-tab=true] .nt-qitem[question-type=Essay] .nt-qoepts input[type=text],#checklist[content-tab=true] .nt-qitem[question-type=Essay][question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
+    $("#checklist[content-tab=true] .nt-qitem[question-type=Essay] .nt-qoepts input[type=text],#checklist[content-tab=true] .nt-qitem[question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
         var questionIdString = $(this).closest(".nt-qitem").attr("question-id");
         var questionid = parseInt(questionIdString);
         var scoreString = $(this).val();
@@ -1263,7 +1324,6 @@ $(function () {
                         etab.append(newItem);
                     }
                     resortInDb();
-                    sortByNumberOrLetters();
                     initEditable();
                     initImageUploadFacility();
                     etab.scrollToElement(newItem);
@@ -1289,8 +1349,12 @@ $(function () {
         }
     });
     //separator
-    $(".nt-qitem .nt-qans").live("change", function (ev) {
+    $("#checklist[content-tab=true] .nt-qitem .nt-qans").live("change", function (ev) {
         updateAnswer($(this).closest(".nt-qans"), ev.target);
+    });
+    $("#checklist[content-tab=true] .nt-qitem .nt-qmatching").live("change", function (ev) {
+        var lineContainer = $(this).closest(".nt-qmatching");
+        updateAnswer(lineContainer, ev.target);
     });
     //separator
     $("#eventDuplicate").live("click", function (ev) {
@@ -1334,11 +1398,11 @@ $(function () {
         });
     });
     $("button.nt-btn-rm").live("click", function (ev) {
-        var row=$(this).closest("tr");
+        var row = $(this).closest("tr");
         var userid = parseInt(row.attr("user-id"));
         $.post("/Tests/RemoveUser", { testid: testid, userid: userid }, function (res) {
             if (res.success) {
-                row.fadeOut("slow", function () { $(this).remove();});
+                row.fadeOut("slow", function () { $(this).remove(); });
                 statusSaved();
             } else {
                 showMessage("error", res.message);
@@ -1511,7 +1575,7 @@ $(function () {
                 var container = control.closest(".modal");
                 var name = tbName.val();
                 var email = tbEmail.val();
-                $.post("/Tests/InviteUserOutSide", { testid: testid, email: email,name:name }, function (res) {
+                $.post("/Tests/InviteUserOutSide", { testid: testid, email: email, name: name }, function (res) {
                     if (res.success) {
                         tbName.val("");
                         tbEmail.val("");
@@ -1651,7 +1715,7 @@ $(function () {
                 initDragAndDrop();
                 initEditable();
                 initImageUploadFacility();
-                sortByNumberOrLetters();
+                //sortByNumberOrLetters();
                 initPopover();
                 $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
             } else {
@@ -1863,6 +1927,14 @@ $(function () {
             $.post("/Tests/UpdateUserNoneChoiceScore", { questionid: questionid, userid: userid, score: value }, function (res) {
                 if (res.success) {
                     statusSaved();
+                    if (res.data) {
+                        var checkedItems = $("#respUsers .nt-clb-item").filter(function () {
+                            return $("input[type=checkbox]:checked", this).length > 0;
+                        });
+                        if (checkedItems.length == 1) {
+                            $(".nt-clb-item-desc", checkedItems).html(res.data);
+                        }
+                    }
                 } else {
                     showMessage("error", res.message);
                 }
@@ -1983,7 +2055,7 @@ $(function () {
     hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {
         if (tid && generatedHtml) {
             if (tid == testid) {
-                
+
                 var comments = $("#comments[student]");
                 if (comments.length > 0) {
                     var ele = $(generatedHtml);

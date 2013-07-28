@@ -355,6 +355,10 @@ i.t-icon.i-img {
     background: url(./img/img.png) no-repeat;
 }
 
+i.t-icon.i-matching {
+    background: url(./img/matching.png) no-repeat;
+}
+
 i.t-icon.i-setting {
     background: url(./img/setting.png) no-repeat;
 }
@@ -458,6 +462,10 @@ i, cite, em, var, address, dfn {
     #container .nt-dnd-example-text.active pre {
         border: 1px dashed #5993e7;
     }
+
+.popover {
+    max-width: 400px;
+}
 
 #test-introduction {
     color: white;
@@ -566,23 +574,26 @@ i, cite, em, var, address, dfn {
     line-height: 18px;
 }
 
-[contenteditable=true]:hover, [contenteditable=true].nt-contedhover {
+[contenteditable=true]:not(.normal-editable):hover, [contenteditable=true]:not(.normal-editable).nt-contedhover {
     outline: 1px dashed #c69c6d;
 }
 
-    [contenteditable=true].nt-contedhover p {
-        position: relative;
-    }
+[contenteditable=true].nt-contedhover p {
+    position: relative;
+}
 
 [contenteditable=true]:focus {
     outline: 0;
     color: #444444;
-    background-color: #ffecbb;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     border-radius: 5px;
+}
+
+[contenteditable=true]:not(.normal-editable):focus {
+    background-color: #ffecbb;
 }
 
 [contenteditable=true] p {
@@ -706,39 +717,41 @@ i, cite, em, var, address, dfn {
         line-height: 18px;
     }
 
-    #sidebar .ui-state-active, #sidebar .ui-widget-content .ui-state-active, #sidebar .ui-widget-header .ui-state-active,
-    #sidebar .ui-state-default, #sidebar .ui-widget-content .ui-state-default, #sidebar .ui-widget-header .ui-state-default {
-        border: none;
-        background: transparent;
-        font-weight: bold;
-        font-family: "Open Sans", sans-serif;
+
+
+.disable-accord-ui .ui-widget-content {
+    border: none;
+    background: transparent;
+}
+
+.disable-accord-ui .ui-state-active, #sidebar .ui-widget-content .ui-state-active, #sidebar .ui-widget-header .ui-state-active,
+.disable-accord-ui .ui-state-default, #sidebar .ui-widget-content .ui-state-default, #sidebar .ui-widget-header .ui-state-default {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    font-family: "Open Sans", sans-serif;
+}
+
+.disable-accord-ui.ui-accordion .ui-accordion-header {
+    cursor: inherit;
+}
+
+    .disable-accord-ui.ui-accordion .ui-accordion-header:not(.ui-state-active) {
+        cursor: pointer;
     }
 
-    #sidebar .ui-widget-content {
-        border: none;
-        background: transparent;
-    }
+.disable-accord-ui.ui-accordion .ui-accordion-icons {
+    padding: 10px;
+}
 
-    #sidebar.ui-accordion .ui-accordion-header {
-        cursor: inherit;
-    }
+.disable-accord-ui.ui-accordion .ui-accordion-content {
+    padding: 0;
+    border-top: 0;
+}
 
-        #sidebar.ui-accordion .ui-accordion-header:not(.ui-state-active) {
-            cursor: pointer;
-        }
-
-    #sidebar.ui-accordion .ui-accordion-icons {
-        padding: 10px;
-    }
-
-    #sidebar.ui-accordion .ui-accordion-content {
-        padding: 0;
-        border-top: 0;
-    }
-
-    #sidebar.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
-        display: none;
-    }
+.disable-accord-ui.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+    display: none;
+}
 
 .t-accord-header.ui-state-active {
     cursor: default;
@@ -975,39 +988,140 @@ i, cite, em, var, address, dfn {
     border-radius: 12px;
 }
 
+#checklist .nt-qitem .nt-qanscont {
+    position: relative;
+}
+
+    #checklist .nt-qitem .nt-qanscont .painter {
+        position: absolute;
+    }
 
 #checklist .nt-qitem .nt-qans {
     position: relative;
-    overflow: hidden;
     padding: 6px 10px 5px 17px;
     font-size: 14px;
     min-height: 28px;
     border-bottom: 1px solid white;
 }
-#checklist .nt-qitem .nt-qmatching {
 
+#checklist .nt-qitem .nt-qmatching {
 }
-#checklist .nt-qitem .nt-qmatching .nt-qans .nt-qansdesc {
-    width:inherit;
-}
-#checklist .nt-qitem .nt-qmatching .begin{
-    float:left;
-    width:40%
-}
+
+    #checklist .nt-qitem .nt-qmatching .nt-qanselem {
+        position: relative;
+    }
+
+    #checklist .nt-qitem .nt-qmatching > div:not(:last-child) {
+        float: left;
+    }
+
+    #checklist .nt-qitem .nt-qmatching .nt-qmatching-couple {
+        width: 85%;
+    }
+
+    #checklist .nt-qitem .nt-qmatching.nt-qmatching-relative .nt-qmatching-couple {
+        width: 80%;
+    }
+
+    #checklist .nt-qitem .nt-qmatching .nt-qansctrls {
+        display: none;
+        position: absolute;
+        top: 8px;
+        right: 10px;
+    }
+
+    #checklist .nt-qitem .nt-qmatching .nt-qansscore {
+        display: none;
+        position: absolute;
+        overflow: hidden;
+        right: 50px;
+        top: 0;
+        width: 8%;
+        background: rgba(225, 205, 155, 0.92);
+    }
+
+        #checklist .nt-qitem .nt-qmatching .nt-qansscore input[type=text] {
+            position: relative;
+            width: 60%;
+            margin: 6px;
+        }
+
+    #checklist .nt-qitem .nt-qmatching.nt-qmatching-hover {
+        position: relative;
+        border-bottom: 1px solid white;
+    }
+
+    #checklist .nt-qitem .nt-qmatching.nt-qmatching-relative {
+        position: relative;
+    }
+
+    #checklist .nt-qitem .nt-qmatching.nt-qmatching-hover:hover {
+        background-color: #f8f2e4;
+        border-bottom: 1px solid gainsboro;
+    }
+
+        #checklist .nt-qitem .nt-qmatching.nt-qmatching-hover:hover .nt-qansctrls {
+            display: block;
+        }
+
+    #checklist .nt-qitem .nt-qmatching .nt-qans .nt-qansdesc, #checklist .nt-qitem .nt-qmatching.nt-qans .nt-qansdesc {
+        width: inherit;
+    }
+
+    #checklist .nt-qitem .nt-qmatching.nt-qmatching-relative.nt-qans .line {
+        top: 15px;
+        width: 10%;
+    }
+
+    #checklist .nt-qitem .nt-qmatching .line {
+        position: relative;
+        float: left;
+        width: 5.3%;
+        top: 20px;
+        height: 3px;
+        background-color: rgb(51, 102, 204);
+    }
+
+    #checklist .nt-qitem .nt-qmatching .begin {
+        padding-right: 0px;
+        float: left;
+        width: 45%;
+    }
+
     #checklist .nt-qitem .nt-qmatching .nt-conted-ph-cont {
-        width:90%;
+        float: left;
+        width: 85%;
     }
-    #checklist .nt-qitem .nt-qmatching .begin>div:first-child,#checklist .nt-qitem .nt-qmatching .end>div:first-child {
-        float:left;
+
+    #checklist .nt-qitem .nt-qmatching .begin > div:first-child, #checklist .nt-qitem .nt-qmatching .end > div:first-child {
+        float: left;
     }
-    #checklist .nt-qitem .nt-qmatching .begin>div:last-child,#checklist .nt-qitem .nt-qmatching .end>div:last-child {
+
+    #checklist .nt-qitem .nt-qmatching .begin > div:last-child, #checklist .nt-qitem .nt-qmatchipopong .end > div:last-child {
         float: right;
     }
-    
-#checklist .nt-qitem .nt-qmatching .end{
-    float:right;
-    width:40%;
-}
+
+    #checklist .nt-qitem .nt-qmatching .matcher {
+        padding: 3px 6px;
+        border: 1px solid lightgray;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        #checklist .nt-qitem .nt-qmatching .matcher.matcher-hover {
+            border: 1px dashed lightgray;
+        }
+
+    #checklist .nt-qitem .nt-qmatching .end {
+        padding-left: 0px;
+        float: right;
+        width: 45%;
+    }
+
 .nt-qans-edit > div {
     float: left;
 }
@@ -1028,7 +1142,6 @@ i, cite, em, var, address, dfn {
     position: relative;
     z-index: 1004;
     outline: none;
-    border: none;
     width: 100%;
 }
 
@@ -1253,7 +1366,7 @@ i, cite, em, var, address, dfn {
             width: 40px;
         }
 
-#checklist .nt-qitem.nt-qitem-edit-inact:hover .nt-qans.nt-qans-hover:hover, #checklist .nt-qitem.nt-qitem-edit-act .nt-qans.nt-qans-hover:hover {
+#checklist .nt-qitem.nt-qitem-edit-inact .nt-qans.nt-qans-hover:hover, #checklist .nt-qitem.nt-qitem-edit-act .nt-qans.nt-qans-hover:hover {
     background-color: #f8f2e4;
     border-bottom: 1px solid gainsboro;
 }
@@ -3110,9 +3223,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     white-space: nowrap;
     font-size: x-large;
     line-height: 40px;
-    max-width: 700px;
     position: relative;
-    left: -5%;
+    float: left;
+    width: 60%;
 }
 
 #container.nt-de-cont .nt-checklist-cont {
@@ -3201,13 +3314,18 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     text-align: right;
 }
 
+#checklist .nt-qitem .nt-qmiddle .nt-qrespinput {
+    margin-bottom: 16px;
+}
 
-#checklist .nt-qitem .nt-qmiddle div.nt-qrespinput {
+#checklist .nt-qitem .nt-qmiddle textarea.nt-qrespinput {
+    padding: 5px;
     min-height: 18px;
-    width: 696px;
+    width: 95%;
 }
 
 .nt-mockinput, #checklist .nt-qitem .nt-qtext .nt-fitb > span, #checklist .nt-qitem .nt-qmiddle div.nt-qrespinput {
+    min-height: 27px;
     outline: none;
     padding: 4px 6px;
     border: 1px solid #cccccc;
@@ -3280,9 +3398,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     font-size: 14px;
 }
 
-#checklist .nt-qitem .nt-qmiddle .nt-qrespinput {
-    margin-bottom: 16px;
-}
+
 
 
 #container.nt-de-cont .nt-checklist-cont #checklist .nt-qitem .nt-qtext.nt-qimg-desc {
@@ -3835,6 +3951,23 @@ article, time {
     margin: 10px 20px 5px 20px;
     border-bottom: 1px solid #ececec;
 }
+
 .nt-empty-msg {
-    padding:20px;
+    padding: 20px;
 }
+
+#checklist .nt-qitem .nt-qmiddle .btn-toolbar {
+    visibility: hidden;
+}
+
+#checklist .nt-qitem .nt-qmiddle:hover .btn-toolbar {
+    visibility: visible;
+}
+
+#checklist .nt-qitem .btn-toolbar .btn-group {
+    margin-bottom: 5px;
+}
+
+    #checklist .nt-qitem .btn-toolbar .btn-group .btn {
+        padding: 4px 8px;
+    }

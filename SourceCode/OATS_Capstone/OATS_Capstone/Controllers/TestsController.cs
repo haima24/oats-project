@@ -614,7 +614,7 @@ namespace OATS_Capstone.Controllers
             common.AddNewQuestion(testid, type);
             return Json(new { common.generatedHtml, common.success, common.message });
         }
-        public JsonResult AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
+        public JsonResult AddListQuestion(int testid, List<Question> listquestion)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -1004,7 +1004,7 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.UpdateUserNoneChoiceScore(questionid, userid, score);
-            return Json(new { common.message, common.success });
+            return Json(new { common.message, common.success,common.data });
         }
 
         public ActionResult ScoreToExcel(int testid, List<int> userids)

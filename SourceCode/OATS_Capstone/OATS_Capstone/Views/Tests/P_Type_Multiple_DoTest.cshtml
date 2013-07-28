@@ -1,7 +1,7 @@
 ﻿@model OATS_Capstone.Models.Question
-<div class="nt-qitem" question-type="Multiple" question-id=@Model.QuestionID>
+<div class="nt-qitem" question-type="Multiple" question-id="@Model.QuestionID">
     <div class="nt-qnum "></div>
-    <a class="nt-qanchor" name="Qundefined"></a>
+    <a class="nt-qanchor"></a>
     @{
         var detail = Model.Test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "SQP");
     }
@@ -32,7 +32,7 @@
     <div class="nt-qfoot">
         <div class="nt-qrep" style="display: none">
             <span>Correct:</span><span class="nt-crate"></span>
-            <span>Pbs:</span><span class="nt-pbs nt-guide" data-guide="resp_q_pbs"></span>
+            <span>Pbs:</span><span class="nt-pbs"></span>
         </div>
     </div>
 </div>

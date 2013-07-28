@@ -10,6 +10,7 @@ namespace OATS_Capstone.Models
 {
     public class ScoreTest
     {
+        public List<UserInTest> InTests { get; set; }
         public string TestTitle { get; set; }
         public List<ScoreUserItem> ScoreUserList { get; set; }
         public decimal? TotalScoreOfTest { get; set; }
@@ -21,7 +22,7 @@ namespace OATS_Capstone.Models
         public List<ScoreOnUser> UsersScores { get; set; }
         public ScoreTest(Test test)
         {
-            var details = test.UserInTests.FilterValidMaxAttend().Select(i => i.UserID).ToList();
+            var details = test.UserInTests.FilterInTestsOnAttempSetting().Select(i => i.UserID).ToList();
             InitScoreTest(test, details);
         }
         public ScoreTest(Test test, List<int> checkIds)
@@ -42,9 +43,9 @@ namespace OATS_Capstone.Models
             {
                 return i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
             });
-            var details = test.UserInTests.FilterValidMaxAttend();
+            InTests = test.UserInTests.FilterInTestsOnAttempSetting();
             ScoreUserList = new List<ScoreUserItem>();
-            details.ForEach(i =>
+            InTests.ForEach(i =>
             {
                 if (i.User != null)
                 {
@@ -62,13 +63,13 @@ namespace OATS_Capstone.Models
                 Overall = new ScoreStatistics();
                 Overall.Name = "Overall";
                 var totalScore = test.Questions.TotalScore();
-                var groupScoreList = test.UserInTests.FilterValidMaxAttend().Select(i =>
+                var groupScoreList = InTests.Select(i =>
                 {
                     return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
                 });
                 var stdevScore = groupScoreList.StandardDeviation();
                 var averageScore = groupScoreList.Average();
-                var userScoreList = test.UserInTests.FilterValidMaxAttend().Where(k => checkIds.Contains(k.UserID)).Select(i =>
+                var userScoreList = InTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
                     return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
                 });
@@ -80,7 +81,7 @@ namespace OATS_Capstone.Models
                 Overall.GroupSTDEVScore = new ScoreStatistic(stdevScore, 1);
                 Overall.ScoreList = userScoreList.ToList();
 
-                UsersScores = test.UserInTests.FilterValidMaxAttend().Where(k => checkIds.Contains(k.UserID)).Select(i =>
+                UsersScores = InTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
                     var userScore = new ScoreOnUser();
                     userScore.Name = !string.IsNullOrEmpty(i.User.Name) ? i.User.Name : i.User.UserMail;
@@ -303,7 +304,7 @@ namespace OATS_Capstone.Models
         }
         public ScoreUserItem(User user, Test test)
         {
-            var inTest = test.UserInTests.FirstOrDefault(i => i.UserID == user.UserID);
+            var inTest = test.UserInTests.FilterInTestsOnAttempSetting().FirstOrDefault(i => i.UserID == user.UserID);
             if (inTest != null)
             {
                 var totalScoreOfTest = inTest.Test.Questions.TotalScore();

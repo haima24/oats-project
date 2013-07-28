@@ -1,0 +1,59 @@
+﻿@model String
+<select class="nt-qtype-sel">
+    @if (Model == "Radio")
+    {
+        <option value="Radio" selected="selected">Radio choice</option>
+    }
+    else
+    {
+        <option value="Radio">Radio choice</option>
+    }
+    @if (Model == "Multiple")
+    {
+        <option value="Multiple" selected="selected">Multiple Choice</option>
+    }
+    else
+    {
+        <option value="Multiple">Multiple Choice</option>
+    }
+    @if (Model == "Essay")
+    { 
+        <option value="Essay" selected="selected">Essay</option>
+    }
+    else
+    {
+        <option value="Essay">Essay</option>
+    }
+    @if (Model == "ShortAnswer")
+    {
+        <option value="ShortAnswer" selected="selected">Short answer</option>
+    }
+    else
+    {
+        <option value="ShortAnswer">Short answer</option>
+    }
+    @if (Model == "Text")
+    {
+        <option value="Text" selected="selected">Text</option>
+    }
+    else
+    {
+        <option value="Text">Text</option>
+    }
+    @if (Model == "Image")
+    {
+        <option value="Image" selected="selected">Image</option>
+    }
+    else
+    {
+        <option value="Image">Image</option>
+    }
+    @if (Model == "Matching")
+    {
+        <option value="Matching" selected="selected">Matching</option>
+    }
+    else
+    {
+        <option value="Matching">Matching</option>
+    }
+</select>

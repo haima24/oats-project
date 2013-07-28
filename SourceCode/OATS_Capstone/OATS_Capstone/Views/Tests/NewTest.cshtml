@@ -3,6 +3,7 @@
     <link href="~/Bootstrap/css/jqbar.css" rel="stylesheet" />
     <script src="~/Bootstrap/js/jqbar.js"></script>
     <script src="~/Resource/Scripts/Tests_Layout.js"></script>
+    <script src="~/Resource/Scripts/NewTestScript.js"></script>
 }
 @{
     ViewBag.Title = "Index";
@@ -12,7 +13,6 @@
     var authen = AuthenticationSessionModel.Instance();
     var user = authen.User;
 }
-<script src="~/Resource/Scripts/NewTestScript.js"></script>
 @if (Model != null)
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
