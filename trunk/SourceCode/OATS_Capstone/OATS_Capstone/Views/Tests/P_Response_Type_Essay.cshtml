@@ -15,7 +15,7 @@
     <div class="nt-qmiddle">
         @if (Model.IsOneIdChecked)
         { 
-            <div class="nt-qrespinput">@Model.NonChoiceText</div>
+            <div class="nt-qrespinput">@Html.Raw(Model.NonChoiceText)</div>
         }
         else
         {

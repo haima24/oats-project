@@ -75,16 +75,7 @@
                     </button>
 
 
-                    <select class="nt-qtype-sel-predef">
-
-                        <option value="Radio">Radio choice</option>
-                        <option value="Multiple" selected="">Multiple Choice</option>
-                        <option value="Essay">Essay</option>
-                        <option value="ShortAnswer">Short answer</option>
-                        <option value="Text">Text</option>
-                        <option value="Image">Image</option>
-
-                    </select>
+                    @Html.Partial("P_Change_Question_Type","Multiple")
 
                     <button class="nt-btn-text nt-scrbtn">
                         Points

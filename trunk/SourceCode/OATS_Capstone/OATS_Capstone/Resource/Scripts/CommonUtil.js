@@ -1,7 +1,12 @@
 ﻿function initReplyAreas() {
     $(".reply-container textarea.reply-area").autosize({ append: "\n" });
 }
-
+$.fn.hasAttr = function (attribute) {
+    return $(this).is(function () {
+        var item = $(this);
+        return typeof (item.attr(attribute)) != "undefined";
+    });
+};
 $.fn.disable = function () {
     this.each(function () {
         $(this).attr("disabled", "disabled");
@@ -43,7 +48,7 @@ function showMessage(type, message, heading) {
         });
     }, 5000);
 }
-function showCountDownMessage(type, message,redirectMessage, after) {
+function showCountDownMessage(type, message, redirectMessage, after) {
     var popup = $("#message-popup");
     $("#message-popup .close").live("click", function () {
         popup.fadeOut("fast", function () {
@@ -261,7 +266,7 @@ $.fn.extend({
                 if (!isExcept) {
                     if (!$(e.target).is(self) && $(e.target).closest(self).length == 0) {
                         if (options.callback && typeof (options.callback) === "function") {
-                            options.callback(e,self);
+                            options.callback(e, self);
                         }
                     }
                 }
@@ -278,12 +283,12 @@ $.fn.extend({
             var height = tb.height();
             var list = $(".nt-tag-hitlist", dropdown);
             list.css({ top: pos.top + height, left: pos.left });
-        }; 
+        };
         var reSearch = function () {
             $(".nt-hitlist .nt-item", dropdown).remove();
-             if (options.source && typeof (options.source) === "function") {
-                                    options.source(text, res, addedTags);
-                                }
+            if (options.source && typeof (options.source) === "function") {
+                options.source(text, res, addedTags);
+            }
         };
         var addedTags = new Array(); //list of int
         var items = new Array();
@@ -327,8 +332,8 @@ $.fn.extend({
                 $(e).each(function (i, ele) {
                     var tid = $(ele).attr("id");
                     var isNotIn = $.inArray(tid, addedTags) < 0;
-                    var currentCount = $(".nt-item", list).length+1;
-                    if (tid && isNotIn&&currentCount<=options.maxTags) {
+                    var currentCount = $(".nt-item", list).length + 1;
+                    if (tid && isNotIn && currentCount <= options.maxTags) {
                         var nElement = $("<div>").addClass("nt-item");
                         nElement.append($("<i>").addClass("t-icon").addClass("i-tag"));
                         var id = $(ele).attr("id");
@@ -377,7 +382,7 @@ $.fn.extend({
                 var text = $(this).val();
                 $(".nt-tag-hitlist .nt-item", dropdown).remove();
                 if (options.tagsource && typeof (options.tagsource) === "function") {
-                    
+
                     options.tagsource(text, restag);
 
                 }
@@ -450,7 +455,7 @@ $.fn.extend({
                         var item = $(items).filter(function () {
                             return clickItem.is($(this).attr("key"));
                         });
-                        if (item.length>0) {
+                        if (item.length > 0) {
                             if (options.select && typeof (options.select) === "function") {
                                 options.select(item.attr("value"), clickItem);
                             }
@@ -580,7 +585,9 @@ $.fn.extend({
         });
     }
 });
-
+function random(range) {
+    return Math.floor(Math.random() * range);
+}
 function statusSaving() {
     $("#savestatus .nt-desc").html("Saving...");
     $("#savestatus").fadeIn("slow");

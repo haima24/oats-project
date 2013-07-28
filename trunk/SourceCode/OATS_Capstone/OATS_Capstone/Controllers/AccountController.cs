@@ -12,7 +12,6 @@ namespace OATS_Capstone.Controllers
     {
         //
         // GET: /Account/
-
         public ActionResult Index()
         {
             return View();

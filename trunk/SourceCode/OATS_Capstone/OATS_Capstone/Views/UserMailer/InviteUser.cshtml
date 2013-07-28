@@ -7,8 +7,12 @@
 <div>
     <p>Dear @ViewBag.UserName,</p>
     <p>You have invited to a test which created by @ViewBag.TeacherName</p>
+    <p>Test title: @ViewBag.TestTitle</p>
     <p>Please sign-in and follow this link <a href="@ViewBag.Link">@ViewBag.Link</a> to do the test.</p>
     <p><b>Note:</b> During this test, you can access anonymously by following: <a href="@ViewBag.AnonymousLink">@ViewBag.AnonymousLink</a></p>
+    @if (ViewBag.AccessCode != null) { 
+    <p>This test require access code. Access code: <b>@ViewBag.AccessCode</b></p>
+    }
     <p>Thanks and best regard,</p>
     <p>Admin of OATS.</p>
 </div>

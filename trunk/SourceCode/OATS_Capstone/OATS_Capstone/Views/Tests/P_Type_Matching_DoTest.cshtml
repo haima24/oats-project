@@ -1,0 +1,74 @@
+﻿@using OATS_Capstone.Models
+@model OATS_Capstone.Models.Question
+@{
+    var ansBegin = Model.Answers.Where(i => !i.DependencyAnswerID.HasValue);
+    var ansEnd = Model.Answers.Where(i => i.DependencyAnswerID.HasValue);
+    var count = 0;
+    if (ansBegin.Count() == ansEnd.Count())
+    {
+        count = ansBegin.Count();
+    }
+}
+<div class="nt-qitem" question-type="Matching" question-id="@Model.QuestionID">
+    <div class="nt-qnum "></div>
+    <a class="nt-qanchor"></a>
+    @{
+        var detail = Model.Test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "SQP");
+    }
+    @if (detail.IsActive)
+    {
+        <div class="nt-qmaxpts">@Model.Answers.Sum(i => i.Score < 0 ? 0 : i.Score)</div>
+    }
+
+    <div class="nt-qtext ">
+        <p>@Model.QuestionTitle</p>
+    </div>
+
+    <div class="nt-qanscont nt-sortable">
+        <div class="painter"></div>
+        @for (int i = 0; i < count; i++)
+        {
+            var beginItem = ansBegin.ElementAtOrDefault(i);
+            var endItem = ansEnd.ElementAtOrDefault(i);
+            <div class="nt-qmatching">
+                <div class="nt-qmatching-couple">
+                    @if (beginItem != null)
+                    {
+                        <div class="begin nt-qans" answer-id="@beginItem.AnswerID">
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="nt-qansdesc">
+                                    <p>@beginItem.AnswerContent</p>
+                                </div>
+                            </div>
+                            <div class="nt-qanselem">
+                                <div class="matcher"><i class="t-icon i-matching"></i></div>
+                            </div>
+                        </div>
+                    }
+                    @if (endItem != null)
+                    {
+                        <div class="end nt-qans" answer-id="@endItem.AnswerID">
+                            <div class="nt-qanselem">
+                                <div class="matcher"><i class="t-icon i-matching"></i></div>
+                            </div>
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="nt-qansdesc">
+                                    <p>@endItem.AnswerContent</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        }
+    </div>
+
+    <div class="nt-qfoot">
+        <div class="nt-qrep" style="display: none">
+            <span>Correct:</span><span class="nt-crate"></span>
+            <span>Pbs:</span><span class="nt-pbs"></span>
+        </div>
+    </div>
+</div>

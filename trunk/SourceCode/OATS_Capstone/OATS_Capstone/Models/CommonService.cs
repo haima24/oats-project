@@ -17,6 +17,13 @@ namespace OATS_Capstone.Models
     public delegate String OnRenderPartialViewHandlerWithParameter(object model, object parameter);
     public class CommonService
     {
+        object _data = null;
+
+        public object data
+        {
+            get { return _data; }
+            set { _data = value; }
+        }
 
         public event OnRenderPartialViewHandler OnRenderPartialViewToString;
         public event OnRenderPartialViewHandler OnRenderSubPartialViewToString;
@@ -354,6 +361,7 @@ namespace OATS_Capstone.Models
                             answer.IsRight = k.IsRight;
                             answer.Score = k.Score;
                             answer.SerialOrder = k.SerialOrder;
+                            answer.DependencyAnswerID = k.DependencyAnswerID;
                             question.Answers.Add(answer);
                         });
                         test.Questions.Add(question);
@@ -1082,10 +1090,37 @@ namespace OATS_Capstone.Models
                     question.QuestionType = dbType;
                     if (dbType.Type == "Radio" || dbType.Type == "Multiple")
                     {
-                        var ans1 = new Answer() { AnswerContent = string.Empty };
-                        var ans2 = new Answer() { AnswerContent = string.Empty };
+                        var ans1 = new Answer() { AnswerContent = string.Empty, SerialOrder = 0, Score = 0 };
+                        var ans2 = new Answer() { AnswerContent = string.Empty, SerialOrder = 1, Score = 0 };
                         question.Answers.Add(ans1);
                         question.Answers.Add(ans2);
+                    }
+                    if (dbType.Type == "Essay" || dbType.Type == "ShortAnswer")
+                    {
+                        question.NoneChoiceScore = 0;
+                    }
+                    if (dbType.Type == "Matching")
+                    {
+                        //create two couple->four answer
+                        //couple 1
+                        var c1Ans1 = new Answer { AnswerContent = string.Empty, SerialOrder = 0 };
+                        c1Ans1.Score = 1;
+                        c1Ans1.IsRight = true;
+                        var c1Ans2 = new Answer { AnswerContent = string.Empty };
+                        c1Ans2.IsRight = false;
+                        c1Ans1.AnswerChilds.Add(c1Ans2);
+                        //couple 2
+                        var c2Ans1 = new Answer { AnswerContent = string.Empty, SerialOrder = 1 };
+                        c2Ans1.IsRight = true;
+                        c2Ans1.Score = 1;
+                        var c2Ans2 = new Answer { AnswerContent = string.Empty };
+                        c2Ans2.IsRight = false;
+                        c2Ans1.AnswerChilds.Add(c2Ans2);
+
+                        question.Answers.Add(c1Ans1);
+                        question.Answers.Add(c1Ans2);
+                        question.Answers.Add(c2Ans1);
+                        question.Answers.Add(c2Ans2);
                     }
                     test.Questions.Add(question);
                     if (db.SaveChanges() > 0)
@@ -1106,7 +1141,7 @@ namespace OATS_Capstone.Models
 
         }
 
-        public void AddListQuestion(int testid, List<QuestionItemTemplate> listquestion)
+        public void AddListQuestion(int testid, List<Question> listquestion)
         {
             success = false;
             arraylist = new ArrayList();
@@ -1117,10 +1152,11 @@ namespace OATS_Capstone.Models
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
                 {
-                    listquestion.ForEach(delegate(QuestionItemTemplate item)
+                    var listSuccess = new List<Question>();
+                    listquestion.ForEach(delegate(Question item)
                     {
 
-                        var qItem = item.QuestionItem;
+                        var qItem = item;
                         if (qItem != null)
                         {
                             var type = qItem.QuestionType.Type;
@@ -1129,9 +1165,24 @@ namespace OATS_Capstone.Models
                             {
                                 qItem.QuestionType = realType;
                             }
+                            foreach (var ans in qItem.Answers)
+                            {
+                                foreach (var child in ans.AnswerChilds)
+                                {
+                                    if (string.IsNullOrEmpty(child.AnswerContent))
+                                    {
+                                        child.AnswerContent = string.Empty;
+                                    }
+                                }
+                                if (string.IsNullOrEmpty(ans.AnswerContent))
+                                {
+                                    ans.AnswerContent = string.Empty;
+                                }
+                            }
                             qItem.QuestionTitle = qItem.QuestionTitle ?? string.Empty;
                             qItem.TextDescription = qItem.TextDescription ?? string.Empty;
                             test.Questions.Add(qItem);
+                            listSuccess.Add(qItem);
                         }
                     });
 
@@ -1139,15 +1190,14 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         message = "Import questions complete.";
-                        listquestion.ForEach(delegate(QuestionItemTemplate item)
+                        listSuccess.ForEach(delegate(Question item)
                         {
                             var html = String.Empty;
                             if (OnRenderPartialViewToString != null)
                             {
-                                html = OnRenderPartialViewToString.Invoke(item.QuestionItem);
+                                html = OnRenderPartialViewToString.Invoke(item);
+                                arraylist.Add(html);
                             }
-
-                            arraylist.Add(new { ClientID = item.ClientID, QuestionHtml = html });
                         });
                     }
                 }
@@ -1169,15 +1219,42 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
-                var ans = new Answer();
-                ans.AnswerContent = String.Empty;
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
                 if (question != null)
                 {
+                    //get serial
                     var maxSerial = question.Answers.Max(k => k.SerialOrder);
-                    if (maxSerial.HasValue) { ans.SerialOrder = maxSerial.Value + 1; }
-                    else { ans.SerialOrder = 0; }
-                    question.Answers.Add(ans);
+                    var serialOrder = 0;
+                    if (maxSerial.HasValue)
+                    {
+                        serialOrder = maxSerial.Value + 1;
+                    }
+                    else
+                    {
+                        serialOrder = 0;
+                    }
+
+                    //handle question
+                    if (question.QuestionType.Type == "Matching")
+                    {
+                        var ans1 = new Answer() { AnswerContent = string.Empty };
+                        ans1.Score = 1;
+                        ans1.SerialOrder = serialOrder;
+                        ans1.IsRight = true;
+                        var ans2 = new Answer() { AnswerContent = string.Empty };
+                        ans2.IsRight = false;
+                        ans1.AnswerChilds.Add(ans2);
+                        question.Answers.Add(ans1);
+                        question.Answers.Add(ans2);
+                    }
+                    else
+                    {
+
+                        var ans = new Answer();
+                        ans.AnswerContent = String.Empty;
+                        ans.SerialOrder = serialOrder;
+                        question.Answers.Add(ans);
+                    }
                     if (db.SaveChanges() > 0)
                     {
                         if (OnRenderPartialViewToString != null)
@@ -1284,19 +1361,20 @@ namespace OATS_Capstone.Models
                     var question = ans.Question;
                     if (question != null)
                     {
-                        //if (question.UserInTestDetails.Count > 0)
-                        //{
-                        //    success = false;
-                        //    message = "This Question Already In Use.";
-                        //}
-                        //else
-                        //{
+                        var answerChilds = ans.AnswerChilds.ToList();
+                        if (answerChilds.Count > 0)
+                        {
+                            answerChilds.ForEach(i =>
+                            {
+                                question.Answers.Remove(i);
+                                db.Answers.Remove(i);
+                            });
+                        }
                         db.Answers.Remove(ans);
                         if (db.SaveChanges() > 0)
                         {
                             success = true;
                         }
-                        //}
                     }
 
                 }
@@ -1466,6 +1544,68 @@ namespace OATS_Capstone.Models
                     if (questionType != null)
                     {
                         question.QuestionType = questionType;
+
+                        //auto add answers
+                        var qType = question.QuestionType.Type;
+                        if (qType == "Essay" || qType == "ShortAnswer")
+                        {
+                            question.NoneChoiceScore = 0;
+                        }
+                        if (qType == "Radio" || qType == "Multiple")
+                        {
+                            if (question.Answers.Count == 0)
+                            {
+                                var ans1 = new Answer() { AnswerContent = string.Empty, SerialOrder = 0, Score = 0 };
+                                var ans2 = new Answer() { AnswerContent = string.Empty, SerialOrder = 1, Score = 0 };
+                                question.Answers.Add(ans1);
+                                question.Answers.Add(ans2);
+                            }
+                        }
+
+                        if (qType == "Matching")
+                        {
+                            if (question.Answers.Count == 0)
+                            {
+                                //create two couple->four answer
+                                //couple 1
+                                var c1Ans1 = new Answer { AnswerContent = string.Empty, SerialOrder = 0 };
+                                c1Ans1.Score = 1;
+                                c1Ans1.IsRight = true;
+                                var c1Ans2 = new Answer { AnswerContent = string.Empty };
+                                c1Ans2.IsRight = false;
+                                c1Ans1.AnswerChilds.Add(c1Ans2);
+                                //couple 2
+                                var c2Ans1 = new Answer { AnswerContent = string.Empty, SerialOrder = 1 };
+                                c2Ans1.IsRight = true;
+                                c2Ans1.Score = 1;
+                                var c2Ans2 = new Answer { AnswerContent = string.Empty };
+                                c2Ans2.IsRight = false;
+                                c2Ans1.AnswerChilds.Add(c2Ans2);
+
+                                question.Answers.Add(c1Ans1);
+                                question.Answers.Add(c1Ans2);
+                                question.Answers.Add(c2Ans1);
+                                question.Answers.Add(c2Ans2);
+                            }
+                            else if (question.Answers.Count > 0)
+                            {
+                                var answesBegins = question.Answers.Where(i => !i.DependencyAnswerID.HasValue).ToList();
+                                answesBegins.ForEach(i =>
+                                {
+                                    i.IsRight = true;
+                                    i.Score = 1;
+                                    var ans = question.Answers.FirstOrDefault(k => k.DependencyAnswerID == i.AnswerID);
+                                    if (ans == null)
+                                    {
+                                        var cloneAns = new Answer { AnswerContent = string.Empty };
+                                        cloneAns.IsRight = false;
+                                        i.AnswerChilds.Add(cloneAns);
+                                        question.Answers.Add(cloneAns);
+                                    }
+                                });
+                            }
+                        }
+
                         if (db.SaveChanges() >= 0)
                         {
                             success = true;
@@ -1753,21 +1893,49 @@ namespace OATS_Capstone.Models
                     var question = db.Questions.FirstOrDefault(j => j.QuestionID == i.QuestionID);
                     if (question != null)
                     {
+                        var qType = question.QuestionType.Type;
                         if (i.AnswerIDs != null)
                         {
-
-                            var IDs = i.AnswerIDs.Split(',');
-                            var score = IDs.Sum(k =>
+                            if (qType == "Matching")
                             {
-                                var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
-                                return answer.Score < 0 ? 0 : answer.Score;
-                            });
-                            i.ChoiceScore = score;
+                                var coupleIds = i.AnswerIDs.Split(';');
+                                var scoreMatching = coupleIds.Sum(k =>
+                                {
+                                    int? point = null;
+                                    var twoIds = k.Split(',');
+                                    var firstId = twoIds.ElementAtOrDefault(0);
+                                    var secondId = twoIds.ElementAtOrDefault(1);
+                                    if (!string.IsNullOrEmpty(firstId))
+                                    {
+                                        var answerBegin = question.Answers.FirstOrDefault(t => t.AnswerID.ToString() == firstId);
+                                        if (answerBegin != null && !string.IsNullOrEmpty(secondId))
+                                        {
+                                            var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
+                                            if (answerEnd != null)
+                                            {
+                                                point = answerBegin.Score < 0 ? 0 : answerBegin.Score;
+                                            }
+                                        }
+                                    }
+                                    return point;
+                                });
+                                i.ChoiceScore = scoreMatching ?? 0;
+                            }
+                            else
+                            {
+                                var IDs = i.AnswerIDs.Split(',');
+                                var score = IDs.Sum(k =>
+                                {
+                                    var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                    return answer.Score < 0 ? 0 : answer.Score;
+                                });
+                                i.ChoiceScore = score ?? 0;
+                            }
 
                         }
                         else
                         {
-                            if (question.QuestionType.Type == "ShortAnswer")
+                            if (qType == "ShortAnswer")
                             {
                                 if (!string.IsNullOrEmpty(i.AnswerContent))
                                 {
@@ -1776,7 +1944,7 @@ namespace OATS_Capstone.Models
                                     {
                                         var questionAnswers = question.TextDescription.Split(',');
 
-                                        if (questionAnswers.All(o => userAnswers.Contains(o)))
+                                        if (userAnswers.All(o => questionAnswers.Contains(o)))
                                         {
                                             i.NonChoiceScore = question.NoneChoiceScore;
                                         }
@@ -1893,7 +2061,7 @@ namespace OATS_Capstone.Models
                         user.UserMail = profile.UserMail;
                         if (!string.IsNullOrEmpty(profile.Password))
                         {
-                            user.Password = ExtensionModel.createHashMD5( profile.Password);
+                            user.Password = ExtensionModel.createHashMD5(profile.Password);
                         }
                         if (db.SaveChanges() >= 0)
                         {
@@ -2151,6 +2319,7 @@ namespace OATS_Capstone.Models
                                 answer.IsRight = k.IsRight;
                                 answer.Score = k.Score;
                                 answer.SerialOrder = k.SerialOrder;
+                                answer.DependencyAnswerID = k.DependencyAnswerID;
                                 question.Answers.Add(answer);
                             });
                         newTest.Questions.Add(question);
@@ -2217,8 +2386,17 @@ namespace OATS_Capstone.Models
                     {
                         if (!string.IsNullOrEmpty(tagname))
                         {
-                            tag = new Tag();
-                            tag.TagName = tagname;
+                            var lowTagName = tagname.Trim().ToLower();
+                            var existTag = db.Tags.FirstOrDefault(j => j.TagName.Trim().ToLower() == lowTagName);
+                            if (existTag != null)
+                            {
+                                tag = existTag;
+                            }
+                            else
+                            {
+                                tag = new Tag();
+                                tag.TagName = tagname;
+                            }
                         }
                     }
                     if (tag != null)
@@ -2359,8 +2537,17 @@ namespace OATS_Capstone.Models
                     {
                         if (!string.IsNullOrEmpty(tagname))
                         {
-                            tag = new Tag();
-                            tag.TagName = tagname;
+                            var lowTagName = tagname.Trim().ToLower();
+                            var existTag = db.Tags.FirstOrDefault(j => j.TagName.Trim().ToLower() == lowTagName);
+                            if (existTag != null)
+                            {
+                                tag = existTag;
+                            }
+                            else
+                            {
+                                tag = new Tag();
+                                tag.TagName = tagname;
+                            }
                         }
                     }
                     if (tag != null)
@@ -2486,7 +2673,7 @@ namespace OATS_Capstone.Models
                             }
                         }
 
-                        if (db.SaveChanges() > 0)
+                        if (db.SaveChanges() >= 0)
                         {
                             success = true;
                             message = string.Empty;
@@ -2826,6 +3013,12 @@ namespace OATS_Capstone.Models
                         {
                             success = true;
                             message = Constants.DefaultSuccessMessage;
+                            var responseTest = new ResponseTest(question.Test, new List<int>() { userid });
+                            var scoreItem = responseTest.ResponseUserList.FirstOrDefault(i => i.UserID == userid);
+                            if (scoreItem != null)
+                            {
+                                data = scoreItem.UserPercent;
+                            }
                         }
                     }
                 }
@@ -3064,7 +3257,7 @@ namespace OATS_Capstone.Models
                 var user = db.Users.FirstOrDefault(i => i.UserID == userid);
                 if (user != null)
                 {
-                    user.Password = ExtensionModel.createHashMD5( password);
+                    user.Password = ExtensionModel.createHashMD5(password);
                     user.AccessToken = null;
                     user.IsRegistered = true;
                     if (db.SaveChanges() > 0)
@@ -3322,7 +3515,8 @@ namespace OATS_Capstone.Models
                 {
                     overview = new OverviewScoreTests(tests);
                 }
-                else {
+                else
+                {
                     overview = new OverviewScoreTests(tests, userids, testids);
                 }
                 excel = overview.ToExcelPackage();

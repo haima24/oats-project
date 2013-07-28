@@ -1,0 +1,110 @@
+﻿@model OATS_Capstone.Models.Question
+@{
+    var tags = Model.TagInQuestions.OrderBy(i => i.SerialOrder).Select(i => i.Tag);
+
+    var isOwner = true;
+    if (ViewBag.isOwner != null)
+    {
+        isOwner = ViewBag.isOwner;
+    }
+    var ansCouples = Model.Answers.Where(i => !i.DependencyAnswerID.HasValue).OrderBy(i => i.SerialOrder);
+}
+<div class="nt-qitem nt-qitem-edit nt-qitem-edit-inact" question-type="Matching" question-id="@Model.QuestionID">
+    <div class="nt-qnum ">@Model.LabelOrder</div>
+    <a class="nt-qanchor"></a>
+    <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
+        <div class="redactor_box">
+            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
+        </div>
+    </div>
+    <div class="nt-qhctrls">
+        <button class="nt-btn-circle bt-duplicate"><i class="t-icon i-duplicate"></i></button>
+        <button class="nt-btn-circle bt-delete"><i class="icon-remove"></i></button>
+    </div>
+    <div class="nt-qanscont nt-sortable" data-matching>
+        @foreach (var item in ansCouples)
+        {
+            var dependAns = item.AnswerChilds.FirstOrDefault();
+            <div class="nt-qmatching nt-qmatching-hover" answer-id="@item.AnswerID">
+                <div class="nt-qmatching-couple">
+                    <div class="begin nt-qans nt-qans-edit" answer-id="@item.AnswerID" data-matching-begin>
+                        <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                            <div class="redactor_box">
+                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@item.AnswerContent</div>
+                            </div>
+                        </div>
+                        <div class="nt-qanselem">
+                            <div class="matcher"><i class="t-icon i-matching"></i></div>
+                        </div>
+                    </div>
+                    @if (dependAns != null)
+                    {   <div class="line"></div>
+                        <div class="end nt-qans nt-qans-edit" answer-id="@dependAns.AnswerID" data-matching-end>
+                            <div class="nt-qanselem">
+                                <div class="matcher"><i class="t-icon i-matching"></i></div>
+                            </div>
+                            <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                <div class="redactor_box">
+                                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@dependAns.AnswerContent</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+                </div>
+                <div class="nt-qansscore">
+                    <input type="text" class="nt-on-score" placeholder="Point Value" value="@item.Score" />
+                </div>
+                <div class="nt-qansctrls">
+                    <button class="nt-btn-circle bt-delete"  style="display: none;">
+                        <i class="icon-remove"></i>
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>    
+            
+        }
+    </div>
+
+    <div class="nt-qfoot">
+
+        <div class="nt-qctrls" style="display: none">
+
+            <button class="nt-btn-text nt-qansadd" style="display: none">
+                Add New Answer
+            </button>
+
+
+            @Html.Partial("P_Change_Question_Type", "Matching")
+
+            <button class="nt-btn-text nt-scrbtn">
+                Points
+            </button>
+        </div>
+        <div class="nt-qtagcont" style="border-top-width: 0px; display: block;">
+            <div class="hoverscroll horizontal" style="width: 100%; height: 28px;">
+                <div class="listcontainer" style="width: 100%; height: 27px;">
+                    <div class="nt-tags list">
+                        <div class="tags-container">
+                            @foreach (var item in tags)
+                            {
+                                @Html.Partial("P_Tag_Item", item)
+                            }
+                        </div>
+                        <div class="nt-tag-adder item">
+                            <input type="text" placeholder="Add Tag..." autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="arrow left" style="display: none;"><i class="icon-chevron-left"></i></div>
+                    <div class="arrow right" style="display: none;"><i class="icon-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+
+        <button class="nt-btn-sqr nt-qctrls-qtags-toggle" style="display: none">
+            <i class="t-icon i-setting"></i>
+        </button>
+    </div>
+
+</div>

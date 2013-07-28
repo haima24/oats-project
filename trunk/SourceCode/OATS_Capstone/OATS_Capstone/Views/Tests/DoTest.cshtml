@@ -1,11 +1,20 @@
-﻿@{
+﻿@section additionheader{
+    <script src="~/Bootstrap/js/jquery.hotkeys.js"></script>
+    <script src="~/Bootstrap/js/bootstrap-wysiwyg.js"></script>
+    <script src="~/Bootstrap/js/raphael.js"></script>
+    <script src="~/Resource/Scripts/DoTestScript.js"></script>
+}
+@{
     ViewBag.Title = "Index";
 }
 @model OATS_Capstone.Models.TestLogic
+@{
+    var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
+    var user = authen.User;
+}
 @if (Model != null)
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
-    <script src="~/Resource/Scripts/DoTestScript.js"></script>
     <div class="navbar navbar-static-top">
         <div class="navbar-inner">
             <div id="savestatus" style="display: none;">
@@ -14,20 +23,31 @@
             <div class="container">
                 <a id="logo" class="brand" href="@Url.Action("Index", "Tests")">OATS</a>
                 <div class="nt-test-header">@Model.TestTitle</div>
-                <!-- /.nav-collapse -->
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name)?user.UserMail:user.Name)</li>
+                            <li class="divider"></li>
+                            <li><a href="#" id="profile-link">My Profile</a></li>
+                            <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
         <!-- /navbar-inner -->
     </div>
     <div id="container" class="container wrapper nt-de-cont">
-        @*<div class="nt-header">Demo to copy</div>*@
         <div class="nt-checklist-cont" style="max-height: 560px; overflow-y: auto;">
-            <div class="introduction">
-                <span class="summary">Introduction : </span>
-                <span>@Model.Introduction</span>
-            </div>
-            <div class="nt-username">Admin User</div>
-            @*<div class="nt-asm-title">Demo to copy</div>*@
+            @if (!string.IsNullOrEmpty(Model.Introduction))
+            {
+                <div class="introduction">
+                    <span class="summary">Introduction : </span>
+                    <span>@Model.Introduction</span>
+                </div>
+            }
+            <div class="nt-username">@(string.IsNullOrEmpty(user.Name) ? user.UserMail : user.Name)</div>
             <div id="checklist">
                 @if (Model == null)
                 { @Html.Partial("P_Type_Empty_Template") }
