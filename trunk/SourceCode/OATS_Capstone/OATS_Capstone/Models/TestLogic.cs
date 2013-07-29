@@ -18,6 +18,7 @@ namespace OATS_Capstone.Models
         public string Introduction { get; set; }
         public int TestID { get; set; }
         public bool IsInInvitationRoleStudent { get; set; }
+        public int TestDuration { get; set; }
         public TestLogic(Test test)
         {
             if (test != null)
@@ -61,6 +62,23 @@ namespace OATS_Capstone.Models
                     {
                         IsInInvitationRoleStudent = true;
                     }
+                }
+                //Test Duration
+                var settingTestDuration = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
+                if (settingTestDuration.IsActive)
+                {
+                    if (settingTestDuration.NumberValue != null)
+                    {
+                        TestDuration = (int)settingTestDuration.NumberValue;
+                    }
+                    else
+                    {
+                        TestDuration = 10;
+                    }
+                }
+                else
+                {
+                    TestDuration = 10;
                 }
 
                 //IsNumberOfAttempMax

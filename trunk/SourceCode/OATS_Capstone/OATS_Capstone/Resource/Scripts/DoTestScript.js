@@ -134,15 +134,8 @@ $.fn.extend({
 
 $(function () {
 
-    var ts = new Date(2012, 0, 23),
-		newYear = true;
-
-    if ((new Date()) > ts) {
-        // The new year is here! Count towards something else.
-        // Notice the *1000 at the end - time must be in milliseconds
-        ts = (new Date()).getTime() + 60 * 60 * 1000;
-        newYear = false;
-    }
+    var duration = parseInt($("#test-duration").val()),
+        ts = (new Date()).getTime() + duration * 60 * 1000;
 
     $('#countdown').countdown({
         timestamp: ts,
