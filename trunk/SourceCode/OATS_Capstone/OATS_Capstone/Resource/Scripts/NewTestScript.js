@@ -8,6 +8,31 @@ var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
+function handleScoreStatisticSubEvents() {
+    var handleColumn = function (name,per,frac) {
+        $(".nt-scores-table-header " + name + " .nt-scores-table-title").live("click", function () {
+            var $this = $(this);
+            var items = $(".nt-scores-table-body " + name + ",.nt-scores-table-footer " + name);
+            if ($this.attr("data-toggle") == "true") {
+                $this.removeAttr("data-toggle");
+                items.each(function () {
+                    $(per, this).hide();
+                    $(frac, this).show();
+                });
+            } else {
+                $this.attr("data-toggle", "true");
+                items.each(function () {
+                    $(per, this).show();
+                    $(frac, this).hide();
+                });
+            }
+        });
+    };
+    handleColumn(".nt-scores-table-selavgcol", ".nt-selavg", ".nt-selavg-nat");
+    handleColumn(".nt-scores-table-egavgcol", ".nt-egavg", ".nt-egavg-nat");
+    handleColumn(".nt-scores-table-avgdiffcol", ".nt-avgdiff", ".nt-avgdiff-nat");
+    handleColumn(".nt-scores-table-grpstdevcol", ".nt-grpstdev", ".nt-grpstdev-nat");
+}
 function checkMaxScoreAndTotalScore() {
     $.post("/Tests/CheckMaxScoreAndTotalScore", { testid: testid }, function (res) {
         if (res.success) {
@@ -1981,11 +2006,29 @@ $(function () {
         }
     });
     //separator
+    $(".nt-qitem .preview-container .nt-qimg-close").live("click", function () {
+        var item=$(this).closest(".nt-qitem");
+        var id = item.attr("question-id");
+        if (!isNaN(id)) {
+            statusSaving();
+            $.post("/Tests/DeleteImage", { questionid: id }, function (res) {
+                if (res.success) {
+                    item.replaceWith($(res.generatedHtml));
+                    initImageUploadFacility();
+                    statusSaved();
+                }
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    //separator
     showOrHideDeleteLineAnswer();
     sortByNumberOrLetters();
-
-
-
+    //separator
+    handleScoreStatisticSubEvents();
+    //separator
 
     var hub = $.connection.generalHub;
     hub.client.R_removeInvitation = function (tid, userids) {
@@ -2099,7 +2142,6 @@ $(function () {
             });
         }
     }
-
     $.connection.hub.start().done(function () {
         $("#eventDel").live("click", function () {
             $.post("/Tests/DeActiveTest", { testid: testid }, function (res) {

@@ -45,7 +45,13 @@
                         }
                             </div>
                         <div class="nt-taglist">
-                            <div class="nt-tag nt-tag-hl"><span>Template<span></span></span></div>
+                            @{
+                    var tags = Model.TagInQuestions.OrderBy(i => i.SerialOrder).Select(i => i.Tag);
+                    foreach (var item in tags)
+                    {
+                    @Html.Partial("P_Tag_Item", item)
+                    }
+                }
                         </div>
                     </div>
                 </div>

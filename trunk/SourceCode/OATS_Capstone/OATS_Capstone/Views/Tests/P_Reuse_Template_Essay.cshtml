@@ -20,6 +20,13 @@
                 </div>
             </div>
             <div class="nt-taglist">
+                @{
+                    var tags = Model.TagInQuestions.OrderBy(i => i.SerialOrder).Select(i => i.Tag);
+                    foreach (var item in tags)
+                    {
+                    @Html.Partial("P_Tag_Item", item)
+                    }
+                }
             </div>
         </div>
     </div>

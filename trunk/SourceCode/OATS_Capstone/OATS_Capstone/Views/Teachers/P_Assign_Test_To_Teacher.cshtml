@@ -1,4 +1,5 @@
-﻿@model OATS_Capstone.Models.User
+﻿@using OATS_Capstone.Models
+@model OATS_Capstone.Models.User
 @{
     var invitations = Model.Invitations.Where(i => i.Role.RoleDescription == "Teacher");
 }
@@ -6,7 +7,7 @@
     <div class="nt-asms-list nt-guide">
         <a>
             <div class="nt-list-head">
-
+                <div class="nt-status">Status</div>
                 <div class="nt-name">
                     Running And Upcoming Tests
                 </div>
@@ -29,19 +30,26 @@
             {
                 foreach (var invitation in invitations)
                 {
-                <div class="nt-list-row nt-guide" test-id ="@invitation.Test.TestID">
+                <div class="nt-list-row" test-id ="@invitation.Test.TestID" invitation-id="@invitation.InvitationID">
+                    @if (invitation.IsMailSent)
+                    {
+                        <div class="nt-status"><span class="label label-info">Mail Sent</span></div>
+                    }
+                    else
+                    {
+                        <div class="nt-status"><span class="label label-important">Mail Un-Sent</span></div>
+                    }
                     <div class="nt-name">
-                        <span>@invitation.Test.TestTitle
-                        </span>
+                        <span>@invitation.Test.TestTitle</span>
                         <button class="nt-btn-icon nt-openbtn">
                             <i class="t-icon pencilpaper"></i>
                         </button>
                     </div>
                     <div class="nt-date">
-                        13 May 2013
+                        @invitation.Test.StartDateTime.ToDateDefaultFormat()
                     </div>
                     <div class="nt-date">
-                        28 May 2013
+                        @invitation.Test.EndDateTime.ToDateDefaultFormat()
                     </div>
                     <div class="nt-ctrl nt-ctrl-wide">
                         <button class="nt-btn-dark static nt-btn-sqr text nt-unassignbtn">
