@@ -16,7 +16,8 @@
 	// Creating the plugin
 	$.fn.countdown = function(prop){
 		
-		var options = $.extend({
+	    var options = $.extend({
+	        timeout:function(){},
 			callback	: function(){},
 			timestamp	: 0
 		},prop);
@@ -34,7 +35,11 @@
 			left = Math.floor((options.timestamp - (new Date())) / 1000);
 			
 			if(left < 0){
-				left = 0;
+			    left = 0;
+			    if (options.timeout && typeof (options.timeout) === "function") {
+			        options.timeout();
+			    }
+			    return;
 			}
 			
 			// Number of days left

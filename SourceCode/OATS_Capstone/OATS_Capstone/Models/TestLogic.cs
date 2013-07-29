@@ -67,18 +67,11 @@ namespace OATS_Capstone.Models
                 var settingTestDuration = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
                 if (settingTestDuration.IsActive)
                 {
-                    if (settingTestDuration.NumberValue != null)
-                    {
-                        TestDuration = (int)settingTestDuration.NumberValue;
-                    }
-                    else
-                    {
-                        TestDuration = 10;
-                    }
+                    TestDuration = settingTestDuration.NumberValue ?? Constants.DefaultTestDuration;
                 }
                 else
                 {
-                    TestDuration = 10;
+                    TestDuration = Constants.DefaultTestDuration;
                 }
 
                 //IsNumberOfAttempMax
@@ -105,12 +98,12 @@ namespace OATS_Capstone.Models
                         IsNumberOfAttempMax = false;
                     }
                 }
-                else 
+                else
                 {
                     IsNumberOfAttempMax = false;
                 }
-                
-                
+
+
                 //Random answer
                 Questions = test.Questions.OrderBy(i => i.SerialOrder);
                 var settingRandomAnswer = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RAO");

@@ -1,8 +1,58 @@
-﻿function initWYSIWYG() {
+﻿var testid;
+function initWYSIWYG() {
     $("[data-original-title]").tooltip();
     $("#checklist .nt-qitem[question-type=Essay] div.normal-editable.nt-qrespinput").wysiwyg();
 }
+function submitTest() {
+    var userInTest = new Object();
+    userInTest.TestID = testid;
+    userInTest.UserInTestDetails = $("#checklist .nt-qitem").map(function (i, e) {
+        var userInTestDetail = new Object();
+        userInTestDetail.QuestionID = parseInt($(e).attr("question-id"));
+        var str = "";
+        $(".nt-qans input[type=radio]:checked,.nt-qans input[type=radio]:checked", e).each(function (index, element) {
 
+            if ($(element).attr("id")) {
+                if (index == 0) {
+                    str += $(element).attr("id");
+                } else {
+                    str += "," + $(element).attr("id");
+                }
+            }
+        });
+        $(".nt-qmatching .begin", e).each(function (index, element) {
+            var $element = $(element);
+            if ($element.attr("answer-id")) {
+                if (!str) {
+                    str += $element.attr("answer-id") + "," + ($element.attr("matching-id") || "");
+                } else {
+                    str += ";" + $element.attr("answer-id") + "," + ($element.attr("matching-id") || "");
+                }
+            }
+        });
+        userInTestDetail.AnswerIDs = str;
+        userInTestDetail.AnswerContent = $(".nt-qrespinput", e).is("textarea,input") ? $(".nt-qrespinput", e).val() : $(".nt-qrespinput", e).html();
+
+        return userInTestDetail;
+    }).convertJqueryArrayToJSArray();
+
+    $.ajax({
+        type: "POST",
+        url: "/Tests/SubmitTest",
+        data: JSON.stringify(userInTest),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if (res.success) {
+                showCountDownMessage("info", res.message, "Redirect to Homepage", function () {
+                    window.location.href = "/Tests";
+                });
+            } else {
+                showMessage("error", res.message);
+            }
+        }
+    });
+}
 
 $.fn.extend({
     _matchingConnectorItem: function () {
@@ -133,66 +183,38 @@ $.fn.extend({
 
 
 $(function () {
-
+    testid = parseInt($("#test-id").val());
     var duration = parseInt($("#test-duration").val()),
         ts = (new Date()).getTime() + duration * 60 * 1000;
 
     $('#countdown').countdown({
         timestamp: ts,
+        timeout: function () {
+            submitTest();
+        }
     });
 
 
     initWYSIWYG();
     $(".nt-qitem[question-type=Matching]").matchingConnector();
     $("#submit-btn").live("click", function (ev) {
-        var userInTest = new Object();
-        userInTest.TestID = parseInt($("#test-id").val());
-        userInTest.UserInTestDetails = $("#checklist .nt-qitem").map(function (i, e) {
-            var userInTestDetail = new Object();
-            userInTestDetail.QuestionID = parseInt($(e).attr("question-id"));
-            var str = "";
-            $(".nt-qans input[type=radio]:checked,.nt-qans input[type=radio]:checked", e).each(function (index, element) {
-
-                if ($(element).attr("id")) {
-                    if (index == 0) {
-                        str += $(element).attr("id");
-                    } else {
-                        str += "," + $(element).attr("id");
-                    }
-                }
-            });
-            $(".nt-qmatching .begin", e).each(function (index, element) {
-                var $element = $(element);
-                if ($element.attr("answer-id")) {
-                    if (!str) {
-                        str += $element.attr("answer-id") + "," + ($element.attr("matching-id") || "");
-                    } else {
-                        str += ";" + $element.attr("answer-id") + "," + ($element.attr("matching-id") || "");
-                    }
-                }
-            });
-            userInTestDetail.AnswerIDs = str;
-            userInTestDetail.AnswerContent = $(".nt-qrespinput", e).is("textarea,input") ? $(".nt-qrespinput", e).val() : $(".nt-qrespinput", e).html();
-
-            return userInTestDetail;
-        }).convertJqueryArrayToJSArray();
-
-        $.ajax({
-            type: "POST",
-            url: "/Tests/SubmitTest",
-            data: JSON.stringify(userInTest),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (res) {
-                if (res.success) {
-                    showCountDownMessage("info", res.message,"Redirect to Homepage", function () {
-                        window.location.href = "/Tests";
-                    });
-                } else {
-                    showMessage("error", res.message);
-                }
-            }
-        });
-
+        submitTest();
     });
+
+    var hub = $.connection.generalHub;
+    hub.client.R_deactivetest = function (id, mail) {
+        if (id && id == testid) {
+            showCountDownMessage("info", "User with email:" + mail + " disabled this test", "Redirect to Homepage", function () {
+                window.location.href = "/Tests";
+            });
+        }
+    }
+    hub.client.R_deleteTestPermanent = function (id, mail) {
+        if (id && id == testid) {
+            showCountDownMessage("info", "User with email:" + mail + " PERMANENTLY DELETE this test", "Redirect to Homepage", function () {
+                window.location.href = "/Tests";
+            });
+        }
+    }
+    $.connection.hub.start();
 });
