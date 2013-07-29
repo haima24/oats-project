@@ -1139,5 +1139,11 @@ namespace OATS_Capstone.Controllers
             common.DeleteImage(questionid);
             return Json(new { common.message, common.success,common.generatedHtml });
         }
+
+        public JsonResult DeleteTestPermanent(int testid) {
+            var common = new CommonService();
+            common.DeleteTestPermanent(testid);
+            return Json(new { common.success, common.message });
+        }
     }
 }

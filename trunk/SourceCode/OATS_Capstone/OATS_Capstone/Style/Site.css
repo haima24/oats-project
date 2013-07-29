@@ -530,7 +530,7 @@ i, cite, em, var, address, dfn {
         }
 
 #test-title {
-    width: 510px;
+    width: 480px;
     padding: 5px;
     margin: 6px;
     font-size: 16px;
@@ -849,46 +849,46 @@ i, cite, em, var, address, dfn {
             padding-top: 5px;
         }
 
-        #checklist[content-tab=true] .nt-qitem .nt-qnum-letter {
-            display: none;
+    #checklist[content-tab=true] .nt-qitem .nt-qnum-letter {
+        display: none;
+    }
+
+    #checklist .nt-qitem.nt-qitem-edit-act .nt-qnum-letter {
+        display: block;
+    }
+
+    #checklist .nt-qitem .nt-qimg-ph {
+        width: 565px;
+        margin: 10px 10px 10px 35px;
+        padding: 10px;
+        border: 1px dashed gainsboro;
+        text-align: center;
+        font-size: 14px;
+        font-style: italic;
+        color: #999999;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    #checklist .nt-qitem.nt-qitem-review .nt-qnum.nt-qnum-letter {
+        display: block;
+    }
+
+    #checklist .nt-qitem.nt-qitem-review {
+        border-top: 1px solid #c7c7c7;
+    }
+
+        #checklist .nt-qitem.nt-qitem-review .nt-qans {
+            border-bottom: 1px solid #ececec;
         }
 
-        #checklist .nt-qitem.nt-qitem-edit-act .nt-qnum-letter {
-            display: block;
-        }
-
-        #checklist .nt-qitem .nt-qimg-ph {
-            width: 565px;
-            margin: 10px 10px 10px 35px;
-            padding: 10px;
-            border: 1px dashed gainsboro;
-            text-align: center;
-            font-size: 14px;
-            font-style: italic;
-            color: #999999;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            -ms-border-radius: 4px;
-            -o-border-radius: 4px;
-            border-radius: 4px;
-        }
-
-        #checklist .nt-qitem.nt-qitem-review .nt-qnum.nt-qnum-letter {
-            display: block;
-        }
-
-        #checklist .nt-qitem.nt-qitem-review {
-            border-top: 1px solid #c7c7c7;
-        }
-
-            #checklist .nt-qitem.nt-qitem-review .nt-qans {
-                border-bottom: 1px solid #ececec;
+            #checklist .nt-qitem.nt-qitem-review .nt-qans .nt-qans-label .nt-qansdesc {
+                width: 525px;
+                margin-left: 17px;
             }
-
-                #checklist .nt-qitem.nt-qitem-review .nt-qans .nt-qans-label .nt-qansdesc {
-                    width: 525px;
-                    margin-left: 17px;
-                }
 
 .nt-clickable {
     cursor: pointer;
@@ -1015,9 +1015,11 @@ i, cite, em, var, address, dfn {
 .nt-qmatching .nt-qmatching-couple {
     width: 85%;
 }
-.nt-qmatching .nt-qmatching-couple.nt-qmatching-couple-full {
-    width: 100%;
-}
+
+    .nt-qmatching .nt-qmatching-couple.nt-qmatching-couple-full {
+        width: 100%;
+    }
+
 .nt-qmatching.nt-qmatching-relative .nt-qmatching-couple {
     width: 80%;
 }
@@ -1100,12 +1102,15 @@ i, cite, em, var, address, dfn {
     float: left;
     width: 85%;
 }
+
 .nt-qsearch-popover .nt-qmatching .nt-conted-ph-cont {
-    width:60%;
+    width: 60%;
 }
+
 .nt-qsearch-popover .nt-qmatching .line {
-    width:10%;
+    width: 10%;
 }
+
 .nt-qmatching .begin > div:first-child, .nt-qmatching .end > div:first-child {
     float: left;
 }
@@ -2003,12 +2008,14 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     .nt-asms-list .nt-list-row.nt-upcoming .nt-desc {
         text-decoration: underline;
     }
-    .nt-asms-list .nt-list-head > div.nt-status,.nt-asms-list .nt-list-row > div.nt-status {
+
+    .nt-asms-list .nt-list-head > div.nt-status, .nt-asms-list .nt-list-row > div.nt-status {
         position: relative;
         padding-left: 20px;
         text-align: left;
-        width:10%;
+        width: 10%;
     }
+
     .nt-asms-list .nt-list-head > div.nt-name, .nt-asms-list .nt-list-row > div.nt-name {
         position: relative;
         padding-left: 15px;
@@ -2303,7 +2310,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 }
 
 .nt-tag {
-    line-height:18px;
+    line-height: 18px;
     position: relative;
     cursor: pointer;
     height: 20px;
@@ -3208,10 +3215,17 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
     .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
+    }
+
+    .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
+        visibility: hidden;
         padding: 8px 1px;
         text-align: right;
     }
 
+    .nt-asms-list .nt-list-head:hover > div.nt-ctrl, .nt-asms-list .nt-list-row:hover > div.nt-ctrl {
+        visibility: visible;
+    }
 
 #asmsList .accordion-group.nt-acc-hl {
     margin: 0 -15px;
@@ -3488,48 +3502,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 }
 
     #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining {
-        margin-top: 10px;
+        margin-top: 0px;
     }
 
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-time-digits {
-            width: 16px;
-            padding-right: 2px;
-            text-align: right;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
-            display: inline-block;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-hour {
-            width: 35px;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
-            display: inline-block;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-time-digits {
-            width: 16px;
-            padding-right: 2px;
-            text-align: right;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
-            display: inline-block;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value .nt-minute {
-            width: 50px;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value > div {
-            display: inline-block;
-        }
-
-        #container.nt-de-cont .nt-footer .nt-footer-cont .nt-footer-right .nt-time-remaining .nt-time-remaining-value.nt-abbr {
-            display: none;
-        }
 
 .test-disable-mask {
     width: 960px;
@@ -3985,3 +3960,11 @@ article, time {
     #checklist .nt-qitem .btn-toolbar .btn-group .btn {
         padding: 4px 8px;
     }
+
+.countDiv0 {
+    display: none !important;
+}
+
+.countDays {
+    display: none !important;
+}

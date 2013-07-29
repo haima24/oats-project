@@ -1343,10 +1343,12 @@ namespace OATS_Capstone.Models
                     else
                     {
                         var type = question.QuestionType.Type;
-                        if (type == "Image") {
+                        if (type == "Image")
+                        {
                             var url = question.ImageUrl;
-                            var path= HttpContext.Current.Server.MapPath(url);
-                            if (File.Exists(path)) {
+                            var path = HttpContext.Current.Server.MapPath(url);
+                            if (File.Exists(path))
+                            {
                                 File.Delete(path);
                             }
                         }
@@ -1685,7 +1687,7 @@ namespace OATS_Capstone.Models
                     var settingConfig = test.SettingConfig;
                     var authen = AuthenticationSessionModel.Instance();
                     var isOwner = authen.UserId == test.CreatedUserID;
-                    if (settingConfig.SettingConfigID == 1)//1 is default
+                    if (settingConfig.SettingConfigID == Constants.DefaultSettingConfigId)//1 is default
                     {
                         var settings = settingConfig.SettingConfigDetails.ToList();
                         //clone default setting
@@ -2415,7 +2417,8 @@ namespace OATS_Capstone.Models
                             message = "Duplicate test successful.";
                         }
                     }
-                    else {
+                    else
+                    {
                         success = false;
                         message = "The name generated of this test after copy was duplicated, try change current name of this test.";
                     }
@@ -3618,20 +3621,23 @@ namespace OATS_Capstone.Models
             }
             return excel;
         }
-        public void DeleteImage(int questionid) {
+        public void DeleteImage(int questionid)
+        {
             success = false;
             message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
-                if (question != null) {
+                if (question != null)
+                {
                     var imageUrl = question.ImageUrl;
                     question.ImageUrl = string.Empty;
                     //delete in server
-                    var path= HttpContext.Current.Server.MapPath(imageUrl);
-                    
-                    if (db.SaveChanges() > 0) {
+                    var path = HttpContext.Current.Server.MapPath(imageUrl);
+
+                    if (db.SaveChanges() > 0)
+                    {
                         if (File.Exists(path))
                         {
                             File.Delete(path);
@@ -3643,10 +3649,68 @@ namespace OATS_Capstone.Models
                             generatedHtml = OnRenderPartialViewToString.Invoke(question);
                         }
                     }
-                    
+
                 }
             }
             catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void DeleteTestPermanent(int testid)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var feedBacks = test.FeedBacks.ToList();
+                    feedBacks.ForEach(i =>
+                    {
+                        db.FeedBacks.Remove(i);
+                    });
+                    var invitations = test.Invitations.ToList();
+                    invitations.ForEach(i =>
+                    {
+                        db.Invitations.Remove(i);
+                    });
+                    var questions = test.Questions.ToList();
+                    questions.ForEach(i =>
+                    {
+                        i.Answers.ToList().ForEach(k => db.Answers.Remove(k));
+                        i.TagInQuestions.ToList().ForEach(k => db.TagInQuestions.Remove(k));
+                        i.UserInTestDetails.ToList().ForEach(k => db.UserInTestDetails.Remove(k));
+                        db.Questions.Remove(i);
+                    });
+                    test.TagInTests.ToList().ForEach(i => db.TagInTests.Remove(i));
+                    test.UserInTests.ToList().ForEach(i => db.UserInTests.Remove(i));
+                    var settingConfig = test.SettingConfig;
+                    if (settingConfig.SettingConfigID != Constants.DefaultSettingConfigId&&settingConfig.Tests.Count<=1)
+                    {
+                        settingConfig.SettingConfigDetails.ToList().ForEach(i => db.SettingConfigDetails.Remove(i));
+                        db.SettingConfigs.Remove(settingConfig);
+                    }
+                    db.Tests.Remove(test);
+                    if (db.SaveChanges() > 0)
+                    {
+                        success = true;
+                        message = Constants.DefaultSuccessMessage;
+                        var authen = AuthenticationSessionModel.Instance();
+                        var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                        context.Clients.All.R_deleteTestPermanent(test.TestID, authen.User.UserMail);
+                    }
+                }
+                else
+                {
+                    success = false;
+                    message = "This Test not exist.";
+                }
+            }
+            catch (Exception ex)
             {
                 success = false;
                 message = Constants.DefaultExceptionMessage;

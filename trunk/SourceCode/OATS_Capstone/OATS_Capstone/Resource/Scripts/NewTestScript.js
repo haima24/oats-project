@@ -2181,8 +2181,16 @@ $(function () {
             });
         }
     }
+    hub.client.R_deleteTestPermanent = function (id, mail) {
+        if (id && id == testid) {
+            showCountDownMessage("info", "User with email:" + mail + " PERMANENTLY DELETE this test", "Redirect to Homepage", function () {
+                window.location.href = "/Tests";
+            });
+        }
+    }
+    
     $.connection.hub.start().done(function () {
-        $("#eventDel").live("click", function () {
+        $("#eventDeactive").live("click", function () {
             $.post("/Tests/DeActiveTest", { testid: testid }, function (res) {
                 if (!res.success) { showMessage("error", res.message); }
                 else {
@@ -2190,7 +2198,16 @@ $(function () {
                 }
             });
         });
-
+        $("#eventDelete").live("click", function () {
+            $.post("/Tests/DeleteTestPermanent", { testid: testid }, function (res) {
+                if (res.success) {
+                    showMessage("success", res.message);
+                }
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        });
 
         $("#comments .reply-button").live("click", function () {
             var button = $(this);

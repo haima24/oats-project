@@ -56,11 +56,11 @@
         {
             if (Model.IsActive)
             { 
-                <input id="asm_duration" type="text" value="@Model.NumberValue"><span>times</span>
+    <input id="asm_duration" type="text" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
             }
             else
             {
-                <input id="asm_duration" type="text" disabled="disabled" value="@Model.NumberValue"><span>times</span>
+    <input id="asm_duration" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
             }
         }
 }
@@ -95,5 +95,9 @@ else
         else if (Model.SettingType.SettingTypeKey == "MTP")
         {
     <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
+        }
+        else if (Model.SettingType.SettingTypeKey == "DRL")
+        {
+    <input id="asm_duration" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
         }
 }
