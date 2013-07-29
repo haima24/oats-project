@@ -8,8 +8,46 @@ var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
+function initClientSorting() {
+    //sidebar
+    var handlers = new Array();
+    handlers.push({
+        key: "name", handler: ".nt-clb-item-label"
+    });
+    handlers.push({
+        key: "percent", handler: ".nt-clb-item-desc"
+    });
+    $(".nt-clb-header-label .nt-btn-circle-mini,.nt-clb-header-desc .nt-btn-circle-mini").clientSort({
+        sortItems: "#respUsers .nt-clb-item",
+        handlers: handlers
+    });
+    //sidebar
+    //score statistic
+    var scoreHandlers = new Array();
+    scoreHandlers.push({
+        key: "tag", handler: ".nt-tag span"
+    });
+    scoreHandlers.push({
+        key: "selection", handler: ".nt-scores-table-selavgcol", useSortAttr: true
+    });
+    scoreHandlers.push({
+        key: "group", handler: ".nt-scores-table-egavgcol", useSortAttr: true
+    });
+    scoreHandlers.push({
+        key: "diff", handler: ".nt-scores-table-avgdiffcol", useSortAttr: true
+    });
+    scoreHandlers.push({
+        key: "stdev", handler: ".nt-scores-table-grpstdevcol", useSortAttr: true
+    });
+    $("#score-container .nt-scores-table-header .nt-btn-circle-mini").clientSort({
+        sortItems: ".nt-scores-table-body .nt-tr-sortable",
+        parentContainer: "#score-container",
+        handlers: scoreHandlers
+    });
+    //score statistic
+}
 function handleScoreStatisticSubEvents() {
-    var handleColumn = function (name,per,frac) {
+    var handleColumn = function (name, per, frac) {
         $(".nt-scores-table-header " + name + " .nt-scores-table-title").live("click", function () {
             var $this = $(this);
             var items = $(".nt-scores-table-body " + name + ",.nt-scores-table-footer " + name);
@@ -2007,7 +2045,7 @@ $(function () {
     });
     //separator
     $(".nt-qitem .preview-container .nt-qimg-close").live("click", function () {
-        var item=$(this).closest(".nt-qitem");
+        var item = $(this).closest(".nt-qitem");
         var id = item.attr("question-id");
         if (!isNaN(id)) {
             statusSaving();
@@ -2029,7 +2067,8 @@ $(function () {
     //separator
     handleScoreStatisticSubEvents();
     //separator
-
+    initClientSorting();
+    //separator
     var hub = $.connection.generalHub;
     hub.client.R_removeInvitation = function (tid, userids) {
         if (tid && userids) {

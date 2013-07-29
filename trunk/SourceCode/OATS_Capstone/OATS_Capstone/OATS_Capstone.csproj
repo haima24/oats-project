@@ -370,6 +370,7 @@
     <Content Include="Style\img\loader.gif" />
     <Content Include="Style\img\matching.png" />
     <Content Include="Style\img\multiple.png" />
+    <Content Include="Style\img\photo_not_available.jpg" />
     <Content Include="Style\img\radio.png" />
     <Content Include="Style\img\setting.png" />
     <Content Include="Style\img\short_answer.png" />

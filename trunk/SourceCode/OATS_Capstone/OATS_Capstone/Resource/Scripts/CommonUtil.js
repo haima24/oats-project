@@ -585,6 +585,55 @@ $.fn.extend({
         });
     }
 });
+$.fn.extend({
+    clientSort: function (options) {
+        var defaults = {
+            activeClass:"active",
+            handlers: [],
+            sortItems: [],
+            parentContainer:""
+        };
+        options = $.extend(defaults, options);
+        var $items = $(this);
+        $items.live("click", function () {
+            var $btn=$(this);
+            var items = $($items.selector);
+            items.each(function () {
+                $(this).removeClass(options.activeClass)
+            });
+            $(this).addClass(options.activeClass)
+            if (options.handlers && options.sortItems) {
+                var sortedItems;
+                if (options.parentContainer) {
+                    var container=$btn.closest(options.parentContainer);
+                    sortedItems = $(options.sortItems, container);
+                } else {
+                    sortedItems = $(options.sortItems);
+                }
+                var key = $btn.data("key");
+                var order = $btn.data("order") || "asc";
+                if (key) {
+                    var handle = $(options.handlers).filter(function () {
+                        return this.key == key;
+                    });
+                    if (handle.length == 1) {
+                        var hand = handle[0];
+                        var handler=hand.handler;
+                        if (handler) {
+                            if (hand.useSortAttr) {
+                                $(sortedItems).tsort(handler, { order: order, attr: "data-sort-value" });
+                            }
+                            else {
+                                $(sortedItems).tsort(handler, { order: order });
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
 function random(range) {
     return Math.floor(Math.random() * range);
 }
