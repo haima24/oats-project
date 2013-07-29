@@ -251,6 +251,7 @@
     <Content Include="Bootstrap\css\fullcalendar.css" />
     <Content Include="Bootstrap\css\GridviewScroll.css" />
     <Content Include="Bootstrap\css\jqbar.css" />
+    <Content Include="Bootstrap\css\jquery.countdown.css" />
     <Content Include="Bootstrap\font\fontawesome-webfont.svg" />
     <Content Include="Bootstrap\img\arrowhl.png" />
     <Content Include="Bootstrap\img\arrowhr.png" />
@@ -273,6 +274,7 @@
     <Content Include="Bootstrap\js\jquery-1.9.1.min.js" />
     <Content Include="Bootstrap\js\jquery.autosize.js" />
     <Content Include="Bootstrap\js\jquery.contenteditable.js" />
+    <Content Include="Bootstrap\js\jquery.countdown.js" />
     <Content Include="Bootstrap\js\jquery.filedrop.js" />
     <Content Include="Bootstrap\js\jquery.hotkeys.js" />
     <Content Include="Bootstrap\js\jquery.sparkline.js" />
