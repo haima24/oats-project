@@ -7,6 +7,7 @@
     <div class="nt-asms-list">
         <a>
             <div class="nt-list-head">
+                <div class="nt-status">Status</div>
                 <div class="nt-name">
                     Running And Upcoming Tests
                 </div>
@@ -28,16 +29,20 @@
             {
                 foreach (var invitation in invitations)
                 {
-                <div class="nt-list-row" test-id ="@invitation.Test.TestID">
+                <div class="nt-list-row" test-id ="@invitation.Test.TestID" invitation-id="@invitation.InvitationID">
+                    @if (invitation.IsMailSent)
+                    {
+                        <div class="nt-status"><span class="label label-info">Mail Sent</span></div>
+                    }
+                    else
+                    {
+                        <div class="nt-status"><span class="label label-important">Mail Un-Sent</span></div>
+                    }
                     <div class="nt-name">
-                        <span>@invitation.Test.TestTitle
-
-                        </span>
-
+                        <span>@invitation.Test.TestTitle</span>
                         <button class="nt-btn-icon nt-openbtn">
                             <i class="t-icon pencilpaper"></i>
                         </button>
-
                     </div>
 
 

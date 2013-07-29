@@ -1,0 +1,73 @@
+﻿@model OATS_Capstone.Models.Question
+@{
+    var answers = @Model.Answers.Where(k => !String.IsNullOrEmpty(k.AnswerContent)).Select(i => i.AnswerContent);
+    var answersDescription = answers.Count() == 0 ? string.Empty : answers.Aggregate((w, n) => w + "/ " + n);
+    var ansCouples = Model.Answers.Where(i => !i.DependencyAnswerID.HasValue).OrderBy(i => i.SerialOrder);
+}
+<div class="nt-qsearch" data-action="reuse" question-id="@Model.QuestionID">
+    <div>
+        <i class="t-icon i-matching"></i>
+    </div>
+    <div class="nt-qsearch-content">
+        <div class="nt-qsearch-title">
+            <p>@Model.QuestionTitle</p>
+        </div>
+        <div class="nt-qsearch-desc">@answersDescription</div>
+    </div>
+    <div class="nt-qsearch-popover-cont">
+        <div class="nt-qsearch-popover">
+            <div class="nt-qtext nt-phrase">
+                <p>@Model.QuestionTitle</p>
+
+            </div>
+            <div class="nt-qanscont">
+                @foreach (var item in ansCouples)
+                {
+                    var dependAns = item.AnswerChilds.FirstOrDefault();
+                    <div class="nt-qmatching nt-qmatching-hover">
+                        <div class="nt-qmatching-couple">
+                            <div class="begin nt-qans">
+                                <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                    <div class="redactor_box">
+                                        <div class="nt-qansdesc nt-delayedblur">@item.AnswerContent</div>
+                                    </div>
+                                </div>
+                                <div class="nt-qanselem">
+                                    <div class="matcher"><i class="t-icon i-matching"></i></div>
+                                </div>
+                            </div>
+                            @if (dependAns != null)
+                            {   <div class="line"></div>
+                                <div class="end nt-qans">
+                                    <div class="nt-qanselem">
+                                        <div class="matcher"><i class="t-icon i-matching"></i></div>
+                                    </div>
+                                    <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
+                                        <div class="redactor_box">
+                                            <div class="nt-qansdesc nt-delayedblur">@dependAns.AnswerContent</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="nt-qansrep">
+                            <div class="nt-qpts">@(item.Score ?? 0) pts</div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>    
+            
+                }
+            </div>
+            <div class="nt-taglist">
+                @{
+                    var tags = Model.TagInQuestions.OrderBy(i => i.SerialOrder).Select(i => i.Tag);
+                    foreach (var item in tags)
+                    {
+                    @Html.Partial("P_Tag_Item", item)
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

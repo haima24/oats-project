@@ -301,12 +301,6 @@ namespace OATS_Capstone.Controllers
             {
                 obj = new
                 {
-                    radio = this.RenderPartialViewToString("P_Type_Radio_Template"),
-                    multiple = this.RenderPartialViewToString("P_Type_Multiple_Template"),
-                    essay = this.RenderPartialViewToString("P_Type_Essay_Template"),
-                    shortanswer = this.RenderPartialViewToString("P_Type_ShortAnswer_Template"),
-                    text = this.RenderPartialViewToString("P_Type_Text_Template"),
-                    image = this.RenderPartialViewToString("P_Type_Image_Template"),
                     imagepreview = this.RenderPartialViewToString("P_RenderPreviewImage"),
                     empty = this.RenderPartialViewToString("P_Type_Empty_Template")
                 };
@@ -391,8 +385,8 @@ namespace OATS_Capstone.Controllers
                                     }
                                 }
                             }
-                            else 
-                            { 
+                            else
+                            {
                                 action = View("ErrorDetail", (object)Constants.DefaultMaxOfAttemp);
                             }
                         }
@@ -429,7 +423,7 @@ namespace OATS_Capstone.Controllers
                     }
                     else
                     {
-                        action = RedirectToActionPermanent("DetailRegister", "Account", new { id = HttpContext.Server.UrlEncode( common.accessToken), forward = Url.Action("DoTest", new { id = invitation.TestID }) });
+                        action = RedirectToActionPermanent("DetailRegister", "Account", new { id = HttpContext.Server.UrlEncode(common.accessToken), forward = Url.Action("DoTest", new { id = invitation.TestID }) });
                     }
                 }
             }
@@ -1004,15 +998,16 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.UpdateUserNoneChoiceScore(questionid, userid, score);
-            return Json(new { common.message, common.success,common.data });
+            return Json(new { common.message, common.success, common.data });
         }
 
         public ActionResult ScoreToExcel(int testid, List<int> userids)
         {
-            ActionResult action = View("ErrorDetail",(object)Constants.DefaultCannotExportFile);
+            ActionResult action = View("ErrorDetail", (object)Constants.DefaultCannotExportFile);
             var common = new CommonService();
             var package = common.ScoreToExcel(testid, userids);
-            if (package != null) {
+            if (package != null)
+            {
                 var result = new ExcelResult();
                 result.Package = package;
                 result.FileName = "OATS_StudentScore_Test_" + testid + ".xlsx";
@@ -1032,7 +1027,7 @@ namespace OATS_Capstone.Controllers
         {
             var common = new CommonService();
             common.UpdateTestDuration(testid, duration);
-            return Json(new { common.success, common.message});
+            return Json(new { common.success, common.message });
         }
 
         public JsonResult CheckMaxScoreAndTotalScore(int testid)
@@ -1123,6 +1118,26 @@ namespace OATS_Capstone.Controllers
             }
             return action;
 
+        }
+
+        public JsonResult DeleteImage(int questionid)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Question_Instance", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.DeleteImage(questionid);
+            return Json(new { common.message, common.success,common.generatedHtml });
         }
     }
 }

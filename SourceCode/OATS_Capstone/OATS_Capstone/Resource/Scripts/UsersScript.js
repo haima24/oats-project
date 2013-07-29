@@ -1,4 +1,5 @@
-﻿function searchUsers(selector, onselect, onvalidatesource) {
+﻿var currentUserId;
+function searchUsers(selector, onselect, onvalidatesource) {
     $(selector).autocomplete({
         minLength: 0,
         focus: function (ev, ui) {
@@ -77,6 +78,8 @@ function createUser() {
     }
 }
 $(function () {
+    var curIdString = $("#current-user-id").val();
+    currentUserId = parseInt(curIdString);
     $("#makeStudent").live("click", function () {
         initPopup("Student");
     });
@@ -85,10 +88,8 @@ $(function () {
     });
     var hub = $.connection.generalHub;
     hub.client.R_notifyNewUserCallBack = function (userid, generatedId, mail, isSuccess) {
-        var curIdString = $("#current-user-id").val();
-        var curId = parseInt(curIdString);
-        if (!isNaN(curId) && generatedId && userid && mail && typeof (isSuccess) != "undefined") {
-            if (curId == userid) {
+        if (!isNaN(currentUserId) && generatedId && userid && mail && typeof (isSuccess) != "undefined") {
+            if (currentUserId == userid) {
                 if (isSuccess) {
                     showMessage("success", "Success on sending email to: " + mail);
                 } else {
@@ -111,6 +112,38 @@ $(function () {
                 setTimeout(function () {
                     window.location.href = loc;
                 }, 3000);
+            }
+        }
+    }
+    hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount, listSent) {
+        if (uid && uid == currentUserId) {
+            if (typeof (initMailCount) != "undefined" && typeof (sentCount) != "undefined" && typeof (unSentCount) != "undefined" && typeof (listSent) != "undefined") {
+                var message = "";
+                var type = "";
+                if (unSentCount) {
+                    type = "error";
+                    message = "Unable to send all emails from invitation.</br>" + "Total : " + initMailCount + "</br>" + sentCount + " was sent.</br>" + unSentCount + " was Un-sent.";
+                } else {
+                    type = "info";
+                    message = "Sent " + sentCount + " invitation emails.";
+                }
+                //re-render
+                $(listSent).each(function () {
+                    var id = this;
+                    if (id) {
+                        var r = $("#asmsList .nt-list-row[invitation-id=" + id + "]");
+                        if (r.length > 0) {
+                            r.fadeOut("fast", function () {
+                                var row = $(this);
+                                var status = $("span.label", row);
+                                status.removeClass("label-important").addClass("label-info");
+                                status.html("Mail Sent");
+                                row.fadeIn("fast");
+                            });
+                        }
+                    }
+                });
+                showMessage(type, message);
             }
         }
     }

@@ -109,15 +109,18 @@ namespace OATS_Capstone.Models
             {
                 foreach (HttpPostedFileBase file in files)
                 {
+                    var fName = file.FileName;
+                    var fNameIndex = fName.LastIndexOf('.');
+                    fName = fName.Insert(fNameIndex, "_" + DateTime.Now.Ticks.ToString());
 
-                    string filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Resource/Images"), file.FileName);
+                    string filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Resource/Images"), fName);
                     System.IO.File.WriteAllBytes(filePath, this.ReadData(file.InputStream));
                     //write path to db
                     var db = SingletonDb.Instance();
                     var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
                     if (question != null)
                     {
-                        question.ImageUrl = "~/Resource/Images/" + file.FileName;
+                        question.ImageUrl = "~/Resource/Images/" + fName;
                         if (db.SaveChanges() > 0)
                         {
                             message = "All files have been successfully stored.";
@@ -362,6 +365,17 @@ namespace OATS_Capstone.Models
                             answer.Score = k.Score;
                             answer.SerialOrder = k.SerialOrder;
                             answer.DependencyAnswerID = k.DependencyAnswerID;
+                            foreach (var item in k.AnswerChilds)
+                            {
+                                var ans = new Answer();
+                                ans.AnswerContent = item.AnswerContent;
+                                ans.IsRight = item.IsRight;
+                                ans.Score = item.Score;
+                                ans.SerialOrder = item.SerialOrder;
+                                ans.DependencyAnswerID = item.DependencyAnswerID;
+                                answer.AnswerChilds.Add(ans);
+                                question.Answers.Add(ans);
+                            }
                             question.Answers.Add(answer);
                         });
                         test.Questions.Add(question);
@@ -1328,6 +1342,15 @@ namespace OATS_Capstone.Models
                     }
                     else
                     {
+                        var type = question.QuestionType.Type;
+                        if (type == "Image") {
+                            var url = question.ImageUrl;
+                            var path= HttpContext.Current.Server.MapPath(url);
+                            if (File.Exists(path)) {
+                                File.Delete(path);
+                            }
+                        }
+
                         question.Answers.ToList().ForEach(k => db.Answers.Remove(k));
                         var tags = question.TagInQuestions.ToList();
                         tags.ForEach(k => db.TagInQuestions.Remove(k));
@@ -2121,6 +2144,7 @@ namespace OATS_Capstone.Models
                 var userRole = db.Roles.FirstOrDefault(k => k.RoleDescription == "Student");
                 if (user != null && test != null)
                 {
+                    var invitationMails = new List<Invitation>();
                     var invitation = new Invitation();
                     var key = GenerateInvitationAccessToken(test.TestID, user.UserID);
                     invitation.AccessToken = key;
@@ -2129,6 +2153,7 @@ namespace OATS_Capstone.Models
                     invitation.InvitationDateTime = DateTime.Now;
                     invitation.IsMailSent = false;
                     user.Invitations.Add(invitation);
+                    invitationMails.Add(invitation);
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
@@ -2136,6 +2161,28 @@ namespace OATS_Capstone.Models
                         {
                             generatedHtml = OnRenderPartialViewToString.Invoke(user);
                         }
+                        var authen = AuthenticationSessionModel.Instance();
+                        var userid = authen.UserId;
+                        IUserMailer userMailer = new UserMailer();
+                        userMailer.OnAcknowledInvitationEmail += (init, sent, unsent, list) =>
+                        {
+                            if (list.Count > 0)
+                            {
+                                list.ForEach(i =>
+                                {
+                                    var invite = db.Invitations.FirstOrDefault(k => k.InvitationID == i);
+                                    if (invite != null)
+                                    {
+                                        invite.IsMailSent = true;
+                                    }
+                                });
+                                db.SaveChanges();
+                            }
+                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                            context.Clients.All.R_AcknowledgeEmailCallback(userid, init, sent, unsent, list);
+                        };
+
+                        userMailer.InviteUsers(invitationMails);
                     }
                 }
             }
@@ -2159,6 +2206,7 @@ namespace OATS_Capstone.Models
                 var userRole = db.Roles.FirstOrDefault(k => k.RoleDescription == "Teacher");
                 if (user != null && test != null)
                 {
+                    var invitationMails = new List<Invitation>();
                     var invitation = new Invitation();
                     var key = GenerateInvitationAccessToken(test.TestID, user.UserID);
                     invitation.AccessToken = key;
@@ -2167,6 +2215,7 @@ namespace OATS_Capstone.Models
                     invitation.InvitationDateTime = DateTime.Now;
                     invitation.IsMailSent = false;
                     user.Invitations.Add(invitation);
+                    invitationMails.Add(invitation);
                     if (db.SaveChanges() > 0)
                     {
                         success = true;
@@ -2174,6 +2223,28 @@ namespace OATS_Capstone.Models
                         {
                             generatedHtml = OnRenderPartialViewToString.Invoke(user);
                         }
+                        var authen = AuthenticationSessionModel.Instance();
+                        var userid = authen.UserId;
+                        IUserMailer userMailer = new UserMailer();
+                        userMailer.OnAcknowledInvitationEmail += (init, sent, unsent, list) =>
+                        {
+                            if (list.Count > 0)
+                            {
+                                list.ForEach(i =>
+                                {
+                                    var invite = db.Invitations.FirstOrDefault(k => k.InvitationID == i);
+                                    if (invite != null)
+                                    {
+                                        invite.IsMailSent = true;
+                                    }
+                                });
+                                db.SaveChanges();
+                            }
+                            var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
+                            context.Clients.All.R_AcknowledgeEmailCallback(userid, init, sent, unsent, list);
+                        };
+
+                        userMailer.InviteUsers(invitationMails);
                     }
                 }
             }
@@ -2270,49 +2341,50 @@ namespace OATS_Capstone.Models
                 var db = SingletonDb.Instance();
                 var authen = AuthenticationSessionModel.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                var newTest = new Test();
-                newTest.TestTitle = "COPY: " + test.TestTitle;
-                newTest.CreatedDateTime = DateTime.Now;
-                newTest.CreatedUserID = authen.UserId;
-                newTest.Duration = test.Duration;
-                newTest.EndDateTime = test.EndDateTime;
-                newTest.StartDateTime = test.StartDateTime;
-                newTest.IsActive = true;
-                newTest.SettingConfig = test.SettingConfig;
-                var tagsInTest = test.TagInTests.ToList();
-                newTest.TagInTests = new List<TagInTest>();
-                tagsInTest.ForEach(i =>
+                if (test != null)
                 {
-                    var tagInTest = new TagInTest();
-                    tagInTest.Tag = i.Tag;
-                    tagInTest.SerialOrder = i.SerialOrder;
-                    newTest.TagInTests.Add(tagInTest);
-                });
-
-                var questions = test.Questions.ToList();
-                newTest.Questions = new List<Question>();
-                questions.ForEach(i =>
+                    var newTitle = "COPY: " + test.TestTitle;
+                    var duplicatedTestByName = db.Tests.FirstOrDefault(i => i.TestTitle.Trim() == newTitle.Trim());
+                    if (duplicatedTestByName == null)
                     {
-                        var question = new Question();
-                        question.ImageUrl = i.ImageUrl;
-                        question.LabelOrder = i.LabelOrder;
-                        question.NoneChoiceScore = i.NoneChoiceScore;
-                        question.QuestionTitle = i.QuestionTitle;
-                        question.QuestionType = i.QuestionType;
-                        question.SerialOrder = i.SerialOrder;
-                        var tagsInQuestion = question.TagInQuestions.ToList();
-                        question.TagInQuestions = new List<TagInQuestion>();
-                        tagsInQuestion.ForEach(k =>
+                        var newTest = new Test();
+                        newTest.TestTitle = newTitle;
+                        newTest.IsRunning = test.IsRunning;
+                        newTest.CreatedDateTime = DateTime.Now;
+                        newTest.CreatedUserID = authen.UserId;
+                        newTest.Duration = test.Duration;
+                        newTest.EndDateTime = test.EndDateTime;
+                        newTest.StartDateTime = test.StartDateTime;
+                        newTest.IsActive = true;
+                        newTest.SettingConfig = test.SettingConfig;
+                        var tagsInTest = test.TagInTests.ToList();
+                        newTest.TagInTests = new List<TagInTest>();
+                        tagsInTest.ForEach(i =>
                         {
-                            var tagInquestion = new TagInQuestion();
-                            tagInquestion.Tag = k.Tag;
-                            tagInquestion.SerialOrder = k.SerialOrder;
-                            question.TagInQuestions.Add(tagInquestion);
+                            var tagInTest = new TagInTest();
+                            tagInTest.Tag = i.Tag;
+                            tagInTest.SerialOrder = i.SerialOrder;
+                            newTest.TagInTests.Add(tagInTest);
                         });
-                        question.TextDescription = i.TextDescription;
-                        var answers = i.Answers.ToList();
-                        question.Answers = new List<Answer>();
-                        answers.ForEach(k =>
+
+                        foreach (var i in test.Questions)
+                        {
+                            var question = new Question();
+                            question.ImageUrl = i.ImageUrl;
+                            question.LabelOrder = i.LabelOrder;
+                            question.NoneChoiceScore = i.NoneChoiceScore;
+                            question.QuestionTitle = i.QuestionTitle;
+                            question.QuestionType = i.QuestionType;
+                            question.SerialOrder = i.SerialOrder;
+                            foreach (var k in i.TagInQuestions)
+                            {
+                                var tagInquestion = new TagInQuestion();
+                                tagInquestion.Tag = k.Tag;
+                                tagInquestion.SerialOrder = k.SerialOrder;
+                                question.TagInQuestions.Add(tagInquestion);
+                            }
+                            question.TextDescription = i.TextDescription;
+                            foreach (var k in i.Answers)
                             {
                                 var answer = new Answer();
                                 answer.AnswerContent = k.AnswerContent;
@@ -2320,16 +2392,33 @@ namespace OATS_Capstone.Models
                                 answer.Score = k.Score;
                                 answer.SerialOrder = k.SerialOrder;
                                 answer.DependencyAnswerID = k.DependencyAnswerID;
+                                foreach (var item in k.AnswerChilds)
+                                {
+                                    var ans = new Answer();
+                                    ans.AnswerContent = item.AnswerContent;
+                                    ans.IsRight = item.IsRight;
+                                    ans.Score = item.Score;
+                                    ans.SerialOrder = item.SerialOrder;
+                                    ans.DependencyAnswerID = item.DependencyAnswerID;
+                                    answer.AnswerChilds.Add(ans);
+                                    question.Answers.Add(ans);
+                                }
                                 question.Answers.Add(answer);
-                            });
-                        newTest.Questions.Add(question);
-                    });
-                db.Tests.Add(newTest);
-                if (db.SaveChanges() > 0)
-                {
-                    newId = newTest.TestID;
-                    success = true;
-                    message = "Duplicate test successful.";
+                            }
+                            newTest.Questions.Add(question);
+                        }
+                        db.Tests.Add(newTest);
+                        if (db.SaveChanges() > 0)
+                        {
+                            newId = newTest.TestID;
+                            success = true;
+                            message = "Duplicate test successful.";
+                        }
+                    }
+                    else {
+                        success = false;
+                        message = "The name generated of this test after copy was duplicated, try change current name of this test.";
+                    }
                 }
             }
             catch (Exception)
@@ -3528,6 +3617,40 @@ namespace OATS_Capstone.Models
                 excel = null;
             }
             return excel;
+        }
+        public void DeleteImage(int questionid) {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
+                if (question != null) {
+                    var imageUrl = question.ImageUrl;
+                    question.ImageUrl = string.Empty;
+                    //delete in server
+                    var path= HttpContext.Current.Server.MapPath(imageUrl);
+                    
+                    if (db.SaveChanges() > 0) {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        success = true;
+                        message = Constants.DefaultSuccessMessage;
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                        }
+                    }
+                    
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
         }
     }
 }
