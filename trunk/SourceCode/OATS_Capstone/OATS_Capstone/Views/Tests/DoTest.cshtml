@@ -2,7 +2,9 @@
     <script src="~/Bootstrap/js/jquery.hotkeys.js"></script>
     <script src="~/Bootstrap/js/bootstrap-wysiwyg.js"></script>
     <script src="~/Bootstrap/js/raphael.js"></script>
+    <script src="~/Bootstrap/js/jquery.countdown.js"></script>
     <script src="~/Resource/Scripts/DoTestScript.js"></script>
+    <link href="~/Bootstrap/css/jquery.countdown.css" rel="stylesheet" />
 }
 @{
     ViewBag.Title = "Index";
@@ -15,6 +17,7 @@
 @if (Model != null)
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
+    
     <div class="navbar navbar-static-top">
         <div class="navbar-inner">
             <div id="savestatus" style="display: none;">
@@ -79,6 +82,8 @@
                 <div class="nt-footer-right">
                     <div class="nt-time-remaining" id="c427">
                         <div class="nt-time-remaining-text">Time remaining:</div>
+                        <div id="countdown"></div>
+                        <div id="note"></div>
                         <div class="nt-time-remaining-value nt-full">
                             <div class="nt-time-digits">1</div>
                             <div class="nt-hour">hour</div>
@@ -91,6 +96,7 @@
                             <div class="nt-time-digits">46</div>
                             <div class="nt-minute">mins</div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
