@@ -26,10 +26,10 @@
                                     <div class="nt-desc">Tags</div>
                                 </div>
                                 <div class="nt-icons">
-                                    <button class="nt-btn-circle-mini nt-sort-asc">
+                                    <button class="nt-btn-circle-mini nt-sort-asc" data-order="asc" data-key="tag">
                                         <i class="t-icon i-caret-up"></i>
                                     </button>
-                                    <button class="nt-btn-circle-mini nt-sort-desc">
+                                    <button class="nt-btn-circle-mini nt-sort-desc" data-order="desc" data-key="tag">
                                         <i class="t-icon i-caret-down"></i>
                                     </button>
                                 </div>
@@ -44,10 +44,10 @@
                                     </div>
                                 </div>
                                 <div class="nt-icons" data-sort-attr="selAvg">
-                                    <button class="nt-btn-circle-mini nt-sort-asc">
+                                    <button class="nt-btn-circle-mini nt-sort-asc" data-order="asc" data-key="selection">
                                         <i class="t-icon i-caret-up"></i>
                                     </button>
-                                    <button class="nt-btn-circle-mini nt-sort-desc">
+                                    <button class="nt-btn-circle-mini nt-sort-desc" data-order="desc" data-key="selection">
                                         <i class="t-icon i-caret-down"></i>
                                     </button>
                                 </div>
@@ -61,10 +61,10 @@
                                     </div>
                                 </div>
                                 <div class="nt-icons" data-sort-attr="egAvg">
-                                    <button class="nt-btn-circle-mini nt-sort-asc">
+                                    <button class="nt-btn-circle-mini nt-sort-asc" data-order="asc" data-key="group">
                                         <i class="t-icon i-caret-up"></i>
                                     </button>
-                                    <button class="nt-btn-circle-mini nt-sort-desc">
+                                    <button class="nt-btn-circle-mini nt-sort-desc" data-order="desc" data-key="group">
                                         <i class="t-icon i-caret-down"></i>
                                     </button>
                                 </div>
@@ -77,10 +77,10 @@
                                     </div>
                                 </div>
                                 <div class="nt-icons" data-sort-attr="avgDiff">
-                                    <button class="nt-btn-circle-mini nt-sort-asc">
+                                    <button class="nt-btn-circle-mini nt-sort-asc" data-order="asc" data-key="diff">
                                         <i class="t-icon i-caret-up"></i>
                                     </button>
-                                    <button class="nt-btn-circle-mini nt-sort-desc">
+                                    <button class="nt-btn-circle-mini nt-sort-desc" data-order="desc" data-key="diff">
                                         <i class="t-icon i-caret-down"></i>
                                     </button>
                                 </div>
@@ -94,10 +94,10 @@
                                     </div>
                                 </div>
                                 <div class="nt-icons" data-sort-attr="grpStdev">
-                                    <button class="nt-btn-circle-mini nt-sort-asc">
+                                    <button class="nt-btn-circle-mini nt-sort-asc" data-order="asc" data-key="stdev">
                                         <i class="t-icon i-caret-up"></i>
                                     </button>
-                                    <button class="nt-btn-circle-mini nt-sort-desc">
+                                    <button class="nt-btn-circle-mini nt-sort-desc" data-order="desc" data-key="stdev">
                                         <i class="t-icon i-caret-down"></i>
                                     </button>
                                 </div>
@@ -121,19 +121,19 @@
                                             <i class="icon-remove nt-tag-remove"></i>
                                         </div>
                                     </td>
-                                    <td class="nt-scores-table-avgcol nt-scores-table-selavgcol">
+                                    <td class="nt-scores-table-avgcol nt-scores-table-selavgcol" data-sort-value="@item.Statistic.SelectionAVGScore.NumberValue">
                                         <span class="nt-selavg" style="display: none">@item.Statistic.SelectionAVGScore.Percent</span>
                                         <span class="nt-selavg-nat">@item.Statistic.SelectionAVGScore.Praction</span>
                                     </td>
-                                    <td class="nt-scores-table-avgcol nt-scores-table-egavgcol">
+                                    <td class="nt-scores-table-avgcol nt-scores-table-egavgcol" data-sort-value="@item.Statistic.GroupAVGScore.NumberValue">
                                         <span class="nt-egavg" style="display: none">@item.Statistic.GroupAVGScore.Percent</span>
                                         <span class="nt-egavg-nat">@item.Statistic.GroupAVGScore.Praction</span>
                                     </td>
-                                    <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol">
+                                    <td class="nt-scores-table-avgcol nt-scores-table-avgdiffcol" data-sort-value="@item.Statistic.DifferenceScore.NumberValue">
                                         <span class="nt-avgdiff" style="display: none">@item.Statistic.DifferenceScore.Percent</span>
                                         <span class="nt-avgdiff-nat">@item.Statistic.DifferenceScore.Decimal</span>
                                     </td>
-                                    <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol">
+                                    <td class="nt-scores-table-avgcol nt-scores-table-grpstdevcol" data-sort-value="@item.Statistic.GroupSTDEVScore.NumberValue">
                                         <span class="nt-grpstdev" style="display: none">@item.Statistic.GroupSTDEVScore.Percent</span>
                                         <span class="nt-grpstdev-nat">@item.Statistic.GroupSTDEVScore.Decimal</span>
                                     </td>

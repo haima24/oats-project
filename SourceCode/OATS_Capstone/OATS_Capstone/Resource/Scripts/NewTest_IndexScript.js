@@ -1,4 +1,17 @@
-﻿function handleOverviewCheckedUsersAndTests() {
+﻿function initClientSorting() {
+    //sidebar
+    var handlers = new Array();
+    handlers.push({
+        key: "name", handler: ".nt-clb-item-label"
+    });
+    $(".nt-clb-header-label .nt-btn-circle-mini,.nt-clb-header-desc .nt-btn-circle-mini").clientSort({
+        sortItems: ".nt-clb-item",
+        handlers: handlers,
+        parentContainer: ".nt-ctrl-list"
+    });
+    //sidebar
+}
+function handleOverviewCheckedUsersAndTests() {
     var userids = $("#sidebar #menuUsers .nt-ctrl-list input[type=checkbox]:checked").map(function () { return $(this).attr("user-id"); }).convertJqueryArrayToJSArray();
     var testids = $("#sidebar #menuTests .nt-ctrl-list input[type=checkbox]:checked").map(function () { return $(this).attr("test-id"); }).convertJqueryArrayToJSArray();
     $.ajax({
@@ -299,6 +312,8 @@ $(function () {
             showMessage("info", "Please select users and tests");
         }
     });
+    //separator
+    initClientSorting();
     //separator
     var hub = $.connection.generalHub;
     hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {

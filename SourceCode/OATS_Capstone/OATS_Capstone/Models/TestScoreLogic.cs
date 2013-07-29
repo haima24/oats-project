@@ -228,7 +228,11 @@ namespace OATS_Capstone.Models
         {
             get { return denominator; }
         }
-
+        public decimal NumberValue {
+            get {
+                return (numerator / denominator).RoundTwo()??0;
+            }
+        }
         public ScoreStatistic(decimal? num, decimal? denom)
         {
             this.numerator = num;
