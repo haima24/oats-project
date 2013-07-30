@@ -52,7 +52,7 @@
                 <div class="control-group">
                     <label class="control-label nt-title">New Password</label>
                     <div class="controls">
-                        <input type="password" id="userPwd" class="nt-input-inspect"  disabled="disabled" />
+                        <input type="password" id="userPwd" class="nt-input-inspect" disabled="disabled" />
                         <p id="userPwdMsg" class="help-inline hide">
                             <i class="icon-ok"></i>
                             <span></span>
@@ -64,6 +64,26 @@
                     <div class="controls">
                         <input type="password" id="userConfPwd" class="nt-input-inspect" disabled="disabled" />
                         <p id="userConfPwdMsg" class="help-inline hide">
+                            <i class="icon-ok"></i>
+                            <span></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label nt-title">Phone Number</label>
+                    <div class="controls">
+                        <input type="text" id="userPhone" class="nt-input-inspect" value="@userInfo.UserPhone"/>
+                        <p id="userPhoneMsg" class="help-inline hide">
+                            <i class="icon-ok"></i>
+                            <span></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label nt-title">Country</label>
+                    <div class="controls">
+                        <input type="text" id="userCountry" class="nt-input-inspect" value="@userInfo.UserCountry"/>
+                        <p id="userCountryMsg" class="help-inline hide">
                             <i class="icon-ok"></i>
                             <span></span>
                         </p>

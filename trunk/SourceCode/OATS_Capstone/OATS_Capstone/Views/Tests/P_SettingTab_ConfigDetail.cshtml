@@ -23,11 +23,44 @@
         {
             if (Model.IsActive)
             {
-    <input id="asm_time_limit" type="text" value="@Model.NumberValue"><span>times</span>
+    <input id="asm_time_limit" data-key="number" type="text" value="@Model.NumberValue"><span>times</span>
             }
             else
             {
-    <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>times</span>
+    <input id="asm_time_limit" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>times</span>
+            }
+
+            if (Model.IsActive && Model.NumberValue > 1)
+            { 
+     <div id="attempBase">
+        <span>Score of this test based on: </span>
+        <select data-key="text">
+            @if (string.IsNullOrEmpty(Model.TextValue)||Model.TextValue == "Recent")
+            {
+                <option value="Recent" selected="selected">Recent Test</option>
+            }
+            else
+            {
+                <option value="Recent">Recent Test</option>
+            }
+            @if (Model.TextValue == "Average")
+            {
+                <option value="Average" selected="selected">Test With Average Score</option>
+            }
+            else
+            {
+                <option value="Average">Test With Average Score</option>
+            }
+            @if (Model.TextValue == "Maximum")
+            {
+                <option value="Maximum" selected="selected">Test With Highest Score</option>
+            }
+            else
+            {
+                <option value="Maximum">Test With Highest Score</option>
+            }
+        </select>
+    </div>
             }
         }
         else if (Model.SettingType.SettingTypeKey == "RTC")
@@ -45,22 +78,22 @@
         {
             if (Model.IsActive)
             {
-    <input id="asm_max_point" type="text" value="@Model.NumberValue"><span>Pts</span>
+    <input id="asm_max_point" data-key="number" type="text" value="@Model.NumberValue"><span>Pts</span>
             }
             else
             {
-    <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
+    <input id="asm_max_point" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
             }
         }
         else if (Model.SettingType.SettingTypeKey == "DRL")
         {
             if (Model.IsActive)
             { 
-    <input id="asm_duration" type="text" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
+    <input id="asm_duration" data-key="number" type="text" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
             }
             else
             {
-    <input id="asm_duration" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
+    <input id="asm_duration" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
             }
         }
 }
@@ -79,7 +112,39 @@ else
     </label>
         if (Model.SettingType.SettingTypeKey == "OSM")
         {
-    <input id="asm_time_limit" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
+    <input id="asm_time_limit" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins</span>
+    if (Model.IsActive && Model.NumberValue > 1)
+            { 
+    <div id="attempBase">
+        <span>Score of this test based on: </span>
+        <select disabled="disabled" data-key="text">
+            @if (string.IsNullOrEmpty(Model.TextValue)||Model.TextValue == "Recent")
+            {
+                <option value="Recent" selected="selected">Recent Test</option>
+            }
+            else
+            {
+                <option value="Recent">Recent Test</option>
+            }
+            @if (Model.TextValue == "Average")
+            {
+                <option value="Average" selected="selected">Test With Average Score</option>
+            }
+            else
+            {
+                <option value="Average">Test With Average Score</option>
+            }
+            @if (Model.TextValue == "Maximum")
+            {
+                <option value="Maximum" selected="selected">Test With Highest Score</option>
+            }
+            else
+            {
+                <option value="Maximum">Test With Highest Score</option>
+            }
+        </select>
+    </div>
+            }
         }
         else if (Model.SettingType.SettingTypeKey == "RTC")
         {
@@ -94,10 +159,10 @@ else
         }
         else if (Model.SettingType.SettingTypeKey == "MTP")
         {
-    <input id="asm_max_point" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
+    <input id="asm_max_point" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>Pts</span>
         }
         else if (Model.SettingType.SettingTypeKey == "DRL")
         {
-    <input id="asm_duration" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
+    <input id="asm_duration" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
         }
 }

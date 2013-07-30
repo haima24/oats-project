@@ -78,18 +78,18 @@ $.fn.extend({
             });
         };
         var _onPutKeyMap = function (obj) {
-            keymap=$.grep(keymap, function (item, i) {
+            keymap = $.grep(keymap, function (item, i) {
                 if (item.start == obj.start || item.end == obj.end) {
                     item.line.remove();
                     return true;
                 }
-            },true);
-            
+            }, true);
+
             keymap.push(obj);
             _updateHtmlFromKeyMap();
         };
         var _onDeleteLine = function (line) {
-            keymap= $.grep(keymap, function (e, i) {
+            keymap = $.grep(keymap, function (e, i) {
                 if (e.line == line) {
                     line.remove();
                     return true;
@@ -134,7 +134,7 @@ $.fn.extend({
                     "stroke-width": 2
                 });
                 line.mouseover(function () {
-                    this.attr({"stroke-opacity":0.5});
+                    this.attr({ "stroke-opacity": 0.5 });
                 }).mouseout(function () {
                     this.attr({ "stroke-opacity": 1 });
                 });
@@ -186,7 +186,6 @@ $(function () {
     testid = parseInt($("#test-id").val());
     var duration = parseInt($("#test-duration").val()),
         ts = (new Date()).getTime() + duration * 60 * 1000;
-
     $('#countdown').countdown({
         timestamp: ts,
         timeout: function () {
@@ -194,6 +193,13 @@ $(function () {
         }
     });
 
+
+    $("#checklist .nt-qitem .nt-qnum:not(.nt-qnum-letter)").each(function (index, element) {
+        $(element).html(index + 1 + ". ");
+    });
+    $("#checklist .nt-qitem .nt-qnum.nt-qnum-letter").each(function (index, element) {
+        $(element).html(String.fromCharCode(65 + index) + ". ");
+    });
 
     initWYSIWYG();
     $(".nt-qitem[question-type=Matching]").matchingConnector();

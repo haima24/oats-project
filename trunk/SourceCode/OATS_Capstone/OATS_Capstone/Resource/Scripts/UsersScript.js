@@ -80,12 +80,27 @@ function createUser() {
 $(function () {
     var curIdString = $("#current-user-id").val();
     currentUserId = parseInt(curIdString);
+    //separator
     $("#makeStudent").live("click", function () {
         initPopup("Student");
     });
     $("#makeTeacher").live("click", function () {
         initPopup("Teacher");
     });
+    //separator
+    $(".nt-dnd-example-text").live("click", function () {
+        var $this = $(this);
+        $this.addClass("active");
+    });
+    $(".nt-dnd-example-text").live("paste", function (e) {
+
+    });
+    $(".nt-dnd-example-text").clickout({
+        callback: function (e,self) {
+            self.removeClass("active");
+        }
+    });
+    //separator
     var hub = $.connection.generalHub;
     hub.client.R_notifyNewUserCallBack = function (userid, generatedId, mail, isSuccess) {
         if (!isNaN(currentUserId) && generatedId && userid && mail && typeof (isSuccess) != "undefined") {
@@ -157,7 +172,4 @@ $(function () {
             createUser();
         });
     });
-
-    //separator
-    
 });

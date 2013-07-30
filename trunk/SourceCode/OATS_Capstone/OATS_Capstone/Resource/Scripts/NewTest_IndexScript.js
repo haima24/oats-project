@@ -245,8 +245,22 @@ $(function () {
             });
         }
     });
-
-
+    //separator
+    $("div.nt-ctrl[data-action=control] .nt-dupbtn").live("click", function () {
+        var testid = parseInt($(this).attr("test-id"));
+        if (!isNaN(testid)) {
+            $.post("/Tests/DuplicateTest", { testid: testid }, function (res) {
+                if (res.success && res.id) {
+                    window.location.href = "/Tests/NewTest/" + res.id;
+                } else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    $("div.nt-ctrl[data-action=control] .nt-delbtn").live("click", function () {
+    });
+    //separator
     $(".btn-feedback").live("click", function () {
         var button = $(this);
         var testIdString = button.attr("test-id");

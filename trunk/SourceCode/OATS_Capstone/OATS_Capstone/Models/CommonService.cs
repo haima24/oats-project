@@ -1674,7 +1674,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
+        public void UpdateSettings(int testid, String settingKey, bool isactive, int? number,string text)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -1709,9 +1709,23 @@ namespace OATS_Capstone.Models
                     if (detail != null)
                     {
                         detail.IsActive = isactive;
-                        if (detail.SettingType.SettingTypeKey == "OSM")
+                        if(detail.SettingType.SettingTypeKey == "DRL"){
+                            detail.NumberValue=number;
+                        }
+                        else if (detail.SettingType.SettingTypeKey == "OSM")
                         {
-                            detail.NumberValue = testtime;
+                            var usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);
+                            if ((number??0) < usersMaxAttemp)
+                            {
+                                message = "The number of times is conflict with max attemps that students have done (" + usersMaxAttemp + "), please choose a number greater than : " + usersMaxAttemp;
+                                success = false;
+                                return;
+                            }
+                            else
+                            {
+                                detail.NumberValue = number;
+                                detail.TextValue = text;
+                            }
                         }
                         else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
                         {
@@ -1721,8 +1735,19 @@ namespace OATS_Capstone.Models
                         {
                             if (isactive)
                             {
-                                var isEqual = test.IsTotalScoreEqualMaxScore();
-                                test.IsRunning = isEqual;
+                                detail.NumberValue = number;
+                                var totalScore = test.Questions.TotalScore();
+                                if (totalScore.HasValue && number != 0)
+                                {
+                                    if ((totalScore ?? 0) != number)
+                                    {
+                                        test.IsRunning = false;
+                                    }
+                                    else
+                                    {
+                                        test.IsRunning = true;
+                                    }
+                                }
                             }
                             else
                             {
@@ -1888,7 +1913,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
         public void SubmitTest(UserInTest userInTest)
         {
             success = false;
@@ -2003,7 +2027,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-
         public void UpdateUserEmail(int userId, string userEmail)
         {
             success = false;
@@ -2084,6 +2107,8 @@ namespace OATS_Capstone.Models
                     {
                         user.Name = profile.Name;
                         user.UserMail = profile.UserMail;
+                        user.UserCountry = profile.UserCountry;
+                        user.UserPhone = profile.UserPhone;
                         if (!string.IsNullOrEmpty(profile.Password))
                         {
                             user.Password = ExtensionModel.createHashMD5(profile.Password);
@@ -3175,73 +3200,6 @@ namespace OATS_Capstone.Models
                 pack = null;
             }
             return pack;
-        }
-        public void UpdateMaxScoreSetting(int testid, int score)
-        {
-            success = false;
-            message = Constants.DefaultProblemMessage;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null)
-                {
-                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
-                    if (settingDetail != null)
-                    {
-                        settingDetail.NumberValue = score;
-                        var totalScore = test.Questions.TotalScore();
-                        if (totalScore.HasValue && score != 0)
-                        {
-                            if ((totalScore ?? 0) != score)
-                            {
-                                test.IsRunning = false;
-                            }
-                            else
-                            {
-                                test.IsRunning = true;
-                            }
-                        }
-                        if (db.SaveChanges() >= 0)
-                        {
-                            success = true;
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-        }
-
-        public void UpdateTestDuration(int testid, int duration)
-        {
-            success = false;
-            message = Constants.DefaultProblemMessage;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null)
-                {
-                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
-                    if (settingDetail != null)
-                    {
-                        settingDetail.NumberValue = duration;
-                        if (db.SaveChanges() >= 0)
-                        {
-                            success = true;
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
         }
 
         public void CheckMaxScoreAndTotalScore(int testid, ref TotalAndMaxScore carier)

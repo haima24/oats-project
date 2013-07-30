@@ -64,6 +64,12 @@ namespace OATS_Capstone.Models
     }
     public class TestListItem
     {
+        private int? remainAttemp = null;
+        public int? RemainAttemp
+        {
+            get { return remainAttemp; }
+            set { remainAttemp = value; }
+        }
         private bool isRunning = true;
         public bool IsRunning
         {
@@ -85,7 +91,6 @@ namespace OATS_Capstone.Models
         private int resultedOnInvitedCount = 0;
         public int NumOfStudent { get; set; }
         public int NumOfTeacher { get; set; }
-
         public int ResultedOnInvitedCount
         {
             get { return resultedOnInvitedCount; }
@@ -147,6 +152,21 @@ namespace OATS_Capstone.Models
             var allInvitations = test.Invitations;
             NumOfStudent = allInvitations.Count(k => k.Role.RoleDescription == "Student");
             NumOfTeacher = allInvitations.Count(k => k.Role.RoleDescription == "Teacher");
+            var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
+            if (settingDetail != null) {
+                if (settingDetail.IsActive) {
+                    var authen = AuthenticationSessionModel.Instance();
+                    var userId = authen.UserId;
+                    var inTests = test.UserInTests.Where(i => i.UserID == userId);
+                    if (inTests.Count() > 0)
+                    {
+                        var maxAttemp = settingDetail.NumberValue ?? 0;
+                        var curAttemp = inTests.Max(i => i.NumberOfAttend);
+                        var delta=maxAttemp-curAttemp;
+                        remainAttemp = delta < 0 ? 0 : delta;
+                    }
+                }
+            }
         }
     }
 }

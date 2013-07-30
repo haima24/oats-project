@@ -25,7 +25,7 @@
             <span class="nt-desc" style="display: inline;"></span>
         </div>
         <div class="container">
-            <a id="logo" class="brand" href="@Url.Action("Index","Tests")">OATS</a>
+            <a id="logo" class="brand" href="@Url.Action("Index", "Tests")">OATS</a>
             <div class="nav-collapse collapse navbar-responsive-collapse">
                 <ul class="nav">
                     <li class="active"><a href="@Url.Action("Index", "Tests")"><i class="t-icon i-tests"></i>Tests</a></li>
@@ -45,7 +45,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name)?user.UserMail:user.Name)</li>
+                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name) ? user.UserMail : user.Name)</li>
                             <li class="divider"></li>
                             <li><a href="#" id="profile-link">My Profile</a></li>
                             <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
@@ -62,7 +62,8 @@
 {
     <div id="eventActiveTest" class="nt-message-info">
         <div class="nt-message-info-cont nt-hover">
-            <div>This test is currently
+            <div>
+                This test is currently
                 <p class="nt-uc">disable</p>
             </div>
             <div class="nt-enable">- Enable!</div>
@@ -72,7 +73,8 @@ else
 {
     <div id="eventActiveTest" class="nt-message-info" style="display: none;">
         <div class="nt-message-info-cont nt-hover">
-            <div>This test is currently
+            <div>
+                This test is currently
                 <p class="nt-uc">disable</p>
             </div>
             <div class="nt-enable">- Enable!</div>
@@ -83,9 +85,20 @@ else
 <div id="container" class="container wrapper">
     @Html.Partial("P_Inner_Container", Model)
 </div>
-<div id="message-max-score" class="alert" style="display:none;">
+<div id="message-max-score" class="alert" style="display: none;">
     <h4 class="alert-heading">Max score compatibility</h4>
     <div class="detail">The max score setting and total score of this test have compatibility problem.</div>
     <div>Total Score: <span class="total"></span></div>
     <div>Max Score Setting:<span class="max"></span></div>
+</div>
+<div id="confirmDelete" class="modal hide fade in">
+    <div class="modal-body">
+        <div>
+            Are you sure you want to delete this test?
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="nt-btn-submit nt-btn-ok">OK</button>
+        <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+    </div>
 </div>

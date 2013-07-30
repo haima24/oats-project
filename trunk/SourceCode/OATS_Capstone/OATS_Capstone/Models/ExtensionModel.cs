@@ -79,7 +79,8 @@ namespace OATS_Capstone.Models
             {
                 s = String.Format("{0:dd MMM yyyy}", datetime);
             }
-            else {
+            else
+            {
                 s = "N/A";
             }
             return s;
@@ -88,7 +89,8 @@ namespace OATS_Capstone.Models
         {
             var s = string.Empty;
             if (datetime.HasValue) { s = String.Format("{0:dd MMM yyyy}", datetime.Value); }
-            else {
+            else
+            {
                 s = "N/A";
             }
             return s;
@@ -188,21 +190,61 @@ namespace OATS_Capstone.Models
         {
             return enumerable.Distinct(new LambdaComparer<TSource>(comparer));
         }
-        public static bool Contains<TSource>(this IEnumerable<TSource> enumerable,TSource item, Func<TSource, TSource, bool> comparer)
+        public static bool Contains<TSource>(this IEnumerable<TSource> enumerable, TSource item, Func<TSource, TSource, bool> comparer)
         {
-            return enumerable.Contains(item,new LambdaComparer<TSource>(comparer));
+            return enumerable.Contains(item, new LambdaComparer<TSource>(comparer));
         }
         public static List<UserInTest> FilterInTestsOnAttempSetting(this IEnumerable<UserInTest> inTests)
         {
             var groups = from i in inTests
-                         group i by i.UserID into InTestGroup
-                         select new { UserId = InTestGroup.Key, MaxAttend = InTestGroup.Max(i => i.NumberOfAttend) };
+                         group i by new { UserID = i.UserID, Test = i.Test } into InTestGroup
+                         select new
+                         {
+                             UserId = InTestGroup.Key.UserID,
+                             Test = InTestGroup.Key.Test,
+                             MaxAttemp = InTestGroup.Max(i => i.NumberOfAttend),
+                             AverageScore = InTestGroup.Average(i => i.Score),
+                             MaxScore = InTestGroup.Max(i => i.Score)
+                         };
             var result = new List<UserInTest>();
             foreach (var item in groups)
             {
+                var setting = AttempTypes.Recent;
+                var test = item.Test;
+                if (test != null)
+                {
+                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
+                    if (settingDetail != null)
+                    {
+                        setting = settingDetail.TextValue;
+                    }
+                }
                 var id = item.UserId;
-                var attend = item.MaxAttend;
-                var inTest = inTests.FirstOrDefault(i => i.UserID == id && i.NumberOfAttend == attend);
+                var maxAttemp = item.MaxAttemp;
+                var avgScore = item.AverageScore;
+                var maxScore = item.MaxScore;
+                UserInTest inTest = null;
+                switch (setting)
+                {
+                    case AttempTypes.Recent:
+                        inTest = inTests.FirstOrDefault(i => i.UserID == id && i.NumberOfAttend == maxAttemp);
+                        break;
+                    case AttempTypes.Average:
+                        var great = inTests.Where(i => i.UserID == id && i.Score >= avgScore).OrderBy(i=>i.Score);
+                        var less = inTests.Where(i => i.UserID == id && i.Score < avgScore).OrderByDescending(i => i.Score);
+                        inTest = great.FirstOrDefault();
+                        if (inTest == null)
+                        {
+                            inTest = less.FirstOrDefault();
+                        }
+                        break;
+                    case AttempTypes.Maximum:
+                        inTest = inTests.FirstOrDefault(i => i.UserID == id && i.Score == maxScore);
+                        break;
+                    default:
+                        inTest = inTests.FirstOrDefault(i => i.UserID == id && i.NumberOfAttend == maxAttemp);
+                        break;
+                }
                 if (inTest != null)
                 {
                     result.Add(inTest);
@@ -233,21 +275,6 @@ namespace OATS_Capstone.Models
             byte[] hashedBytes = md5.ComputeHash(authBytes);
             string hash = BitConverter.ToString(hashedBytes);
             return hash;
-        }
-        public static bool IsTotalScoreEqualMaxScore(this Test test)
-        {
-            var result = false;
-            if (test != null)
-            {
-                var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
-                if (settingDetail != null)
-                {
-                    var total = test.Questions.TotalScore();
-                    var max = settingDetail.NumberValue;
-                    result = total == max;
-                }
-            }
-            return result;
         }
         public static IEnumerable<Question> RandomQuestion(this IEnumerable<Question> questions)
         {
@@ -305,7 +332,8 @@ namespace OATS_Capstone.Models
                 if ((i + 1) == sortedCount && currentList.Count > 0)
                 {
                     var last = groupList.LastOrDefault();
-                    if (last != null) {
+                    if (last != null)
+                    {
                         last.AddRange(currentList);
                     }
                 }
