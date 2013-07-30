@@ -1343,6 +1343,7 @@ i, cite, em, var, address, dfn {
     border-radius: 3px;
 }
 
+
     .nt-btn-text:hover:not(.static) {
         color: #444444;
     }
@@ -1359,6 +1360,12 @@ i, cite, em, var, address, dfn {
         box-shadow: inset 0 1px 2px #828282, inset 1px 3px 5px 1px lightgrey, inset 0 -1px 0 white, inset 0 -2px 5px 0 lightgrey;
         color: #444444;
     }
+
+.nt-invbtn {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1em;
+    line-height:20px;
+}
 
 #checklist .nt-qitem .nt-qans .nt-qansscore {
     position: absolute;
@@ -2954,7 +2961,12 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
                 margin: 0 10px;
                 padding: 2px;
             }
-
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #attempBase {
+                padding-left:30px;
+            }
+                #eventTab > div.nt-asm-settings .nt-panel .nt-section #attempBase select {
+                    width:210px;
+                }
 #eventTab > div.nt-asm-inv {
     float: none;
 }
@@ -3214,18 +3226,12 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         width: auto;
     }
 
-    .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
-    }
 
     .nt-asms-list .nt-list-head > div.nt-ctrl, .nt-asms-list .nt-list-row > div.nt-ctrl {
-        visibility: hidden;
         padding: 8px 1px;
         text-align: right;
     }
 
-    .nt-asms-list .nt-list-head:hover > div.nt-ctrl, .nt-asms-list .nt-list-row:hover > div.nt-ctrl {
-        visibility: visible;
-    }
 
 #asmsList .accordion-group.nt-acc-hl {
     margin: 0 -15px;

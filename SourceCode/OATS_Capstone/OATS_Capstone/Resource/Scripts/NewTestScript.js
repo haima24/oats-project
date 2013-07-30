@@ -105,14 +105,17 @@ function postSetting(li) {
     var cb = $("input[type=checkbox]", li);
     var settingKey = cb.attr("setting-key");
     var isactive = cb.attr("checked") ? true : false;
-    var timeValue = parseInt($("#asm_time_limit").val());
-    var testtime = isNaN(timeValue) ? 0 : timeValue;
-    $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive, testtime: testtime }, function (res) {
+    var num = parseInt($("[data-key=number]", li).val());
+    var number = isNaN(num) ? null : num;
+    var text = $("[data-key=text]", li).val() || null;
+    statusSaving();
+    $.post("/Tests/UpdateSettings", { testid: testid, settingKey: settingKey, isactive: isactive, number: number, text: text }, function (res) {
         if (res.success) {
             var html = $(res.generatedHtml);
             if (li) {
                 li.html(html);
                 checkMaxScoreAndTotalScore();
+                statusSaved();
             }
         } else {
             showMessage("error", res.message);
@@ -1430,13 +1433,8 @@ $(function () {
         });
     });
     //separator
-    $("#eventTab .nt-asm-settings .nt-section input[type=checkbox]").live("change", function (ev) {
-        var li = $(this).closest("li");
-        postSetting(li);
-    });
-    $("#asm_time_limit").live("blur", function (ev) {
-        var li = $(this).closest("li");
-        postSetting(li);
+    $("#eventTab .nt-asm-settings .nt-section li").live("change", function (ev) {
+        postSetting($(this));
     });
     //separator
     $("button.nt-btn-ri").live("click", function (ev) {
@@ -2013,37 +2011,6 @@ $(function () {
         window.location.href = "/Tests/ScoreToExcel?testid=" + testid + "&&userids=" + ids;
     });
     //separator
-    $("#asm_max_point").live("change", function () {
-        var valueString = $(this).val();
-        var value = parseInt(valueString);
-        if (!isNaN(value)) {
-            statusSaving();
-            $.post("/Tests/UpdateMaxScoreSetting", { testid: testid, score: value }, function (res) {
-                if (res.success) {
-                    statusSaved();
-                    checkMaxScoreAndTotalScore();
-                } else {
-                    showMessage("error", res.message);
-                }
-            });
-        }
-    });
-    //separator
-    $("#asm_duration").live("change", function () {
-        var valueString = $(this).val();
-        var value = parseInt(valueString);
-        if (!isNaN(value)) {
-            statusSaving();
-            $.post("/Tests/UpdateTestDuration", { testid: testid, duration: value }, function (res) {
-                if (res.success) {
-                    statusSaved();
-                } else {
-                    showMessage("error", res.message);
-                }
-            });
-        }
-    });
-    //separator
     $(".nt-qitem .preview-container .nt-qimg-close").live("click", function () {
         var item = $(this).closest(".nt-qitem");
         var id = item.attr("question-id");
@@ -2188,7 +2155,7 @@ $(function () {
             });
         }
     }
-    
+
     $.connection.hub.start().done(function () {
         $("#eventDeactive").live("click", function () {
             $.post("/Tests/DeActiveTest", { testid: testid }, function (res) {
@@ -2199,6 +2166,10 @@ $(function () {
             });
         });
         $("#eventDelete").live("click", function () {
+            $("#confirmDelete").modal("show");
+        });
+        $("#confirmDelete .nt-btn-ok").live("click", function () {
+            $("#confirmDelete").modal("hide");
             $.post("/Tests/DeleteTestPermanent", { testid: testid }, function (res) {
                 if (res.success) {
                     showMessage("success", res.message);

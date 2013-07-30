@@ -23,4 +23,9 @@ namespace OATS_Capstone.Models
         public const int DefaultSettingConfigId = 1;
         public const int DefaultTestDuration = 10;
     }
+    public class AttempTypes {
+        public const string Recent = "Recent";
+        public const string Average = "Average";
+        public const string Maximum = "Maximum";
+    }
 }

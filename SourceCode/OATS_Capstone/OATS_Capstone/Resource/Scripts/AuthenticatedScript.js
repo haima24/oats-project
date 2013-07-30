@@ -9,7 +9,7 @@
     $("#userPwd,#userConfPwd")
         .match(/^.{8,20}$/, "Passwords must be at least 8 characters.")
         .equal("Passwords do not match.");
-    $("#userName").match(/^([\sa-zA-Z0-9_-]+){1,30}$/, "Input must be text.");
+    $("#userName,#userPhone,#userCountry").match(/^([\sa-zA-Z0-9_-]{0,120})$/, "Input must be text.");
     var result = $.validity.end();
     return result.valid;
 }
@@ -65,6 +65,8 @@ $(function () {
             profile.Name = $("#userName").val();
             profile.UserMail = $("#userEmail").val();
             profile.Password = $("#userPwd").val();
+            profile.UserPhone = $("#userPhone").val();
+            profile.UserCountry = $("#userCountry").val();
             $.post("/Users/UpdateProfile", profile, function (res) {
                 if (res.success) {
                     showMessage("success", res.message);

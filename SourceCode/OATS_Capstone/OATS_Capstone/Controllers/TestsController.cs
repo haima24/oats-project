@@ -215,13 +215,14 @@ namespace OATS_Capstone.Controllers
             var generatedId = common.MakeTest();
             return RedirectToAction("NewTest", new { id = generatedId });
         }
-        public ActionResult NewTest(int id)
+        public ActionResult NewTest(int id,string tab="")
         {
             var common = new CommonService();
             var test = common.NewTest(id);
             ActionResult action = null;
             if (common.IsHavePermission && test != null)
             {
+                ViewBag.Tab = tab;
                 action = View(test);
             }
             else
@@ -719,7 +720,7 @@ namespace OATS_Capstone.Controllers
             common.UpdateStartEnd(testid, start, end);
             return Json(new { common.success, common.message });
         }
-        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int testtime)
+        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int? number,string text)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToStringWithParameter += (model, isOwner) =>
@@ -737,7 +738,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.UpdateSettings(testid, settingKey, isactive, testtime);
+            common.UpdateSettings(testid, settingKey, isactive, number,text);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult DeActiveTest(int testid)
@@ -1014,20 +1015,6 @@ namespace OATS_Capstone.Controllers
                 action = result;
             }
             return action;
-        }
-
-        public JsonResult UpdateMaxScoreSetting(int testid, int score)
-        {
-            var common = new CommonService();
-            common.UpdateMaxScoreSetting(testid, score);
-            return Json(new { common.success, common.message });
-        }
-
-        public JsonResult UpdateTestDuration(int testid, int duration)
-        {
-            var common = new CommonService();
-            common.UpdateTestDuration(testid, duration);
-            return Json(new { common.success, common.message });
         }
 
         public JsonResult CheckMaxScoreAndTotalScore(int testid)

@@ -5,6 +5,12 @@
   var authen = AuthenticationSessionModel.Instance();
   var isOwner = Model.CreatedUserID == authen.UserId;
   ViewBag.isOwner = isOwner;
+
+  var tab = "";
+  if (ViewBag.Tab != null)
+  {
+      tab = ViewBag.Tab;
+  }
 }
 @if (!Model.IsActive)
 { 
@@ -73,17 +79,51 @@
     <div class="navbar">
         <div class="navbar-inner test-larger-custom">
             <ul class="nav">
-                <li class="active"><a class="tab-event" href="@Url.Action("NewTest_ContentTab")">Content</a></li>
-                <li><a class="tab-event" href="@Url.Action("NewTest_SettingTab")">Settings</a></li>
-                <li><a class="tab-event" href="@Url.Action("NewTest_InvitationTab")">Invitation</a></li>
+                @if (tab == "Content")
+                {
+                    <li class="active"><a class="tab-event" href="@Url.Action("NewTest_ContentTab")">Content</a></li>
+                }
+                else
+                {
+                    <li><a class="tab-event" href="@Url.Action("NewTest_ContentTab")">Content</a></li>
+                }
+                @if (tab == "Setting")
+                { 
+                    <li class="active"><a class="tab-event" href="@Url.Action("NewTest_SettingTab")">Settings</a></li>
+                }
+                else
+                {
+                    <li><a class="tab-event" href="@Url.Action("NewTest_SettingTab")">Settings</a></li>
+                }
+                @if (tab == "Invitation")
+                { 
+                    <li class="active"><a class="tab-event" href="@Url.Action("NewTest_InvitationTab")">Invitation</a></li>
+                }
+                else
+                {
+                    <li><a class="tab-event" href="@Url.Action("NewTest_InvitationTab")">Invitation</a></li>
+                }
                 <li><a class="tab-event" href="@Url.Action("NewTest_ResponseTab")">Response</a></li>
                 <li><a class="tab-event" href="@Url.Action("NewTest_ScoreTab")">Score</a></li>
                 <li><a class="tab-event" href="@Url.Action("NewTest_FeedBackTab")">FeedBack</a></li>
-
             </ul>
         </div>
     </div>
     <div id="eventTab">
-        @Html.Partial("P_ContentTab", Model)
+        @switch (tab)
+        {
+            case "Content":
+            @Html.Partial("P_ContentTab", Model)
+                break;
+            case "Setting":
+            @Html.Partial("P_SettingTab", Model)
+                break;
+            case "Invitation":
+            @Html.Partial("P_InvitationTab", Model)    
+                break;
+            default:
+            @Html.Partial("P_ContentTab", Model)
+                break;
+        }
     </div>
 </div>
