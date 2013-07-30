@@ -285,7 +285,11 @@ namespace OATS_Capstone.Models
         public ScoreUserItem(List<Tag> tags, UserInTest inTest, decimal? totalScoreOfTest)
         {
             UserLabel = !string.IsNullOrEmpty(inTest.User.Name) ? inTest.User.Name : inTest.User.UserMail;
-            var percent = (decimal)inTest.Score / totalScoreOfTest;
+            decimal? percent = 0;
+            if (totalScoreOfTest!=0&&totalScoreOfTest.HasValue) {
+               percent= (decimal)inTest.Score / totalScoreOfTest;
+            }
+            
             if (inTest.Score == 0)
             {
                 UserDecimalPercent = null;
@@ -315,7 +319,11 @@ namespace OATS_Capstone.Models
                 UserID = inTest.User.UserID;
                 User = inTest.User;
                 UserLabel = !string.IsNullOrEmpty(inTest.User.Name) ? inTest.User.Name : inTest.User.UserMail;
-                var percent = (decimal)inTest.Score / totalScoreOfTest;
+                decimal? percent = 0;
+                if (totalScoreOfTest != 0 && totalScoreOfTest.HasValue)
+                {
+                    percent = (decimal)inTest.Score / totalScoreOfTest;
+                }
                 if (inTest.Score == 0)
                 {
                     UserDecimalPercent = null;
