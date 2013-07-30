@@ -4,7 +4,24 @@
     <div class="nt-qnum nt-qnum-letter"></div>
     <a class="nt-qanchor"></a>
     <p align="center" class="nt-qimg-cont" style="display: block">
-        <img data-dz-thumbnail="" width="300" height="300" alt="@Path.GetFileName(Model.ImageUrl.Trim())" src="@Url.Content(Model.ImageUrl.Trim())">
+        @{
+            var path = Model.ImageUrl;
+            var isImage = false;
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = path.Trim();
+                var realPath = HttpContext.Current.Server.MapPath(path);
+                if (File.Exists(realPath)) { isImage = true; }
+            }
+            if (isImage)
+            {
+            <img alt="@Path.GetFileName(path)" src="@Url.Content(path)" width="300" height="300"/>
+            }
+            else
+            {
+            <img alt="default" src="@Url.Content("~/Style/img/photo_not_available.jpg")" width="300" height="300" />
+            }
+        }
     </p>
 
     <div class="nt-qtext nt-qimg-desc">
