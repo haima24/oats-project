@@ -200,6 +200,7 @@ function handleImportText(text) {
                                             } else {
                                                 begin = o;
                                             }
+                                            ans.Score = 1;
                                             ans.IsRight = true;
                                             ans.AnswerContent = begin;
                                             var ansDepend = new Object();
@@ -988,6 +989,7 @@ function addListQuestion(list, onAfterAddListQuestion) {
                 resortInDb();
                 initEditable();
                 initImageUploadFacility();
+                showOrHideDeleteLineAnswer();
                 statusSaved();
                 showMessage("success", res.message);
             } else {
@@ -1121,7 +1123,7 @@ $(function () {
                 if (tabcontent && res.generatedHtml) {
                     tabcontent.html(res.generatedHtml);
                     $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
-                    //sortByNumberOrLetters();
+                    sortByNumberOrLetters();
                     initEditable();
                     initReuseDragAndDrop();
                     initImageUploadFacility();

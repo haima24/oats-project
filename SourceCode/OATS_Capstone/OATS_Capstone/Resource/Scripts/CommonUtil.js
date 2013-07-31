@@ -181,6 +181,9 @@ $.fn.extend({
         return '#' + r + g + b;
 
     };
+    $.toPercent = function (numerator, denominator) {
+        return (numerator * 100 / denominator) + "%";
+    }
 }(jQuery));
 $.fn.extend({
     convertToUnsign: function () {
@@ -588,15 +591,15 @@ $.fn.extend({
 $.fn.extend({
     clientSort: function (options) {
         var defaults = {
-            activeClass:"active",
+            activeClass: "active",
             handlers: [],
             sortItems: [],
-            parentContainer:""
+            parentContainer: ""
         };
         options = $.extend(defaults, options);
         var $items = $(this);
         $items.live("click", function () {
-            var $btn=$(this);
+            var $btn = $(this);
             var items = $($items.selector);
             items.each(function () {
                 $(this).removeClass(options.activeClass)
@@ -605,7 +608,7 @@ $.fn.extend({
             if (options.handlers && options.sortItems) {
                 var sortedItems;
                 if (options.parentContainer) {
-                    var container=$btn.closest(options.parentContainer);
+                    var container = $btn.closest(options.parentContainer);
                     sortedItems = $(options.sortItems, container);
                 } else {
                     sortedItems = $(options.sortItems);
@@ -618,7 +621,7 @@ $.fn.extend({
                     });
                     if (handle.length == 1) {
                         var hand = handle[0];
-                        var handler=hand.handler;
+                        var handler = hand.handler;
                         if (handler) {
                             if (hand.useSortAttr) {
                                 $(sortedItems).tsort(handler, { order: order, attr: "data-sort-value" });
@@ -626,7 +629,7 @@ $.fn.extend({
                             else {
                                 $(sortedItems).tsort(handler, { order: order });
                             }
-                            
+
                         }
                     }
                 }
@@ -634,6 +637,74 @@ $.fn.extend({
         });
     }
 });
+$.fn.extend({
+    oatsProgressBar: function (maxValue, update) {
+        var currentValue = 0;
+        var obj = $(this).progressbar({ max: maxValue, value: currentValue });
+        obj.increase = function () {
+            ++currentValue;
+            if (currentValue > maxValue) { currentValue = maxValue; }
+            obj.progressbar("value", currentValue);
+            if (update && typeof (update) === "function") {
+                update(maxValue, currentValue);
+            }
+        };
+        obj.decrease = function () {
+            --currentValue;
+            if (currentValue < 0) { currentValue = 0; }
+            obj.progressbar("value", currentValue);
+            if (update && typeof (update) === "function") {
+                update(maxValue, currentValue);
+            }
+        };
+        return obj;
+    }
+});
+$.fn.extend({
+    removeItem: function (item, comparer) {
+        return $.grep(this, function (element, index) {
+            var result = false;
+            if (comparer && typeof (comparer) === "function") {
+                if (comparer(element, item)) {
+                    result = true;
+                }
+            } else if (comparer && typeof (comparer) === "string") {
+                if ($(element).attr(comparer) == $(item).attr(comparer)) {
+                    result = true;
+                }
+            } else if (element == item) {
+                result = true;
+            }
+            return result;
+        }, true);
+    },
+    contain: function (item, comparer) {
+        var result = false;
+        $(this).each(function (i, e) {
+            if (comparer && typeof (comparer) === "function") {
+                if (comparer(e, item)) {
+                    result = true;
+                }
+            } if (comparer && typeof (comparer) === "string") {
+                if ($(e).attr(comparer) == $(item).attr(comparer)) {
+                    result = true;
+                }
+            }
+            else {
+                if (e == item) {
+                    result = true;
+                }
+            }
+        });
+        return result;
+    }
+})
+$.fn.extend({
+    cleanHtml: function () {
+        var html = $(this).html();
+        return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
+    }
+})
 function random(range) {
     return Math.floor(Math.random() * range);
 }
