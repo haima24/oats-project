@@ -1,4 +1,5 @@
 ﻿@section additionheader{
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <script src="~/Bootstrap/js/jquery.hotkeys.js"></script>
     <script src="~/Bootstrap/js/bootstrap-wysiwyg.js"></script>
     <script src="~/Bootstrap/js/raphael.js"></script>
@@ -74,9 +75,8 @@
         <div class="nt-footer" style="display: block;">
             <div class="nt-footer-cont">
                 <div class="nt-resp-stat">
-                    <div class="nt-resp-stat-desc">0 of 4 answered - 0% complete</div>
-                    <div class="nt-resp-stat-bar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
-                        <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="display: none; width: 0%;"></div>
+                    <div class="nt-resp-stat-desc"></div>
+                    <div class="nt-resp-stat-bar">
                     </div>
                 </div>
                 <button id="submit-btn" class="nt-btn-submit nt-submit">Submit</button>
