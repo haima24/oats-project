@@ -13,7 +13,7 @@ function submitTest() {
         var userInTestDetail = new Object();
         userInTestDetail.QuestionID = parseInt($(e).attr("question-id"));
         var str = "";
-        $(".nt-qans input[type=radio]:checked,.nt-qans input[type=radio]:checked", e).each(function (index, element) {
+        $(".nt-qans input[type=radio]:checked,.nt-qans input[type=checkbox]:checked", e).each(function (index, element) {
 
             if ($(element).attr("id")) {
                 if (index == 0) {
@@ -301,6 +301,11 @@ $(function () {
         }
     });
     $("#submit-btn").live("click", function (ev) {
+        $("#confirmSubmit").modal("show");
+        
+    });
+    $("#confirmSubmit .nt-btn-ok").live("click", function () {
+        $("#confirmSubmit").modal("hide");
         submitTest();
     });
 

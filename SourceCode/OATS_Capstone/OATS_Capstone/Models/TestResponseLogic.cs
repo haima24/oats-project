@@ -92,9 +92,9 @@ namespace OATS_Capstone.Models
             if (rightAns != null) { rightAnsId = rightAns.AnswerID; }
 
             var userRightCount = Ids.Count(k => k.Contains(rightAnsId));
-            var correctPer = (decimal)userRightCount / TotalUsersInTest;
+            var correctPer = ExtensionModel.SafeDivide(userRightCount, TotalUsersInTest);
             _correctPercent = correctPer.ToPercent();
-            _correctPraction = userRightCount + "/" + TotalUsersInTest;
+            _correctPraction = TotalUsersInTest == 0 ? "0" : userRightCount + "/" + TotalUsersInTest;
             var answers = question.Answers.ToList();
             _responseAnswers = new List<ResponseAnswer>();
             answers.ForEach(k =>
@@ -160,9 +160,9 @@ namespace OATS_Capstone.Models
             var rightAnsIds = question.Answers.Where(k => k.IsRight).Select(k => k.AnswerID).ToList();
 
             var userRightCount = Ids.Count(k => k.All(i => rightAnsIds.Contains(i)));
-            var correctPer = (decimal)userRightCount / TotalUsersInTest;
+            var correctPer = ExtensionModel.SafeDivide(userRightCount, TotalUsersInTest);
             _correctPercent = correctPer.ToPercent();
-            _correctPraction = userRightCount + "/" + TotalUsersInTest;
+            _correctPraction = TotalUsersInTest == 0 ? "0" : userRightCount + "/" + TotalUsersInTest;
             var answers = question.Answers.ToList();
             _responseAnswers = new List<ResponseAnswer>();
             answers.ForEach(k =>
@@ -251,9 +251,9 @@ namespace OATS_Capstone.Models
                 }
                 return result;
             }));
-            var correctPer = (decimal)userRightCount / TotalUsersInTest;
+            var correctPer = ExtensionModel.SafeDivide(userRightCount, TotalUsersInTest);
             _correctPercent = correctPer.ToPercent();
-            _correctPraction = userRightCount + "/" + TotalUsersInTest;
+            _correctPraction = TotalUsersInTest == 0 ? "0" : userRightCount + "/" + TotalUsersInTest;
             var answers = question.Answers.Where(i => !i.DependencyAnswerID.HasValue).ToList();
             _responseAnswers = new List<ResponseAnswer>();
             answers.ForEach(k =>
@@ -579,7 +579,7 @@ namespace OATS_Capstone.Models
                     AnswerMatchingContent = dependAnswer.AnswerContent;
                 }
             }
-            AnswerPercent = ((decimal)countOfUserChooseThisAns / question.TotalUsersInTest).ToPercent();
+            AnswerPercent = ExtensionModel.SafeDivide(countOfUserChooseThisAns,question.TotalUsersInTest).ToPercent();
             AnswerContent = answer.AnswerContent;
             IsRight = answer.IsRight;
             Score = answer.Score;
@@ -609,7 +609,8 @@ namespace OATS_Capstone.Models
                             answer.AnswerID,
                             dependId
                         };
-                        userChooseThisAnswer = coupleIds.Contains(ids, (f, s) => {
+                        userChooseThisAnswer = coupleIds.Contains(ids, (f, s) =>
+                        {
                             return f.ElementAtOrDefault(0) == s.ElementAtOrDefault(0) && f.ElementAtOrDefault(1) == s.ElementAtOrDefault(1);
                         });
                         if (userChooseThisAnswer) { userAnsScore = answer.Score; }
@@ -621,8 +622,8 @@ namespace OATS_Capstone.Models
 
     public class ResponseTest
     {
+        public bool IsHaveData { get; set; }
         private string testTakenDate = String.Empty;
-
         public string TestTakenDate
         {
             get { return testTakenDate; }
@@ -649,6 +650,7 @@ namespace OATS_Capstone.Models
         {
             db = SingletonDb.Instance();
             var inTestsValid = test.UserInTests.FilterInTestsOnAttempSetting();
+            IsHaveData = inTestsValid.Count > 0;
             TestTitle = test.TestTitle;
             CheckedUserIds = checkIds;
             if (checkIds.Count == 1)
@@ -723,7 +725,7 @@ namespace OATS_Capstone.Models
             }
         }
     }
-    public class ResponseUserItem
+    public class ResponseUserItem : IUserItem
     {
         public string UserLabel { get; set; }
         public string UserPercent { get; set; }

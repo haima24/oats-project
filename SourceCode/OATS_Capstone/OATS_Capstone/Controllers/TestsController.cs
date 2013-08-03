@@ -215,7 +215,7 @@ namespace OATS_Capstone.Controllers
             var generatedId = common.MakeTest();
             return RedirectToAction("NewTest", new { id = generatedId });
         }
-        public ActionResult NewTest(int id,string tab="")
+        public ActionResult NewTest(int id, string tab = "")
         {
             var common = new CommonService();
             var test = common.NewTest(id);
@@ -720,7 +720,7 @@ namespace OATS_Capstone.Controllers
             common.UpdateStartEnd(testid, start, end);
             return Json(new { common.success, common.message });
         }
-        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int? number,string text)
+        public JsonResult UpdateSettings(int testid, String settingKey, bool isactive, int? number, string text)
         {
             var common = new CommonService();
             common.OnRenderPartialViewToStringWithParameter += (model, isOwner) =>
@@ -738,7 +738,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.UpdateSettings(testid, settingKey, isactive, number,text);
+            common.UpdateSettings(testid, settingKey, isactive, number, text);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult DeActiveTest(int testid)
@@ -1110,7 +1110,8 @@ namespace OATS_Capstone.Controllers
         public JsonResult DeleteImage(int questionid)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -1124,13 +1125,33 @@ namespace OATS_Capstone.Controllers
                 return result;
             };
             common.DeleteImage(questionid);
-            return Json(new { common.message, common.success,common.generatedHtml });
+            return Json(new { common.message, common.success, common.generatedHtml });
         }
 
-        public JsonResult DeleteTestPermanent(int testid) {
+        public JsonResult DeleteTestPermanent(int testid)
+        {
             var common = new CommonService();
             common.DeleteTestPermanent(testid);
             return Json(new { common.success, common.message });
+        }
+        public JsonResult SearchUserItems(int testid,string term, string type)
+        {
+            var common = new CommonService();
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_User_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.SearchUserItems(testid,term, type);
+            return Json(new { common.message,common.success,common.resultlist});
         }
     }
 }

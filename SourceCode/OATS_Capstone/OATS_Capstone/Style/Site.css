@@ -459,10 +459,12 @@ i, cite, em, var, address, dfn {
             text-align: center;
         }
 
-    #container .nt-dnd-example-text.active pre {
-        border: 1px dashed #5993e7;
-    }
-
+.nt-dnd-example-text {
+    width:500px;
+    height:100px;
+    resize:none;
+    overflow:hidden;
+}
 .popover {
     max-width: 400px;
 }

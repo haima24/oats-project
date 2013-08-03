@@ -8,6 +8,34 @@ var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
+function initResponseAndScoreSearch() {
+    $("#sidebar .nt-ctrl-search input.nt-search-input").autocomplete({
+        source: function (req, res) {
+            var type = $(this.element).attr("notation");
+            if (type.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/SearchUserItems",
+                    data: JSON.stringify({ testid: testid, term:req.term,type:type }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.success) {
+                            var list=$("#respUsers");
+                            list.empty();
+                            $(res.resultlist).each(function (i,o) {
+                                list.append(o);
+                            });
+                        }
+                        else {
+                            showMessage("error", res.message);
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
 function initClientSorting() {
     //sidebar
     var handlers = new Array();
@@ -1132,6 +1160,7 @@ $(function () {
                     initScoreOnUserChart();
                     initReplyAreas();
                     initDropText();
+                    initResponseAndScoreSearch();
                     var activeLi = $("#score-detail-tab li").filter(function () {
                         return $("a[tab=" + currentScoreDetailTab + "]", this).length > 0;
                     }).addClass("active");
@@ -1270,10 +1299,6 @@ $(function () {
                 handleImportText(pastedText);
             }
         }, 100);
-    });
-    $("#qpaste textarea").live("mouseup", function (ev) {
-        var text = $(this).val();
-        handleImportText(text);
     });
     //separator
     $("#checklist[content-tab=true] .nt-qitem[question-type=Essay] .nt-qoepts input[type=text],#checklist[content-tab=true] .nt-qitem[question-type=ShortAnswer] .nt-qoepts input[type=text]").live("blur", function () {
