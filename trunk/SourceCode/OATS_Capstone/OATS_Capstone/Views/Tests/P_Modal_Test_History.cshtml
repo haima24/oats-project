@@ -5,7 +5,14 @@
     </div>
     <div class="modal-body">
         <div class="controls">
-            @Html.Partial("P_ResponseTab_Inner",Model)
+            @if (Model.IsHaveData)
+            {
+                @Html.Partial("P_ResponseTab_Inner", Model)
+            }
+            else
+            {
+                <div id="checklist" style="height: 450px; overflow-y: auto;">You are no longer take this test</div>
+            }
         </div>
     </div>
     <div class="modal-footer">

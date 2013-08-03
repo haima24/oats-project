@@ -264,7 +264,7 @@ namespace OATS_Capstone.Models
             }
         }
     }
-    public class ScoreUserItem
+    public class ScoreUserItem : IUserItem
     {
         public decimal? UserDecimalPercent { get; set; }
         public Test Test { get; set; }

@@ -79,5 +79,11 @@ namespace OATS_Capstone.Controllers
             var generatedHtml=this.RenderPartialViewToString("P_Email_Input");
             return Json(new { generatedHtml });
         }
+        public JsonResult ImportUsers(List<User> users)
+        {
+            var common = new CommonService();
+            common.ImportUsers(users);
+            return Json(new {common.message,common.success,common.resultlist });
+        }
     }
 }

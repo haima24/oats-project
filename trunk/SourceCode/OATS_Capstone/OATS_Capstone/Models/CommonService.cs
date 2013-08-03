@@ -1269,6 +1269,7 @@ namespace OATS_Capstone.Models
                         ans.SerialOrder = serialOrder;
                         question.Answers.Add(ans);
                     }
+                    RecalculateUserInTestScore(question.Answers);
                     if (db.SaveChanges() > 0)
                     {
                         if (OnRenderPartialViewToString != null)
@@ -1395,6 +1396,8 @@ namespace OATS_Capstone.Models
                                 db.Answers.Remove(i);
                             });
                         }
+                        var answersOfThisQuestion = ans.Question.Answers.Where(i => !i.DependencyAnswerID.HasValue);
+                        RecalculateUserInTestScore(answersOfThisQuestion);
                         db.Answers.Remove(ans);
                         if (db.SaveChanges() > 0)
                         {
@@ -1439,15 +1442,18 @@ namespace OATS_Capstone.Models
                     var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
                     if (settingDetail != null)
                     {
-                        if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
+                        if (settingDetail.IsActive)
                         {
-                            if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
+                            if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
                             {
-                                test.IsRunning = false;
-                            }
-                            else
-                            {
-                                test.IsRunning = true;
+                                if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
+                                {
+                                    test.IsRunning = false;
+                                }
+                                else
+                                {
+                                    test.IsRunning = true;
+                                }
                             }
                         }
                     }
@@ -1674,7 +1680,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void UpdateSettings(int testid, String settingKey, bool isactive, int? number,string text)
+        public void UpdateSettings(int testid, String settingKey, bool isactive, int? number, string text)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -1709,13 +1715,14 @@ namespace OATS_Capstone.Models
                     if (detail != null)
                     {
                         detail.IsActive = isactive;
-                        if(detail.SettingType.SettingTypeKey == "DRL"){
-                            detail.NumberValue=number;
+                        if (detail.SettingType.SettingTypeKey == "DRL")
+                        {
+                            detail.NumberValue = number;
                         }
                         else if (detail.SettingType.SettingTypeKey == "OSM")
                         {
                             var usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);
-                            if ((number??0) < usersMaxAttemp)
+                            if ((number ?? 0) < usersMaxAttemp)
                             {
                                 message = "The number of times is conflict with max attemps that students have done (" + usersMaxAttemp + "), please choose a number greater than : " + usersMaxAttemp;
                                 success = false;
@@ -2146,7 +2153,9 @@ namespace OATS_Capstone.Models
                 {
                     if (!String.IsNullOrEmpty(pass) && !string.IsNullOrEmpty(user.Password))
                     {
-                        ismatch = pass.Trim() == user.Password.Trim();
+                        pass = pass.Trim();
+                        var uPass = user.Password.Trim();
+                        ismatch = ExtensionModel.createHashMD5(pass) == uPass;
                     }
                     success = true;
                 }
@@ -3063,15 +3072,44 @@ namespace OATS_Capstone.Models
                         {
                             if (question != null)
                             {
+                                var qType = question.QuestionType.Type;
                                 if (i.AnswerIDs != null)
                                 {
-                                    var IDs = i.AnswerIDs.Split(',');
-                                    var score = IDs.Sum(k =>
+                                    if (qType == "Matching")
                                     {
-                                        var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
-                                        return answer.Score < 0 ? 0 : answer.Score;
-                                    });
-                                    i.ChoiceScore = score;
+                                        var coupleIds = i.AnswerIDs.Split(';');
+                                        var scoreMatching = coupleIds.Sum(k =>
+                                        {
+                                            int? point = null;
+                                            var twoIds = k.Split(',');
+                                            var firstId = twoIds.ElementAtOrDefault(0);
+                                            var secondId = twoIds.ElementAtOrDefault(1);
+                                            if (!string.IsNullOrEmpty(firstId))
+                                            {
+                                                var answerBegin = question.Answers.FirstOrDefault(t => t.AnswerID.ToString() == firstId);
+                                                if (answerBegin != null && !string.IsNullOrEmpty(secondId))
+                                                {
+                                                    var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
+                                                    if (answerEnd != null)
+                                                    {
+                                                        point = answerBegin.Score < 0 ? 0 : answerBegin.Score;
+                                                    }
+                                                }
+                                            }
+                                            return point;
+                                        });
+                                        i.ChoiceScore = scoreMatching ?? 0;
+                                    }
+                                    else
+                                    {
+                                        var IDs = i.AnswerIDs.Split(',');
+                                        var score = IDs.Sum(k =>
+                                        {
+                                            var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                            return answer.Score < 0 ? 0 : answer.Score;
+                                        });
+                                        i.ChoiceScore = score;
+                                    }
                                 }
                                 else
                                 {
@@ -3647,7 +3685,7 @@ namespace OATS_Capstone.Models
                     test.TagInTests.ToList().ForEach(i => db.TagInTests.Remove(i));
                     test.UserInTests.ToList().ForEach(i => db.UserInTests.Remove(i));
                     var settingConfig = test.SettingConfig;
-                    if (settingConfig.SettingConfigID != Constants.DefaultSettingConfigId&&settingConfig.Tests.Count<=1)
+                    if (settingConfig.SettingConfigID != Constants.DefaultSettingConfigId && settingConfig.Tests.Count <= 1)
                     {
                         settingConfig.SettingConfigDetails.ToList().ForEach(i => db.SettingConfigDetails.Remove(i));
                         db.SettingConfigs.Remove(settingConfig);
@@ -3669,6 +3707,122 @@ namespace OATS_Capstone.Models
                 }
             }
             catch (Exception ex)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void SearchUserItems(int testid, string term, string type)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    List<IUserItem> userItems = null;
+                    switch (type)
+                    {
+                        case "Response":
+                            userItems = new List<IUserItem>();
+                            var resTest = new ResponseTest(test);
+                            resTest.ResponseUserList.ForEach(i =>
+                            {
+                                userItems.Add(i);
+                            });
+                            break;
+                        case "Score":
+                            userItems = new List<IUserItem>();
+                            var scoreTest = new ScoreTest(test);
+                            scoreTest.ScoreUserList.ForEach(i =>
+                            {
+                                userItems.Add(i);
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                    if (userItems != null)
+                    {
+                        success = true;
+                        if (!string.IsNullOrEmpty(term))
+                        {
+                            var termLower = term.Trim().ToLower();
+                            userItems = userItems.Where(i =>
+                            {
+                                var result = false;
+                                if (!string.IsNullOrEmpty(i.UserLabel))
+                                {
+                                    if (i.UserLabel.ToLower().Contains(termLower))
+                                    {
+                                        result = true;
+                                    }
+                                }
+                                return result;
+                            }).ToList();
+                        }
+                        if (OnRenderPartialViewToString != null)
+                        {
+                            userItems.ForEach(i =>
+                            {
+                                var html = OnRenderPartialViewToString.Invoke(i);
+                                resultlist.Add(html);
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+        }
+        public void ImportUsers(List<User> users)
+        {
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            resultlist = new List<object>();
+            try
+            {
+                var db = SingletonDb.Instance();
+                var usersImported = db.Users.ToList();
+                users.ForEach(u =>
+                {
+                    if (!string.IsNullOrEmpty(u.Name) && !string.IsNullOrEmpty(u.UserMail))
+                    {
+                        var email = u.UserMail.Trim();
+                        var name = u.Name.Trim();
+                        var checkUser = usersImported.FirstOrDefault(i => i.UserMail.Trim() == email);
+                        if (checkUser == null)
+                        {
+                            var user = new User();
+                            user.UserMail = email;
+                            user.Name = name;
+                            user.IsRegistered = false;
+                            //generate token
+                            var token = GenerateUserToken(user.UserID);
+                            user.AccessToken = token;
+                            db.Users.Add(user);
+                            usersImported.Add(user);
+                            resultlist.Add(new { name, email, isDuplicated = false });
+                        }
+                        else
+                        {
+                            resultlist.Add(new { name, email, isDuplicated = true });
+                        }
+                    }
+                });
+
+                if (db.SaveChanges() >= 0) {
+                    success = true;
+                    message = Constants.DefaultSuccessMessage;
+                    //send email
+                }
+            }
+            catch (Exception)
             {
                 success = false;
                 message = Constants.DefaultExceptionMessage;

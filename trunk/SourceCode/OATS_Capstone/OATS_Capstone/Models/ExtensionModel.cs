@@ -383,6 +383,25 @@ namespace OATS_Capstone.Models
             }
             return result;
         }
+        public static decimal SafeDivide(decimal num1, decimal num2)
+        {
+            decimal result = 0;
+            try
+            {
+                if (num2 == 0)
+                {
+                    result = 0;
+                }
+                else {
+                    result = num1 / num2;
+                }
+            }
+            catch (Exception)
+            {
+                result = 0;
+            }
+            return result;
+        }
     }
 }
 

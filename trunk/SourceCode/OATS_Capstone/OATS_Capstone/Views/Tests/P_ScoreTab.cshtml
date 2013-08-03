@@ -11,7 +11,7 @@ else
         <div class="nt-acc-content nt-acc-content-noheader nt-acc-content-resp">
             <div class="nt-ctrl-search">
                 <div class="nt-search-box">
-                    <input type="text" placeholder="Search" class="nt-search-input " />
+                    <input type="text" placeholder="Search" class="nt-search-input" notation="Score" />
                     <i class="t-icon icon-search"></i>
                     <button class="nt-btn-icon nt-btn-clear ">
                         <i class="icon-remove-sign"></i>
@@ -42,15 +42,7 @@ else
                 <div id="respUsers" style="max-height: 450px; overflow-y: auto;">
                     @foreach (var uInTest in Model.ScoreUserList)
                     {
-                        <div class="nt-clb-item nt-clb-item-multi nt-clb-item-sel">
-                            <div class="nt-clb-item-control">
-                                <input type="checkbox" checked="checked" user-id="@uInTest.UserID" />
-                            </div>
-                            <div class="nt-clb-item-content">
-                                <div class="nt-clb-item-label">@uInTest.UserLabel</div>
-                                <div class="nt-clb-item-desc">@uInTest.UserPercent</div>
-                            </div>
-                        </div>
+                        @Html.Partial("P_User_Item", uInTest)
                     }
 
                 </div>

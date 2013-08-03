@@ -77,6 +77,65 @@ function createUser() {
         });
     }
 }
+function initImportArea() {
+    var handleImportUsers = function (pastedText) {
+        if (pastedText) {
+            var couples = pastedText.split(/\s*[\n;,](?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)\s*/);
+            var users=$(couples).map(function (i, e) {
+                var couples = e.split(/\s+/);
+                if (couples.length == 2) {
+                    var name = couples[0].replace(/"/g, "");
+                    var mail = couples[1].replace(/</g, "").replace(/>/g, "");
+                    return {Name:name,UserMail:mail};
+                }
+            }).convertJqueryArrayToJSArray();
+            if (users) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Users/ImportUsers",
+                    data: JSON.stringify({ users: users }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.success) {
+                            var imported=0;
+                            var notImported=0;
+                            $(res.resultlist).each(function(i,e){
+                                if(e.isDuplicated){
+                                    notImported++;
+                                }else{
+                                    imported++;
+                                }
+                            });
+                            showMessage("info", "Imported: " + imported + ". Duplicated: " + notImported);
+                        } else {
+                            showMessage("error", res.message);
+                        }
+                    }
+                });
+            }
+        }
+    };
+    $("textarea.nt-dnd-example-text").placeholder();
+    $("textarea.nt-dnd-example-text").live("paste", function (ev) {
+        var $tb = $(this);
+        setTimeout(function () {
+            var textarea = $tb;
+            if (textarea) {
+                var pastedText = textarea.val();
+                handleImportUsers(pastedText);
+            }
+        }, 100);
+    });
+    $("#qpaste textarea").filedrop({
+        success: function (text) {
+            handleImportUsers(text);
+        },
+        error: function (msg) {
+            showMessage("error", msg);
+        }
+    });
+}
 $(function () {
     var curIdString = $("#current-user-id").val();
     currentUserId = parseInt(curIdString);
@@ -88,18 +147,7 @@ $(function () {
         initPopup("Teacher");
     });
     //separator
-    $(".nt-dnd-example-text").live("click", function () {
-        var $this = $(this);
-        $this.addClass("active");
-    });
-    $(".nt-dnd-example-text").live("paste", function (e) {
-
-    });
-    $(".nt-dnd-example-text").clickout({
-        callback: function (e,self) {
-            self.removeClass("active");
-        }
-    });
+    initImportArea();
     //separator
     var hub = $.connection.generalHub;
     hub.client.R_notifyNewUserCallBack = function (userid, generatedId, mail, isSuccess) {

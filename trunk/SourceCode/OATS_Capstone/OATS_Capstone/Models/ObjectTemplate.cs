@@ -5,6 +5,13 @@ using System.Web;
 
 namespace OATS_Capstone.Models
 {
+    public interface IUserItem
+    {
+        string UserLabel { get; set; }
+        string UserPercent { get; set; }
+        int UserID { get; set; }
+    }
+
     public class TestCalendarObject
     {
         public int id;

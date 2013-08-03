@@ -32,7 +32,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name)?user.UserMail:user.Name)</li>
+                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name) ? user.UserMail : user.Name)</li>
                             <li class="divider"></li>
                             <li><a href="#" id="profile-link">My Profile</a></li>
                             <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
@@ -90,3 +90,14 @@
         </div>
     </div>
 }
+<div id="confirmSubmit" class="modal hide fade in">
+    <div class="modal-body">
+        <div>
+            Are you sure you want to submit all and finish this test?
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="nt-btn-submit nt-btn-ok">OK</button>
+        <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+    </div>
+</div>
