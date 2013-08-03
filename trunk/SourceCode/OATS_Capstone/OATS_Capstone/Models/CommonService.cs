@@ -929,7 +929,7 @@ namespace OATS_Capstone.Models
                 var authen = AuthenticationSessionModel.Instance();
                 var user = authen.User;
                 var invitedTests = user.Invitations.Select(i => i.Test).ToList();
-                var tests = user.Tests.ToList().Concat(invitedTests).ToList();
+                var tests = user.Tests.ToList();
 
 
                 tests.ForEach(delegate(Test test)
@@ -939,8 +939,20 @@ namespace OATS_Capstone.Models
                     template.testTitle = test.TestTitle;
                     template.startDateTime = test.StartDateTime;
                     template.endDateTime = test.EndDateTime;
+                    template.isOwner = true;
                     resultlist.Add(template);
                 });
+                invitedTests.ForEach(delegate(Test test)
+                {
+                    var template = new TestCalendarObject();
+                    template.id = test.TestID;
+                    template.testTitle = test.TestTitle;
+                    template.startDateTime = test.StartDateTime;
+                    template.endDateTime = test.EndDateTime;
+                    template.isOwner = false;
+                    resultlist.Add(template);
+                });
+
                 success = true;
             }
             catch (Exception)

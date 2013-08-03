@@ -92,13 +92,14 @@
                                 else
                                 {
                                     var remainString = string.Empty;
-                                    if(item.RemainAttemp.HasValue){
+                                    if (item.RemainAttemp.HasValue)
+                                    {
                                         remainString = " - Remain Attemp: " + item.RemainAttemp.Value;
                                     }
                         <div class="nt-list-row student">
                             <div class="nt-name">
                                 <i class="t-icon i-student"></i>
-                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="@("Take This Test"+remainString)">@item.TestTitle</a>
+                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="@("Take This Test" + remainString)">@item.TestTitle</a>
                                 <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
                                     <i class="t-icon i-test-history"></i>
                                 </button>
@@ -260,7 +261,7 @@
                         <div class="nt-list-row student">
                             <div class="nt-name">
                                 <i class="t-icon i-student"></i>
-                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="@("Take This Test"+remainString)">@item.TestTitle</a>
+                                <a href="@Url.Action("DoTest", new { id = item.TestID, accesscode = "" })" data-toggle="tooltip" data-placement="top" data-original-title="@("Take This Test" + remainString)">@item.TestTitle</a>
                                 <button test-id="@item.TestID" class="nt-btn-icon btn-test-history" data-toggle="tooltip" data-placement="top" data-original-title="View Test History">
                                     <i class="t-icon i-test-history"></i>
                                 </button>
@@ -364,7 +365,7 @@
                             <div class="nt-desc">@item.NumOfStudent Student</div>
 
                             <div class="nt-desc">
-                                <a href="@Url.Action("NewTest", new { id=@item.TestID,tab="Invitation"})" class="nt-btn-text nt-invbtn">Invite</a>
+                                <a href="@Url.Action("NewTest", new { id = @item.TestID, tab = "Invitation" })" class="nt-btn-text nt-invbtn">Invite</a>
                             </div>
 
                             <div class="nt-desc">@item.NumOfTeacher Educator</div>
