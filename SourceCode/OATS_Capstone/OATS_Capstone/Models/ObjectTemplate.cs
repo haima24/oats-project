@@ -18,6 +18,7 @@ namespace OATS_Capstone.Models
         public string testTitle;
         public DateTime startDateTime;
         public DateTime? endDateTime;
+        public bool isOwner;
     }
 
     /// <summary>
