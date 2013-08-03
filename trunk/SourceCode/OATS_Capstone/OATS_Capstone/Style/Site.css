@@ -2952,7 +2952,8 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_time_limit,
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_max_point,
-            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_duration {
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_duration ,
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_num_question{
                 width: 35px;
                 margin: 0 10px;
                 padding: 2px;
@@ -3302,7 +3303,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         margin: 10px auto;
         font-weight: bold;
     }
-
+    #container.nt-de-cont .nt-checklist-cont .holder {
+        text-align:center;
+    }
     #container.nt-de-cont .nt-checklist-cont .nt-asm-title {
         display: none;
         font-size: 16px;

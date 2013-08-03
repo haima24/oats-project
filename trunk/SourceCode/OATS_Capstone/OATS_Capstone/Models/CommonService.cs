@@ -1731,6 +1731,10 @@ namespace OATS_Capstone.Models
                         {
                             detail.NumberValue = number;
                         }
+                        else if (detail.SettingType.SettingTypeKey == "NPP")
+                        {
+                            detail.NumberValue = number;
+                        }
                         else if (detail.SettingType.SettingTypeKey == "OSM")
                         {
                             var usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);

@@ -7,6 +7,7 @@ namespace OATS_Capstone.Models
 {
     public class TestLogic
     {
+        public int NumberQuestionPerPage { get; set; }
         public bool IsRunning { get; set; }
         public bool IsActive { get; set; }
         public bool IsDateTimeNotValid { get; set; }
@@ -122,6 +123,13 @@ namespace OATS_Capstone.Models
                     if (settingRandomQuestion.IsActive)
                     {
                         Questions = Questions.RandomQuestion();
+                    }
+                }
+
+                var settingNumberQuestionPerPage = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "NPP");
+                if (settingNumberQuestionPerPage != null) {
+                    if (settingNumberQuestionPerPage.IsActive) {
+                        NumberQuestionPerPage = settingNumberQuestionPerPage.NumberValue??0;
                     }
                 }
             }
