@@ -84,7 +84,11 @@ $(function () {
     });
     $("#login-container").live("keypress", function (ev) {
         if (ev.keyCode == 13) {
-            login();
+            var mail = $("#email").val();
+            var pass = $("#pass").val();
+            if (mail && pass) { 
+                login();
+            }
         }
     });
    

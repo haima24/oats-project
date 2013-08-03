@@ -109,9 +109,20 @@ function initProgressBar() {
     });
     $(".nt-resp-stat .nt-resp-stat-desc").html("0 of " + qCount + " answered - 0% complete");
     oatsProgressBar = $(".nt-resp-stat .nt-resp-stat-bar").oatsProgressBar(qCount, function (max, cur) {
-        $(".nt-resp-stat .nt-resp-stat-desc").html(cur + " of " + max + " answered - " + $.toPercent(cur, max) + " complete");
+        $(".nt-resp-stat .nt-resp-stat-desc").html(cur + " of " + max + " answered - " + $.toPercent(cur, max,1) + " complete");
     });
     //progress bar
+}
+function initPages() {
+    var pagesCount = parseInt($("#question-per-page").val());
+    if (!isNaN(pagesCount)) {
+        $("div.holder").jPages({
+            containerID: "checklist",
+            perPage:pagesCount,
+            first: "First",
+            last: "Last"
+        });
+    }
 }
 $.fn.extend({
     _matchingConnectorItem: function (options) {
@@ -282,7 +293,7 @@ $(function () {
 
     initWYSIWYG();
     initProgressBar();
-
+    initPages();
 
     $(".nt-qitem[question-type=Matching]").matchingConnector({
         onChange: function (item, count) {

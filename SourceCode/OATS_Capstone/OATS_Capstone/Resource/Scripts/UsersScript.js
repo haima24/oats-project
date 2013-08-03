@@ -127,7 +127,7 @@ function initImportArea() {
             }
         }, 100);
     });
-    $("#qpaste textarea").filedrop({
+    $("textarea.nt-dnd-example-text").filedrop({
         success: function (text) {
             handleImportUsers(text);
         },

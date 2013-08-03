@@ -95,6 +95,16 @@
             {
     <input id="asm_duration" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
             }
+        }else if (Model.SettingType.SettingTypeKey == "NPP")
+        {
+            if (Model.IsActive)
+            {
+    <input id="asm_num_question" data-key="number" type="text" value="@Model.NumberValue"><span>Questions</span>
+            }
+            else
+            {
+    <input id="asm_num_question" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>Questions</span>
+            }
         }
 }
 else
@@ -164,5 +174,10 @@ else
         else if (Model.SettingType.SettingTypeKey == "DRL")
         {
     <input id="asm_duration" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>mins (default. 10 min)</span>
+        }else if (Model.SettingType.SettingTypeKey == "NPP")
+        {
+            <input id="asm_num_question" data-key="number" type="text" disabled="disabled" value="@Model.NumberValue"><span>Questions</span>
         }
+        
+        
 }

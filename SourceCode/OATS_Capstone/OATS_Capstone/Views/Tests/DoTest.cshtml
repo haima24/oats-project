@@ -6,6 +6,9 @@
     <script src="~/Bootstrap/js/jquery.countdown.js"></script>
     <script src="~/Resource/Scripts/DoTestScript.js"></script>
     <link href="~/Bootstrap/css/jquery.countdown.css" rel="stylesheet" />
+    <link href="~/Bootstrap/css/jPages.css" rel="stylesheet" />
+    <link href="~/Bootstrap/css/animate.css" rel="stylesheet" />
+    <script src="~/Bootstrap/js/jPages.js"></script>
 }
 @{
     ViewBag.Title = "Index";
@@ -19,7 +22,10 @@
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
     <input id="test-duration" type="hidden" value="@Model.TestDuration" />
-    
+    if (Model.NumberQuestionPerPage != 0)
+    { 
+    <input id="question-per-page" type="hidden" value="@Model.NumberQuestionPerPage" />
+    }
     <div class="navbar navbar-static-top">
         <div class="navbar-inner">
             <div id="savestatus" style="display: none;">
@@ -53,6 +59,7 @@
                 </div>
             }
             <div class="nt-username">@(string.IsNullOrEmpty(user.Name) ? user.UserMail : user.Name)</div>
+            <div class="holder"></div>
             <div id="checklist">
                 @if (Model == null)
                 { @Html.Partial("P_Type_Empty_Template") }
@@ -64,6 +71,7 @@
                     }
                     else
                     {
+                        
                         foreach (var question in Model.Questions)
                         {
                     @Html.Partial("P_Question_Instance_DoTest", question)
@@ -71,6 +79,7 @@
                     }
                 }
             </div>
+            <div class="holder"></div>
         </div>
         <div class="nt-footer" style="display: block;">
             <div class="nt-footer-cont">

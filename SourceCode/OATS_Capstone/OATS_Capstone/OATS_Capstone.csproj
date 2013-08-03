@@ -258,9 +258,12 @@
     <Content Include="Bootstrap\img\arrowvb.png" />
     <Content Include="Bootstrap\img\arrowvt.png" />
     <Content Include="Bootstrap\css\bootstrap-combined.no-icons.min.css" />
+    <Content Include="Bootstrap\css\animate.css" />
     <Content Include="Bootstrap\js\bootstrap-wysiwyg.js" />
     <Content Include="Bootstrap\js\fullcalendar.js" />
     <Content Include="Bootstrap\js\gridviewScroll.min.js" />
+    <Content Include="Bootstrap\css\jPages.css" />
+    <Content Include="Bootstrap\js\jPages.js" />
     <Content Include="Bootstrap\js\jqbar.js" />
     <Content Include="Bootstrap\css\jquery.validity.css" />
     <Content Include="Bootstrap\css\kalendae.css" />

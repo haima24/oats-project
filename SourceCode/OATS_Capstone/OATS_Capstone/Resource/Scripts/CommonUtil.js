@@ -181,8 +181,16 @@ $.fn.extend({
         return '#' + r + g + b;
 
     };
-    $.toPercent = function (numerator, denominator) {
-        return (numerator * 100 / denominator) + "%";
+    $.toPercent = function (numerator, denominator, places) {
+        var result = "";
+        if (places) {
+            var s = (numerator * 100 / denominator).toString();
+            var iOfDot = s.indexOf(".");
+            result = s.substring(0, iOfDot + 1 + places) + "%";
+        } else {
+            result = (numerator * 100 / denominator) + "%";
+        }
+        return result;
     }
 }(jQuery));
 (function ($) {
