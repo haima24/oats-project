@@ -1,5 +1,5 @@
 ﻿@model OATS_Capstone.Models.OverviewScoreTests
-@if (Model.CheckedTestsSorted.Count == 0 && Model.CheckedUsersSorted.Count == 0)
+@if (Model.CheckedTestsSorted.Count == 0 || Model.CheckedUsersSorted.Count == 0)
 {
     <div class="nt-empty-msg">No data match your selection</div>
 }

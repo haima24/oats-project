@@ -342,6 +342,7 @@
     <Content Include="Resource\Scripts\AccountScript.js" />
     <Content Include="Resource\Scripts\AuthenticatedScript.js" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
+    <Content Include="Resource\Scripts\CommonValidation.js" />
     <Content Include="Resource\Scripts\DetailRegisterScript.js" />
     <Content Include="Resource\Scripts\DoTestScript.js" />
     <Content Include="Resource\Scripts\NewTeacherScript.js" />
@@ -517,7 +518,7 @@
     <Content Include="Views\UserMailer\ForgotPassword.cshtml" />
     <Content Include="Views\Account\DetailRegister.cshtml" />
     <Content Include="Views\UserMailer\InviteNonRegisteredUser.cshtml" />
-    <Content Include="Views\Shared\P_Email_Input.cshtml" />
+    <Content Include="Views\Users\P_Email_Input.cshtml" />
     <Content Include="Views\UserMailer\NotifyNewUser.cshtml" />
     <Content Include="Views\Tests\P_OverviewTab.cshtml" />
     <Content Include="Views\Shared\ErrorDetail.cshtml" />
@@ -530,6 +531,7 @@
     <Content Include="Views\Tests\P_Response_Type_Matching.cshtml" />
     <Content Include="Views\Tests\P_Reuse_Template_Matching.cshtml" />
     <Content Include="Views\Tests\P_User_Item.cshtml" />
+    <Content Include="Views\Users\P_Email_Input_Item.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

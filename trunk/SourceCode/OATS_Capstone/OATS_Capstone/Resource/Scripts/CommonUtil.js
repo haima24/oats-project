@@ -96,9 +96,19 @@ $.fn.extend({
     scrollToElement: function (item) {
         var offset = item.position().top + this.scrollTop();
         this.animate({ scrollTop: offset }, 1000);
+    },
+    scrollEnd: function () {
+        $(this).each(function (i, e) {
+            $(e).animate({ scrollTop: e.scrollHeight }, 1000);
+        });
+
     }
+
 });
 (function ($) {
+    $.initTooltips = function () {
+        $("[data-toggle=tooltip]").tooltip();
+    };
     $.initCheckboxAllSub = function (param) {
         if (param && param.container && param.all && param.sub && param.onchange && typeof (param.onchange) === "function") {
             //separator
@@ -486,6 +496,7 @@ $.fn.extend({
             );
         var defaults = {
             maxTags: 5,
+            hideOnSelect:false
         }
         options = $.extend(defaults, options);
         $(this).each(function (index, element) {
@@ -501,14 +512,14 @@ $.fn.extend({
 
                 }
             });
-            $(element).live("focus", function () {
+            $(element).on("focus", function () {
                 dropdown.show();
             });
-            $(element).live("keyup", function (ev) {
+            $(element).on("keyup", function (ev) {
                 text = $(this).val();
                 reSearch();
             });
-            $(document).live("click", function (e) {
+            $(document).on("click", function (e) {
                 if (!$(e.target).is(self) && $(e.target).closest(dropdown).length == 0) {
                     dropdown.hide();
                 }
@@ -572,6 +583,9 @@ $.fn.extend({
                         if (item.length > 0) {
                             if (options.select && typeof (options.select) === "function") {
                                 options.select(item.attr("value"), clickItem);
+                                if (options.hideOnSelect) {
+                                    dropdown.hide();
+                                }
                             }
                         }
                     }
@@ -772,6 +786,12 @@ $.fn.extend({
     }
 });
 $.fn.extend({
+    removeByIndex:function(index){
+        if (index >= 0 && index < $(this).length) {
+            this.splice(index, 1);
+        }
+        return this;
+    },
     removeItem: function (item, comparer) {
         return $.grep(this, function (element, index) {
             var result = false;
@@ -816,6 +836,7 @@ $.fn.extend({
         return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
     }
 })
+
 function random(range) {
     return Math.floor(Math.random() * range);
 }
@@ -831,7 +852,8 @@ function setLocalStorage(key, value) {
     if (typeof (Storage) !== "undefined") {
         // Yes! localStorage and sessionStorage support!
         // Some code.....
-        localStorage.setItem(key, value);
+        var obj = JSON.stringify(value)
+        localStorage.setItem(key, obj);
     }
     else {
         // Sorry! No web storage support..
@@ -842,7 +864,8 @@ function getLocalStorage(key) {
     if (typeof (Storage) !== "undefined") {
         // Yes! localStorage and sessionStorage support!
         // Some code.....
-        obj = localStorage.getItem(key);
+        var value = localStorage.getItem(key);
+        obj = JSON.parse(value);
     }
     else {
         // Sorry! No web storage support..

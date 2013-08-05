@@ -695,15 +695,19 @@ namespace OATS_Capstone.Models
                         var user = db.Users.FirstOrDefault(k => k.UserID == id);
                         if (user != null)
                         {
-                            var invitation = new Invitation();
-                            var key = GenerateInvitationAccessToken(test.TestID, id);
-                            invitation.IsMailSent = false;
-                            invitation.AccessToken = key;
-                            invitation.User = user;
-                            invitation.Role = userRole;
-                            invitation.InvitationDateTime = DateTime.Now;
-                            test.Invitations.Add(invitation);
-                            invitationMails.Add(invitation);
+                            var existInvitation = test.Invitations.FirstOrDefault(i => i.UserID == id);
+                            if (existInvitation == null)
+                            {
+                                var invitation = new Invitation();
+                                var key = GenerateInvitationAccessToken(test.TestID, id);
+                                invitation.IsMailSent = false;
+                                invitation.AccessToken = key;
+                                invitation.User = user;
+                                invitation.Role = userRole;
+                                invitation.InvitationDateTime = DateTime.Now;
+                                test.Invitations.Add(invitation);
+                                invitationMails.Add(invitation);
+                            }
                         }
                     });
                 }
@@ -3515,62 +3519,6 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public int MakeUser(string name, string email)
-        {
-            var generatedId = 0;
-            success = false;
-            message = Constants.DefaultProblemMessage;
-            try
-            {
-                var db = SingletonDb.Instance();
-                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(name))
-                {
-                    email = email.Trim();
-                    var checkUser = db.Users.FirstOrDefault(i => i.UserMail.Trim() == email);
-                    if (checkUser == null)
-                    {
-                        var user = new User();
-                        user.UserMail = email;
-                        user.Name = name;
-                        user.IsRegistered = false;
-                        //generate token
-                        var token = GenerateUserToken(user.UserID);
-                        user.AccessToken = token;
-                        db.Users.Add(user);
-                        if (db.SaveChanges() > 0)
-                        {
-                            success = true;
-                            message = Constants.DefaultSuccessMessage;
-                            generatedId = user.UserID;
-
-                            var authen = AuthenticationSessionModel.Instance();
-                            //send mail notify new user here
-                            IUserMailer mailer = new UserMailer();
-                            var curId = authen.UserId;
-                            var userMail = user.UserMail;
-                            mailer.OnNotifyNewUserCallback += (isSuccess) =>
-                            {
-                                var context = GlobalHost.ConnectionManager.GetHubContext<GeneralHub>();
-                                context.Clients.All.R_notifyNewUserCallBack(curId, generatedId, userMail, isSuccess);
-
-                            };
-                            mailer.NofityNewUser(user, authen.User);
-                        }
-                    }
-                    else
-                    {
-                        success = false;
-                        message = Constants.DefaultDuplicateEmail;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-            return generatedId;
-        }
         public Test NewTest(int testid)
         {
             Test test = null;
@@ -3796,15 +3744,16 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void ImportUsers(List<User> users)
+        public void CreateUsers(List<User> users,string type)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
-            resultlist = new List<object>();
+            var createdResults = new List<bool>();
             try
             {
                 var db = SingletonDb.Instance();
                 var usersImported = db.Users.ToList();
+                var importeds = new List<User>();
                 users.ForEach(u =>
                 {
                     if (!string.IsNullOrEmpty(u.Name) && !string.IsNullOrEmpty(u.UserMail))
@@ -3823,18 +3772,43 @@ namespace OATS_Capstone.Models
                             user.AccessToken = token;
                             db.Users.Add(user);
                             usersImported.Add(user);
-                            resultlist.Add(new { name, email, isDuplicated = false });
+                            createdResults.Add(true);
+                            importeds.Add(user);
                         }
                         else
                         {
-                            resultlist.Add(new { name, email, isDuplicated = true });
+                            createdResults.Add(false);
                         }
                     }
                 });
 
                 if (db.SaveChanges() >= 0) {
                     success = true;
-                    message = Constants.DefaultSuccessMessage;
+                    var created=createdResults.Count(i=>i);
+                    var duplicated=createdResults.Count(i=>!i);
+                    message = "Initial: "+users.Count+" users .Created " + created + ". Duplicated " + duplicated;
+                    switch (type)
+                    {
+                        case "Import":
+                            if (OnRenderPartialViewToString != null) {
+                                generatedHtml = OnRenderPartialViewToString.Invoke(importeds);
+                            }
+                            break;
+                        case "Create":
+                            if (OnRenderSubPartialViewToString != null) { 
+                                importeds.ForEach(i=>{
+                                    var html = OnRenderSubPartialViewToString.Invoke(i);
+                                    resultlist.Add(html);
+                                });
+                            }
+                            break;
+                        default: //import
+                            if (OnRenderPartialViewToString != null)
+                            {
+                                generatedHtml = OnRenderPartialViewToString.Invoke(importeds);
+                            }
+                            break;
+                    }
                     //send email
                 }
             }

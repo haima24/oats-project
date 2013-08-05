@@ -65,14 +65,29 @@ function createUser() {
     $.validity.settings.position = "left";
     var result = $.validity.end();
     if (result.valid) {
-        var name = tbName.val();
-        var email = tbEmail.val();
-        $.post("/Users/MakeUser", { name:name,email: email }, function (res) {
-            if (res.success && res.generatedId) {
-                modal.modal("hide");
-                showMessage("Sending email")
-            } else {
-                showMessage("error", res.message);
+        var users = new Array();
+        users.push({ Name: tbName.val(), UserMail: tbEmail.val() });
+        $.ajax({
+            type: "POST",
+            url: "/Users/CreateUsers",
+            data: JSON.stringify({ users: users, type: "Create" }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.success) {
+                    var list = $("#emailInputModal .nt-clb-list");
+                    $(res.resultlist).each(function (i, e) {
+                        if ($(".nt-empty", list).length > 0) {
+                            list.html(e);
+                        } else {
+                            list.append(e);
+                        }
+                        list.scrollEnd();
+                    });
+                    showMessage("info", res.message);
+                } else {
+                    showMessage("error", res.message);
+                }
             }
         });
     }
@@ -81,33 +96,32 @@ function initImportArea() {
     var handleImportUsers = function (pastedText) {
         if (pastedText) {
             var couples = pastedText.split(/\s*[\n;,](?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)\s*/);
-            var users=$(couples).map(function (i, e) {
+            var users = $(couples).map(function (i, e) {
                 var couples = e.split(/\s+/);
                 if (couples.length == 2) {
                     var name = couples[0].replace(/"/g, "");
                     var mail = couples[1].replace(/</g, "").replace(/>/g, "");
-                    return {Name:name,UserMail:mail};
+                    return { Name: name, UserMail: mail };
                 }
             }).convertJqueryArrayToJSArray();
-            if (users) {
+            var role = $("#created-role").val();
+            if (users&&role) {
                 $.ajax({
                     type: "POST",
-                    url: "/Users/ImportUsers",
-                    data: JSON.stringify({ users: users }),
+                    url: "/Users/CreateUsers",
+                    data: JSON.stringify({ users: users, type: "Import", role: role }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (res) {
                         if (res.success) {
-                            var imported=0;
-                            var notImported=0;
-                            $(res.resultlist).each(function(i,e){
-                                if(e.isDuplicated){
-                                    notImported++;
-                                }else{
-                                    imported++;
-                                }
-                            });
-                            showMessage("info", "Imported: " + imported + ". Duplicated: " + notImported);
+                            var html = res.generatedHtml;
+                            if (!$("#emailInputModal").length > 0) {
+                                $(html).modal();
+                            } else {
+                                $("#emailInputModal").html($(html).html());
+                            }
+                            $("#emailInputModal").modal("show");
+                            showMessage("info", res.message);
                         } else {
                             showMessage("error", res.message);
                         }
@@ -140,6 +154,8 @@ $(function () {
     var curIdString = $("#current-user-id").val();
     currentUserId = parseInt(curIdString);
     //separator
+
+    //separator
     $("#makeStudent").live("click", function () {
         initPopup("Student");
     });
@@ -148,36 +164,124 @@ $(function () {
     });
     //separator
     initImportArea();
-    //separator
-    var hub = $.connection.generalHub;
-    hub.client.R_notifyNewUserCallBack = function (userid, generatedId, mail, isSuccess) {
-        if (!isNaN(currentUserId) && generatedId && userid && mail && typeof (isSuccess) != "undefined") {
-            if (currentUserId == userid) {
-                if (isSuccess) {
-                    showMessage("success", "Success on sending email to: " + mail);
-                } else {
-                    showMessage("error", "Failed on sending email to: " + mail);
+    $("#emailInputModal .nt-clb-item-control button.btn-remove-invite").live("click", function () {
+        var btn = $(this);
+        var userid = parseInt(btn.attr("user-id"));
+        if (!isNaN(userid)) {
+            $.post("/Users/RemoveNonRegisteredUser", { userid: userid }, function (res) {
+                if (res.success) {
+                    var item = $(btn).closest(".nt-clb-item");
+                    item.fadeOut("slow", function () { $(this).remove(); });
                 }
-                var loc = "/Tests";
-                var role = $("#emailInputModal #role").val();
-                if (role) {
-                    switch (role) {
-                        case "Student":
-                            loc = "/Students/NewStudent/" + generatedId;
-                            break;
-                        case "Teacher":
-                            loc = "/Teachers/NewTeacher/" + generatedId;
-                            break;
-                        default:
-                            break;
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    });
+    $("#emailInputModal .btn-remove-assign-test").live("click", function () {
+        var box=$("#emailInputModal .nt-search-box-result");
+        box.fadeOut("fast",function(){
+            var span = $("span.assign-test[test-id]",this);
+            span.html("");
+            span.removeAttr("test-id");
+        });
+        
+    });
+    $("#emailInputModal #emailInputOk").live("click", function () {
+        var modal = $("#emailInputModal");
+        var holder = $("span.assign-test[test-id]", modal);
+        if (holder.length > 0) {
+            var testid = parseInt(holder.attr("test-id"));
+            var checkedIds = $(".nt-clb-item[user-id]", modal).map(function (i, e) {
+                var id = parseInt($(e).attr("user-id"));
+                if (id) {
+                    return id;
+                }
+            }).convertJqueryArrayToJSArray();
+            var role = $("#role", modal).val();
+            if (!isNaN(testid)&&checkedIds&&role) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/AddUserToInvitationTest",
+                    data: JSON.stringify({ testid: testid, count: checkedIds.length, userids: checkedIds, role: role }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.success) {
+                            window.location.href = "/Tests/NewTest/" + testid + "?tab=Invitation";
+                        } else {
+                            showMessage("error", res.message);
+                        }
                     }
-                }
-                setTimeout(function () {
-                    window.location.href = loc;
-                }, 3000);
+                });
             }
         }
-    }
+        modal.modal("hide");
+    });
+    $("#emailInputModal").live("shown", function () {
+        $("#emailInputModal input[type=text].nt-search-input").oatsSearch({
+            hideOnSelect:true,
+            select: function (item) {
+                if (item.id) {
+                    var searchBox = $("#emailInputModal .nt-search-box-result");
+                    searchBox.show();
+                    var spanHolder = $("span.assign-test", searchBox);
+                    spanHolder.html(item.title || "");
+                    spanHolder.attr("test-id", item.id);
+                }
+            },
+            source: function (req, res, addedTagIds) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/TestsSearch",
+                    data: JSON.stringify({ term: req, tagids: addedTagIds }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var result = $(r.resultlist).map(function (index, obj) {
+                                if (obj.IsCurrentUserOwnTest && obj.TestTitle && obj.TestTitle != "") {
+                                    return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning };
+                                }
+                            }).convertJqueryArrayToJSArray();
+                            res(result);
+                        } else {
+                            showMessage("error", r.message);
+                        }
+                    }
+                });
+            },
+            tagsource: function (req, res) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/TestsSearchTag",
+                    data: JSON.stringify({ term: req }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var result = $(r.resultlist).map(function (index, obj) {
+                                if (obj.TagName && obj.TagName != "") {
+                                    return { id: obj.TagID, name: obj.TagName };
+                                }
+                            }).convertJqueryArrayToJSArray();
+                            res(result);
+                        } else {
+                            showMessage("error", r.message);
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $("#emailInputModal #nameInput,#emailInputModal #emailInput").live("keydown", function (ev) {
+        if (ev.keyCode == 13) {
+            createUser();
+        }
+    });
+    //separator
+    var hub = $.connection.generalHub;
     hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount, listSent) {
         if (uid && uid == currentUserId) {
             if (typeof (initMailCount) != "undefined" && typeof (sentCount) != "undefined" && typeof (unSentCount) != "undefined" && typeof (listSent) != "undefined") {
@@ -211,13 +315,6 @@ $(function () {
         }
     }
     $.connection.hub.start().done(function () {
-        $("#emailInputModal").live("keydown", function (ev) {
-            if (ev.keyCode == 13) {
-                createUser();
-            }
-        });
-        $("#emailInputOk").live("click", function () {
-            createUser();
-        });
+        
     });
 });
