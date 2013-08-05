@@ -1117,6 +1117,7 @@ function saveTextDescription(questionidString, text) {
     });
 }
 $(function () {
+    $.initTooltips();
     initImageUploadFacility();
     initReuseDragAndDrop();
     initDropText();
@@ -1161,6 +1162,7 @@ $(function () {
                     initReplyAreas();
                     initDropText();
                     initResponseAndScoreSearch();
+                    $.initTooltips();
                     var activeLi = $("#score-detail-tab li").filter(function () {
                         return $("a[tab=" + currentScoreDetailTab + "]", this).length > 0;
                     }).addClass("active");
@@ -1615,7 +1617,6 @@ $(function () {
                     }
                 }
             }
-
         });
         $("#modalPopupUser").modal('hide');
 
@@ -1706,7 +1707,7 @@ $(function () {
             }
         });
     });
-    $("#modalPopupUser .button button").live("click", function () {
+    $("#modalPopupUser button.btn-remove-invite").live("click", function () {
         var btn = $(this);
         var userid = parseInt(btn.attr("user-id"));
         if (!isNaN(userid)) {

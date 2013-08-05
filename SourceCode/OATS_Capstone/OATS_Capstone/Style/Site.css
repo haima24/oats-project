@@ -460,11 +460,12 @@ i, cite, em, var, address, dfn {
         }
 
 .nt-dnd-example-text {
-    width:500px;
-    height:100px;
-    resize:none;
-    overflow:hidden;
+    width: 500px;
+    height: 100px;
+    resize: none;
+    overflow: hidden;
 }
+
 .popover {
     max-width: 400px;
 }
@@ -657,18 +658,13 @@ i, cite, em, var, address, dfn {
     position: relative;
 }
 
-    #eventTab .feedback-tab.nav > li > a {
-        background-color: white;
+    #eventTab .feedback-tab.nav > li:not(.active) > a {
+        color: black;
+        background-color: rgb(235, 235, 235);
     }
 
-    #eventTab .feedback-tab.nav-tabs > .active > a, #eventTab .feedback-tab.nav-tabs > .active > a:hover, #eventTab .feedback-tab.nav-tabs > .active > a:focus {
-        background-size: 100%;
-        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #F8FAFC), color-stop(100%, #EAEFFA));
-        background-image: -webkit-linear-gradient(top, #F8FAFC, #EAEFFA);
-        background-image: -moz-linear-gradient(top, #F8FAFC, #EAEFFA);
-        background-image: -o-linear-gradient(top, #F8FAFC, #EAEFFA);
-        background-image: linear-gradient(top, #F8FAFC, #EAEFFA);
-        text-shadow: none;
+    #eventTab .feedback-tab.nav-tabs > li.active > a, #eventTab .feedback-tab.nav-tabs > .active > a:hover, #eventTab .feedback-tab.nav-tabs > .active > a:focus {
+        background-color: white;
     }
 
 .teacher-feedback-controls {
@@ -1366,7 +1362,7 @@ i, cite, em, var, address, dfn {
 .nt-invbtn {
     font-family: Verdana,Arial,sans-serif;
     font-size: 1em;
-    line-height:20px;
+    line-height: 20px;
 }
 
 #checklist .nt-qitem .nt-qans .nt-qansscore {
@@ -1834,7 +1830,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
         .nt-clb-header .nt-clb-header-content > div.nt-clb-header-label {
-            width: 55%;
+            width: 50%;
         }
 
         .nt-clb-header .nt-clb-header-content > div {
@@ -2107,6 +2103,20 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 .nt-search-box {
     position: relative;
 }
+
+.nt-search-box-result {
+    display:none;
+    padding: 10px 10px 0 10px;
+    color: #8e5e19;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+    .nt-search-box-result .assign-test {
+        padding-left: 10px;
+        font-size: 15px;
+        color: rgb(7, 48, 177);
+    }
 
 .nt-user-details .nt-asms-unrelated .nt-search-box .nt-search-input {
     background-color: #FFF;
@@ -2952,8 +2962,8 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_time_limit,
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_max_point,
-            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_duration ,
-            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_num_question{
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_duration,
+            #eventTab > div.nt-asm-settings .nt-panel .nt-section #asm_num_question {
                 width: 35px;
                 margin: 0 10px;
                 padding: 2px;
@@ -2964,12 +2974,15 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
                 margin: 0 10px;
                 padding: 2px;
             }
+
             #eventTab > div.nt-asm-settings .nt-panel .nt-section #attempBase {
-                padding-left:30px;
+                padding-left: 30px;
             }
+
                 #eventTab > div.nt-asm-settings .nt-panel .nt-section #attempBase select {
-                    width:210px;
+                    width: 210px;
                 }
+
 #eventTab > div.nt-asm-inv {
     float: none;
 }
@@ -3303,9 +3316,11 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
         margin: 10px auto;
         font-weight: bold;
     }
+
     #container.nt-de-cont .nt-checklist-cont .holder {
-        text-align:center;
+        text-align: center;
     }
+
     #container.nt-de-cont .nt-checklist-cont .nt-asm-title {
         display: none;
         font-size: 16px;
@@ -3978,4 +3993,17 @@ article, time {
 
 .countDays {
     display: none !important;
+}
+
+#emailInputModal .modal-body {
+    min-height: 350px;
+}
+
+#emailInputModal .nt-ctrl-list .nt-clb-header-content, #emailInputModal .nt-ctrl-list .nt-clb-item-content {
+    width: 20%;
+}
+
+#emailInputModal .nt-clb-list {
+    height: inherit;
+    max-height: 250px;
 }

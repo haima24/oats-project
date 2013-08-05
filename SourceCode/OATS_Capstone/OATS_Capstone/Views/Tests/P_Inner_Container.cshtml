@@ -25,7 +25,7 @@
 <input id="test_id" type="hidden" value="@Model.TestID" />
 <div id="test-header">
     <div>
-        <button id="eventIntroduction" class="nt-btn-circle"><i class="t-icon i-introduction t-icon-white"></i></button>
+        <button id="eventIntroduction" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="Introduction for this test"><i class="t-icon i-introduction t-icon-white"></i></button>
     </div>
     @if (Model != null)
     {
@@ -41,9 +41,9 @@
     <div id="eventDateFrom" class="test-date-time" contenteditable="true" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.StartDateTime)</div>
     <div class="spacer">_</div>
     <div id="eventDateTo" class="test-date-time" contenteditable="true" current-date="@((Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime).ToJavaScriptMilliseconds())" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime)</div>
-    <button id="eventDuplicate" class="nt-btn-circle"><i class="t-icon i-duplicate t-icon-white"></i></button>
-    <button id="eventDeactive" class="nt-btn-circle"><i class="icon-pause t-icon-white"></i></button>
-    <button id="eventDelete" class="nt-btn-circle"><i class="icon-trash t-icon-white"></i></button>
+    <button id="eventDuplicate" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="Duplicate"><i class="t-icon i-duplicate t-icon-white"></i></button>
+    <button id="eventDeactive" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="De-Active"><i class="icon-pause t-icon-white"></i></button>
+    <button id="eventDelete" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="Delete"><i class="icon-trash t-icon-white"></i></button>
 </div>
 <div id="test-introduction" class="popover bottom">
     <div class="arrow"></div>

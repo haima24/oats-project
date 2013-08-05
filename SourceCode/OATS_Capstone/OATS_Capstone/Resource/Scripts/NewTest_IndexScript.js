@@ -101,25 +101,20 @@ function initCalendar() {
     $.post("/Tests/TestCalendarObjectResult", function (res) {
         if (res.success) {
             events = $(res.resultlist).map(function (index, obj) {
+                var resultObj = new Object();
+                resultObj.id = obj.id;
+                resultObj.title = obj.testTitle;
+                resultObj.start = convertJsonDatetoDate(obj.startDateTime);
+                resultObj.end= convertJsonDatetoDate(obj.endDateTime);
                 if (obj.isOwner) {
-                    return {
-                        id: obj.id,
-                        title: obj.testTitle,
-                        start: convertJsonDatetoDate(obj.startDateTime),
-                        end: convertJsonDatetoDate(obj.endDateTime),
-                        backgroundColor: "green",
-                        url: "/Tests/NewTest/id:" + parseInt(obj.id)
-                    };
+                    resultObj.backgroundColor = "#EAEFFA";
+                    resultObj.url = "/Tests/NewTest/" + parseInt(obj.id);
                 } else {
-                    return {
-                        id: obj.id,
-                        title: obj.testTitle,
-                        start: convertJsonDatetoDate(obj.startDateTime),
-                        end: convertJsonDatetoDate(obj.endDateTime),
-                        backgroundColor: "red",
-                        url: "/Tests/DoTest/id:" + parseInt(obj.id)
-                    };
+                    resultObj.backgroundColor = "#FAEAEA",
+                    resultObj.url = "/Tests/DoTest/" + parseInt(obj.id);
                 }
+                resultObj.textColor = "#222222";
+                return resultObj;
                 
             }).convertJqueryArrayToJSArray();
             $('#calendar').fullCalendar({

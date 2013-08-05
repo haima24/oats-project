@@ -67,23 +67,45 @@ namespace OATS_Capstone.Controllers
             common.RemoveNonRegisteredUser(userid);
             return Json(new { common.success, common.message });
         }
-        public JsonResult MakeUser(string name,string email)
-        {
-            var common = new CommonService();
-            var generatedId=common.MakeUser(name,email);
-            return Json(new { common.success, common.message, generatedId });
-        }
         public JsonResult EmailInput(string role)
         {
             ViewBag.Role = role;
             var generatedHtml=this.RenderPartialViewToString("P_Email_Input");
             return Json(new { generatedHtml });
         }
-        public JsonResult ImportUsers(List<User> users)
+        public JsonResult CreateUsers(List<User> users,string type="",string role="")
         {
             var common = new CommonService();
-            common.ImportUsers(users);
-            return Json(new {common.message,common.success,common.resultlist });
+            ViewBag.Role = role;
+            common.OnRenderPartialViewToString += (model) => {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Email_Input", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.OnRenderSubPartialViewToString += (model) =>
+            {
+                var result = string.Empty;
+                try
+                {
+                    result = this.RenderPartialViewToString("P_Email_Input_Item", model);
+                }
+                catch (Exception)
+                {
+                    common.success = false;
+                    common.message = Constants.DefaultExceptionMessage;
+                }
+                return result;
+            };
+            common.CreateUsers(users,type);
+            return Json(new {common.message,common.success,common.resultlist,common.generatedHtml });
         }
     }
 }

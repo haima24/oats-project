@@ -1,0 +1,72 @@
+﻿@model IEnumerable<OATS_Capstone.Models.User>
+<div id="emailInputModal" class="modal hide fade">
+    @if (!String.IsNullOrEmpty(ViewBag.Role))
+    { 
+        <input type="hidden" id="role" value="@ViewBag.Role" />
+    }
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Specify Info</h3>
+    </div>
+    <div class="modal-body">
+        <div class="nt-ctrl-search">
+            <div class="nt-search-box">
+                <input type="text" class="nt-search-input search-query" placeholder="Search Test To Assign" />
+                <i class="t-icon search"></i>
+            </div>
+            <div class="nt-search-box-result">
+                <div>
+                    <span>Assigned Test:</span>
+                    <span class="assign-test"></span>
+                    <button class="btn-remove-assign-test nt-btn-circle"><i class="icon-remove"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="nt-ctrl-list">
+            <div class="nt-ctrl-line"></div>
+            <div class="nt-clb-header">
+                <div class="nt-clb-header-content">
+                    <div class="nt-clb-header-label">
+                        <span>Name</span>
+                    </div>
+                    <div class="nt-clb-header-desc">
+                        <span>Email Address</span>
+                    </div>
+                </div>
+                <div class="nt-loader" style="display: none;"></div>
+            </div>
+            <div class="nt-ctrl-line"></div>
+            <div class="nt-clb-list">
+                @if (Model == null)
+                {
+                    <div class="nt-clb-item nt-empty">
+                        No Users Choosen
+                    </div>
+                }
+                else
+                {
+                    if (Model.Count() == 0)
+                    {
+                        <div class="nt-clb-item nt-empty">
+                        No Users Choosen
+                    </div>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                    @Html.Partial("P_Email_Input_Item", item)
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <input id="nameInput" type="text" class="span2" placeholder="Name" required="" />
+        <input id="emailInput" type="text" class="span3" placeholder="Email Address" required="" />
+        <p id="emailInputError" class="help-inline hide"></p>
+    </div>
+    <div class="modal-footer">
+        <a id="emailInputOk" href="#" class="btn btn-primary">Ok</a>
+        <a href="#" data-dismiss="modal" class="btn">Cancel</a>
+    </div>
+</div>
