@@ -8,6 +8,11 @@ var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
+function initCommonValidation() {
+    var handlers = new Array();
+    handlers.push({ selector: "#checklist .nt-qansscore .nt-on-score", regex: /^([\s0-9]{0,20})$/, def: "0" });
+    $.initCommonValidator(handlers);
+}
 function initResponseAndScoreSearch() {
     $("#sidebar .nt-ctrl-search input.nt-search-input").autocomplete({
         source: function (req, res) {
@@ -16,14 +21,14 @@ function initResponseAndScoreSearch() {
                 $.ajax({
                     type: "POST",
                     url: "/Tests/SearchUserItems",
-                    data: JSON.stringify({ testid: testid, term:req.term,type:type }),
+                    data: JSON.stringify({ testid: testid, term: req.term, type: type }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (res) {
                         if (res.success) {
-                            var list=$("#respUsers");
+                            var list = $("#respUsers");
                             list.empty();
-                            $(res.resultlist).each(function (i,o) {
+                            $(res.resultlist).each(function (i, o) {
                                 list.append(o);
                             });
                         }
@@ -1118,6 +1123,7 @@ function saveTextDescription(questionidString, text) {
 }
 $(function () {
     $.initTooltips();
+    initCommonValidation();
     initImageUploadFacility();
     initReuseDragAndDrop();
     initDropText();
