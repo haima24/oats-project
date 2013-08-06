@@ -6,6 +6,8 @@
 @{
     var authen = AuthenticationSessionModel.Instance();
     var user = authen.User;
+    var durationDetail = Model.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
+    var accesscodeDetail = Model.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
 }
 <script src="~/Resource/Scripts/DoTestScript.js"></script>
 <div class="navbar navbar-static-top">
@@ -34,7 +36,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="t-icon icon-user"></i><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name)?user.UserMail:user.Name)</li>
+                            <li class="nav-header">Welcome: @(string.IsNullOrEmpty(user.Name) ? user.UserMail : user.Name)</li>
                             <li class="divider"></li>
                             <li><a href="#" id="profile-link">My Profile</a></li>
                             <li><a href="@Url.Action("LogOut", "Account")">Logout</a></li>
@@ -49,10 +51,14 @@
 </div>
 <div id="container" class="container wrapper nt-de-cont">
     <div id="jointest_container">
-        @using (Html.BeginForm("DoTest", "Tests", new { id = Model.TestID, check = true }, FormMethod.Post))
-        {
-            <div class="thumbnail well well-small text-center">
-                <h2>Test Enrollment</h2>
+        <div class="thumbnail well well-small text-center">
+            <p>Title: @Model.TestTitle. Duration: @durationDetail.NumberValue mins</p>
+
+
+            @using (Html.BeginForm("DoTest", "Tests", new { id = Model.TestID, check = true }, FormMethod.Post))
+            {
+                if (accesscodeDetail.IsActive)
+                {
                 <p>This test require test access code to. Please use your access code in invitation email.</p>
                 <div class="input-prepend">
                     <span class="add-on"><i class="icon-pencil"></i></span>
@@ -60,9 +66,18 @@
                 </div>
                 <br />
                 <button type="submit" class="btn-submit btn btn-large">Take this test</button>
-            </div>
-           
-        }
+                }
+                else
+                {
+                <div class="input-prepend">
+                    <button type="submit" id="btn-continue" class="btn-submit btn btn-large">Continue</button>
+                </div>
+                }
+            }
+
+
+
+        </div>
     </div>
 
 </div>

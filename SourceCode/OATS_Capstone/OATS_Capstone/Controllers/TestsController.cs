@@ -364,25 +364,25 @@ namespace OATS_Capstone.Controllers
                                 {
                                     if (check)
                                     {
-                                        if (testLogic.RequireAccessCodeSetting.TextValue == accesscode)
+                                        if (testLogic.RequireAccessCodeSetting.IsActive)
                                         {
-                                            action = View(testLogic);
+                                            if (testLogic.RequireAccessCodeSetting.TextValue == accesscode)
+                                            {
+                                                action = View(testLogic);
+                                            }
+                                            else
+                                            {
+                                                action = RedirectToAction("AccessCode", new { id = id });
+                                            }
                                         }
                                         else
                                         {
-                                            action = RedirectToAction("AccessCode", new { id = id });
+                                            action = View(testLogic);
                                         }
                                     }
                                     else
                                     {
-                                        if (testLogic.RequireAccessCodeSetting.IsActive)
-                                        {
-                                            action = RedirectToAction("AccessCode", new { id = id });
-                                        }
-                                        else
-                                        {
-                                            action = View(testLogic);
-                                        }
+                                        action = RedirectToAction("AccessCode", new { id = id });
                                     }
                                 }
                             }
@@ -1134,10 +1134,11 @@ namespace OATS_Capstone.Controllers
             common.DeleteTestPermanent(testid);
             return Json(new { common.success, common.message });
         }
-        public JsonResult SearchUserItems(int testid,string term, string type)
+        public JsonResult SearchUserItems(int testid, string term, string type)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) => {
+            common.OnRenderPartialViewToString += (model) =>
+            {
                 var result = string.Empty;
                 try
                 {
@@ -1150,8 +1151,8 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.SearchUserItems(testid,term, type);
-            return Json(new { common.message,common.success,common.resultlist});
+            common.SearchUserItems(testid, term, type);
+            return Json(new { common.message, common.success, common.resultlist });
         }
     }
 }
