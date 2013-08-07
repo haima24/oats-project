@@ -10,7 +10,7 @@ var reuseAddedTags = new Array();
 
 function initCommonValidation() {
     var handlers = new Array();
-    handlers.push({ selector: "#checklist .nt-qansscore .nt-on-score", regex: /^([\s0-9]{0,20})$/, def: "0" });
+    handlers.push({ selector: "#checklist .nt-qansscore .nt-on-score", regex: /^([\s0-9]{0,2})$/, def: "0" });
     $.initCommonValidator(handlers);
 }
 function initResponseAndScoreSearch() {
