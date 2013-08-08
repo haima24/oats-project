@@ -632,7 +632,7 @@ i, cite, em, var, address, dfn {
         text-shadow: none;
     }
 
-    .test-larger-custom > .nav > .active > a {
+    .test-larger-custom .nav > .active > a, .test-larger-custom .nav > .active > a:hover, .test-larger-custom .nav > .active > a:focus {
         color: white;
         background-size: 100%;
         background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5993e7), color-stop(100%, #3365cb));

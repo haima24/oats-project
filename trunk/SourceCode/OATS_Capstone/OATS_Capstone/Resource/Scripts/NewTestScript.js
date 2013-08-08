@@ -38,6 +38,9 @@ function initCommonValidation() {
     handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10",min:"5" });
     handlers.push({ selector: "#asm_num_question", regex: /^([0-9]{0,3})$/, def: "5", min: "1" });
     handlers.push({ selector: "#asm_time_limit", regex: /^([0-9]{0,3})$/, def: "1", min: "1" });
+    //feedback
+    handlers.push({ selector: "#teacher-feedback-content", regex: /^(.|\n){0,1024}$/ });
+    handlers.push({ selector: ".reply-details textarea.reply-area", regex: /^(.|\n){0,1024}$/ });
     $.initCommonValidator(handlers);
 }
 function initResponseAndScoreSearch() {
@@ -639,7 +642,7 @@ function initEditable() {
         "placeholder": "<i>Enter Test Title</i>",
         "onBlur": function (element) {
             statusSaving();
-            var text = element.content == "<i>Enter Test Title</i>" ? "" : element.content;
+            var text = element.content == "<i>Enter Test Title</i>" ? "" : $.cleanTextHtml(element.content);
             $.ajax({
                 type: "POST",
                 url: "/Tests/UpdateTestTitle",
@@ -668,8 +671,9 @@ function initEditable() {
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
-            var content = element.content == "<i>Enter Text</i>" ? "" : element.content;
-            updateQuestionTitle(quesid, content);
+            var content = $(element).html()||element.content;
+            var text = content == "<i>Enter Text</i>" ? "" : $.cleanTextHtml(content);
+            updateQuestionTitle(quesid, text);
         },
     });
     $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit[contenteditable=true]").contentEditable({
@@ -677,8 +681,9 @@ function initEditable() {
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
-            var content = element.content == "<i>Enter Question</i>" ? "" : element.content;
-            updateQuestionTitle(quesid, content);
+            var content = $(element).html() || element.content;
+            var text = content == "<i>Enter Question</i>" ? "" : $.cleanTextHtml(content);
+            updateQuestionTitle(quesid, text);
         },
     });
 }
@@ -1073,6 +1078,7 @@ function updateQuestionTitle(questionidString, newtext) {
         data: JSON.stringify({ questionid: questionid, newtext: newtext }),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
+        async: false,
         success: function (res) {
             if (!res.success) {
                 showMessage("error", res.message);
@@ -1275,6 +1281,8 @@ $(function () {
     //separator
     $("#checklist[content-tab=true] .nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
+        var titleItem = $(".nt-qtext[contenteditable]", parent);
+        if (titleItem) { titleItem.blur();}
         if (currentEditAnswer) { $(currentEditAnswer).blur(); }
         addAnswer(parent, parent.attr("question-id"), function () {
             showOrHideDeleteLineAnswer();
@@ -2166,7 +2174,12 @@ $(function () {
     hub.client.R_studentAndTeacherCommentFeedback = function (tid, generatedHtml) {
         if (tid && generatedHtml) {
             if (tid == testid) {
-
+                var empty = $("#eventTab .nt-checklist-ctrl");
+                if (empty.length > 0) {
+                    empty.siblings(".comment-count").show();
+                    empty.siblings("#comments[student]").show();
+                    empty.remove();
+                }
                 var comments = $("#comments[student]");
                 if (comments.length > 0) {
                     var ele = $(generatedHtml);

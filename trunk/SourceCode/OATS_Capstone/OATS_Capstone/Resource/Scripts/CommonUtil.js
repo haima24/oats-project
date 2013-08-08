@@ -201,6 +201,9 @@ $.fn.extend({
             result = (numerator * 100 / denominator) + "%";
         }
         return result;
+    };
+    $.cleanTextHtml= function (html) {
+        return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
     }
 }(jQuery));
 (function ($) {
@@ -835,6 +838,7 @@ $.fn.extend({
         var html = $(this).html();
         return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
     }
+   
 })
 
 function random(range) {
