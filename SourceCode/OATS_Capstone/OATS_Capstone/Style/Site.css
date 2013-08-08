@@ -1167,6 +1167,9 @@ i, cite, em, var, address, dfn {
     padding: 5px;
     width: 620px;
 }
+#checklist .nt-qitem .nt-qmatching-couple .nt-qans .nt-qansdesc {
+    width:inherit;
+}
 
 #checklist .nt-qitem .nt-qans .nt-qanselem input, #checklist .nt-qitem .nt-qans .nt-qans-label input {
     margin: 7px 0 0 0;

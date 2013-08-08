@@ -8,9 +8,36 @@ var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
 
+function initResponseCommonValidation() {
+    var handlers = new Array();
+    handlers.push({
+        selector: "#checklist[response-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0", min: "0", max: function (item) {
+            var max = 0;
+            var value = parseFloat(item.attr("max-point"));
+            if (!isNaN(value)) {
+                max = value;
+            }
+            return max;
+        }
+    });
+    $.initCommonValidator(handlers);
+}
+
 function initCommonValidation() {
     var handlers = new Array();
-    handlers.push({ selector: "#checklist .nt-qansscore .nt-on-score", regex: /^([\s0-9]{0,2})$/, def: "0" });
+    //content
+    handlers.push({ selector: "#test-title", regex: /^(.|\n){0,128}$/ });
+    handlers.push({ selector: "#intro-detail", regex: /^(.|\n){0,1024}$/ })
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qtext", regex: /^(.|\n){0,1024}$/ });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qansdesc", regex: /^(.|\n){0,1024}$/ });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0" });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^([0-9]{0,3})$/, def: "0" });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
+    //setting
+    handlers.push({ selector: "#asm_max_point", regex: /^([0-9]{0,5})$/, def: "1" });
+    handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10",min:"5" });
+    handlers.push({ selector: "#asm_num_question", regex: /^([0-9]{0,3})$/, def: "5", min: "1" });
+    handlers.push({ selector: "#asm_time_limit", regex: /^([0-9]{0,3})$/, def: "1", min: "1" });
     $.initCommonValidator(handlers);
 }
 function initResponseAndScoreSearch() {
@@ -1123,6 +1150,7 @@ function saveTextDescription(questionidString, text) {
 }
 $(function () {
     $.initTooltips();
+    initResponseCommonValidation();
     initCommonValidation();
     initImageUploadFacility();
     initReuseDragAndDrop();

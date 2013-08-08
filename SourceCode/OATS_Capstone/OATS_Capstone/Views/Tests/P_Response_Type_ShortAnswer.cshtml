@@ -40,7 +40,7 @@
                 <span>Points:</span>
                 @if (canEdit)
                 {
-                    <input question-id="@Model.QuestionID" type="text" value="@(Model.UserNonChoiceScore ?? 0)" class="nt-pts"/>
+                    <input question-id="@Model.QuestionID" max-point="@(Model.NonChoiceScore ?? 0)" type="text" value="@(Model.UserNonChoiceScore ?? 0)" class="nt-pts"/>
                 }
                 else
                 {

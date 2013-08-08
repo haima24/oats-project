@@ -64,6 +64,7 @@ namespace OATS_Capstone.Models
     }
     public class TestListItem
     {
+        public bool CanViewHistory { get; set; }
         private int? remainAttemp = null;
         public int? RemainAttemp
         {
@@ -152,19 +153,28 @@ namespace OATS_Capstone.Models
             var allInvitations = test.Invitations;
             NumOfStudent = allInvitations.Count(k => k.Role.RoleDescription == "Student");
             NumOfTeacher = allInvitations.Count(k => k.Role.RoleDescription == "Teacher");
-            var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
-            if (settingDetail != null) {
-                if (settingDetail.IsActive) {
+            var settingDetails = test.SettingConfig.SettingConfigDetails;
+            var osmSetting=settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
+            if (osmSetting != null)
+            {
+                if (osmSetting.IsActive)
+                {
                     var authen = AuthenticationSessionModel.Instance();
                     var userId = authen.UserId;
                     var inTests = test.UserInTests.Where(i => i.UserID == userId);
                     if (inTests.Count() > 0)
                     {
-                        var maxAttemp = settingDetail.NumberValue ?? 0;
+                        var maxAttemp = osmSetting.NumberValue ?? 0;
                         var curAttemp = inTests.Max(i => i.NumberOfAttend);
                         var delta=maxAttemp-curAttemp;
                         remainAttemp = delta < 0 ? 0 : delta;
                     }
+                }
+            }
+            var canViewHistorySetting = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "SAR");
+            if (canViewHistorySetting != null) {
+                if (canViewHistorySetting.IsActive) {
+                    CanViewHistory = true;
                 }
             }
         }
