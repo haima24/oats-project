@@ -11,6 +11,9 @@
   {
       tab = ViewBag.Tab;
   }
+  if(string.IsNullOrEmpty(tab)){
+      tab = "Content";
+  }
 }
 @if (!Model.IsActive)
 { 
