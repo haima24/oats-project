@@ -33,6 +33,7 @@ function initCommonValidation() {
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0" });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^([0-9]{0,3})$/, def: "0" });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
+    handlers.push({ selector: ".nt-tag-adder input[type=text]", regex: /^.{0,50}$/ });
     //setting
     handlers.push({ selector: "#asm_max_point", regex: /^([0-9]{0,5})$/, def: "1" });
     handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10",min:"5" });
