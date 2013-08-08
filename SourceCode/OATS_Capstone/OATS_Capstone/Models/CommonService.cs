@@ -2408,7 +2408,6 @@ namespace OATS_Capstone.Models
                         newTest.IsRunning = test.IsRunning;
                         newTest.CreatedDateTime = DateTime.Now;
                         newTest.CreatedUserID = authen.UserId;
-                        newTest.Duration = test.Duration;
                         newTest.EndDateTime = test.EndDateTime;
                         newTest.StartDateTime = test.StartDateTime;
                         newTest.IsActive = true;
