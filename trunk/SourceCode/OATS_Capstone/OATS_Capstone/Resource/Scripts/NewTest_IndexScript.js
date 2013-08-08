@@ -123,7 +123,7 @@ function initCalendar() {
                 return resultObj;
                 
             }).convertJqueryArrayToJSArray();
-            $('#calendar').fullCalendar({
+            var fCalen=$('#calendar').fullCalendar({
                 theme: true,
                 header: {
                     left: 'prev,next today',
@@ -134,17 +134,21 @@ function initCalendar() {
                 events: events
             });
             $('#calendar').removeClass("loading");
+
+            var calendar = $("#asmsOverview").kalendae({
+                months: 3,
+                mode: 'single',
+                selected: Kalendae.moment(),
+                subscribe: {
+                    'change': function (date) {
+                        fCalen.fullCalendar('gotoDate',date.year(),date.month(),date.date());
+                    }
+                }
+            });
+
         } else {
             showMessage("error", res.message);
         }
-
-
-    });
-
-    $("#asmsOverview").kalendae({
-        months: 3,
-        mode: 'single',
-        selected: Kalendae.moment().subtract({ M: 1 })
     });
 }
 $(function () {
