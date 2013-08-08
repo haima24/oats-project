@@ -2,6 +2,11 @@
 var pro;
 var oatsProgressBar;
 var progressBag = new Array();
+function initCommonValidation() {
+    var handlers = new Array();
+    handlers.push({ selector: "input.nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
+    $.initCommonValidator(handlers);
+}
 function initWYSIWYG() {
     $("[data-original-title]").tooltip();
     $("#checklist .nt-qitem[question-type=Essay] div.normal-editable.nt-qrespinput").wysiwyg();
@@ -291,6 +296,7 @@ $(function () {
         $(element).html(String.fromCharCode(65 + index) + ". ");
     });
 
+    initCommonValidation();
     initWYSIWYG();
     initProgressBar();
     initPages();

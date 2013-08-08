@@ -2805,15 +2805,18 @@ namespace OATS_Capstone.Models
                         var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
                         if (settingDetail != null)
                         {
-                            if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
+                            if (settingDetail.IsActive)
                             {
-                                if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
+                                if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
                                 {
-                                    test.IsRunning = false;
-                                }
-                                else
-                                {
-                                    test.IsRunning = true;
+                                    if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
+                                    {
+                                        test.IsRunning = false;
+                                    }
+                                    else
+                                    {
+                                        test.IsRunning = true;
+                                    }
                                 }
                             }
                         }
