@@ -29,7 +29,6 @@ namespace OATS_Capstone.Models
         public System.DateTime CreatedDateTime { get; set; }
         public System.DateTime StartDateTime { get; set; }
         public Nullable<System.DateTime> EndDateTime { get; set; }
-        public Nullable<int> Duration { get; set; }
         public Nullable<int> SettingConfigID { get; set; }
         public bool IsActive { get; set; }
         public string Introduction { get; set; }

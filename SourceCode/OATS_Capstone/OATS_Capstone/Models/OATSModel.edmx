@@ -239,7 +239,6 @@
           <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
           <Property Name="StartDateTime" Type="datetime" Nullable="false" />
           <Property Name="EndDateTime" Type="datetime" />
-          <Property Name="Duration" Type="int" />
           <Property Name="SettingConfigID" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="IsRunning" Type="bit" Nullable="false" />
@@ -810,7 +809,6 @@
           <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Duration" Type="Int32" />
           <Property Name="SettingConfigID" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="FeedBacks" Relationship="OATSDBModel.FK_FeedBack_Test" FromRole="Test" ToRole="FeedBack" />
@@ -1279,7 +1277,6 @@
                 <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
                 <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="SettingConfigID" ColumnName="SettingConfigID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
               </MappingFragment>
