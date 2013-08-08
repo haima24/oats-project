@@ -277,7 +277,7 @@
           <Property Name="UserInTestID" Type="int" Nullable="false" />
           <Property Name="QuestionID" Type="int" Nullable="false" />
           <Property Name="AnswerContent" Type="nvarchar" MaxLength="1024" />
-          <Property Name="AnswerIDs" Type="varchar" MaxLength="50" />
+          <Property Name="AnswerIDs" Type="varchar" MaxLength="256" />
           <Property Name="ChoiceScore" Type="decimal" Scale="2" />
           <Property Name="NonChoiceScore" Type="decimal" Scale="2" />
         </EntityType>
@@ -863,7 +863,7 @@
           <Property Name="UserInTestID" Type="Int32" Nullable="false" />
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
           <Property Name="AnswerContent" Type="String" MaxLength="1024" Unicode="true" FixedLength="false" />
-          <Property Name="AnswerIDs" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="AnswerIDs" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
           <Property Name="ChoiceScore" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="NonChoiceScore" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_UserInTestDetail_Question" FromRole="UserInTestDetail" ToRole="Question" />

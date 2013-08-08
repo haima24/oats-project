@@ -52,7 +52,8 @@
 <div id="container" class="container wrapper nt-de-cont">
     <div id="jointest_container">
         <div class="thumbnail well well-small text-center">
-            <p>Title: @Model.TestTitle. Duration: @durationDetail.NumberValue mins</p>
+            <h3>@Model.TestTitle</h3>
+            <h4> Duration: @durationDetail.NumberValue mins</h4>
 
 
             @using (Html.BeginForm("DoTest", "Tests", new { id = Model.TestID, check = true }, FormMethod.Post))

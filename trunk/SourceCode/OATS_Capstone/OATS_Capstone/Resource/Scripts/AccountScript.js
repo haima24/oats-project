@@ -85,7 +85,7 @@ $(function () {
     $("#login-container").live("keypress", function (ev) {
         if (ev.keyCode == 13) {
             var mail = $("#email").val();
-            var pass = $("#pass").val();
+            var pass = $("#password").val();
             if (mail && pass) { 
                 login();
             }

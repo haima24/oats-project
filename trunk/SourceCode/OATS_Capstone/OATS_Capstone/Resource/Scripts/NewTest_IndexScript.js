@@ -1,4 +1,10 @@
-﻿function initClientSorting() {
+﻿function initCommonValidation() {
+    var handlers = new Array();
+    handlers.push({ selector: "#message", regex: /^(.|\n){0,1024}$/ });
+    handlers.push({ selector: "#modalPopupFeedback textarea.reply-area", regex: /^(.|\n){0,1024}$/ });
+    $.initCommonValidator(handlers);
+}
+function initClientSorting() {
     //sidebar
     var handlers = new Array();
     handlers.push({
@@ -142,6 +148,7 @@ function initCalendar() {
     });
 }
 $(function () {
+    initCommonValidation();
     initCalendar();
     $(".tab-event").live("click", function (e) {
         e.preventDefault();
