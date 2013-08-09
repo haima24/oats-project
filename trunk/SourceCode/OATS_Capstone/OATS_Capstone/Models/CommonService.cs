@@ -832,7 +832,11 @@ namespace OATS_Capstone.Models
                     {
                         if (!user.IsRegistered)
                         {
-                            db.Users.Remove(user);
+                            user.Invitations.Remove(inv);
+                            if (user.Invitations.Count == 0)
+                            {
+                                db.Users.Remove(user);
+                            }
                         }
                     }
                     if (db.SaveChanges() >= 0)
@@ -874,7 +878,11 @@ namespace OATS_Capstone.Models
                                 db.Invitations.Remove(inv);
                                 if (!user.IsRegistered)
                                 {
-                                    db.Users.Remove(user);
+                                    user.Invitations.Remove(inv);
+                                    if (user.Invitations.Count == 0)
+                                    {
+                                        db.Users.Remove(user);
+                                    }
                                 }
                             }
                         });
