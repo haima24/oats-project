@@ -13,7 +13,7 @@
         .require()
         .match(/^.{8,20}$/, "Passwords must be at least 8 characters.")
         .equal("Passwords do not match.");
-    $("#signup-container input:not(#reg-email)").match(/^([\sa-zA-Z0-9_-]+){1,30}$/, "Input must be text.");
+    $("#signup-container input:not(#reg-email)").match(/^([\sa-zA-Z0-9_-]{0,30})$/, "Input must be text.");
     $("#reg-understand").checkboxChecked("Agree terms and conditions");
     // All of the validator methods have been called:
     // End the validation session:

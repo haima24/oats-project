@@ -1195,7 +1195,8 @@ namespace OATS_Capstone.Models
                             {
                                 qItem.QuestionType = realType;
                             }
-                            foreach (var ans in qItem.Answers)
+                            var ansParents = qItem.Answers.ToList();
+                            foreach (var ans in ansParents)
                             {
                                 foreach (var child in ans.AnswerChilds)
                                 {
@@ -1203,6 +1204,7 @@ namespace OATS_Capstone.Models
                                     {
                                         child.AnswerContent = string.Empty;
                                     }
+                                    qItem.Answers.Add(child);
                                 }
                                 if (string.IsNullOrEmpty(ans.AnswerContent))
                                 {
@@ -1565,6 +1567,10 @@ namespace OATS_Capstone.Models
                                 success = true;
                             }
                         }
+                    }
+                    else {
+                        success = false;
+                        message = "Enter test name";
                     }
 
                 }
