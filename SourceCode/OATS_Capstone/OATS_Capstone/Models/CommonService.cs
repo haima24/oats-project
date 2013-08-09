@@ -833,7 +833,7 @@ namespace OATS_Capstone.Models
                         if (!user.IsRegistered)
                         {
                             user.Invitations.Remove(inv);
-                            if (user.Invitations.Count == 0)
+                            if (user.Invitations.Count == 0&&user.FeedBacks.Count==0&&user.Tests.Count==0&&user.UserInTests.Count==0)
                             {
                                 db.Users.Remove(user);
                             }
@@ -879,7 +879,7 @@ namespace OATS_Capstone.Models
                                 if (!user.IsRegistered)
                                 {
                                     user.Invitations.Remove(inv);
-                                    if (user.Invitations.Count == 0)
+                                    if (user.Invitations.Count == 0 && user.FeedBacks.Count == 0 && user.Tests.Count == 0 && user.UserInTests.Count == 0)
                                     {
                                         db.Users.Remove(user);
                                     }
@@ -3520,6 +3520,10 @@ namespace OATS_Capstone.Models
                 {
                     if (!user.IsRegistered)
                     {
+                        user.FeedBacks.ToList().ForEach(i => db.FeedBacks.Remove(i));
+                        user.Invitations.ToList().ForEach(i => db.Invitations.Remove(i));
+                        user.Tests.ToList().ForEach(i => db.Tests.Remove(i));
+                        user.UserInTests.ToList().ForEach(i => db.UserInTests.Remove(i));
                         db.Users.Remove(user);
                         if (db.SaveChanges() > 0)
                         {
