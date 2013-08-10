@@ -852,6 +852,17 @@ function statusSaved() {
     $("#savestatus .nt-desc").html("All changes saved.");
     $("#savestatus").fadeOut("slow");
 }
+function hasLocalStorage(key) {
+    var result = false;
+    if (typeof (Storage) !== "undefined") {
+        if (localStorage.hasOwnProperty(key)) {
+            result = true;
+        }
+    }
+    else {
+    }
+    return result;
+}
 function setLocalStorage(key, value) {
     if (typeof (Storage) !== "undefined") {
         // Yes! localStorage and sessionStorage support!
@@ -875,4 +886,19 @@ function getLocalStorage(key) {
         // Sorry! No web storage support..
     }
     return obj;
+}
+function removeLocalStorage(key) {
+    var result = false;
+    if (typeof (Storage) !== "undefined") {
+        if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+            if (!localStorage.hasOwnProperty(key)) {
+                result = true;
+            }
+        }
+    }
+    else {
+        // Sorry! No web storage support..
+    }
+    return result
 }

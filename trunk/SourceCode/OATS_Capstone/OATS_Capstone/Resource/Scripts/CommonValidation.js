@@ -29,8 +29,8 @@
                 var min = element.min;
                 var max = element.max;
                 $(selector).live("keydown", function (e) {
-                    //var handlersKeys = e.ctrlKey || e.altKey || e.shiftKey;
-                    //if (!handlersKeys) {
+                    var handlersKeys = e.ctrlKey || e.altKey;
+                    if (!handlersKeys) {
                         var $tb = $(this);
                         var isEditable = $tb.is('[contenteditable]');
                         var code = e.which || e.keyCode || e.charCode;
@@ -43,59 +43,79 @@
                             if (reg.test) {
                                 if (!reg.test(str)) {
                                     e.preventDefault();
-                                } else {
-                                    if (def) {
-                                        if (current == def.toString()) {
-                                            isEditable ? $tb.html(inputted) : $tb.val(inputted);
-                                            e.preventDefault();
-                                            $tb.change();
-                                        }
-                                    }
-                                    if (min) {
-                                        var fInputed = parseFloat(inputted);
-                                        if (!isNaN(fInputed) && !isNaN(min)) {
-                                            if (fInputed < min) {
-                                                isEditable ? $tb.html(min) : $tb.val(min);
-                                                e.preventDefault();
-                                                $tb.change();
-                                            }
-                                        }
-                                    }
-                                    if (max) {
-                                        var maxValue = 0;
-                                        if (typeof (max) === "function") {
-                                            maxValue = max($tb);
-                                        }
-                                        else {
-                                            maxValue = max;
-                                        }
-
-                                        var fInputed = parseFloat(inputted);
-                                        if (!isNaN(fInputed) && !isNaN(maxValue)) {
-                                            if (fInputed > maxValue) {
-                                                isEditable ? $tb.html(maxValue) : $tb.val(maxValue);
-                                                e.preventDefault();
-                                                $tb.change();
-                                            }
-                                        }
-                                    }
+                                } 
+                            }
+                        }
+                    }
+                });
+                    $(selector).live("change", function (e) {
+                        var $tb = $(this);
+                        var isEditable = $tb.is('[contenteditable]');
+                        var value = isEditable ? $tb.html() : $tb.val();
+                        if (def) {
+                            if (!value) {
+                                isEditable ? $tb.html(def) : $tb.val(def);
+                            }
+                        }
+                        if (min) {
+                            var fInputed = parseFloat(value);
+                            if (!isNaN(fInputed) && !isNaN(min)) {
+                                if (fInputed < min) {
+                                    isEditable ? $tb.html(min) : $tb.val(min);
                                 }
                             }
                         }
-                    //}
-                });
-                if (def) {
-                    $(selector).live("keyup", function (e) {
-                        var tb = $(this);
-                        var isEditable = tb.is('[contenteditable]');
-                        var value = isEditable ? tb.html() : tb.val();
-                        if (!value) {
-                            isEditable ? tb.html(def) : tb.val(def);
-                            e.preventDefault();
-                            tb.change();
+                        if (max) {
+                            var maxValue = 0;
+                            if (typeof (max) === "function") {
+                                maxValue = max($tb);
+                            }
+                            else {
+                                maxValue = max;
+                            }
+
+                            var fInputed = parseFloat(value);
+                            if (!isNaN(fInputed) && !isNaN(maxValue)) {
+                                if (fInputed > maxValue) {
+                                    isEditable ? $tb.html(maxValue) : $tb.val(maxValue);
+                                }
+                            }
                         }
                     });
-                }
+                    $(selector).live("blur", function (e) {
+                        var $tb = $(this);
+                        var isEditable = $tb.is('[contenteditable]');
+                        var value = isEditable ? $tb.html() : $tb.val();
+                        if (def) {
+                            if (!value) {
+                                isEditable ? $tb.html(def) : $tb.val(def);
+                            }
+                        }
+                        if (min) {
+                            var fInputed = parseFloat(value);
+                            if (!isNaN(fInputed) && !isNaN(min)) {
+                                if (fInputed < min) {
+                                    isEditable ? $tb.html(min) : $tb.val(min);
+                                }
+                            }
+                        }
+                        if (max) {
+                            var maxValue = 0;
+                            if (typeof (max) === "function") {
+                                maxValue = max($tb);
+                            }
+                            else {
+                                maxValue = max;
+                            }
+
+                            var fInputed = parseFloat(value);
+                            if (!isNaN(fInputed) && !isNaN(maxValue)) {
+                                if (fInputed > maxValue) {
+                                    isEditable ? $tb.html(maxValue) : $tb.val(maxValue);
+                                }
+                            }
+                        }
+                    });
             });
         }
     };

@@ -2147,7 +2147,7 @@ namespace OATS_Capstone.Models
                     if (user != null)
                     {
                         user.Name = profile.Name;
-                        user.UserMail = profile.UserMail;
+                        //user.UserMail = profile.UserMail;
                         user.UserCountry = profile.UserCountry;
                         user.UserPhone = profile.UserPhone;
                         if (!string.IsNullOrEmpty(profile.Password))

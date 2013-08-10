@@ -2,6 +2,7 @@
 var pro;
 var oatsProgressBar;
 var progressBag = new Array();
+var secondKey = "second";
 function initCommonValidation() {
     var handlers = new Array();
     handlers.push({ selector: "input.nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
@@ -52,6 +53,7 @@ function submitTest() {
         contentType: "application/json; charset=utf-8",
         success: function (res) {
             if (res.success) {
+                removeLocalStorage(secondKey);
                 showCountDownMessage("info", res.message, "Redirect to Homepage", function () {
                     window.location.href = "/Tests";
                 });
@@ -114,7 +116,7 @@ function initProgressBar() {
     });
     $(".nt-resp-stat .nt-resp-stat-desc").html("0 of " + qCount + " answered - 0% complete");
     oatsProgressBar = $(".nt-resp-stat .nt-resp-stat-bar").oatsProgressBar(qCount, function (max, cur) {
-        $(".nt-resp-stat .nt-resp-stat-desc").html(cur + " of " + max + " answered - " + $.toPercent(cur, max,1) + " complete");
+        $(".nt-resp-stat .nt-resp-stat-desc").html(cur + " of " + max + " answered - " + $.toPercent(cur, max, 1) + " complete");
     });
     //progress bar
 }
@@ -123,11 +125,33 @@ function initPages() {
     if (!isNaN(pagesCount)) {
         $("div.holder").jPages({
             containerID: "checklist",
-            perPage:pagesCount,
+            perPage: pagesCount,
             first: "First",
             last: "Last"
         });
     }
+}
+function initCountDown() {
+    var remainSecond;
+    var duration = parseInt($("#test-duration").val());
+    var second = duration * 60;
+    if (hasLocalStorage(secondKey)) {
+        second = getLocalStorage(secondKey);
+    }
+    var ts = (new Date()).getTime() + second*1000;
+    $('#countdown').countdown({
+        timestamp: ts,
+        callback: function (d, h, m, s,r) {
+            remainSecond = r;
+        },
+        timeout: function () {
+            submitTest();
+        }
+    });
+    $(window).unload(function () {
+        remainSecond = remainSecond < 0 ? 0 : remainSecond;
+        setLocalStorage("second", remainSecond);
+    });
 }
 $.fn.extend({
     _matchingConnectorItem: function (options) {
@@ -277,14 +301,7 @@ $.fn.extend({
 
 $(function () {
     testid = parseInt($("#test-id").val());
-    var duration = parseInt($("#test-duration").val()),
-        ts = (new Date()).getTime() + duration * 60 * 1000;
-    $('#countdown').countdown({
-        timestamp: ts,
-        timeout: function () {
-            submitTest();
-        }
-    });
+    initCountDown();
 
 
     $("#checklist .nt-qitem .nt-qnum:not(.nt-qnum-letter)").each(function (index, element) {
@@ -319,7 +336,7 @@ $(function () {
     });
     $("#submit-btn").live("click", function (ev) {
         $("#confirmSubmit").modal("show");
-        
+
     });
     $("#confirmSubmit .nt-btn-ok").live("click", function () {
         $("#confirmSubmit").modal("hide");
