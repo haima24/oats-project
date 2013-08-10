@@ -22,7 +22,7 @@
 			timestamp	: 0
 		},prop);
 		
-		var left, d, h, m, s, positions;
+		var left, d, h, m, s, positions,remain;
 
 		// Initialize the plugin
 		init(this, options);
@@ -41,7 +41,7 @@
 			    }
 			    return;
 			}
-			
+			remain = left;
 			// Number of days left
 			d = Math.floor(left / days);
 			updateDuo(0, 1, d);
@@ -62,7 +62,7 @@
 			updateDuo(6, 7, s);
 			
 			// Calling an optional user supplied callback
-			options.callback(d, h, m, s);
+			options.callback(d, h, m, s,remain);
 			
 			// Scheduling another call of this function in 1s
 			setTimeout(tick, 1000);
