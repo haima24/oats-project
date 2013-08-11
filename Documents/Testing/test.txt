@@ -13,3 +13,10 @@ igrnore-12/ co kha nang keo tha bai test o big calendar, f5 tro lai nhu cu~
 missing-13/ Khong thay chuc nang send email cho user o tab score
 going-14/ O?tab response, doi khi co 2 thanh scroll, gay kho chiu
 going-15/ send mail when update access code
+
+16/ ko biet phai loi khong nhung o tab reponse, vd co 5 student, chon 2 student thi no van tinh cua 2 student tren 5 student(co' kem` hinh`)
+17/ o tab reponse, hien thi so thu tu cau hoi nhieu luc bi trung (co' kem` hinh`)
+18/ o tab reponse, du` chon 2 student ko duoc cham diem o cau hoi essay, nhung van~ co' hien average ponit (co' kem` hinh`)
+19/ o tab score, logic dung' nhung thay tinh toan sai nhieu qua @@
+20/ o phan setting, neu user da vao lam test >2 lan, thi` owner ko the teach vao setting set attemp limit.
+21/ voi cac data cu~ co' tinh' toan' bi. sai (vd bai test lsion 123 cua user pk_lilo777@yahoo.com, co' 3 data ket qua cua 3 user, "abc", "last name of teacher 1", "last name of teacher 2" bi sai)
