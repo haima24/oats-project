@@ -591,12 +591,12 @@ function initPlot() {
     });
 }
 function sortByNumberOrLetters() {
-    $("#checklist .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
+    $("#checklist[content-tab=true] .nt-qnum:not(.nt-qnum-letter)").each(function (i) {
         $(this).html((i + 1) + ". ");
         var radioes = $(this).parent().find("input[type=radio]:not([name])");
         radioes.attr("name", "ans_" + (i + 1));
     });
-    $("#checklist .nt-qnum.nt-qnum-letter").each(function (i) {
+    $("#checklist[content-tab=true] .nt-qnum.nt-qnum-letter").each(function (i) {
         $(this).html(String.fromCharCode(65 + i) + ". ");
     });
 }

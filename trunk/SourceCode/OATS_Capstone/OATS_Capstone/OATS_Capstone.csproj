@@ -340,7 +340,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Resource\Scripts\AccountScript.js" />
-    <Content Include="Resource\Scripts\AuthenticatedScript.js" />
+    <Content Include="Resource\Scripts\GeneralScript.js" />
     <Content Include="Resource\Scripts\CommonUtil.js" />
     <Content Include="Resource\Scripts\CommonValidation.js" />
     <Content Include="Resource\Scripts\DetailRegisterScript.js" />

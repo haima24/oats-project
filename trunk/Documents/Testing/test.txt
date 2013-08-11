@@ -4,7 +4,7 @@ done-3/ Reset lai countdown trong phan dotest moi lan f5
 done-4/ Co error trong viec set max test point, duration limit, attemp limit times, number question per page
 done-5/ chua co validate trong phan invite outside user, user nhap.email loi~ va bam invite thi dong pop up, ko hien thong bao j ca
 done-6/ phan new user chua co validate va khong hien thong bao j ca, chua thay co new nhieu user
-going-7/ khi tao.bai test chua co' set chuan? end date cho bai test
+done-7/ khi tao.bai test chua co' set chuan? end date cho bai test
 done-8/ bai test ko co 1 cau hoi nao van~ duoc.active cho user khac' vao` do test.
 done-9/ doi voi nhung bai test ko co question thi` khi vao do test bi.be? css
 done-10/ chua co tinh nang j cho phan small calendar
@@ -14,9 +14,9 @@ missing-13/ Khong thay chuc nang send email cho user o tab score
 going-14/ O?tab response, doi khi co 2 thanh scroll, gay kho chiu
 going-15/ send mail when update access code
 
-16/ ko biet phai loi khong nhung o tab reponse, vd co 5 student, chon 2 student thi no van tinh cua 2 student tren 5 student(co' kem` hinh`)
-17/ o tab reponse, hien thi so thu tu cau hoi nhieu luc bi trung (co' kem` hinh`)
-18/ o tab reponse, du` chon 2 student ko duoc cham diem o cau hoi essay, nhung van~ co' hien average ponit (co' kem` hinh`)
-19/ o tab score, logic dung' nhung thay tinh toan sai nhieu qua @@
-20/ o phan setting, neu user da vao lam test >2 lan, thi` owner ko the teach vao setting set attemp limit.
-21/ voi cac data cu~ co' tinh' toan' bi. sai (vd bai test lsion 123 cua user pk_lilo777@yahoo.com, co' 3 data ket qua cua 3 user, "abc", "last name of teacher 1", "last name of teacher 2" bi sai)
+ignore-16/ ko biet phai loi khong nhung o tab reponse, vd co 5 student, chon 2 student thi no van tinh cua 2 student tren 5 student(co' kem` hinh`)
+done-17/ o tab reponse, hien thi so thu tu cau hoi nhieu luc bi trung (co' kem` hinh`)
+ignore-18/ o tab reponse, du` chon 2 student ko duoc cham diem o cau hoi essay, nhung van~ co' hien average ponit (co' kem` hinh`)
+ignore-19/ o tab score, logic dung' nhung thay tinh toan sai nhieu qua @@
+going-20/ o phan setting, neu user da vao lam test >2 lan, thi` owner ko the teach vao setting set attemp limit.
+ignore-21/ voi cac data cu~ co' tinh' toan' bi. sai (vd bai test lsion 123 cua user pk_lilo777@yahoo.com, co' 3 data ket qua cua 3 user, "abc", "last name of teacher 1", "last name of teacher 2" bi sai)

@@ -386,7 +386,7 @@ i, cite, em, var, address, dfn {
     font-style: italic;
 }
 
-.btn.oval {
+.oval {
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
     -ms-border-radius: 14px;
@@ -4026,4 +4026,8 @@ article, time {
 }
 #jointest_container h4 {
     color: #8e5e19;
+}
+#inputTestTitle {
+    padding:10px;
+    margin:10px 0px 20px 10px;
 }
