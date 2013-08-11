@@ -17,6 +17,7 @@
 @if (Model != null)
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
+    <input id="is-complete" type="hidden" value="@(Model.IsComplete?"true":"false")" />
 }
 <input id="user-id" type="hidden" value="@user.UserID" />
 <div class="navbar navbar-static-top">
@@ -90,6 +91,10 @@ else
     <div class="detail">The max score setting and total score of this test have compatibility problem.</div>
     <div>Total Score: <span class="total"></span></div>
     <div>Max Score Setting:<span class="max"></span></div>
+</div>
+<div id="message-completion" class="alert" style="display: none;">
+    <h4 class="alert-heading">Completion problem</h4>
+    <div class="detail">Please specify contents to complete this test.</div>
 </div>
 <div id="confirmDelete" class="modal hide fade in">
     <div class="modal-body">

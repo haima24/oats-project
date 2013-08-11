@@ -33,6 +33,7 @@ namespace OATS_Capstone.Models
         public bool IsActive { get; set; }
         public string Introduction { get; set; }
         public bool IsRunning { get; set; }
+        public bool IsComplete { get; set; }
     
         public virtual ICollection<FeedBack> FeedBacks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }

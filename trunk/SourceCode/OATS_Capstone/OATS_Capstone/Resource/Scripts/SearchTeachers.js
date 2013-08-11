@@ -59,7 +59,7 @@
                 success: function (r) {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
-                            if (obj.TestTitle && obj.TestTitle != "") {
+                            if (obj.IsCurrentUserOwnTest&&obj.TestTitle && obj.TestTitle != "") {
                                 return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning };
                             }
                         }).convertJqueryArrayToJSArray();

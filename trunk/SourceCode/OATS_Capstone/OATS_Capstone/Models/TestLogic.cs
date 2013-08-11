@@ -20,12 +20,15 @@ namespace OATS_Capstone.Models
         public int TestID { get; set; }
         public bool IsInInvitationRoleStudent { get; set; }
         public int TestDuration { get; set; }
+        public bool IsComplete { get; set; }
         public TestLogic(Test test)
         {
             if (test != null)
             {
                 var settingDetails = test.SettingConfig.SettingConfigDetails;
                 RequireAccessCodeSetting = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+
+                IsComplete = test.IsComplete;
 
                 var now = DateTime.Now;
                 IsDateTimeNotValid = false;

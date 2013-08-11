@@ -13,6 +13,7 @@ namespace OATS_Capstone.Models
         public bool IsCurrentUserOwnTest { get; set; }
         public string Introduction { get; set; }
         public bool IsRunning { get; set; }
+        public bool IsComplete { get; set; }
     }
 
     public class SearchingUsers

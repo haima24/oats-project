@@ -63,7 +63,7 @@
                     {
                         foreach (var item in Model.RecentTests)
                         {
-                            if (item.IsRunning)
+                            if (item.IsRunning&&item.IsComplete)
                             {
                                 if (item.IsCurrentUserOwnTest)
                                 {
@@ -133,7 +133,7 @@
                         <div class="nt-list-row teacher locked">
                             <div class="nt-name">
                                 <i class="t-icon i-teachers"></i>
-                                <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test - This Test Locked due to compatitle problem">@item.TestTitle</a>
+                                <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test - This Test Locked, Open To Check These Problem">@item.TestTitle</a>
                             </div>
                             <div class="popover-introduction">@item.Introduction</div>
                             <div class="nt-date">
@@ -235,7 +235,7 @@
                     {
                         foreach (var item in Model.RunningTests)
                         {
-                            if (item.IsRunning)
+                            if (item.IsRunning&&item.IsComplete)
                             {
                                 if (item.IsCurrentUserOwnTest)
                                 {
@@ -291,7 +291,7 @@
                         <div class="nt-list-row teacher locked">
                             <div class="nt-name">
                                 <i class="t-icon i-teachers"></i>
-                                <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test - This Test Locked due to compatitle problem">@item.TestTitle</a>
+                                <a href="@Url.Action("NewTest", new { id = item.TestID })" data-toggle="tooltip" data-placement="top" data-original-title="Open This Test - This Test Locked, Open To Check These Problem">@item.TestTitle</a>
                             </div>
                             <div class="popover-introduction">@item.Introduction</div>
                             <div class="nt-date">@item.Start</div>
