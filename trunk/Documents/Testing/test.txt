@@ -2,13 +2,13 @@ done-1/ ko the thay doi email o phan profile
 done-2/ ko the tao. cau hoi trong' (khong co title, ko chon.dap an')
 done-3/ Reset lai countdown trong phan dotest moi lan f5
 done-4/ Co error trong viec set max test point, duration limit, attemp limit times, number question per page
-them button add-5/ chua co validate trong phan invite outside user, user nhap.email loi~ va bam invite thi dong pop up, ko hien thong bao j ca
-them button add-6/ phan new user chua co validate va khong hien thong bao j ca, chua thay co new nhieu user
+done-5/ chua co validate trong phan invite outside user, user nhap.email loi~ va bam invite thi dong pop up, ko hien thong bao j ca
+done-6/ phan new user chua co validate va khong hien thong bao j ca, chua thay co new nhieu user
 going-7/ khi tao.bai test chua co' set chuan? end date cho bai test
 done-8/ bai test ko co 1 cau hoi nao van~ duoc.active cho user khac' vao` do test.
 done-9/ doi voi nhung bai test ko co question thi` khi vao do test bi.be? css
 done-10/ chua co tinh nang j cho phan small calendar
-going-11/ Do test xong bam' nut back vao lai trang do test
+done-11/ Do test xong bam' nut back vao lai trang do test
 igrnore-12/ co kha nang keo tha bai test o big calendar, f5 tro lai nhu cu~
 missing-13/ Khong thay chuc nang send email cho user o tab score
 going-14/ O?tab response, doi khi co 2 thanh scroll, gay kho chiu

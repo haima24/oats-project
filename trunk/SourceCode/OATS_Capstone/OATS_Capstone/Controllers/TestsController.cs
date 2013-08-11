@@ -341,6 +341,8 @@ namespace OATS_Capstone.Controllers
             var test = db.Tests.FirstOrDefault(i => i.TestID == id);
             return View(test);
         }
+
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public ActionResult DoTest(int id, string accesscode = "", bool check = false)
         {
             var db = SingletonDb.Instance();

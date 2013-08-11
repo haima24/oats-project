@@ -7,6 +7,47 @@ var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
+
+function initInviteOutSide() {
+    var inviteOutSide = function (ele) {
+        var control = $(ele).closest(".nt-invite-outside");
+        var tbName = $(".nt-name-outside", control);
+        var tbEmail = $(".nt-email-outside", control);
+        $.validity.start();
+        $.validity.settings.position = "top";
+        tbName.require();
+        tbEmail.require().match("email");
+        $.validity.settings.position = "left";
+        var result = $.validity.end();
+        if (result.valid) {
+            var container = control.closest(".modal");
+            var name = tbName.val();
+            var email = tbEmail.val();
+            $.post("/Tests/InviteUserOutSide", { testid: testid, email: email, name: name }, function (res) {
+                if (res.success) {
+                    tbName.val("");
+                    tbEmail.val("");
+                    var html = $(res.generatedHtml);
+                    var list = $(".nt-clb-list", container);
+                    list.append(html);
+                    list.scrollToElement(html);
+                }
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    }
+    $("#modalPopupUser input[type=text].nt-email-outside,#modalPopupUser input[type=text].nt-name-outside").live("keydown", function (ev) {
+        var keyCode = ev.keyCode;
+        if (keyCode == 13) {
+            inviteOutSide(this);
+        }
+    });
+    $("#modalPopupUser .nt-btn-add-outside").live("click", function () {
+        inviteOutSide(this);
+    });
+}
 function checkCompleteCurrent() {
     var isComplete = $("#is-complete").val();
     var completion = $("#message-completion");
@@ -62,8 +103,8 @@ function initCommonValidation() {
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: ".nt-tag-adder input[type=text]", regex: /^.{0,50}$/ });
     //setting
-    handlers.push({ selector: "#asm_max_point", regex: /^([0-9]{0,5})$/, def: "1",min:"1" });
-    handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10",min:"5" });
+    handlers.push({ selector: "#asm_max_point", regex: /^([0-9]{0,5})$/, def: "1", min: "1" });
+    handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10", min: "5" });
     handlers.push({ selector: "#asm_num_question", regex: /^([0-9]{0,3})$/, def: "5", min: "1" });
     handlers.push({ selector: "#asm_time_limit", regex: /^([0-9]{0,3})$/, def: "1", min: "1" });
     //feedback
@@ -699,7 +740,7 @@ function initEditable() {
         "onBlur": function (element) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
-            var content = $(element).html()||element.content;
+            var content = $(element).html() || element.content;
             var text = content == "<i>Enter Text</i>" ? "" : $.cleanTextHtml(content);
             updateQuestionTitle(quesid, text);
         },
@@ -1318,7 +1359,7 @@ $(function () {
     $("#checklist[content-tab=true] .nt-btn-text.nt-qansadd").live("click", function (ev) {
         var parent = $(ev.target).closest(".nt-qitem");
         var titleItem = $(".nt-qtext[contenteditable]", parent);
-        if (titleItem) { titleItem.blur();}
+        if (titleItem) { titleItem.blur(); }
         if (currentEditAnswer) { $(currentEditAnswer).blur(); }
         addAnswer(parent, parent.attr("question-id"), function () {
             showOrHideDeleteLineAnswer();
@@ -1727,38 +1768,7 @@ $(function () {
             }
         }
     });
-    $("#modalPopupUser input[type=text].nt-email-outside,#modalPopupUser input[type=text].nt-name-outside").live("keydown", function (ev) {
-        var keyCode = ev.keyCode;
-        if (keyCode == 13) {
-            var control = $(this).closest(".nt-invite-outside");
-            var tbName = $(".nt-name-outside", control);
-            var tbEmail = $(".nt-email-outside", control);
-            $.validity.start();
-            $.validity.settings.position = "top";
-            tbName.require();
-            tbEmail.require().match("email");
-            $.validity.settings.position = "left";
-            var result = $.validity.end();
-            if (result.valid) {
-                var container = control.closest(".modal");
-                var name = tbName.val();
-                var email = tbEmail.val();
-                $.post("/Tests/InviteUserOutSide", { testid: testid, email: email, name: name }, function (res) {
-                    if (res.success) {
-                        tbName.val("");
-                        tbEmail.val("");
-                        var html = $(res.generatedHtml);
-                        var list = $(".nt-clb-list", container);
-                        list.append(html);
-                        list.scrollToElement(html);
-                    }
-                    else {
-                        showMessage("error", res.message);
-                    }
-                });
-            }
-        }
-    });
+    initInviteOutSide();
     $("#modalPopupUser").live("shown", function () {
         var container = $(this);
         var role = $("#role", container).val();

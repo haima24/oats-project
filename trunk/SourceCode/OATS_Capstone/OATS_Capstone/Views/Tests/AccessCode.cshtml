@@ -6,8 +6,29 @@
 @{
     var authen = AuthenticationSessionModel.Instance();
     var user = authen.User;
-    var durationDetail = Model.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
-    var accesscodeDetail = Model.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+    var settingDetails= Model.SettingConfig.SettingConfigDetails;
+    var durationDetail = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "DRL");
+    var accesscodeDetail = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "RTC");
+    var introduction = Model.Introduction;
+    int? remainAttemp = null;
+    var osmSetting = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
+    if (osmSetting != null)
+    {
+        if (osmSetting.IsActive)
+        {
+            var userId = authen.UserId;
+            var inTests = Model.UserInTests.Where(i => i.UserID == userId);
+            var maxAttemp = osmSetting.NumberValue ?? 0;
+            if (inTests.Count() > 0)
+            {
+                var curAttemp = inTests.Max(i => i.NumberOfAttend);
+                var delta = maxAttemp - curAttemp;
+                remainAttemp = delta < 0 ? 0 : delta;
+            }else{
+                remainAttemp = maxAttemp;
+            }
+        }
+    }
 }
 <div class="navbar navbar-static-top">
     <div class="navbar-inner">
@@ -52,25 +73,30 @@
     <div id="jointest_container">
         <div class="thumbnail well well-small text-center">
             <h3>@Model.TestTitle</h3>
-            <h4> Duration: @durationDetail.NumberValue mins</h4>
-
+            <h4>Duration: @durationDetail.NumberValue mins</h4>
+            @if(remainAttemp.HasValue){
+            <h4>Remain Attemp: @remainAttemp</h4>
+            }
+            @if(!string.IsNullOrEmpty(introduction)){
+            <h4 class="introduction">@introduction</h4>
+            }
 
             @using (Html.BeginForm("DoTest", "Tests", new { id = Model.TestID, check = true }, FormMethod.Post))
             {
                 if (accesscodeDetail.IsActive)
                 {
                 <p>This test require test access code to. Please use your access code in invitation email.</p>
-                <div class="input-prepend">
+                <div>
                     <span class="add-on"><i class="icon-pencil"></i></span>
                     <input type="password" id="" name="accesscode" placeholder="your access code" />
                 </div>
                 <br />
-                <button type="submit" class="btn-submit btn btn-large">Take this test</button>
+                <button type="submit" class="btn btn-primary btn-submit btn btn-large">Continue</button>
                 }
                 else
                 {
-                <div class="input-prepend">
-                    <button type="submit" id="btn-continue" class="btn-submit btn btn-large">Continue</button>
+                <div>
+                    <button type="submit" id="btn-continue" class="btn btn-primary btn-submit btn btn-large">Continue</button>
                 </div>
                 }
             }

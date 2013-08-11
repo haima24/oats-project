@@ -447,6 +447,12 @@ i, cite, em, var, address, dfn {
         text-align: center;
         width: 700px;
         margin: auto;
+        background-color:#FAEAEA;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        border-radius: 10px;
     }
 
     #container .home-page-link {
@@ -4017,4 +4023,7 @@ article, time {
 #emailInputModal .nt-clb-list {
     height: inherit;
     max-height: 250px;
+}
+#jointest_container h4 {
+    color: #8e5e19;
 }
