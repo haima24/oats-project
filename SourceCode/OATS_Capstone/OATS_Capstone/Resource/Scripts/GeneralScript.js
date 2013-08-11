@@ -13,6 +13,30 @@
     var result = $.validity.end();
     return result.valid;
 }
+function MakeTest(element) {
+    var $element = $(element);
+    var modal = $element.closest("#askTestTitleModal");
+    var $tb = $("#inputTestTitle");
+    if (modal && $tb) {
+        $.validity.start();
+        $tb.require().match(/^(.|\n){0,512}$/, "Input must be text.");;
+        var result = $.validity.end();
+        if (result.valid) {
+            var testTitle = $tb.val();
+            $.post("/Tests/MakeTest", { testTitle: testTitle }, function (res) {
+                if (res.success) {
+                    var id = res.generatedId;
+                    if (id) {
+                        window.location.href = "/Tests/NewTest/" + id;
+                    }
+                }
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        }
+    }
+}
 $(function () {
     $("#profile-link").live("click", function (ev) {
         $.post("/Users/ProfilePopup", function (res) {
@@ -33,7 +57,7 @@ $(function () {
         var mesEle = $("#userOldPwdMsg");
         var text = $(this).val().trim();
         var isMatchOldPass = false;
-        var twoText=$("#userPwd,#userConfPwd");
+        var twoText = $("#userPwd,#userConfPwd");
         if (text) {
             $.post("/Users/IsMatchOldPass", { pass: text }, function (res) {
                 if (res.success) {
@@ -75,6 +99,14 @@ $(function () {
                 }
                 $("#popup-profile").modal("hide");
             });
+        }
+    });
+    $("#btnMakeTest").live("click", function () {
+        MakeTest(this);
+    });
+    $("#inputTestTitle").live("keydown", function (e) {
+        if (e.keyCode == 13) {
+            MakeTest(this);
         }
     });
 });

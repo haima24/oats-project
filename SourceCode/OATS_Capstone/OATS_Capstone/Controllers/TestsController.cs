@@ -209,11 +209,11 @@ namespace OATS_Capstone.Controllers
             ViewBag.Tab = id;
             return View();
         }
-        public ActionResult MakeTest()
+        public JsonResult MakeTest(string testTitle)
         {
             var common = new CommonService();
-            var generatedId = common.MakeTest();
-            return RedirectToAction("NewTest", new { id = generatedId });
+            var generatedId = common.MakeTest(testTitle);
+            return Json(new {common.success,common.message,generatedId });
         }
         public ActionResult NewTest(int id, string tab = "")
         {

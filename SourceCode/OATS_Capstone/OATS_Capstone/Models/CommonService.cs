@@ -657,26 +657,52 @@ namespace OATS_Capstone.Models
 
         }
 
-        public int MakeTest()
+        public int MakeTest(string testTitle)
         {
-            var authen = AuthenticationSessionModel.Instance();
+            success = false;
+            message = Constants.DefaultProblemMessage;
             var generatedId = 0;
-            if (authen.UserId != 0)
+            try
             {
-                var db = SingletonDb.Instance();
-                var test = new Test();
-                test.TestTitle = String.Empty;
-                test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
-                test.CreatedDateTime = DateTime.Now;
-                test.StartDateTime = DateTime.Now;
-                test.SettingConfigID = 1;
-                test.IsActive = true;
-                test.IsRunning = true;
-                test.IsComplete = false;
-                db.Tests.Add(test);
-                db.SaveChanges();
-                generatedId = test.TestID;
+                if (!string.IsNullOrEmpty(testTitle))
+                {
+                    var authen = AuthenticationSessionModel.Instance();
+                    if (authen.UserId != 0)
+                    {
+                        var db = SingletonDb.Instance();
+                        var spanDays = 7;
+                        var test = new Test();
+                        test.TestTitle = testTitle;
+                        test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
+                        var now = DateTime.Now;
+                        test.CreatedDateTime = now;
+                        test.StartDateTime = now;
+                        test.EndDateTime = now.AddDays(spanDays);
+                        test.SettingConfigID = 1;
+                        test.IsActive = true;
+                        test.IsRunning = true;
+                        test.IsComplete = false;
+                        db.Tests.Add(test);
+                        if (db.SaveChanges() > 0)
+                        {
+                            success = true;
+                            message = Constants.DefaultSuccessMessage;
+                            generatedId = test.TestID;
+                        }
+                    }
+                }
+                else {
+                    success = false;
+                    message = "Please specify test title.";
+                }
             }
+            catch (Exception)
+            {
+                generatedId = 0;
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+            }
+            
             return generatedId;
         }
 

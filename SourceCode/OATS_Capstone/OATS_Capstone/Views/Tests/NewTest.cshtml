@@ -33,7 +33,7 @@
                     <li><a href="@Url.Action("Index", "Teachers")"><i class="t-icon i-teachers"></i>Teachers</a></li>
                     <li><a href="@Url.Action("Index", "Students")"><i class="t-icon i-student"></i>Students</a></li>
                     <li>
-                        <button class="btn oval" onclick="window.location='@Url.Action("MakeTest")'">New</button></li>
+                        <button class="btn oval" data-toggle="modal" data-target="#askTestTitleModal">New</button></li>
                 </ul>
 
                 <ul class="nav pull-right">
@@ -105,5 +105,18 @@ else
     <div class="modal-footer">
         <button class="nt-btn-submit nt-btn-ok">OK</button>
         <button class="nt-btn-dark nt-btn-cancel" data-dismiss="modal">Cancel</button>
+    </div>
+</div>
+<div id="askTestTitleModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Specify Title of Test</h3>
+    </div>
+    <div class="modal-body">
+        <input id="inputTestTitle" type="text" class="span5" placeholder="Enter Test Title" required="" />
+    </div>
+    <div class="modal-footer">
+        <a id="btnMakeTest" href="#" class="btn btn-primary">Create</a>
+        <a href="#" data-dismiss="modal" class="btn">Cancel</a>
     </div>
 </div>
