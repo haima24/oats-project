@@ -3960,8 +3960,16 @@ article, time {
     max-width: 300px;
     position: fixed;
     bottom: 0px;
-    margin-left: 20px;
-    margin-bottom: 0px;
+    left:20px;
+    margin-bottom:0;
+}
+#message-completion {
+    min-width: 200px;
+    max-width: 300px;
+    position: fixed;
+    bottom: 0px;
+    right:20px;
+    margin-bottom:0;
 }
 
 .nt-overview-list .nt-user {

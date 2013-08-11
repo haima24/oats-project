@@ -503,6 +503,7 @@ namespace OATS_Capstone.Models
                                 testTemplate.IsCurrentUserOwnTest = test.CreatedUserID == authenUserId;
                                 testTemplate.Introduction = test.Introduction;
                                 testTemplate.IsRunning = test.IsRunning;
+                                testTemplate.IsComplete = test.IsComplete;
                                 resultlist.Add(testTemplate);
                             }
                         }
@@ -563,6 +564,7 @@ namespace OATS_Capstone.Models
                                 testTemplate.IsCurrentUserOwnTest = test.CreatedUserID == authenUserId;
                                 testTemplate.Introduction = test.Introduction;
                                 testTemplate.IsRunning = test.IsRunning;
+                                testTemplate.IsRunning = test.IsComplete;
                                 resultlist.Add(testTemplate);
                             }
                         }
@@ -670,6 +672,7 @@ namespace OATS_Capstone.Models
                 test.SettingConfigID = 1;
                 test.IsActive = true;
                 test.IsRunning = true;
+                test.IsComplete = false;
                 db.Tests.Add(test);
                 db.SaveChanges();
                 generatedId = test.TestID;
@@ -833,7 +836,7 @@ namespace OATS_Capstone.Models
                         if (!user.IsRegistered)
                         {
                             user.Invitations.Remove(inv);
-                            if (user.Invitations.Count == 0&&user.FeedBacks.Count==0&&user.Tests.Count==0&&user.UserInTests.Count==0)
+                            if (user.Invitations.Count == 0 && user.FeedBacks.Count == 0 && user.Tests.Count == 0 && user.UserInTests.Count == 0)
                             {
                                 db.Users.Remove(user);
                             }
@@ -1576,7 +1579,8 @@ namespace OATS_Capstone.Models
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         success = false;
                         message = "Enter test name";
                     }
@@ -2420,6 +2424,7 @@ namespace OATS_Capstone.Models
                         var newTest = new Test();
                         newTest.TestTitle = newTitle;
                         newTest.IsRunning = test.IsRunning;
+                        newTest.IsComplete = test.IsComplete;
                         newTest.CreatedDateTime = DateTime.Now;
                         newTest.CreatedUserID = authen.UserId;
                         newTest.EndDateTime = test.EndDateTime;
@@ -3764,7 +3769,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void CreateUsers(List<User> users,string type)
+        public void CreateUsers(List<User> users, string type)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -3802,21 +3807,25 @@ namespace OATS_Capstone.Models
                     }
                 });
 
-                if (db.SaveChanges() >= 0) {
+                if (db.SaveChanges() >= 0)
+                {
                     success = true;
-                    var created=createdResults.Count(i=>i);
-                    var duplicated=createdResults.Count(i=>!i);
-                    message = "Initial: "+users.Count+" users .Created " + created + ". Duplicated " + duplicated;
+                    var created = createdResults.Count(i => i);
+                    var duplicated = createdResults.Count(i => !i);
+                    message = "Initial: " + users.Count + " users .Created " + created + ". Duplicated " + duplicated;
                     switch (type)
                     {
                         case "Import":
-                            if (OnRenderPartialViewToString != null) {
+                            if (OnRenderPartialViewToString != null)
+                            {
                                 generatedHtml = OnRenderPartialViewToString.Invoke(importeds);
                             }
                             break;
                         case "Create":
-                            if (OnRenderSubPartialViewToString != null) { 
-                                importeds.ForEach(i=>{
+                            if (OnRenderSubPartialViewToString != null)
+                            {
+                                importeds.ForEach(i =>
+                                {
                                     var html = OnRenderSubPartialViewToString.Invoke(i);
                                     resultlist.Add(html);
                                 });
@@ -3837,6 +3846,63 @@ namespace OATS_Capstone.Models
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
+        }
+        public bool MarkAsComplete(int testid)
+        {
+            var isComplete = false;
+            success = false;
+            message = Constants.DefaultProblemMessage;
+            try
+            {
+                var db = SingletonDb.Instance();
+                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
+                if (test != null)
+                {
+                    var isHaveTitle = !string.IsNullOrEmpty(test.TestTitle);
+                    var questions = test.Questions.Where(i => i.QuestionType.Type != "Image");
+                    var qCount = questions.Count() > 0;
+                    var isCompleteQuestions = questions.All(i =>
+                    {
+                        var complete = false;
+                        if (i != null)
+                        {
+                            var type = i.QuestionType.Type;
+                            if (!string.IsNullOrEmpty(i.QuestionTitle))
+                            {
+                                if (i.Answers.Count == 0)
+                                {
+                                    complete = true;
+                                }
+                                else
+                                {
+                                    var completeAnswerContent = i.Answers.All(k => !string.IsNullOrEmpty(k.AnswerContent));
+                                    var choosen = true;
+                                    if (type == "Multiple" || type == "Radio")
+                                    {
+                                        choosen = i.Answers.Any(o => o.IsRight);
+                                    }
+                                    complete = completeAnswerContent && choosen;
+                                }
+                            }
+                        }
+                        return complete;
+                    });
+                    test.IsComplete = isHaveTitle && qCount && isCompleteQuestions;
+                    isComplete = test.IsComplete;
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                        message = Constants.DefaultSuccessMessage;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                success = false;
+                message = Constants.DefaultExceptionMessage;
+                isComplete = false;
+            }
+            return isComplete;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace OATS_Capstone.Models
         public const string DefaultSubmitTestSuccessMessage = "Submit test was success.";
         public const string DefaultDuplicateEmail = "This email already exist, please choose another.";
         public const string DefaultTestInInvalidDateTime = "This test currently is not in range of start time and end time.";
-        public const string DefaultTestNotRunningOrActive = "This test currently is not make as running or active.";
+        public const string DefaultTestNotRunningOrActive = "This test currently is not marked as actived running test or contents not completed.";
         public const string DefaultTestNotExist = "This test is not exist.";
         public const string DefaultNoPermission = "Test content is not available or you have no permission to access content of this test.";
         public const string DefaultCannotExportFile = "Sorry, we could not export your requested file due to server problem. Try gain later.";

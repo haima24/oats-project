@@ -57,9 +57,9 @@ namespace OATS_Capstone.Models
                 return condition;
             });
             var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId).Concat(teacherInvited);
-            recentTests = studentInvited.FilterByRecents().Select(i => new TestListItem(i) {IsCurrentUserOwnTest=false, IsRunning = i.IsRunning }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
-            runningTests = studentInvited.FilterByRuning().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
-            upComingTests = studentInvited.FilterByUpcoming().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning })).ToList();
+            recentTests = studentInvited.FilterByRecents().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
+            runningTests = studentInvited.FilterByRuning().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
+            upComingTests = studentInvited.FilterByUpcoming().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
         }
     }
     public class TestListItem
@@ -71,6 +71,7 @@ namespace OATS_Capstone.Models
             get { return remainAttemp; }
             set { remainAttemp = value; }
         }
+        public bool IsComplete { get; set; }
         private bool isRunning = true;
         public bool IsRunning
         {

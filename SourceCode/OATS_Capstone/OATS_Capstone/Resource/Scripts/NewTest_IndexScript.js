@@ -186,13 +186,13 @@ $(function () {
                 if (html && obj) {
                     $(html).attr("data-toggle", "tooltip");
                     if (obj.isCurrentUserOwnTest) {
-                        if (obj.running) {
+                        if (obj.running && obj.complete) {
                             $(html).attr("data-original-title", "Open This Test");
                         } else {
-                            $(html).attr("data-original-title", "Open This Test - This Test Locked due to compatitle problem");
+                            $(html).attr("data-original-title", "Open This Test - Open This Test - This Test Locked, Open To Check These Problem");
                         }
                     } else {
-                        if (obj.running) {
+                        if (obj.running&&obj.complete) {
                             $(html).attr("data-original-title", "Take This Test");
                         } else {
                             $(html).attr("data-original-title", "This Test Locked");
@@ -233,7 +233,7 @@ $(function () {
                     if (r.success) {
                         var result = $(r.resultlist).map(function (index, obj) {
                             if (obj.TestTitle && obj.TestTitle != "") {
-                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning };
+                                return { des: obj.DateDescription, title: obj.TestTitle, id: obj.Id, isCurrentUserOwnTest: obj.IsCurrentUserOwnTest, intro: obj.Introduction, running: obj.IsRunning,complete:obj.IsComplete };
                             }
                         }).convertJqueryArrayToJSArray();
                         res(result);

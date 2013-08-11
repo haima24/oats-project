@@ -352,7 +352,7 @@ namespace OATS_Capstone.Controllers
             if (test != null)
             {
                 var testLogic = new TestLogic(test);
-                if (testLogic.IsRunning && testLogic.IsActive)
+                if (testLogic.IsRunning && testLogic.IsActive&&testLogic.IsComplete)
                 {
                     if (!testLogic.IsDateTimeNotValid)
                     {
@@ -1153,6 +1153,12 @@ namespace OATS_Capstone.Controllers
             };
             common.SearchUserItems(testid, term, type);
             return Json(new { common.message, common.success, common.resultlist });
+        }
+        public JsonResult MarkAsComplete(int testid)
+        {
+            var common = new CommonService();
+            var isComplete = common.MarkAsComplete(testid);
+            return Json(new { isComplete, common.success, common.message });
         }
     }
 }

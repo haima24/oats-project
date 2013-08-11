@@ -7,7 +7,35 @@ var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
-
+function checkCompleteCurrent() {
+    var isComplete = $("#is-complete").val();
+    var completion = $("#message-completion");
+    if (isComplete) {
+        if (isComplete == "true") {
+            completion.hide("slide", { direction: "down" });
+        }
+        else {
+            completion.show("slide", { direction: "down" });
+        }
+    }
+}
+function checkComplete() {
+    $.post("/Tests/MarkAsComplete", { testid: testid }, function (res) {
+        if (res.success) {
+            var complete = res.isComplete;
+            if (typeof (complete) != "undefined") {
+                var messageContainer = $("#message-completion");
+                if (complete) {
+                    messageContainer.hide("slide", { direction: "down" });
+                } else {
+                    messageContainer.show("slide", { direction: "down" });
+                }
+            }
+        } else {
+            showMessage("error", res.message);
+        }
+    });
+}
 function initResponseCommonValidation() {
     var handlers = new Array();
     handlers.push({
@@ -22,7 +50,6 @@ function initResponseCommonValidation() {
     });
     $.initCommonValidator(handlers);
 }
-
 function initCommonValidation() {
     var handlers = new Array();
     //content
@@ -756,13 +783,13 @@ function initSearchTests() {
                 if (html && obj) {
                     $(html).attr("data-toggle", "tooltip");
                     if (obj.isCurrentUserOwnTest) {
-                        if (obj.running) {
+                        if (obj.running && obj.complete) {
                             $(html).attr("data-original-title", "Open This Test");
                         } else {
-                            $(html).attr("data-original-title", "Open This Test - This Test Locked due to compatitle problem");
+                            $(html).attr("data-original-title", "Open This Test - Open This Test - This Test Locked, Open To Check These Problem");
                         }
                     } else {
-                        if (obj.running) {
+                        if (obj.running && obj.complete) {
                             $(html).attr("data-original-title", "Take This Test");
                         } else {
                             $(html).attr("data-original-title", "This Test Locked");
@@ -914,6 +941,7 @@ function ajaxUpdateAnwer(answers) {
             if (!res.success) {
                 showMessage("error", res.message);
             } else {
+                checkComplete();
                 statusSaved();
                 checkMaxScoreAndTotalScore();
             }
@@ -1024,6 +1052,7 @@ function addQuestion(testidentify, type, onaddquestion) {
                 if (onaddquestion && typeof (onaddquestion) === "function") {
                     onaddquestion(newElement);
                 }
+                checkComplete();
                 statusSaved();
             } else {
                 showMessage("error", res.message);
@@ -1056,6 +1085,7 @@ function addListQuestion(list, onAfterAddListQuestion) {
                 initEditable();
                 initImageUploadFacility();
                 showOrHideDeleteLineAnswer();
+                checkComplete();
                 statusSaved();
                 showMessage("success", res.message);
             } else {
@@ -1084,6 +1114,7 @@ function updateQuestionTitle(questionidString, newtext) {
             if (!res.success) {
                 showMessage("error", res.message);
             } else {
+                checkComplete();
                 statusSaved();
             }
         }
@@ -1098,6 +1129,7 @@ function deleteQuestion(questionidString, onsuccess) {
             if (onsuccess && typeof (onsuccess) === "function") {
                 onsuccess();
             }
+            checkComplete();
             statusSaved();
         } else {
             showMessage("error", res.message);
@@ -1112,6 +1144,7 @@ function deleteAnswer(answeridString, onsuccess) {
             if (onsuccess && typeof (onsuccess) === "function") {
                 onsuccess();
             }
+            checkComplete();
             statusSaved();
         } else {
             showMessage("error", res.message);
@@ -1136,6 +1169,7 @@ function addAnswer(element, qid, onsuccess, noreload) {
                 if (onsuccess && typeof (onsuccess) === "function") {
                     onsuccess();
                 }
+                checkComplete();
                 statusSaved();
             } else {
                 showMessage("error", res.message);
@@ -1157,6 +1191,7 @@ function saveTextDescription(questionidString, text) {
 }
 $(function () {
     $.initTooltips();
+    checkCompleteCurrent();
     initResponseCommonValidation();
     initCommonValidation();
     initImageUploadFacility();
@@ -1173,7 +1208,6 @@ $(function () {
     userid = parseInt(useridString);
 
     checkMaxScoreAndTotalScore();
-
     //separator
     initPopover();
     initSearchTests();
@@ -1260,6 +1294,7 @@ $(function () {
                     initEditable();
                     initImageUploadFacility();
                     etab.scrollToElement(newItem);
+                    checkComplete();
                     statusSaved();
                 } else {
                     showMessage("error", res.message);
@@ -1465,6 +1500,7 @@ $(function () {
                     initEditable();
                     initImageUploadFacility();
                     etab.scrollToElement(newItem);
+                    checkComplete();
                     statusSaved();
                 } else {
                     showMessage("error", res.message);
