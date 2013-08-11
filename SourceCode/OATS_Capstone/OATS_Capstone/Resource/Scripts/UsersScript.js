@@ -280,6 +280,9 @@ $(function () {
             createUser();
         }
     });
+    $("#emailInputModal .nt-btn-add-input").live("click", function () {
+        createUser();
+    });
     //separator
     var hub = $.connection.generalHub;
     hub.client.R_AcknowledgeEmailCallback = function (uid, initMailCount, sentCount, unSentCount, listSent) {
