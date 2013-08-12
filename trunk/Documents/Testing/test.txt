@@ -20,3 +20,7 @@ ignore-18/ o tab reponse, du` chon 2 student ko duoc cham diem o cau hoi essay, 
 ignore-19/ o tab score, logic dung' nhung thay tinh toan sai nhieu qua @@
 going-20/ o phan setting, neu user da vao lam test >2 lan, thi` owner ko the teach vao setting set attemp limit.
 ignore-21/ voi cac data cu~ co' tinh' toan' bi. sai (vd bai test lsion 123 cua user pk_lilo777@yahoo.com, co' 3 data ket qua cua 3 user, "abc", "last name of teacher 1", "last name of teacher 2" bi sai)
+
+
+22/ phan difference o? tab score hien thi. ko dung format
+23/ phan selection avg bi. sai nhieu truong hop
