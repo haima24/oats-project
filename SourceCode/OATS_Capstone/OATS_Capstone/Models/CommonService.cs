@@ -666,30 +666,40 @@ namespace OATS_Capstone.Models
             {
                 if (!string.IsNullOrEmpty(testTitle))
                 {
-                    var authen = AuthenticationSessionModel.Instance();
-                    if (authen.UserId != 0)
-                    {
+                    
                         var db = SingletonDb.Instance();
-                        var spanDays = 7;
-                        var test = new Test();
-                        test.TestTitle = testTitle;
-                        test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
-                        var now = DateTime.Now;
-                        test.CreatedDateTime = now;
-                        test.StartDateTime = now;
-                        test.EndDateTime = now.AddDays(spanDays);
-                        test.SettingConfigID = 1;
-                        test.IsActive = true;
-                        test.IsRunning = true;
-                        test.IsComplete = false;
-                        db.Tests.Add(test);
-                        if (db.SaveChanges() > 0)
+                        testTitle = testTitle.Trim();
+                        var tTestTitle = db.Tests.FirstOrDefault(i => i.TestTitle.ToLower() == testTitle.ToLower());
+                        if (tTestTitle == null)
                         {
-                            success = true;
-                            message = Constants.DefaultSuccessMessage;
-                            generatedId = test.TestID;
+                            var authen = AuthenticationSessionModel.Instance();
+                            if (authen.UserId != 0)
+                            {
+                                var spanDays = 7;
+                                var test = new Test();
+                                test.TestTitle = testTitle;
+                                test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
+                                var now = DateTime.Now;
+                                test.CreatedDateTime = now;
+                                test.StartDateTime = now;
+                                test.EndDateTime = now.AddDays(spanDays);
+                                test.SettingConfigID = 1;
+                                test.IsActive = true;
+                                test.IsRunning = true;
+                                test.IsComplete = false;
+                                db.Tests.Add(test);
+                                if (db.SaveChanges() > 0)
+                                {
+                                    success = true;
+                                    message = Constants.DefaultSuccessMessage;
+                                    generatedId = test.TestID;
+                                }
+                            }
                         }
-                    }
+                        else {
+                            success = false;
+                            message = "Duplicate Test Name";
+                        }
                 }
                 else {
                     success = false;
@@ -1785,8 +1795,14 @@ namespace OATS_Capstone.Models
                         }
                         else if (detail.SettingType.SettingTypeKey == "OSM")
                         {
-                            var usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);
-                            if ((number ?? 0) < usersMaxAttemp)
+                            var isConflict = false;
+                            decimal? usersMaxAttemp = null;
+                            if (test.UserInTests.Count > 0) {
+                                usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);
+                                isConflict= (number ?? 0) < usersMaxAttemp;
+                            }
+                            
+                            if (isConflict&&usersMaxAttemp.HasValue)
                             {
                                 message = "The number of times is conflict with max attemps that students have done (" + usersMaxAttemp + "), please choose a number greater than : " + usersMaxAttemp;
                                 success = false;
