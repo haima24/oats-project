@@ -99,7 +99,7 @@ function initCommonValidation() {
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qtext", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qansdesc", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0" });
-    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^([0-9]{0,3})$/, def: "0" });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^((-)*[0-9]{0,3})$/, def: "0" });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: ".nt-tag-adder input[type=text]", regex: /^.{0,50}$/ });
     //setting
@@ -1029,9 +1029,10 @@ function updateAnswer(lineElement, target) {
             answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", $obj).attr("checked") ? true : false;
             var tb = $(".nt-qansscore input[type=text]", $obj);
             var scoreString = tb.val();
-            if (scoreString == "" || scoreString == "0") {
+            var score = parseInt(scoreString);
+            if (scoreString == "" || score <=0) {
                 if (answer.IsRight == true) { tb.val(1); }
-            } else if (scoreString == "1") {
+            } else if(score>0){
                 if (answer.IsRight == false) { tb.val(0); }
             }
             scoreString = tb.val();

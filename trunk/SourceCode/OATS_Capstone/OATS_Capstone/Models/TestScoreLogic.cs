@@ -41,7 +41,8 @@ namespace OATS_Capstone.Models
             var gTags = lGroupTags.Select(i => i.Key).ToList();
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
-                return i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
+                var score=i.Answers.Sum(k => k.Score ?? 0);
+                return i.NoneChoiceScore ?? 0 + (score<0?0:score);
             });
             InTests = test.UserInTests.FilterInTestsOnAttempSetting();
             ScoreUserList = new List<ScoreUserItem>();

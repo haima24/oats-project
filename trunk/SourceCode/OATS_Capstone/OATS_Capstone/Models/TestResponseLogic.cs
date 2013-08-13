@@ -53,7 +53,8 @@ namespace OATS_Capstone.Models
             LabelOrder = question.LabelOrder;
             QuestionTitle = question.QuestionTitle;
             NonChoiceScore = question.NoneChoiceScore;
-            ChoiceScore = question.Answers.Sum(i => i.Score);
+            var score = question.Answers.Sum(i => i.Score);
+            ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
             CheckedUserIds = checkIds;
             InTests = question.Test.UserInTests.FilterInTestsOnAttempSetting();
             InTestDetails = InTests.SelectMany(i => i.UserInTestDetails).Where(i => i.QuestionID == question.QuestionID);
@@ -591,7 +592,7 @@ namespace OATS_Capstone.Models
                     if (ids != null)
                     {
                         userChooseThisAnswer = ids.Contains(answer.AnswerID);
-                        if (userChooseThisAnswer) { userAnsScore = answer.Score; }
+                        if (userChooseThisAnswer) { userAnsScore = (!answer.Score.HasValue||answer.Score<0)?0:answer.Score; }
                     }
                 }
                 else if (question.ListCoupleIds != null)
@@ -613,7 +614,7 @@ namespace OATS_Capstone.Models
                         {
                             return f.ElementAtOrDefault(0) == s.ElementAtOrDefault(0) && f.ElementAtOrDefault(1) == s.ElementAtOrDefault(1);
                         });
-                        if (userChooseThisAnswer) { userAnsScore = answer.Score; }
+                        if (userChooseThisAnswer) { userAnsScore = (!answer.Score.HasValue || answer.Score < 0) ? 0 : answer.Score; }
                     }
                 }
             }
@@ -665,7 +666,8 @@ namespace OATS_Capstone.Models
             }
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
-                return i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
+                var score = i.Answers.Sum(k => k.Score ?? 0);
+                return i.NoneChoiceScore ?? 0 + (score < 0 ? 0 : score);
             });
             var details = inTestsValid.ToList();
             ResponseUserList = new List<ResponseUserItem>();
