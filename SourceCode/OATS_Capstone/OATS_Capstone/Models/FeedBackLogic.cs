@@ -56,7 +56,7 @@ namespace OATS_Capstone.Models
             {
                 if (test.CreatedUserID == i.UserID)
                 {
-                    return true;
+                    return !i.ParentID.HasValue;
                 }
                 else
                 {
