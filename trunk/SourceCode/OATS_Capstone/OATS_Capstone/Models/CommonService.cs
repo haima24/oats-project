@@ -417,7 +417,8 @@ namespace OATS_Capstone.Models
                 {
                     questions = questions.Where(i =>
                     {
-                        var tags = i.Test.TagInTests.Select(k => k.TagID);
+                        var tags = i.TagInQuestions.Select(k => k.TagID);
+                        tags=tags.Concat(i.Test.TagInTests.Select(k => k.TagID));
                         return tags.Any(t => tagids.Contains(t));
                     }).ToList();
                 }
