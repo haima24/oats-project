@@ -27,17 +27,18 @@ namespace OATS_Capstone.Models
             get { return upComingTests; }
         }
 
-        public TestList(IEnumerable<Test> tests)
+        private void Initialize(IEnumerable<Test> tests, string role)
         {
             var authen = AuthenticationSessionModel.Instance();
-            var curUserId=authen.UserId;
-
+            var curUserId = authen.UserId;
             var studentInvited = tests.Where(i =>
             {
                 var condition = false;
                 var invitation = i.Invitations.FirstOrDefault(t => t.UserID == curUserId);
-                if (invitation != null) {
-                    if (invitation.Role.RoleDescription == "Student") {
+                if (invitation != null)
+                {
+                    if (invitation.Role.RoleDescription == "Student")
+                    {
                         condition = true;
                     }
                 }
@@ -57,9 +58,34 @@ namespace OATS_Capstone.Models
                 return condition;
             });
             var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId).Concat(teacherInvited);
-            recentTests = studentInvited.FilterByRecents().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
-            runningTests = studentInvited.FilterByRuning().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
-            upComingTests = studentInvited.FilterByUpcoming().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
+            switch (role)
+            {
+                case "Do":
+                    recentTests = studentInvited.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = false, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    runningTests = studentInvited.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = false, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    upComingTests = studentInvited.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = false, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    break;
+                case "Review":
+                    recentTests = ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    runningTests = ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    upComingTests = ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    break;
+                default:
+                    recentTests = studentInvited.FilterByRecents().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
+                    runningTests = studentInvited.FilterByRuning().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
+                    upComingTests = studentInvited.FilterByUpcoming().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
+                    break;
+            }
+        }
+
+        public TestList(IEnumerable<Test> tests)
+        {
+            Initialize(tests,null);
+        }
+
+        public TestList(IEnumerable<Test> tests, string role)
+        {
+            Initialize(tests, role);
         }
     }
     public class TestListItem
@@ -155,7 +181,7 @@ namespace OATS_Capstone.Models
             NumOfStudent = allInvitations.Count(k => k.Role.RoleDescription == "Student");
             NumOfTeacher = allInvitations.Count(k => k.Role.RoleDescription == "Teacher");
             var settingDetails = test.SettingConfig.SettingConfigDetails;
-            var osmSetting=settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
+            var osmSetting = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "OSM");
             if (osmSetting != null)
             {
                 if (osmSetting.IsActive)
@@ -167,14 +193,16 @@ namespace OATS_Capstone.Models
                     {
                         var maxAttemp = osmSetting.NumberValue ?? 0;
                         var curAttemp = inTests.Max(i => i.NumberOfAttend);
-                        var delta=maxAttemp-curAttemp;
+                        var delta = maxAttemp - curAttemp;
                         remainAttemp = delta < 0 ? 0 : delta;
                     }
                 }
             }
             var canViewHistorySetting = settingDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "SAR");
-            if (canViewHistorySetting != null) {
-                if (canViewHistorySetting.IsActive) {
+            if (canViewHistorySetting != null)
+            {
+                if (canViewHistorySetting.IsActive)
+                {
                     CanViewHistory = true;
                 }
             }

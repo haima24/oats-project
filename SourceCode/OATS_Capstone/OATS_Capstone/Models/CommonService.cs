@@ -2896,7 +2896,7 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
-        public void Index_TestListTab()
+        public void Index_TestListTab(string role)
         {
             success = false;
             message = Constants.DefaultProblemMessage;
@@ -2906,7 +2906,7 @@ namespace OATS_Capstone.Models
                 success = true;
                 if (OnRenderPartialViewToString != null)
                 {
-                    var testList = new TestList(db.Tests);
+                    var testList = new TestList(db.Tests,role);
                     generatedHtml = OnRenderPartialViewToString.Invoke(testList);
                 }
             }

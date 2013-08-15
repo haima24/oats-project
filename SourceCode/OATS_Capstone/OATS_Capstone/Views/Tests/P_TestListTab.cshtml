@@ -7,18 +7,12 @@
         });
     });
 </script>
-<style>
-    #asmsOverview {
-        margin-right: 5px;
-        vertical-align: top;
-    }
-</style>
 <style type="text/css" media="screen">
     .kalendae .k-days span.closed {
         background: red;
     }
 </style>
-<div id="asmsList" style="height: 600px; overflow-y: visible; float: left; width: 740px;" class="nt-flex-acc disable-accord-ui">
+<div id="asmsList" class="nt-flex-acc disable-accord-ui">
     <div class="accordion-group nt-acc-group nt-acc-open">
         <div class="accordion-heading">
 
@@ -30,7 +24,7 @@
                 <div class="nt-desc">Recent Tests</div>
             </a>
         </div>
-        <div id="recent" class="accordion-body" style="max-height: 350px">
+        <div id="recent" class="accordion-body" style="max-height: 300px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <a>
                     <div class="nt-list-head">
@@ -202,7 +196,7 @@
                 <div class="nt-desc">Running Tests</div>
             </a>
         </div>
-        <div class="accordion-body" style="max-height: 350px">
+        <div class="accordion-body" style="max-height: 300px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <a>
                     <div class="nt-list-head">
@@ -345,7 +339,7 @@
                 <div class="nt-desc">Upcoming Tests</div>
             </a>
         </div>
-        <div class="accordion-body" style="max-height: 350px">
+        <div class="accordion-body" style="max-height: 300px">
             <div class="nt-asms-list accordion-inner" style="overflow-y: auto; height: 100%;">
                 <div class="nt-list-cont">
                     @if (Model.UpComingTests.Count == 0)
@@ -372,16 +366,19 @@
                             <!-- TODO: invite -->
                             <div class="nt-desc">@item.NumOfStudent Student</div>
 
+                            @if(item.IsCurrentUserOwnTest){
                             <div class="nt-desc">
                                 <a href="@Url.Action("NewTest", new { id = @item.TestID, tab = "Invitation" })" class="nt-btn-text nt-invbtn">Invite</a>
                             </div>
+                            }
 
                             <div class="nt-desc">@item.NumOfTeacher Educator</div>
 
-
+                            @if(item.IsCurrentUserOwnTest){
                             <div class="nt-ctrl nt-ctrl-wide" data-action="control">
                                 <button test-id="@item.TestID" class="nt-btn-circle nt-dupbtn" data-toggle="tooltip" data-placement="right" data-original-title="Duplicate this test"><i class="t-icon i-duplicate"></i></button>
                             </div>
+                            }
                         </div>
                         }
                     }
@@ -389,6 +386,4 @@
             </div>
         </div>
     </div>
-</div>
-<div id="asmsOverview">
 </div>

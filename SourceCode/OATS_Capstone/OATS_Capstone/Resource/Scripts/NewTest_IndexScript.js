@@ -130,21 +130,11 @@ function initCalendar() {
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                height: 300,
                 editable: true,
                 events: events
             });
             $('#calendar').removeClass("loading");
-
-            var calendar = $("#asmsOverview").kalendae({
-                months: 3,
-                mode: 'single',
-                selected: Kalendae.moment(),
-                subscribe: {
-                    'change': function (date) {
-                        fCalen.fullCalendar('gotoDate',date.year(),date.month(),date.date());
-                    }
-                }
-            });
 
         } else {
             showMessage("error", res.message);
@@ -156,13 +146,14 @@ $(function () {
     initCalendar();
     $(".tab-event").live("click", function (e) {
         e.preventDefault();
-        var link = e.target;
-        var action = $(link).attr("href");
-        var nav = $(link).closest(".nav");
-        var li = $(link).closest("li");
+        var $link = $(this);
+        var action = $link.attr("href");
+        var role = $link.data("role");
+        var nav = $link.closest(".nav");
+        var li = $link.closest("li");
         nav.find("li").removeClass("active");
         li.addClass("active");
-        $.post(action, function (res) {
+        $.post(action,{role:role}, function (res) {
             if (res.success) {
                 var tabcontent = $("#eventTab");
                 var ele = res.generatedHtml;
