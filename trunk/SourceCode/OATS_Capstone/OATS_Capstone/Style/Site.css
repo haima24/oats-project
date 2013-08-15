@@ -25,9 +25,8 @@ audio, canvas, video {
 
 #calendar {
     min-height: 400px;
-    width: 735px;
-    /*margin: 0 auto;*/
-    margin-left: 20px;
+    margin:0 20px 0 20px;
+    width:95%;
     vertical-align: top;
     float: left;
 }
@@ -37,10 +36,6 @@ audio, canvas, video {
         background-color: rgba(255, 255, 255, 0.5);
     }
 
-#asmsOverview {
-    margin-right: 5px;
-    vertical-align: top;
-}
 
 #message-popup {
     position: fixed;
@@ -432,7 +427,7 @@ i, cite, em, var, address, dfn {
         min-height: 500px;
         position: relative;
         background: rgba(255, 255, 255, 0.3);
-        padding: 20px 20px 1px 20px;
+        padding: 20px 20px 10px 20px;
         -webkit-box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
         -moz-box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
         box-shadow: inset rgba(0, 0, 0, 0.3) 0 1px 2px;
@@ -1571,7 +1566,12 @@ div.hoverscroll {
     }
 
 
-
+#asmsList {
+    height: 500px;
+overflow-y: visible;
+float: left;
+width: 95%;
+}
 #asmsList .accordion-group {
     background-color: #FFF;
     margin: 0;

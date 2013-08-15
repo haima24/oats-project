@@ -207,7 +207,9 @@ namespace OATS_Capstone.Controllers
         public ActionResult Index(string id = "")
         {
             ViewBag.Tab = id;
-            return View();
+            var db = SingletonDb.Instance();
+            var testList = new TestList(db.Tests,"Do");
+            return View(testList);
         }
         public JsonResult MakeTest(string testTitle)
         {
@@ -462,7 +464,7 @@ namespace OATS_Capstone.Controllers
             return Json(new { success, message, generatedHtml });
 
         }
-        public JsonResult Index_TestListTab()
+        public JsonResult Index_TestListTab(string role="")
         {
             var common = new CommonService();
             common.OnRenderPartialViewToString += (model) =>
@@ -480,7 +482,7 @@ namespace OATS_Capstone.Controllers
                 }
                 return result;
             };
-            common.Index_TestListTab();
+            common.Index_TestListTab(role);
             return Json(new { common.success, common.message, common.generatedHtml });
         }
         public JsonResult NewTest_ResponseTab(int testid)
