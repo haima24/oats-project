@@ -76,6 +76,9 @@ namespace OATS_Capstone.Models
                     upComingTests = studentInvited.FilterByUpcoming().Select(i => new TestListItem(i) { IsCurrentUserOwnTest = false, IsRunning = i.IsRunning, IsComplete = i.IsComplete }).Concat(ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete })).ToList();
                     break;
             }
+            recentTests = recentTests.OrderByDescending(i => i.CreatedDate).ToList();
+            runningTests = runningTests.OrderByDescending(i => i.CreatedDate).ToList();
+            upComingTests = upComingTests.OrderByDescending(i => i.CreatedDate).ToList();
         }
 
         public TestList(IEnumerable<Test> tests)
@@ -115,6 +118,7 @@ namespace OATS_Capstone.Models
         public string TestTitle { get; set; }
         public string Start { get; set; }
         public string End { get; set; }
+        public DateTime CreatedDate { get; set; }
         private int allInvitedCount = 0;
         private int resultedOnInvitedCount = 0;
         public int NumOfStudent { get; set; }
@@ -158,6 +162,7 @@ namespace OATS_Capstone.Models
         {
             TestID = test.TestID;
             TestTitle = test.TestTitle;
+            CreatedDate = test.CreatedDateTime;
             Introduction = test.Introduction;
             Start = test.StartDateTime.ToDateDefaultFormat();
             End = test.EndDateTime.ToDateDefaultFormat();

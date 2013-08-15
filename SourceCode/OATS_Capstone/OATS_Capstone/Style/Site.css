@@ -686,7 +686,7 @@ i, cite, em, var, address, dfn {
 }
 
 #eventTab .nt-checklist-ctrl {
-    height: 37px;
+    height: 30px;
     margin-right: 17px;
     margin-top: 10px;
 }
@@ -1706,7 +1706,7 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
     }
 
 .nt-scores-cont .nt-scores-footer {
-    padding: 15px 20px;
+    padding: 10px 20px;
     margin: 0px;
     float: left;
     position: relative;
