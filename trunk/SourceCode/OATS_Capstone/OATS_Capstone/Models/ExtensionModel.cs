@@ -8,6 +8,76 @@ namespace OATS_Capstone.Models
 {
     public static class ExtensionModel
     {
+        public static bool ContainQuestion(this Test test, Question question)
+        {
+            var contained = false;
+            try
+            {
+                contained = test.Questions.ToList().Contains(question, (q1, q2) =>
+                 {
+                     var result = false;
+                     var title = q1.QuestionTitle == q2.QuestionTitle;
+                     var type = q1.QuestionTypeID == q2.QuestionTypeID;
+                     var nonScore = q1.NoneChoiceScore == q2.NoneChoiceScore;
+                     var detailCondition = false;
+                     if (type)
+                     {
+                         var qType = q1.QuestionType.Type;
+                         if (qType == "ShortAnswer" || qType == "Essay")
+                         {
+                             detailCondition = q1.TextDescription == q2.TextDescription;
+                         }
+                         else
+                         {
+                             detailCondition = true;
+                         }
+                     }
+                     var answers = false;
+                     if (q1.Answers.Count == q2.Answers.Count)
+                     {
+                         answers = q1.Answers.All(i =>
+                         {
+                             return q2.Answers.Contains(i, (a1, a2) =>
+                             {
+                                 return a1.AnswerContent == a2.AnswerContent
+                                     && a1.IsRight == a2.IsRight
+                                     && a1.Score == a2.Score;
+                             });
+                         });
+                     }
+                     result = title && type && nonScore && detailCondition && answers;
+                     return result;
+                 });
+            }
+            catch (Exception)
+            {
+                contained = false;
+            }
+            return contained;
+
+        }
+        public static bool IsNotOver(this Test test)
+        {
+            var isOver = false;
+            try
+            {
+                var end = test.EndDateTime;
+                var today = DateTime.Now;
+                if (end.HasValue)
+                {
+                    if (end.Value.CompareTo(today) < 0)
+                    {
+                        isOver = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                isOver = false;
+            }
+            return !isOver;
+
+        }
         public static String ToPercent(this decimal? praction)
         {
             var percent = String.Empty;
@@ -230,7 +300,7 @@ namespace OATS_Capstone.Models
                         inTest = inTests.FirstOrDefault(i => i.UserID == id && i.NumberOfAttend == maxAttemp);
                         break;
                     case AttempTypes.Average:
-                        var great = inTests.Where(i => i.UserID == id && i.Score >= avgScore).OrderBy(i=>i.Score);
+                        var great = inTests.Where(i => i.UserID == id && i.Score >= avgScore).OrderBy(i => i.Score);
                         var less = inTests.Where(i => i.UserID == id && i.Score < avgScore).OrderByDescending(i => i.Score);
                         inTest = great.FirstOrDefault();
                         if (inTest == null)
@@ -392,7 +462,8 @@ namespace OATS_Capstone.Models
                 {
                     result = 0;
                 }
-                else {
+                else
+                {
                     result = num1 / num2;
                 }
             }

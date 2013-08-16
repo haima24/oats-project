@@ -996,7 +996,7 @@ i, cite, em, var, address, dfn {
     }
 
 #checklist .nt-qitem .nt-qans {
-    overflow-y: hidden;
+    overflow: hidden;
     position: relative;
     padding: 6px 10px 5px 17px;
     font-size: 14px;

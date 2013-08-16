@@ -414,15 +414,59 @@ function initTagsOnTest() {
             });
         }
     });
-    $("#test-tags").autocomplete({
-        minLength: 0,
-        select: function (e, ui) {
-            e.stopPropagation();
-            $("#test-tags").val("")
-            statusSaving();
-            var id = ui.item.id;
-            if (id) {
-                $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
+    var testTagAdder = $("#test-tags");
+    if (testTagAdder.length>0) {
+        testTagAdder.autocomplete({
+            minLength: 0,
+            select: function (e, ui) {
+                e.stopPropagation();
+                $("#test-tags").val("")
+                statusSaving();
+                var id = ui.item.id;
+                if (id) {
+                    $.post("/Tests/AddTagToTest", { testid: testid, tagid: id }, function (res) {
+                        if (res.success) {
+                            var tagItem = $(res.generatedHtml);
+                            $("#eventTags .nt-tags .tags-container").append(tagItem);
+                            statusSaved();
+                        }
+                        else { showMessage("error", res.message); }
+                    });
+                }
+            },
+            source: function (req, res) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Tests/SearchTagsOnTest",
+                    data: JSON.stringify({ testid: testid, term: req.term, maxrows: 10 }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+                        if (r.success) {
+                            var result = $(r.resultlist).map(function (index, element) {
+                                if (element && element.tagname) {
+                                    return { id: element.id, label: element.tagname, value: element.tagname };
+                                }
+                            }).convertJqueryArrayToJSArray();
+                            res(result);
+                        } else {
+                            showMessage("error", r.message);
+                        }
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
+            var li = $("<li>").append("<a>" + item.label + "</a>");
+            if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
+            li.appendTo(ul);
+            return li;
+        };
+        $("#test-tags").live("keydown", function (ev) {
+            if (ev.keyCode == 13) {
+                statusSaving();
+                var text = $(this).val();
+                $.post("/Tests/AddTagToTest", { testid: testid, tagid: 0, tagname: text }, function (res) {
                     if (res.success) {
                         var tagItem = $(res.generatedHtml);
                         $("#eventTags .nt-tags .tags-container").append(tagItem);
@@ -431,49 +475,8 @@ function initTagsOnTest() {
                     else { showMessage("error", res.message); }
                 });
             }
-        },
-        source: function (req, res) {
-            $.ajax({
-                type: "POST",
-                url: "/Tests/SearchTagsOnTest",
-                data: JSON.stringify({ testid: testid, term: req.term, maxrows: 10 }),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (r) {
-                    if (r.success) {
-                        var result = $(r.resultlist).map(function (index, element) {
-                            if (element && element.tagname) {
-                                return { id: element.id, label: element.tagname, value: element.tagname };
-                            }
-                        }).convertJqueryArrayToJSArray();
-                        res(result);
-                    } else {
-                        showMessage("error", r.message);
-                    }
-                }
-            });
-        }
-    }).data("ui-autocomplete")._renderItem = function (ul, item) {
-        if (!ul.hasClass("search-autocomple")) { ul.addClass("search-autocomple"); }
-        var li = $("<li>").append("<a>" + item.label + "</a>");
-        if (!li.hasClass("search-autocomplete-hover-item")) { li.addClass("search-autocomplete-hover-item"); }
-        li.appendTo(ul);
-        return li;
-    };
-    $("#test-tags").live("keydown", function (ev) {
-        if (ev.keyCode == 13) {
-            statusSaving();
-            var text = $(this).val();
-            $.post("/Tests/AddTagToTest", { testid: testid, tagid: 0, tagname: text }, function (res) {
-                if (res.success) {
-                    var tagItem = $(res.generatedHtml);
-                    $("#eventTags .nt-tags .tags-container").append(tagItem);
-                    statusSaved();
-                }
-                else { showMessage("error", res.message); }
-            });
-        }
-    });
+        });
+    }
     $("#eventTags .nt-tag .nt-tag-remove").live("click", function (ev) {
         var item = $(this).closest(".nt-tag");
         var tagIdString = $(item).attr("tag-id");
@@ -738,10 +741,10 @@ function initEditable() {
         },
         onFocusIn: function (element) { currentEditAnswer = element; }
     });
-    
+
     $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext[contenteditable=true]").wysiwyg({
         placeholder: "<i>Enter Text</i>",
-        "onBlur": function (element,text) {
+        "onBlur": function (element, text) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
             updateQuestionTitle(quesid, text);
@@ -749,7 +752,7 @@ function initEditable() {
     });
     $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit[contenteditable=true]").wysiwyg({
         placeholder: "<i>Enter Question</i>",
-        onBlur: function (element,text) {
+        onBlur: function (element, text) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
             updateQuestionTitle(quesid, text);
@@ -916,40 +919,42 @@ function checkConstraintStartEnd(start, end, onsuccessvalidate) {
 var dFromObj;
 var dToObj;
 function initDateTimePicker() {
+    var evDateFrom = $("#eventDateFrom:not([data-not-owner])");
+    var evDateTo = $("#eventDateTo:not([data-not-owner])");
+    if (evDateFrom && evDateTo) {
+        var dFString = evDateFrom.attr("current-date");
+        var dTString = evDateTo.attr("current-date");
+        var dF = !isNaN(parseInt(dFString)) ? new Date(parseInt(dFString)) : new Date();
+        var dT = !isNaN(parseInt(dTString)) ? new Date(parseInt(dTString)) : new Date();
 
-    var dFString = $("#eventDateFrom").attr("current-date");
-    var dTString = $("#eventDateTo").attr("current-date");
-    var dF = !isNaN(parseInt(dFString)) ? new Date(parseInt(dFString)) : new Date();
-    var dT = !isNaN(parseInt(dTString)) ? new Date(parseInt(dTString)) : new Date();
+        dFromObj = dF;
+        dToObj = dT;
 
-    dFromObj = dF;
-    dToObj = dT;
-
-    $("#eventDateFrom").datetimepicker({
-        language: 'en',
-        pick12HourFormat: true,
-        pickSeconds: false
-    }).datetimepicker('setLocalDate', dF).on('changeDate', function (ev) {
-        dFromObj = ev.localDate;
-        checkConstraintStartEnd(dFromObj, dToObj, function () {
-            updateStartEndDate(testid, dFromObj, dToObj);
+        evDateFrom.datetimepicker({
+            language: 'en',
+            pick12HourFormat: true,
+            pickSeconds: false
+        }).datetimepicker('setLocalDate', dF).on('changeDate', function (ev) {
+            dFromObj = ev.localDate;
+            checkConstraintStartEnd(dFromObj, dToObj, function () {
+                updateStartEndDate(testid, dFromObj, dToObj);
+            });
         });
-    });
-    $("#eventDateTo").datetimepicker({
-        language: 'en',
-        pick12HourFormat: true,
-        pickSeconds: false
-    }).datetimepicker('setLocalDate', dT).on('changeDate', function (ev) {
-        dToObj = ev.localDate;
-        checkConstraintStartEnd(dFromObj, dToObj, function () {
-            updateStartEndDate(testid, dFromObj, dToObj);
+        evDateTo.datetimepicker({
+            language: 'en',
+            pick12HourFormat: true,
+            pickSeconds: false
+        }).datetimepicker('setLocalDate', dT).on('changeDate', function (ev) {
+            dToObj = ev.localDate;
+            checkConstraintStartEnd(dFromObj, dToObj, function () {
+                updateStartEndDate(testid, dFromObj, dToObj);
+            });
         });
-    });
+    }
 }
 
 function updateStartEndDate(testid, start, end) {
     statusSaving();
-
     $.ajax({
         type: "POST",
         url: "/Tests/UpdateStartEnd",
@@ -957,13 +962,15 @@ function updateStartEndDate(testid, start, end) {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (res) {
-            if (!res.success) {
-                showMessage("error", res.message);
-            } else {
+            if (res.success) {
                 statusSaved();
+                if (res.message) {
+                    showMessage("info", res.message);
+                }
+            } else {
+                showMessage("error", res.message);
             }
         }
-
     });
 }
 
@@ -1030,9 +1037,9 @@ function updateAnswer(lineElement, target) {
             var tb = $(".nt-qansscore input[type=text]", $obj);
             var scoreString = tb.val();
             var score = parseInt(scoreString);
-            if (scoreString == "" || score <=0) {
+            if (scoreString == "" || score <= 0) {
                 if (answer.IsRight == true) { tb.val(1); }
-            } else if(score>0){
+            } else if (score > 0) {
                 if (answer.IsRight == false) { tb.val(0); }
             }
             scoreString = tb.val();

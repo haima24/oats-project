@@ -3,15 +3,18 @@
 @using OATS_Capstone.Models
 @{var tags = Model.TagInTests.OrderBy(k => k.SerialOrder).Select(i => i.Tag);
   var authen = AuthenticationSessionModel.Instance();
-  var isOwner = Model.CreatedUserID == authen.UserId;
-  ViewBag.isOwner = isOwner;
+
+  var isOwner = Model.CreatedUserID == authen.UserId && Model.IsNotOver();
+  var isAuthor = Model.CreatedUserID == authen.UserId;
+  ViewBag.isOwner = isOwner ;
 
   var tab = "";
   if (ViewBag.Tab != null)
   {
       tab = ViewBag.Tab;
   }
-  if(string.IsNullOrEmpty(tab)){
+  if (string.IsNullOrEmpty(tab))
+  {
       tab = "Content";
   }
 }
@@ -30,23 +33,36 @@
     <div>
         <button id="eventIntroduction" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="Introduction for this test"><i class="t-icon i-introduction t-icon-white"></i></button>
     </div>
-    @if (Model != null)
+    @if (isOwner)
     {
-        if (isOwner)
-        {
         <div contenteditable="true" id="test-title">@Model.TestTitle</div>
-        }
-        else
-        {
-        <div id="test-title">@Model.TestTitle</div>
-        }
     }
-    <div id="eventDateFrom" class="test-date-time" contenteditable="true" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.StartDateTime)</div>
+    else
+    {
+        <div id="test-title">@Model.TestTitle</div>
+    }
+    @if (isOwner||isAuthor)
+    {
+        <div id="eventDateFrom" class="test-date-time" contenteditable="true" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.StartDateTime)</div>
+    }
+    else
+    {
+        <div id="eventDateFrom" data-not-owner class="test-date-time" current-date="@Model.StartDateTime.ToJavaScriptMilliseconds()" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.StartDateTime)</div>
+    }
     <div class="spacer">_</div>
-    <div id="eventDateTo" class="test-date-time" contenteditable="true" current-date="@((Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime).ToJavaScriptMilliseconds())" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime)</div>
+    @if (isOwner || isAuthor)
+    {
+        <div id="eventDateTo" class="test-date-time" contenteditable="true" current-date="@((Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime).ToJavaScriptMilliseconds())" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime)</div>
+    }
+    else
+    {
+        <div id="eventDateTo" data-not-owner class="test-date-time" current-date="@((Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime).ToJavaScriptMilliseconds())" data-format="dd TM yyyy hh:mm PP">@String.Format("{0:dd MMM yyyy HH:mm tt}", Model.EndDateTime.HasValue ? Model.EndDateTime.Value : Model.StartDateTime)</div>
+    }
     <button id="eventDuplicate" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="Duplicate"><i class="t-icon i-duplicate t-icon-white"></i></button>
+    @if(isOwner){
     <button id="eventDeactive" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="De-Active"><i class="icon-pause t-icon-white"></i></button>
     <button id="eventDelete" class="nt-btn-circle" data-toggle="tooltip" data-placement="top" data-original-title="Delete"><i class="icon-trash t-icon-white"></i></button>
+    }
 </div>
 <div id="test-introduction" class="popover bottom">
     <div class="arrow"></div>
@@ -71,9 +87,11 @@
                     @Html.Partial("P_Tag_Item", item)
                 }
             </div>
+            @if(isOwner){
             <div class="nt-tag-adder">
                 <input type="text" id="test-tags" placeholder="Add Tag..." autocomplete="off" />
             </div>
+            }
         </div>
     </div>
 </div>
