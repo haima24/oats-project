@@ -412,7 +412,13 @@ namespace OATS_Capstone.Models
             try
             {
                 var db = SingletonDb.Instance();
-                var questions = db.Questions.ToList();
+
+                //all
+                //var questions = db.Questions.ToList();
+
+                //of current users
+                var authen = AuthenticationSessionModel.Instance();
+                var questions = authen.User.Tests.SelectMany(i => i.Questions);
                 if (tagids != null)
                 {
                     questions = questions.Where(i =>

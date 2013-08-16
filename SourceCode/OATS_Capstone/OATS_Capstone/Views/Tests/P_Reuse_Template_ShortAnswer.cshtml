@@ -5,7 +5,7 @@
     </div>
     <div class="nt-qsearch-content">
         <div class="nt-qsearch-title">
-            <p>@Model.QuestionTitle</p>
+            <p>@Html.Raw(Model.QuestionTitle)</p>
         </div>
         <div class="nt-qsearch-desc">@Model.TextDescription</div>
     </div>
@@ -13,7 +13,7 @@
         <div class="nt-qsearch-popover">
             <div class="nt-qtext nt-phrase">
                 @*<p><span class="nt-qsearch-hl">short</span> answer example</p>*@
-                <p>@Model.QuestionTitle</p>
+                <p>@Html.Raw(Model.QuestionTitle)</p>
             </div>
             <div class="nt-qanscont">
                 <div class="nt-textinput">

@@ -4,13 +4,13 @@
         <i class="t-icon i-text"></i>
     </div>
     <div class="nt-qsearch-content">
-        <div class="nt-qsearch-title">@Model.QuestionTitle</div>
+        <div class="nt-qsearch-title">@Html.Raw(Model.QuestionTitle)</div>
         <div class="nt-qsearch-desc"></div>
     </div>
     <div class="nt-qsearch-popover-cont">
         <div class="nt-qsearch-popover">
             <div class="nt-qtext nt-phrase">
-                @Model.QuestionTitle
+                @Html.Raw(Model.QuestionTitle)
             </div>
             <div class="nt-qanscont">
             </div>

@@ -1,7 +1,7 @@
 ﻿@model OATS_Capstone.Models.Question
 @{
     var answers = @Model.Answers.Where(k => !String.IsNullOrEmpty(k.AnswerContent)).Select(i => i.AnswerContent);
-    var answersDescription = answers.Count() == 0 ? string.Empty : answers.Aggregate((w, n) => w + "/ " + n);
+    var answersDescription = answers.Count() == 0 ? string.Empty : answers.Aggregate((w, n) => Html.Raw(w) + "/ " + Html.Raw(n));
     var ansCouples = Model.Answers.Where(i => !i.DependencyAnswerID.HasValue).OrderBy(i => i.SerialOrder);
 }
 <div class="nt-qsearch" data-action="reuse" question-id="@Model.QuestionID">
@@ -10,14 +10,14 @@
     </div>
     <div class="nt-qsearch-content">
         <div class="nt-qsearch-title">
-            <p>@Model.QuestionTitle</p>
+            <p>@Html.Raw(Model.QuestionTitle)</p>
         </div>
         <div class="nt-qsearch-desc">@answersDescription</div>
     </div>
     <div class="nt-qsearch-popover-cont">
         <div class="nt-qsearch-popover">
             <div class="nt-qtext nt-phrase">
-                <p>@Model.QuestionTitle</p>
+                <p>@Html.Raw(Model.QuestionTitle)</p>
 
             </div>
             <div class="nt-qanscont">
@@ -29,7 +29,7 @@
                             <div class="begin nt-qans">
                                 <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                                     <div class="redactor_box">
-                                        <div class="nt-qansdesc nt-delayedblur">@item.AnswerContent</div>
+                                        <div class="nt-qansdesc nt-delayedblur">@Html.Raw(item.AnswerContent)</div>
                                     </div>
                                 </div>
                                 <div class="nt-qanselem">
@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                                         <div class="redactor_box">
-                                            <div class="nt-qansdesc nt-delayedblur">@dependAns.AnswerContent</div>
+                                            <div class="nt-qansdesc nt-delayedblur">@Html.Raw(dependAns.AnswerContent)</div>
                                         </div>
                                     </div>
                                 </div>

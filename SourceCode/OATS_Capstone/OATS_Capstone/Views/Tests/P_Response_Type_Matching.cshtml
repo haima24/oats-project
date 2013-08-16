@@ -2,7 +2,7 @@
 <div class="nt-qitem nt-qitem-review">
     <div class="nt-qnum ">@Model.LabelOrder</div>
     <div class="nt-qtext">
-        <p>@Model.QuestionTitle</p>
+        <p>@Html.Raw(Model.QuestionTitle)</p>
     </div>
     <div class="nt-qhctrls">
         <label class="checkbox">
@@ -16,7 +16,7 @@
                     <div class="begin">
                         <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                             <div class="redactor_box">
-                                <div class="nt-qansdesc">@item.AnswerContent</div>
+                                <div class="nt-qansdesc">@Html.Raw(item.AnswerContent)</div>
                             </div>
                         </div>
                         <div class="nt-qanselem">

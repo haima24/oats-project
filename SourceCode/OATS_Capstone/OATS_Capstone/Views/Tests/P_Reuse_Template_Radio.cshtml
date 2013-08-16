@@ -1,20 +1,20 @@
 ﻿@model OATS_Capstone.Models.Question
 @{
     var answers = @Model.Answers.Where(k => !String.IsNullOrEmpty(k.AnswerContent)).Select(i => i.AnswerContent);
-    var answersDescription =answers.Count()==0?string.Empty: answers.Aggregate((w, n) => w + "/ " + n);
+    var answersDescription = answers.Count() == 0 ? string.Empty : answers.Aggregate((w, n) => Html.Raw(w) + "/ " + Html.Raw(n));
     }
 <div class="nt-qsearch" data-action="reuse" question-id="@Model.QuestionID">
                 <div>
                     <i class="t-icon i-radio"></i>
                 </div>
                 <div class="nt-qsearch-content">
-                    <div class="nt-qsearch-title">@Model.QuestionTitle</div>
+                    <div class="nt-qsearch-title">@Html.Raw(Model.QuestionTitle)</div>
                     <div class="nt-qsearch-desc">@answersDescription</div>
                 </div>
                 <div class="nt-qsearch-popover-cont">
                     <div class="nt-qsearch-popover">
                         <div class="nt-qtext nt-phrase">
-                            @Model.QuestionTitle
+                            @Html.Raw(Model.QuestionTitle)
                         </div>
                         <div class="nt-qanscont">
                         @foreach(var ans in Model.Answers){
@@ -24,7 +24,7 @@
                                 {
                                     <label class="radio nt-qans-label nt-qans-label-rep">
                                     <input type="radio" checked="checked"  disabled="disabled" />
-                                    <div class="nt-qansdesc">@ans.AnswerContent</div>
+                                    <div class="nt-qansdesc">@Html.Raw(ans.AnswerContent)</div>
                                 </label>
                                 <div class="nt-qansrep">
                                     <div class="nt-qpts">1 pts</div>
@@ -33,7 +33,7 @@
                                 else { 
                                     <label class="radio nt-qans-label nt-qans-label-rep">
                                     <input type="radio"  disabled="disabled" />
-                                    <div class="nt-qansdesc">@ans.AnswerContent</div>
+                                    <div class="nt-qansdesc">@Html.Raw(ans.AnswerContent)</div>
                                 </label>
                                 <div class="nt-qansrep">
                                     <div class="nt-qpts" style="display: none;">0 pts</div>
