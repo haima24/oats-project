@@ -488,12 +488,12 @@ namespace OATS_Capstone.Controllers
         public JsonResult NewTest_ResponseTab(int testid)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) =>
+            common.OnRenderPartialViewToStringWithParameter += (model,canEdit) =>
             {
                 var result = String.Empty;
                 try
                 {
-                    ViewBag.canEdit = true;
+                    ViewBag.canEdit = canEdit;
                     result = this.RenderPartialViewToString("P_ResponseTab", model);
                 }
                 catch (Exception)
@@ -774,12 +774,12 @@ namespace OATS_Capstone.Controllers
         public JsonResult NewTest_ResponseTab_CheckUserIds(int testid, List<int> userids, int count)
         {
             var common = new CommonService();
-            common.OnRenderPartialViewToString += (model) =>
+            common.OnRenderPartialViewToStringWithParameter += (model,canEdit) =>
             {
                 var result = String.Empty;
                 try
                 {
-                    ViewBag.canEdit = true;
+                    ViewBag.canEdit = canEdit;
                     result = this.RenderPartialViewToString("P_ResponseTab_Inner", model);
                 }
                 catch (Exception)

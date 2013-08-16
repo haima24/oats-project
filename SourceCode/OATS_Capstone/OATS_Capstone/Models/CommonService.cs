@@ -1029,13 +1029,15 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (OnRenderPartialViewToString != null)
+                if (OnRenderPartialViewToStringWithParameter != null)
                 {
                     success = true;
                     //var checkIds = new List<int>();
                     //var responseTest = new ResponseTest(test, checkIds);
                     var responseTest = new ResponseTest(test);
-                    generatedHtml = OnRenderPartialViewToString.Invoke(responseTest);
+                    var authen = AuthenticationSessionModel.Instance();
+                    var canEdit = test.CreatedUserID == authen.UserId&&test.IsNotOver();
+                    generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(responseTest,canEdit);
                 }
             }
             catch (Exception)
@@ -1206,14 +1208,21 @@ namespace OATS_Capstone.Models
                         question.Answers.Add(c2Ans1);
                         question.Answers.Add(c2Ans2);
                     }
-                    test.Questions.Add(question);
-                    if (db.SaveChanges() > 0)
+                    if (!test.ContainQuestion(question))
                     {
-                        if (OnRenderPartialViewToString != null)
+                        test.Questions.Add(question);
+                        if (db.SaveChanges() > 0)
                         {
-                            success = true;
-                            generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                            if (OnRenderPartialViewToString != null)
+                            {
+                                success = true;
+                                generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                            }
                         }
+                    }
+                    else {
+                        success = false;
+                        message = Constants.DefaultTestContainedQuestion;
                     }
                 }
             }
@@ -1237,6 +1246,7 @@ namespace OATS_Capstone.Models
                 if (test != null)
                 {
                     var listSuccess = new List<Question>();
+                    var duplicated = 0;
                     listquestion.ForEach(delegate(Question item)
                     {
 
@@ -1267,8 +1277,14 @@ namespace OATS_Capstone.Models
                             }
                             qItem.QuestionTitle = qItem.QuestionTitle ?? string.Empty;
                             qItem.TextDescription = qItem.TextDescription ?? string.Empty;
-                            test.Questions.Add(qItem);
-                            listSuccess.Add(qItem);
+                            if (!test.ContainQuestion(qItem))
+                            {
+                                test.Questions.Add(qItem);
+                                listSuccess.Add(qItem);
+                            }
+                            else {
+                                ++duplicated;
+                            }
                         }
                     });
 
@@ -1276,6 +1292,9 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         message = "Import questions complete.";
+                        if (duplicated > 0) {
+                            message += " Duplicated " + duplicated;
+                        }
                         listSuccess.ForEach(delegate(Question item)
                         {
                             var html = String.Empty;
@@ -1507,9 +1526,12 @@ namespace OATS_Capstone.Models
                 });
 
                 var dbAns = dbAnswers.FirstOrDefault();
+                Question question=null;
+                Test test=null;
                 if (dbAns != null)
                 {
-                    var test = dbAns.Question.Test;
+                    question=dbAns.Question;
+                    test = question.Test;
                     var totalScore = test.Questions.TotalScore();
                     var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
                     if (settingDetail != null)
@@ -1530,11 +1552,23 @@ namespace OATS_Capstone.Models
                         }
                     }
                 }
-
+                var isContained = false;
+                if (question != null && test != null) {
+                    if (!test.ContainQuestion(question)) {
+                        isContained = true;
+                    }
+                }
                 RecalculateUserInTestScore(dbAnswers);
-                if (db.SaveChanges() >= 0)
+                if (!isContained)
                 {
-                    success = true;
+                    if (db.SaveChanges() >= 0)
+                    {
+                        success = true;
+                    }
+                }
+                else {
+                    success = false;
+                    message = Constants.DefaultTestContainedQuestion;
                 }
             }
             catch (Exception)
@@ -1555,9 +1589,17 @@ namespace OATS_Capstone.Models
                 if (question != null)
                 {
                     question.QuestionTitle = string.IsNullOrEmpty(newtext) ? string.Empty : (newtext);
-                    if (db.SaveChanges() >= 0)
+                    var test = question.Test;
+                    if (!test.ContainQuestion(question))
                     {
-                        success = true;
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                        }
+                    }
+                    else {
+                        success = false;
+                        message = Constants.DefaultTestContainedQuestion;
                     }
                 }
 
@@ -1580,9 +1622,17 @@ namespace OATS_Capstone.Models
                 if (question != null)
                 {
                     question.TextDescription = text;
-                    if (db.SaveChanges() >= 0)
+                    var test = question.Test;
+                    if (!test.ContainQuestion(question))
                     {
-                        success = true;
+                        if (db.SaveChanges() >= 0)
+                        {
+                            success = true;
+                        }
+                    }
+                    else {
+                        success = false;
+                        message = Constants.DefaultTestContainedQuestion;
                     }
                 }
 
@@ -1714,13 +1764,21 @@ namespace OATS_Capstone.Models
                             }
                         }
 
-                        if (db.SaveChanges() >= 0)
+                        var test = question.Test;
+                        if (!test.ContainQuestion(question))
                         {
-                            success = true;
-                            if (OnRenderPartialViewToString != null)
+                            if (db.SaveChanges() >= 0)
                             {
-                                generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                                success = true;
+                                if (OnRenderPartialViewToString != null)
+                                {
+                                    generatedHtml = OnRenderPartialViewToString.Invoke(question);
+                                }
                             }
+                        }
+                        else {
+                            success = false;
+                            message = Constants.DefaultTestContainedQuestion;
                         }
                     }
                 }
@@ -1743,11 +1801,17 @@ namespace OATS_Capstone.Models
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
                 if (test != null)
                 {
+                    var currentOver = test.IsNotOver();
                     test.StartDateTime = start;
                     test.EndDateTime = end;
                     if (db.SaveChanges() >= 0)
                     {
                         success = true;
+                        message = string.Empty;
+                        if (!currentOver&&test.IsNotOver())
+                        {
+                            message = "Reload to unlock your test";
+                        }
                     }
                 }
             }
@@ -1769,7 +1833,7 @@ namespace OATS_Capstone.Models
                 {
                     var settingConfig = test.SettingConfig;
                     var authen = AuthenticationSessionModel.Instance();
-                    var isOwner = authen.UserId == test.CreatedUserID;
+                    var isOwner = authen.UserId == test.CreatedUserID&&test.IsNotOver();
                     if (settingConfig.SettingConfigID == Constants.DefaultSettingConfigId)//1 is default
                     {
                         var settings = settingConfig.SettingConfigDetails.ToList();
@@ -2417,12 +2481,14 @@ namespace OATS_Capstone.Models
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (OnRenderPartialViewToString != null)
+                if (OnRenderPartialViewToStringWithParameter != null)
                 {
                     success = true;
                     if (count == 0) { userids = new List<int>(); }
                     var responseTest = new ResponseTest(test, userids);
-                    generatedHtml = OnRenderPartialViewToString.Invoke(responseTest);
+                    var authen=AuthenticationSessionModel.Instance();
+                    var canEdit=test.CreatedUserID==authen.UserId&&test.IsNotOver();
+                    generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(responseTest,canEdit);
                 }
             }
             catch (Exception)
@@ -2888,11 +2954,17 @@ namespace OATS_Capstone.Models
                                 }
                             }
                         }
-
-                        if (db.SaveChanges() >= 0)
+                        if (!test.ContainQuestion(question))
                         {
-                            success = true;
-                            message = string.Empty;
+                            if (db.SaveChanges() >= 0)
+                            {
+                                success = true;
+                                message = string.Empty;
+                            }
+                        }
+                        else {
+                            success = false;
+                            message = Constants.DefaultTestContainedQuestion;
                         }
                     }
                 }

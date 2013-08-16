@@ -1,8 +1,9 @@
-﻿@model OATS_Capstone.Models.Test
+﻿@using OATS_Capstone.Models
+@model OATS_Capstone.Models.Test
 @{
     var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
     var templateQuestions = authen.User.Tests.SelectMany(i => i.Questions).Where(i => i.TagInQuestions.Select(t => t.Tag).Concat(i.Test.TagInTests.Select(t=>t.Tag)).Any(k => k.TagName == "Template")).Take(2);
-    var isOwner = Model.CreatedUserID == authen.UserId;
+    var isOwner = Model.CreatedUserID == authen.UserId&&Model.IsNotOver();
     ViewBag.isOwner = isOwner;
 }
 <div id="sidebar" class="disable-accord-ui" content-tab="true">
@@ -34,7 +35,7 @@
         }
         else
         {
-            <p>The content of this test has been locked because you are not the owner.</p>
+            <p>The content of this test has been locked.</p>
             <p>Duplicate this test to get all the questions in a new test without responses and to be able to change all content freely.</p>
         }
     </div>
@@ -72,7 +73,7 @@
         }
         else
         {
-            <p>The content of this test has been locked because you are not the owner.</p>
+            <p>The content of this test has been locked.</p>
             <p>Duplicate this test to get all the questions in a new test without responses and to be able to change all content freely.</p>
         }
     </div>
@@ -88,7 +89,7 @@
         }
         else
         {
-            <p>The content of this test has been locked because you are not the owner.</p>
+            <p>The content of this test has been locked.</p>
             <p>Duplicate this test to get all the questions in a new test without responses and to be able to change all content freely.</p>
         
         }

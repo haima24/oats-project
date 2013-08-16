@@ -4,7 +4,7 @@
     var studentsInvited = Model.Invitations.Where(i => i.Role.RoleDescription == "Student");
     var teachersInvited = Model.Invitations.Where(i => i.Role.RoleDescription == "Teacher");
     var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
-    var isOwner = Model.CreatedUserID == authen.UserId;
+    var isOwner = Model.CreatedUserID == authen.UserId&&Model.IsNotOver();
 }
 <div class="nt-asm-inv">
     <div class="nt-asm-inv-cont" style="height: 400px; overflow-y: auto;">
