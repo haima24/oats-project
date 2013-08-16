@@ -215,7 +215,7 @@ $.fn.extend({
 
                 // origin -> ending ... from left to right
                 // 10 + 10 (padding left + padding right) + 2 + 2 (border left + border right)
-                var originX = $source.parent().position().left + $source.width() + 12 + 4;
+                var originX = $source.parent().position().left + $source.width() + 12 + 7;
                 var originY = $source.parent().position().top + (($source.height() + 12 + 4) / 2);
 
                 var endingX = $target.parent().position().left;
@@ -264,13 +264,13 @@ $.fn.extend({
             }, 1000);
         }
         var painter = $(".painter", $this);
-        $(".begin .matcher", $this).draggable({
+        $(".begin .nt-conted-ph-cont", $this).draggable({
             connectWith: ".end .matcher",
             helper: "clone",
             revert: "invalid"
         });
-        $(".end .matcher", $this).droppable({
-            hoverClass: "matcher-hover",
+        $(".end .nt-conted-ph-cont", $this).droppable({
+            hoverClass: "hover",
             helper: "clone",
             cursor: "move",
             drop: function (event, ui) {

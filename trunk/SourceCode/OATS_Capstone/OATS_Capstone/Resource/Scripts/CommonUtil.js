@@ -196,7 +196,11 @@ $.fn.extend({
         if (places) {
             var s = (numerator * 100 / denominator).toString();
             var iOfDot = s.indexOf(".");
-            result = s.substring(0, iOfDot + 1 + places) + "%";
+            if (iOfDot >= 0) {
+                result = s.substring(0, iOfDot + 1 + places) + "%";
+            } else {
+                result = (numerator * 100 / denominator) + "%";
+            }
         } else {
             result = (numerator * 100 / denominator) + "%";
         }
