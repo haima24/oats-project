@@ -19,7 +19,7 @@
 
         <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
             <div class="redactor_box">
-                <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
+                <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Html.Raw(Model.QuestionTitle)</div>
             </div>
 
             <!-- NOT isImg END -->
@@ -48,7 +48,7 @@
                         </div>
                         <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                             <div class="redactor_box">
-                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@ans.AnswerContent</div>
+                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Html.Raw(ans.AnswerContent)</div>
                             </div>
                         </div>
                         <div class="nt-qansscore">
@@ -120,7 +120,7 @@ else
 
         <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
             <div class="redactor_box">
-                <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor">@Model.QuestionTitle</div>
+                <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor">@Html.Raw(Model.QuestionTitle)</div>
             </div>
 
             <div class="nt-qanscont nt-sortable">
@@ -139,7 +139,7 @@ else
                         </div>
                         <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                             <div class="redactor_box">
-                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor">@ans.AnswerContent</div>
+                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor">@Html.Raw(ans.AnswerContent)</div>
                             </div>
                         </div>
                         <div class="nt-qansscore">

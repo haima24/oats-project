@@ -12,7 +12,7 @@
     
 
     <div class="nt-qtext ">
-        <p>@Model.QuestionTitle</p>
+        <p>@Html.Raw(Model.QuestionTitle)</p>
     </div>
 
     <div class="nt-qanscont nt-sortable">
@@ -23,7 +23,7 @@
                 <label class="radio nt-qans-label ">
                     <input type="radio" id=@ans.AnswerID>
                     <div class="nt-qansdesc">
-                        <p>@ans.AnswerContent</p>
+                        <p>@Html.Raw(ans.AnswerContent)</p>
                     </div>
                 </label>
             </div>

@@ -14,7 +14,7 @@
     <a class="nt-qanchor"></a>
     <div class="nt-conted-ph-cont" style="position: relative; overflow: hidden;">
         <div class="redactor_box">
-            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Model.QuestionTitle</div>
+            <div class="nt-qtext nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Html.Raw(Model.QuestionTitle)</div>
         </div>
     </div>
     <div class="nt-qhctrls">
@@ -30,7 +30,7 @@
                     <div class="begin nt-qans nt-qans-edit" answer-id="@item.AnswerID" data-matching-begin>
                         <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                             <div class="redactor_box">
-                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@item.AnswerContent</div>
+                                <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Html.Raw(item.AnswerContent)</div>
                             </div>
                         </div>
                         <div class="nt-qanselem">
@@ -45,7 +45,7 @@
                             </div>
                             <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                                 <div class="redactor_box">
-                                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@dependAns.AnswerContent</div>
+                                    <div class="nt-qansdesc nt-qedit nt-delayedblur redactor_editor" contenteditable="true">@Html.Raw(dependAns.AnswerContent)</div>
                                 </div>
                             </div>
                         </div>

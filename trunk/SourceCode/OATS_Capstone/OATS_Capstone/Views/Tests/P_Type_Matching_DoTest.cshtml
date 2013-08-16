@@ -21,7 +21,7 @@
     }
 
     <div class="nt-qtext ">
-        <p>@Model.QuestionTitle</p>
+        <p>@Html.Raw(Model.QuestionTitle)</p>
     </div>
 
     <div class="nt-qanscont nt-sortable">
@@ -37,7 +37,7 @@
                         <div class="begin nt-qans" answer-id="@beginItem.AnswerID">
                             <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                                 <div class="nt-qansdesc">
-                                    <p>@beginItem.AnswerContent</p>
+                                    <p>@Html.Raw(beginItem.AnswerContent)</p>
                                 </div>
                             </div>
                             <div class="nt-qanselem">
@@ -53,7 +53,7 @@
                             </div>
                             <div class="nt-conted-ph-cont" style="position: relative; overflow: visible;">
                                 <div class="nt-qansdesc">
-                                    <p>@endItem.AnswerContent</p>
+                                    <p>@Html.Raw(endItem.AnswerContent)</p>
                                 </div>
                             </div>
                         </div>

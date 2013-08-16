@@ -1,7 +1,7 @@
 ﻿@model OATS_Capstone.Models.Question
 @{
     var answers = @Model.Answers.Where(k => !String.IsNullOrEmpty(k.AnswerContent)).Select(i => i.AnswerContent);
-    var answersDescription =answers.Count()==0?string.Empty: answers.Aggregate((w, n) => w + "/ " + n);
+    var answersDescription =answers.Count()==0?string.Empty: answers.Aggregate((w, n) =>Html.Raw(w) + "/ " + Html.Raw(n));
     }
 <div class="nt-qsearch" data-action="reuse" question-id="@Model.QuestionID">
     <div>
@@ -9,14 +9,14 @@
     </div>
     <div class="nt-qsearch-content">
         <div class="nt-qsearch-title">
-            <p>@Model.QuestionTitle</p>
+            <p>@Html.Raw(Model.QuestionTitle)</p>
         </div>
         <div class="nt-qsearch-desc">@answersDescription</div>
     </div>
     <div class="nt-qsearch-popover-cont">
         <div class="nt-qsearch-popover">
             <div class="nt-qtext nt-phrase">
-                <p>@Model.QuestionTitle</p>
+                <p>@Html.Raw(Model.QuestionTitle)</p>
 
             </div>
             <div class="nt-qanscont">
@@ -33,7 +33,7 @@
                                 <input type="checkbox" disabled="disabled" />
                             }
                             <div class="nt-qansdesc">
-                                <p>@ans.AnswerContent</p>
+                                <p>@Html.Raw(ans.AnswerContent)</p>
                             </div>
                         </label>
                         <div class="nt-qansrep">

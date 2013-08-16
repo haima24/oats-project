@@ -255,10 +255,13 @@ function postSetting(li) {
     });
 }
 function initReuseDragAndDrop() {
-    $("#sidebar[content-tab=true] .nt-qsearch", "#modalPopupUser[content-tab=true] .nt-qsearch").draggable({
+    $("#sidebar[content-tab=true] .nt-qsearch").draggable({
         connectToSortable: "#checklist[content-tab=true]",
         helper: "clone",
-        revert: "invalid"
+        revert: "invalid",
+        drag: function (e, ui) {
+            $(".popover", ui.helper).hide()
+        },
     });
 }
 function initDropText() {
@@ -728,30 +731,27 @@ function initEditable() {
             });
         },
     });
-    $("#checklist[content-tab=true] .nt-qans .nt-qansdesc[contenteditable=true]").contentEditable({
-        "placeholder": "<i>Enter Answer</i>",
-        "onBlur": function (element) {
-            updateAnswer($(element).closest(".nt-qans"));
+    $("#checklist[content-tab=true] .nt-qans .nt-qansdesc[contenteditable=true]").wysiwyg({
+        placeholder: "<i>Enter Answer</i>",
+        onBlur: function (element) {
+            updateAnswer(element.closest(".nt-qans"));
         },
-        "onFocusIn": function (element) { currentEditAnswer = element; }
+        onFocusIn: function (element) { currentEditAnswer = element; }
     });
-    $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext[contenteditable=true]").contentEditable({
-        "placeholder": "<i>Enter Text</i>",
-        "onBlur": function (element) {
+    
+    $("#checklist[content-tab=true] div.nt-qitem[question-type=Text] .nt-qtext[contenteditable=true]").wysiwyg({
+        placeholder: "<i>Enter Text</i>",
+        "onBlur": function (element,text) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
-            var content = $(element).html() || element.content;
-            var text = content == "<i>Enter Text</i>" ? "" : $.cleanTextHtml(content);
             updateQuestionTitle(quesid, text);
         },
     });
-    $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit[contenteditable=true]").contentEditable({
-        "placeholder": "<i>Enter Question</i>",
-        "onBlur": function (element) {
+    $("#checklist[content-tab=true] div.nt-qitem[question-type!=Text] .nt-qtext.nt-qedit[contenteditable=true]").wysiwyg({
+        placeholder: "<i>Enter Question</i>",
+        onBlur: function (element,text) {
             var item = $(element).closest(".nt-qitem");
             var quesid = item.attr("question-id");
-            var content = $(element).html() || element.content;
-            var text = content == "<i>Enter Question</i>" ? "" : $.cleanTextHtml(content);
             updateQuestionTitle(quesid, text);
         },
     });

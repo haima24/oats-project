@@ -1,7 +1,7 @@
 ﻿@model OATS_Capstone.Models.Test
 @{
-    var templateQuestions = OATS_Capstone.Models.SingletonDb.Instance().Questions.Where(i => i.TagInQuestions.Select(t => t.Tag).Any(k => k.TagName == "Template")).Take(2);
     var authen = OATS_Capstone.Models.AuthenticationSessionModel.Instance();
+    var templateQuestions = authen.User.Tests.SelectMany(i => i.Questions).Where(i => i.TagInQuestions.Select(t => t.Tag).Concat(i.Test.TagInTests.Select(t=>t.Tag)).Any(k => k.TagName == "Template")).Take(2);
     var isOwner = Model.CreatedUserID == authen.UserId;
     ViewBag.isOwner = isOwner;
 }
