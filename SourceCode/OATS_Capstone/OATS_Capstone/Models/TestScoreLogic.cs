@@ -66,13 +66,13 @@ namespace OATS_Capstone.Models
                 var totalScore = test.Questions.TotalRealScore();
                 var groupScoreList = InTests.Select(i =>
                 {
-                    return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
+                    return i.UserInTestDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0);
                 });
                 var stdevScore = groupScoreList.StandardDeviation();
                 var averageScore = groupScoreList.Average();
                 var userScoreList = InTests.Where(k => checkIds.Contains(k.UserID)).Select(i =>
                 {
-                    return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
+                    return i.UserInTestDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0);
                 });
                 var selectionAverageScore = userScoreList.Average();
 
@@ -87,7 +87,7 @@ namespace OATS_Capstone.Models
                     var userScore = new ScoreOnUser();
                     userScore.Name = !string.IsNullOrEmpty(i.User.Name) ? i.User.Name : i.User.UserMail;
                     decimal? percent = 0;
-                    if (totalScore != 0) { percent = (i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0) / totalScore).RoundTwo() * 100; }
+                    if (totalScore != 0) { percent = (i.UserInTestDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0) / totalScore).RoundTwo() * 100; }
                     userScore.Percent = percent;
                     userScore.UserId = i.UserID;
                     return userScore;
@@ -171,11 +171,11 @@ namespace OATS_Capstone.Models
                 var groupDetails = questions.SelectMany(i => i.UserInTestDetails);
                 var groupCalculate = from g in groupDetails
                                      group g by g.UserInTestID into GroupDetails
-                                     select new { Score = GroupDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0) };
+                                     select new { Score = GroupDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0) };
                 var userDetails = groupDetails.Where(i => checkIds.Contains(i.UserInTest.UserID));
                 var userCalculate = from g in userDetails
                                     group g by g.UserInTestID into UserDetails
-                                    select new { Score = UserDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0) };
+                                    select new { Score = UserDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0) };
                 var selectionAverageScore = userCalculate.Average(i => i.Score);
                 var groupAverageScore = groupCalculate.Average(i => i.Score);
                 var stdevScore = groupCalculate.Select(i => i.Score).StandardDeviation();
@@ -359,7 +359,7 @@ namespace OATS_Capstone.Models
                 var tagIds = i.Question.TagInQuestions.Select(k => k.Tag.TagID);
                 return tagIds.Contains(tag.TagID);
             });
-            var score = details.Sum(i => i.ChoiceScore ?? 0 + i.NonChoiceScore ?? 0);
+            var score = details.Sum(i => i.RealScore() ?? 0 + i.RealNonChoiceScore() ?? 0);
             decimal percent = 0;
             if (totalScore.HasValue)
             {

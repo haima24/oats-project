@@ -32,6 +32,8 @@ namespace OATS_Capstone.Models
             {
                 decimal? score = 0;
                 if (ResponseAnswers != null) { score = ResponseAnswers.Sum(i => i.UserAnsScore); }
+                //round
+                score = score.RoundTwo();
                 return score;
             }
         }
@@ -52,9 +54,10 @@ namespace OATS_Capstone.Models
             Type = question.QuestionType.Type;
             LabelOrder = question.LabelOrder;
             QuestionTitle = question.QuestionTitle;
-            NonChoiceScore = question.NoneChoiceScore;
-            var score = question.Answers.Sum(i => i.Score);
-            ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
+            NonChoiceScore = question.RealNoneChoiceScore();
+            var score = question.Answers.Sum(i => i.RealScore());
+            var calculateScore = (!score.HasValue || score < 0) ? 0 : score;
+            ChoiceScore = calculateScore.RoundTwo();
             CheckedUserIds = checkIds;
             InTests = question.Test.UserInTests.FilterInTestsOnAttempSetting();
             InTestDetails = InTests.SelectMany(i => i.UserInTestDetails).Where(i => i.QuestionID == question.QuestionID);
@@ -308,7 +311,7 @@ namespace OATS_Capstone.Models
             : base(question, checkIds)
         {
             var count = InTestDetails.Count();
-            var point = InTestDetails.Sum(i => i.NonChoiceScore);
+            var point = InTestDetails.Sum(i => i.RealNonChoiceScore());
             decimal? averagePoint = decimal.Zero;
             if (count != 0) { averagePoint = point / count; }
             if (checkIds.Count == 0)
@@ -319,11 +322,11 @@ namespace OATS_Capstone.Models
                     var detail = InTestDetails.FirstOrDefault(k => k.UserInTest.UserID == id);
                     if (detail != null)
                     {
-                        averagePoint = detail.NonChoiceScore ?? 0;
+                        averagePoint = detail.RealNonChoiceScore() ?? 0;
                     }
                 }
             }
-            var maxPoint = question.NoneChoiceScore;
+            var maxPoint = question.RealNoneChoiceScore().RoundTwo();
             _correctPraction = String.Format("{0:0.00} pt (of {1} pt)", averagePoint, maxPoint);
             if (checkIds.Count == 1)
             {
@@ -332,7 +335,8 @@ namespace OATS_Capstone.Models
                 if (detail != null)
                 {
                     _nonChoiceText = detail.AnswerContent;
-                    _userNonScore = detail.NonChoiceScore;
+                    _userNonScore = detail.RealNonChoiceScore();
+                    _userNonScore = _userNonScore.RoundTwo();
                 }
             }
         }
@@ -387,7 +391,7 @@ namespace OATS_Capstone.Models
             : base(question, checkIds)
         {
             var count = InTestDetails.Count();
-            var point = InTestDetails.Sum(i => i.NonChoiceScore);
+            var point = InTestDetails.Sum(i => i.RealNonChoiceScore());
             decimal? averagePoint = decimal.Zero;
             if (count != 0) { averagePoint = point / count; }
             if (checkIds.Count == 0)
@@ -398,11 +402,11 @@ namespace OATS_Capstone.Models
                     var detail = InTestDetails.FirstOrDefault(k => k.UserInTest.UserID == id);
                     if (detail != null)
                     {
-                        averagePoint = detail.NonChoiceScore ?? 0;
+                        averagePoint = detail.RealNonChoiceScore() ?? 0;
                     }
                 }
             }
-            var maxPoint = question.NoneChoiceScore;
+            var maxPoint = question.RealNoneChoiceScore().RoundTwo();
             _correctPraction = String.Format("{0:0.00} pt (of {1} pt)", averagePoint, maxPoint);
 
             if (checkIds.Count == 1)
@@ -412,7 +416,8 @@ namespace OATS_Capstone.Models
                 if (detail != null)
                 {
                     _nonChoiceText = detail.AnswerContent;
-                    _userNonScore = detail.NonChoiceScore;
+                    _userNonScore = detail.RealNonChoiceScore();
+                    _userNonScore = _userNonScore.RoundTwo();
                 }
             }
         }
@@ -530,7 +535,7 @@ namespace OATS_Capstone.Models
         public string AnswerContent { get; set; }
         public string AnswerMatchingContent { get; set; }
         public bool IsRight { get; set; }
-        public int? Score { get; set; }
+        public decimal? Score { get; set; }
         public string AnswerPercent { get; set; }
         private int countOfUserChooseThisAns = 0;
         private decimal? userAnsScore = 0;
@@ -583,7 +588,8 @@ namespace OATS_Capstone.Models
             AnswerPercent = ExtensionModel.SafeDivide(countOfUserChooseThisAns,question.TotalUsersInTest).ToPercent();
             AnswerContent = answer.AnswerContent;
             IsRight = answer.IsRight;
-            Score = answer.Score;
+            var ansScore=answer.RealScore();
+            Score = ansScore.RoundTwo();
             if (question.IsOneIdChecked)
             {
                 if (question.Ids != null)
@@ -592,7 +598,10 @@ namespace OATS_Capstone.Models
                     if (ids != null)
                     {
                         userChooseThisAnswer = ids.Contains(answer.AnswerID);
-                        if (userChooseThisAnswer) { userAnsScore = (!answer.Score.HasValue||answer.Score<0)?0:answer.Score; }
+                        if (userChooseThisAnswer) {
+                            var score = answer.RealScore();
+                            userAnsScore = (!score.HasValue || score < 0) ? 0 : score; 
+                        }
                     }
                 }
                 else if (question.ListCoupleIds != null)
@@ -614,7 +623,10 @@ namespace OATS_Capstone.Models
                         {
                             return f.ElementAtOrDefault(0) == s.ElementAtOrDefault(0) && f.ElementAtOrDefault(1) == s.ElementAtOrDefault(1);
                         });
-                        if (userChooseThisAnswer) { userAnsScore = (!answer.Score.HasValue || answer.Score < 0) ? 0 : answer.Score; }
+                        if (userChooseThisAnswer) {
+                            var score = answer.RealScore();
+                            userAnsScore = (!score.HasValue || score < 0) ? 0 : score;
+                        }
                     }
                 }
             }
@@ -664,11 +676,7 @@ namespace OATS_Capstone.Models
                 }
 
             }
-            TotalScoreOfTest = test.Questions.Sum(i =>
-            {
-                var score = i.Answers.Sum(k => k.Score ?? 0);
-                return i.NoneChoiceScore ?? 0 + (score < 0 ? 0 : score);
-            });
+            TotalScoreOfTest = test.Questions.TotalRealScore();
             var details = inTestsValid.ToList();
             ResponseUserList = new List<ResponseUserItem>();
             details.ForEach(i =>
