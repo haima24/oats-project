@@ -39,11 +39,7 @@ namespace OATS_Capstone.Models
                              group tag by tag into GroupTags
                              select GroupTags;
             var gTags = lGroupTags.Select(i => i.Key).ToList();
-            TotalScoreOfTest = test.Questions.Sum(i =>
-            {
-                var score=i.Answers.Sum(k => k.RealScore()??0);
-                return i.RealNoneChoiceScore() ?? 0 + (score<0?0:score);
-            });
+            TotalScoreOfTest = test.Questions.TotalRealScore();
             InTests = test.UserInTests.FilterInTestsOnAttempSetting();
             ScoreUserList = new List<ScoreUserItem>();
             InTests.ForEach(i =>
