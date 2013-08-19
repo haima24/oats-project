@@ -118,39 +118,7 @@ namespace OATS_Capstone.Models
         {
             return Math.Round(value, 2);
         }
-        public static decimal? TotalRealScore(this IEnumerable<Question> questions) {
-            decimal? score = 0;
-            try
-            {
-                score = questions.Sum(i =>
-                {
-                    var temp = i.RealNoneChoiceScore() ?? 0 + i.Answers.Sum(k => k.RealScore() ?? 0);
-                    return temp;
-                });
-            }
-            catch (Exception)
-            {
-                score = 0;
-            }
-            return score;
-        }
-        public static decimal? TotalScore(this IEnumerable<Question> questions)
-        {
-            decimal? score = 0;
-            try
-            {
-                score = questions.Sum(i =>
-                {
-                    var temp = i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => k.Score ?? 0);
-                    return temp;
-                });
-            }
-            catch (Exception)
-            {
-                score = 0;
-            }
-            return score;
-        }
+
         public static double StandardDeviation(this IEnumerable<double> values)
         {
             double avg = values.Average();
@@ -492,24 +460,28 @@ namespace OATS_Capstone.Models
             }
             return result;
         }
-        public static decimal? RealScore(this Answer answer) {
+        public static decimal? RealScore(this Answer answer)
+        {
             decimal? score = answer.Score;
             try
             {
                 var question = answer.Question;
                 var test = question.Test;
                 var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
-                if (settingDetail != null) {
-                    if (settingDetail.IsActive&&settingDetail.NumberValue.HasValue) {
+                if (settingDetail != null)
+                {
+                    if (settingDetail.IsActive && settingDetail.NumberValue.HasValue)
+                    {
                         if (settingDetail.NumberValue.Value > 0)
                         {
                             var totalScore = test.Questions.TotalScore();
                             if (totalScore != 0)
                             {
                                 var masterScore = settingDetail.NumberValue.Value;
-                                score = answer.Score * masterScore / totalScore;
+                                score = answer.Score* masterScore / totalScore;
                             }
-                            else {
+                            else
+                            {
                                 score = 0;
                             }
                         }
@@ -518,11 +490,12 @@ namespace OATS_Capstone.Models
             }
             catch (Exception)
             {
-                score = answer.Score;   
+                score = answer.Score;
             }
             return score;
         }
-        public static decimal? RealNoneChoiceScore(this Question question) {
+        public static decimal? RealNoneChoiceScore(this Question question)
+        {
             var score = question.NoneChoiceScore;
             try
             {
@@ -551,6 +524,119 @@ namespace OATS_Capstone.Models
             catch (Exception)
             {
                 score = question.NoneChoiceScore;
+            }
+            return score;
+        }
+        public static decimal? TotalRealScore(this IEnumerable<Question> questions)
+        {
+            decimal? score = 0;
+            try
+            {
+                score = questions.Sum(i =>
+                {
+                    var temp = i.RealNoneChoiceScore() ?? 0 + i.Answers.Sum(k => {
+                        decimal tScore = 0;
+                        var real = k.RealScore();
+                        if (real.HasValue) {
+                            tScore = real.Value < 0 ? 0 : real.Value;
+                        }
+                        return score;
+                    });
+                    return temp;
+                });
+            }
+            catch (Exception)
+            {
+                score = 0;
+            }
+            return score;
+        }
+        public static decimal? TotalScore(this IEnumerable<Question> questions)
+        {
+            decimal? score = 0;
+            try
+            {
+                score = questions.Sum(i =>
+                {
+                    var temp = i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => (!k.Score.HasValue||k.Score<0) ? 0:k.Score);
+                    return temp;
+                });
+            }
+            catch (Exception)
+            {
+                score = 0;
+            }
+            return score;
+        }
+        public static decimal? RealScore(this UserInTestDetail detail)
+        {
+            decimal? score = detail.ChoiceScore;
+            try
+            {
+                var test = detail.UserInTest.Test;
+                if (test != null)
+                {
+                    var setting = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                    if (setting != null)
+                    {
+                        if (setting.IsActive && setting.NumberValue.HasValue)
+                        {
+                            if (setting.NumberValue.Value > 0)
+                            {
+                                var totalScore = test.Questions.TotalScore();
+                                if (totalScore != 0)
+                                {
+                                    var masterScore = setting.NumberValue.Value;
+                                    score = ((!detail.ChoiceScore.HasValue||detail.ChoiceScore<0)?0:detail.ChoiceScore) * masterScore / totalScore;
+                                }
+                                else
+                                {
+                                    score = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                score = detail.ChoiceScore;
+            }
+            return score;
+        }
+        public static decimal? RealNonChoiceScore(this UserInTestDetail detail)
+        {
+            decimal? score = detail.NonChoiceScore;
+            try
+            {
+                var test = detail.UserInTest.Test;
+                if (test != null)
+                {
+                    var setting = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                    if (setting != null)
+                    {
+                        if (setting.IsActive && setting.NumberValue.HasValue)
+                        {
+                            if (setting.NumberValue.Value > 0)
+                            {
+                                var totalScore = test.Questions.TotalScore();
+                                if (totalScore != 0)
+                                {
+                                    var masterScore = setting.NumberValue.Value;
+                                    score = detail.NonChoiceScore * masterScore / totalScore;
+                                }
+                                else
+                                {
+                                    score = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                score = detail.NonChoiceScore;
             }
             return score;
         }
