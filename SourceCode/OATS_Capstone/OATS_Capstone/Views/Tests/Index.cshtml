@@ -73,12 +73,14 @@
                         case "overview":
                         <li><a class="tab-event" href="@Url.Action("Index_TestListTab")" data-role="Do">To Do Tests</a></li>
                         <li><a class="tab-event" href="@Url.Action("Index_TestListTab")" data-role="Review">Review Tests</a></li>
+                        <li><a class="tab-event" href="@Url.Action("Index_TestListTab")" data-role="Own">Own Tests</a></li>
                         <li><a class="tab-event" href="@Url.Action("Index_CalendarTab")">Calendar</a></li>
                         <li class="active"><a class="tab-event" href="@Url.Action("Index_OverViewTab")">Tests Statistic Overview</a></li>
                             break;
                         default:
                         <li class="active"><a class="tab-event" href="@Url.Action("Index_TestListTab")" data-role="Do">To Do Tests</a></li>
                         <li><a class="tab-event" href="@Url.Action("Index_TestListTab")" data-role="Review">Review Tests</a></li>
+                        <li><a class="tab-event" href="@Url.Action("Index_TestListTab")" data-role="Own">Own Tests</a></li>
                         <li><a class="tab-event" href="@Url.Action("Index_CalendarTab")">Calendar</a></li>
                         <li><a class="tab-event" href="@Url.Action("Index_OverViewTab")">Tests Statistic Overview</a></li>
                             break;
@@ -87,7 +89,7 @@
             </div>
         </div>
         <div id="eventTab">
-            @Html.Partial("P_TestListTab",Model)
+            @Html.Partial("P_TestListTab", Model)
         </div>
     </div>
 </div>
