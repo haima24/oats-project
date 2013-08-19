@@ -534,14 +534,8 @@ namespace OATS_Capstone.Models
             {
                 score = questions.Sum(i =>
                 {
-                    var temp = i.RealNoneChoiceScore() ?? 0 + i.Answers.Sum(k => {
-                        decimal tScore = 0;
-                        var real = k.RealScore();
-                        if (real.HasValue) {
-                            tScore = real.Value < 0 ? 0 : real.Value;
-                        }
-                        return score;
-                    });
+                    var ansScore=i.Answers.Sum(k => k.RealScore()??0);
+                    var temp = i.RealNoneChoiceScore() ?? 0 + (ansScore<0?0:ansScore);
                     return temp;
                 });
             }
@@ -558,7 +552,8 @@ namespace OATS_Capstone.Models
             {
                 score = questions.Sum(i =>
                 {
-                    var temp = i.NoneChoiceScore ?? 0 + i.Answers.Sum(k => (!k.Score.HasValue||k.Score<0) ? 0:k.Score);
+                    var ansScore = i.Answers.Sum(k => k.Score??0);
+                    var temp = i.NoneChoiceScore ?? 0 + (ansScore<0?0:ansScore);
                     return temp;
                 });
             }
