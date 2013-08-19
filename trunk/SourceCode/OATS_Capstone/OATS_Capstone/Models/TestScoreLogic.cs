@@ -41,8 +41,8 @@ namespace OATS_Capstone.Models
             var gTags = lGroupTags.Select(i => i.Key).ToList();
             TotalScoreOfTest = test.Questions.Sum(i =>
             {
-                var score=i.Answers.Sum(k => k.Score ?? 0);
-                return i.NoneChoiceScore ?? 0 + (score<0?0:score);
+                var score=i.Answers.Sum(k => k.RealScore()??0);
+                return i.RealNoneChoiceScore() ?? 0 + (score<0?0:score);
             });
             InTests = test.UserInTests.FilterInTestsOnAttempSetting();
             ScoreUserList = new List<ScoreUserItem>();
@@ -63,7 +63,7 @@ namespace OATS_Capstone.Models
                 AvailableTags = groupTags.ToList();
                 Overall = new ScoreStatistics();
                 Overall.Name = "Overall";
-                var totalScore = test.Questions.TotalScore();
+                var totalScore = test.Questions.TotalRealScore();
                 var groupScoreList = InTests.Select(i =>
                 {
                     return i.UserInTestDetails.Sum(k => k.NonChoiceScore ?? 0 + k.ChoiceScore ?? 0);
@@ -167,7 +167,7 @@ namespace OATS_Capstone.Models
             {
                 var questions = tag.TagInQuestions.Where(i => i.Question.TestID == testid).Select(k => k.Question);
                 statistic = new ScoreStatistics();
-                var totalScore = questions.TotalScore();
+                var totalScore = questions.TotalRealScore();
                 var groupDetails = questions.SelectMany(i => i.UserInTestDetails);
                 var groupCalculate = from g in groupDetails
                                      group g by g.UserInTestID into GroupDetails
@@ -316,7 +316,7 @@ namespace OATS_Capstone.Models
             var inTest = test.UserInTests.FilterInTestsOnAttempSetting().FirstOrDefault(i => i.UserID == user.UserID);
             if (inTest != null)
             {
-                var totalScoreOfTest = inTest.Test.Questions.TotalScore();
+                var totalScoreOfTest = inTest.Test.Questions.TotalRealScore();
                 UserID = inTest.User.UserID;
                 User = inTest.User;
                 UserLabel = !string.IsNullOrEmpty(inTest.User.Name) ? inTest.User.Name : inTest.User.UserMail;
@@ -489,7 +489,7 @@ namespace OATS_Capstone.Models
                     }
                     scoreList.Add(item);
                 }
-                var totalOfAllTests = CheckedTestsSorted.Where(i => i.UserInTests.Select(t => t.UserID).Contains(u.UserID)).SelectMany(i => i.Questions).TotalScore();
+                var totalOfAllTests = CheckedTestsSorted.Where(i => i.UserInTests.Select(t => t.UserID).Contains(u.UserID)).SelectMany(i => i.Questions).TotalRealScore();
                 var gainScore = CheckedTestsSorted.SelectMany(i => i.UserInTests).Where(i => i.UserID == u.UserID).Sum(i => i.Score);
                 var percentString = string.Empty;
                 if (totalOfAllTests == 0)

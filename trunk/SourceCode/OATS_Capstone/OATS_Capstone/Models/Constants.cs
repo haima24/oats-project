@@ -18,7 +18,7 @@ namespace OATS_Capstone.Models
         public const string DefaultTestNotExist = "This test is not exist.";
         public const string DefaultNoPermission = "Test content is not available or you have no permission to access content of this test.";
         public const string DefaultCannotExportFile = "Sorry, we could not export your requested file due to server problem. Try gain later.";
-        public const string DefaultTestContainedQuestion = "This test already have the same question.";
+        public const string DefaultTestContainedQuestion = "Your current edit question exist in this test. Make content different.";
         public const string DefaultExcelPercentFormat = "#0%";
         public const string DefaultMaxOfAttemp = "Max Of Attemp";
         public const int DefaultSettingConfigId = 1;

@@ -13,39 +13,42 @@ namespace OATS_Capstone.Models
             var contained = false;
             try
             {
-                contained = test.Questions.ToList().Contains(question, (q1, q2) =>
+                contained = test.Questions.Contains(question, (q1, q2) =>
                  {
                      var result = false;
-                     var title = q1.QuestionTitle == q2.QuestionTitle;
-                     var type = q1.QuestionTypeID == q2.QuestionTypeID;
-                     var nonScore = q1.NoneChoiceScore == q2.NoneChoiceScore;
-                     var detailCondition = false;
-                     if (type)
+                     if (q1.QuestionID != q2.QuestionID)
                      {
-                         var qType = q1.QuestionType.Type;
-                         if (qType == "ShortAnswer" || qType == "Essay")
+                         var title = q1.QuestionTitle == q2.QuestionTitle;
+                         var type = q1.QuestionTypeID == q2.QuestionTypeID;
+                         var nonScore = q1.NoneChoiceScore == q2.NoneChoiceScore;
+                         var detailCondition = false;
+                         if (type)
                          {
-                             detailCondition = q1.TextDescription == q2.TextDescription;
-                         }
-                         else
-                         {
-                             detailCondition = true;
-                         }
-                     }
-                     var answers = false;
-                     if (q1.Answers.Count == q2.Answers.Count)
-                     {
-                         answers = q1.Answers.All(i =>
-                         {
-                             return q2.Answers.Contains(i, (a1, a2) =>
+                             var qType = q1.QuestionType.Type;
+                             if (qType == "ShortAnswer" || qType == "Essay")
                              {
-                                 return a1.AnswerContent == a2.AnswerContent
-                                     && a1.IsRight == a2.IsRight
-                                     && a1.Score == a2.Score;
+                                 detailCondition = q1.TextDescription == q2.TextDescription;
+                             }
+                             else
+                             {
+                                 detailCondition = true;
+                             }
+                         }
+                         var answers = false;
+                         if (q1.Answers.Count == q2.Answers.Count)
+                         {
+                             answers = q1.Answers.All(i =>
+                             {
+                                 return q2.Answers.Contains(i, (a1, a2) =>
+                                 {
+                                     return a1.AnswerContent == a2.AnswerContent
+                                         && a1.IsRight == a2.IsRight
+                                         && a1.Score == a2.Score;
+                                 });
                              });
-                         });
+                         }
+                         result = title && type && nonScore && detailCondition && answers;
                      }
-                     result = title && type && nonScore && detailCondition && answers;
                      return result;
                  });
             }
@@ -114,6 +117,22 @@ namespace OATS_Capstone.Models
         public static decimal RoundTwo(this decimal value)
         {
             return Math.Round(value, 2);
+        }
+        public static decimal? TotalRealScore(this IEnumerable<Question> questions) {
+            decimal? score = 0;
+            try
+            {
+                score = questions.Sum(i =>
+                {
+                    var temp = i.RealNoneChoiceScore() ?? 0 + i.Answers.Sum(k => k.RealScore() ?? 0);
+                    return temp;
+                });
+            }
+            catch (Exception)
+            {
+                score = 0;
+            }
+            return score;
         }
         public static decimal? TotalScore(this IEnumerable<Question> questions)
         {
@@ -472,6 +491,68 @@ namespace OATS_Capstone.Models
                 result = 0;
             }
             return result;
+        }
+        public static decimal? RealScore(this Answer answer) {
+            decimal? score = answer.Score;
+            try
+            {
+                var question = answer.Question;
+                var test = question.Test;
+                var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                if (settingDetail != null) {
+                    if (settingDetail.IsActive&&settingDetail.NumberValue.HasValue) {
+                        if (settingDetail.NumberValue.Value > 0)
+                        {
+                            var totalScore = test.Questions.TotalScore();
+                            if (totalScore != 0)
+                            {
+                                var masterScore = settingDetail.NumberValue.Value;
+                                score = answer.Score * masterScore / totalScore;
+                            }
+                            else {
+                                score = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                score = answer.Score;   
+            }
+            return score;
+        }
+        public static decimal? RealNoneChoiceScore(this Question question) {
+            var score = question.NoneChoiceScore;
+            try
+            {
+                var test = question.Test;
+                var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
+                if (settingDetail != null)
+                {
+                    if (settingDetail.IsActive && settingDetail.NumberValue.HasValue)
+                    {
+                        if (settingDetail.NumberValue.Value > 0)
+                        {
+                            var totalScore = test.Questions.TotalScore();
+                            if (totalScore != 0)
+                            {
+                                var masterScore = settingDetail.NumberValue.Value;
+                                score = question.NoneChoiceScore * masterScore / totalScore;
+                            }
+                            else
+                            {
+                                score = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                score = question.NoneChoiceScore;
+            }
+            return score;
         }
     }
 }

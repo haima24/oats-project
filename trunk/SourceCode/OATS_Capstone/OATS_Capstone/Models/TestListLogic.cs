@@ -57,7 +57,7 @@ namespace OATS_Capstone.Models
                 }
                 return condition;
             });
-            var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId).Concat(teacherInvited);
+            var ownTests = tests.Where(i => i.CreatedUserID == authen.UserId);
             switch (role)
             {
                 case "Do":
@@ -66,6 +66,11 @@ namespace OATS_Capstone.Models
                     upComingTests = studentInvited.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = false, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
                     break;
                 case "Review":
+                    recentTests = teacherInvited.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    runningTests = teacherInvited.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    upComingTests = teacherInvited.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
+                    break;
+                case "Own":
                     recentTests = ownTests.FilterByRecents().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
                     runningTests = ownTests.FilterByRuning().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();
                     upComingTests = ownTests.FilterByUpcoming().Select(k => new TestListItem(k) { IsCurrentUserOwnTest = true, IsRunning = k.IsRunning, IsComplete = k.IsComplete }).ToList();

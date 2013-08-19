@@ -203,25 +203,7 @@ function handleScoreStatisticSubEvents() {
     handleColumn(".nt-scores-table-avgdiffcol", ".nt-avgdiff", ".nt-avgdiff-nat");
     handleColumn(".nt-scores-table-grpstdevcol", ".nt-grpstdev", ".nt-grpstdev-nat");
 }
-function checkMaxScoreAndTotalScore() {
-    $.post("/Tests/CheckMaxScoreAndTotalScore", { testid: testid }, function (res) {
-        if (res.success) {
-            var obj = $("#message-max-score");
-            if (typeof (res.IsRunning) != "undefined") {
-                if (res.IsRunning) {
-                    obj.hide();
-                } else {
-                    $(".total", obj).html(res.TotalScore);
-                    $(".max", obj).html(res.MaxScoreSetting);
-                    obj.show();
-                }
-            }
-        }
-        else {
-            showMessage("error", res.message);
-        }
-    });
-}
+
 function updateTestIntroduction() {
     var text = $("#intro-detail").val();
     statusSaving();
@@ -246,7 +228,6 @@ function postSetting(li) {
             var html = $(res.generatedHtml);
             if (li) {
                 li.html(html);
-                checkMaxScoreAndTotalScore();
                 statusSaved();
             }
         } else {
@@ -322,6 +303,7 @@ function handleImportText(text) {
                                     case "=":
                                         trueCount++;
                                         ans.IsRight = true;
+                                        ans.Score = 1;
                                         ans.AnswerContent = o.substr(1, length - 1);
                                         break;
                                     default:
@@ -965,7 +947,9 @@ function updateStartEndDate(testid, start, end) {
             if (res.success) {
                 statusSaved();
                 if (res.message) {
-                    showMessage("info", res.message);
+                    showCountDownMessage("info", "Reloading", res.message, function () {
+                        window.location.href = "/Tests/NewTest/"+testid;
+                    });
                 }
             } else {
                 showMessage("error", res.message);
@@ -991,7 +975,6 @@ function ajaxUpdateAnwer(answers) {
             } else {
                 checkComplete();
                 statusSaved();
-                checkMaxScoreAndTotalScore();
             }
         }
     });
@@ -1256,7 +1239,6 @@ $(function () {
     var useridString = $("#user-id").val();
     userid = parseInt(useridString);
 
-    checkMaxScoreAndTotalScore();
     //separator
     initPopover();
     initSearchTests();
@@ -1440,7 +1422,6 @@ $(function () {
             $.post("/Tests/UpdateNoneChoiceScore", { questionid: questionid, score: score }, function (res) {
                 if (res.success) {
                     statusSaved();
-                    checkMaxScoreAndTotalScore();
                 }
                 else {
                     showMessage("error", res.message);

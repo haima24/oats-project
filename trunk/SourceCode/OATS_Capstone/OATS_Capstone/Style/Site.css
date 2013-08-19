@@ -3983,14 +3983,14 @@ article, time {
         font-size: 14px;
     }
 
-#message-max-score {
+/*#message-max-score {
     min-width: 200px;
     max-width: 300px;
     position: fixed;
     bottom: 0px;
     left: 20px;
     margin-bottom: 0;
-}
+}*/
 
 #message-completion {
     min-width: 200px;

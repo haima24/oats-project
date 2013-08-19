@@ -1021,23 +1021,6 @@ namespace OATS_Capstone.Controllers
             return action;
         }
 
-        public JsonResult CheckMaxScoreAndTotalScore(int testid)
-        {
-            var common = new CommonService();
-            TotalAndMaxScore carier = null;
-            common.CheckMaxScoreAndTotalScore(testid, ref carier);
-            Object json = null;
-            if (carier == null)
-            {
-                json = new { common.success, common.message };
-            }
-            else
-            {
-                json = new { common.success, common.message, carier.MaxScoreSetting, carier.TotalScore, carier.IsRunning };
-            }
-            return Json(json);
-        }
-
         public JsonResult InviteUserOutSide(int testid, string email, string name)
         {
             var common = new CommonService();

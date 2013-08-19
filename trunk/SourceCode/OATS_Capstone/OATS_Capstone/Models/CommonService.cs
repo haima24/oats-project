@@ -424,7 +424,7 @@ namespace OATS_Capstone.Models
                     questions = questions.Where(i =>
                     {
                         var tags = i.TagInQuestions.Select(k => k.TagID);
-                        tags=tags.Concat(i.Test.TagInTests.Select(k => k.TagID));
+                        tags = tags.Concat(i.Test.TagInTests.Select(k => k.TagID));
                         return tags.Any(t => tagids.Contains(t));
                     }).ToList();
                 }
@@ -571,7 +571,7 @@ namespace OATS_Capstone.Models
                                 testTemplate.IsCurrentUserOwnTest = test.CreatedUserID == authenUserId;
                                 testTemplate.Introduction = test.Introduction;
                                 testTemplate.IsRunning = test.IsRunning;
-                                testTemplate.IsRunning = test.IsComplete;
+                                testTemplate.IsComplete = test.IsComplete;
                                 resultlist.Add(testTemplate);
                             }
                         }
@@ -673,42 +673,44 @@ namespace OATS_Capstone.Models
             {
                 if (!string.IsNullOrEmpty(testTitle))
                 {
-                    
-                        var db = SingletonDb.Instance();
-                        testTitle = testTitle.Trim();
-                        var tTestTitle = db.Tests.FirstOrDefault(i => i.TestTitle.ToLower() == testTitle.ToLower());
-                        if (tTestTitle == null)
+
+                    var db = SingletonDb.Instance();
+                    testTitle = testTitle.Trim();
+                    var tTestTitle = db.Tests.FirstOrDefault(i => i.TestTitle.ToLower() == testTitle.ToLower());
+                    if (tTestTitle == null)
+                    {
+                        var authen = AuthenticationSessionModel.Instance();
+                        if (authen.UserId != 0)
                         {
-                            var authen = AuthenticationSessionModel.Instance();
-                            if (authen.UserId != 0)
+                            var spanDays = 7;
+                            var test = new Test();
+                            test.TestTitle = testTitle;
+                            test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
+                            var now = DateTime.Now;
+                            test.CreatedDateTime = now;
+                            test.StartDateTime = now;
+                            test.EndDateTime = now.AddDays(spanDays);
+                            test.SettingConfigID = 1;
+                            test.IsActive = true;
+                            test.IsRunning = true;
+                            test.IsComplete = false;
+                            db.Tests.Add(test);
+                            if (db.SaveChanges() > 0)
                             {
-                                var spanDays = 7;
-                                var test = new Test();
-                                test.TestTitle = testTitle;
-                                test.CreatedUserID = authen.UserId;//must be fix, this is for test purpose
-                                var now = DateTime.Now;
-                                test.CreatedDateTime = now;
-                                test.StartDateTime = now;
-                                test.EndDateTime = now.AddDays(spanDays);
-                                test.SettingConfigID = 1;
-                                test.IsActive = true;
-                                test.IsRunning = true;
-                                test.IsComplete = false;
-                                db.Tests.Add(test);
-                                if (db.SaveChanges() > 0)
-                                {
-                                    success = true;
-                                    message = Constants.DefaultSuccessMessage;
-                                    generatedId = test.TestID;
-                                }
+                                success = true;
+                                message = Constants.DefaultSuccessMessage;
+                                generatedId = test.TestID;
                             }
                         }
-                        else {
-                            success = false;
-                            message = "Duplicate Test Name";
-                        }
+                    }
+                    else
+                    {
+                        success = false;
+                        message = "Duplicate Test Name";
+                    }
                 }
-                else {
+                else
+                {
                     success = false;
                     message = "Please specify test title.";
                 }
@@ -719,7 +721,7 @@ namespace OATS_Capstone.Models
                 success = false;
                 message = Constants.DefaultExceptionMessage;
             }
-            
+
             return generatedId;
         }
 
@@ -1036,8 +1038,8 @@ namespace OATS_Capstone.Models
                     //var responseTest = new ResponseTest(test, checkIds);
                     var responseTest = new ResponseTest(test);
                     var authen = AuthenticationSessionModel.Instance();
-                    var canEdit = test.CreatedUserID == authen.UserId&&test.IsNotOver();
-                    generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(responseTest,canEdit);
+                    var canEdit = test.CreatedUserID == authen.UserId && test.IsNotOver();
+                    generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(responseTest, canEdit);
                 }
             }
             catch (Exception)
@@ -1220,7 +1222,8 @@ namespace OATS_Capstone.Models
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         success = false;
                         message = Constants.DefaultTestContainedQuestion;
                     }
@@ -1282,7 +1285,8 @@ namespace OATS_Capstone.Models
                                 test.Questions.Add(qItem);
                                 listSuccess.Add(qItem);
                             }
-                            else {
+                            else
+                            {
                                 ++duplicated;
                             }
                         }
@@ -1292,7 +1296,8 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         message = "Import questions complete.";
-                        if (duplicated > 0) {
+                        if (duplicated > 0)
+                        {
                             message += " Duplicated " + duplicated;
                         }
                         listSuccess.ForEach(delegate(Question item)
@@ -1526,47 +1531,31 @@ namespace OATS_Capstone.Models
                 });
 
                 var dbAns = dbAnswers.FirstOrDefault();
-                Question question=null;
-                Test test=null;
+                Question question = null;
+                Test test = null;
                 if (dbAns != null)
                 {
-                    question=dbAns.Question;
+                    question = dbAns.Question;
                     test = question.Test;
-                    var totalScore = test.Questions.TotalScore();
-                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
-                    if (settingDetail != null)
-                    {
-                        if (settingDetail.IsActive)
-                        {
-                            if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
-                            {
-                                if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
-                                {
-                                    test.IsRunning = false;
-                                }
-                                else
-                                {
-                                    test.IsRunning = true;
-                                }
-                            }
-                        }
-                    }
                 }
-                var isContained = false;
-                if (question != null && test != null) {
-                    if (!test.ContainQuestion(question)) {
-                        isContained = true;
+                var isNotContained = false;
+                if (question != null && test != null)
+                {
+                    if (!test.ContainQuestion(question))
+                    {
+                        isNotContained = true;
                     }
                 }
                 RecalculateUserInTestScore(dbAnswers);
-                if (!isContained)
+                if (isNotContained)
                 {
                     if (db.SaveChanges() >= 0)
                     {
                         success = true;
                     }
                 }
-                else {
+                else
+                {
                     success = false;
                     message = Constants.DefaultTestContainedQuestion;
                 }
@@ -1597,7 +1586,8 @@ namespace OATS_Capstone.Models
                             success = true;
                         }
                     }
-                    else {
+                    else
+                    {
                         success = false;
                         message = Constants.DefaultTestContainedQuestion;
                     }
@@ -1630,7 +1620,8 @@ namespace OATS_Capstone.Models
                             success = true;
                         }
                     }
-                    else {
+                    else
+                    {
                         success = false;
                         message = Constants.DefaultTestContainedQuestion;
                     }
@@ -1776,7 +1767,8 @@ namespace OATS_Capstone.Models
                                 }
                             }
                         }
-                        else {
+                        else
+                        {
                             success = false;
                             message = Constants.DefaultTestContainedQuestion;
                         }
@@ -1808,7 +1800,7 @@ namespace OATS_Capstone.Models
                     {
                         success = true;
                         message = string.Empty;
-                        if (!currentOver&&test.IsNotOver())
+                        if (!currentOver && test.IsNotOver())
                         {
                             message = "Reload to unlock your test";
                         }
@@ -1833,7 +1825,7 @@ namespace OATS_Capstone.Models
                 {
                     var settingConfig = test.SettingConfig;
                     var authen = AuthenticationSessionModel.Instance();
-                    var isOwner = authen.UserId == test.CreatedUserID&&test.IsNotOver();
+                    var isOwner = authen.UserId == test.CreatedUserID && test.IsNotOver();
                     if (settingConfig.SettingConfigID == Constants.DefaultSettingConfigId)//1 is default
                     {
                         var settings = settingConfig.SettingConfigDetails.ToList();
@@ -1868,12 +1860,13 @@ namespace OATS_Capstone.Models
                         {
                             var isConflict = false;
                             decimal? usersMaxAttemp = null;
-                            if (test.UserInTests.Count > 0) {
+                            if (test.UserInTests.Count > 0)
+                            {
                                 usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);
-                                isConflict= (number ?? 0) < usersMaxAttemp;
+                                isConflict = (number ?? 0) < usersMaxAttemp;
                             }
-                            
-                            if (isConflict&&usersMaxAttemp.HasValue)
+
+                            if (isConflict && usersMaxAttemp.HasValue)
                             {
                                 message = "The number of times is conflict with max attemps that students have done (" + usersMaxAttemp + "), please choose a number greater than : " + usersMaxAttemp;
                                 success = false;
@@ -1891,26 +1884,12 @@ namespace OATS_Capstone.Models
                         }
                         else if (detail.SettingType.SettingTypeKey == "MTP")
                         {
-                            if (isactive)
+                            detail.NumberValue = number;
+                            var questions = test.Questions.ToList();
+                            questions.ForEach(i =>
                             {
-                                detail.NumberValue = number;
-                                var totalScore = test.Questions.TotalScore();
-                                if (totalScore.HasValue && number != 0)
-                                {
-                                    if ((totalScore ?? 0) != number)
-                                    {
-                                        test.IsRunning = false;
-                                    }
-                                    else
-                                    {
-                                        test.IsRunning = true;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                test.IsRunning = true;
-                            }
+                                RecalculateUserInTestScore(i.Answers);
+                            });
                         }
                         if (db.SaveChanges() >= 0)
                         {
@@ -2108,7 +2087,7 @@ namespace OATS_Capstone.Models
                                 var coupleIds = i.AnswerIDs.Split(';');
                                 var scoreMatching = coupleIds.Sum(k =>
                                 {
-                                    int? point = null;
+                                    decimal? point = null;
                                     var twoIds = k.Split(',');
                                     var firstId = twoIds.ElementAtOrDefault(0);
                                     var secondId = twoIds.ElementAtOrDefault(1);
@@ -2120,7 +2099,8 @@ namespace OATS_Capstone.Models
                                             var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
                                             if (answerEnd != null)
                                             {
-                                                point = answerBegin.Score < 0 ? 0 : answerBegin.Score;
+                                                var ansScore = answerBegin.RealScore();
+                                                point = ansScore < 0 ? 0 : ansScore;
                                             }
                                         }
                                     }
@@ -2134,7 +2114,8 @@ namespace OATS_Capstone.Models
                                 var score = IDs.Sum(k =>
                                 {
                                     var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
-                                    return answer.Score < 0 ? 0 : answer.Score;
+                                    var ansScore = answer.RealScore();
+                                    return ansScore < 0 ? 0 : ansScore;
                                 });
                                 i.ChoiceScore = score ?? 0;
                             }
@@ -2153,7 +2134,7 @@ namespace OATS_Capstone.Models
 
                                         if (userAnswers.All(o => questionAnswers.Contains(o)))
                                         {
-                                            i.NonChoiceScore = question.NoneChoiceScore;
+                                            i.NonChoiceScore = question.RealNoneChoiceScore();
                                         }
                                         else
                                         {
@@ -2486,9 +2467,9 @@ namespace OATS_Capstone.Models
                     success = true;
                     if (count == 0) { userids = new List<int>(); }
                     var responseTest = new ResponseTest(test, userids);
-                    var authen=AuthenticationSessionModel.Instance();
-                    var canEdit=test.CreatedUserID==authen.UserId&&test.IsNotOver();
-                    generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(responseTest,canEdit);
+                    var authen = AuthenticationSessionModel.Instance();
+                    var canEdit = test.CreatedUserID == authen.UserId && test.IsNotOver();
+                    generatedHtml = OnRenderPartialViewToStringWithParameter.Invoke(responseTest, canEdit);
                 }
             }
             catch (Exception)
@@ -2935,25 +2916,7 @@ namespace OATS_Capstone.Models
 
                         //update running status
                         var test = question.Test;
-                        var totalScore = test.Questions.TotalScore();
-                        var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
-                        if (settingDetail != null)
-                        {
-                            if (settingDetail.IsActive)
-                            {
-                                if (totalScore.HasValue && settingDetail.NumberValue.HasValue)
-                                {
-                                    if ((totalScore ?? 0) != (settingDetail.NumberValue ?? 0))
-                                    {
-                                        test.IsRunning = false;
-                                    }
-                                    else
-                                    {
-                                        test.IsRunning = true;
-                                    }
-                                }
-                            }
-                        }
+
                         if (!test.ContainQuestion(question))
                         {
                             if (db.SaveChanges() >= 0)
@@ -2962,7 +2925,8 @@ namespace OATS_Capstone.Models
                                 message = string.Empty;
                             }
                         }
-                        else {
+                        else
+                        {
                             success = false;
                             message = Constants.DefaultTestContainedQuestion;
                         }
@@ -2985,7 +2949,7 @@ namespace OATS_Capstone.Models
                 success = true;
                 if (OnRenderPartialViewToString != null)
                 {
-                    var testList = new TestList(db.Tests,role);
+                    var testList = new TestList(db.Tests, role);
                     generatedHtml = OnRenderPartialViewToString.Invoke(testList);
                 }
             }
@@ -3242,7 +3206,7 @@ namespace OATS_Capstone.Models
                                         var coupleIds = i.AnswerIDs.Split(';');
                                         var scoreMatching = coupleIds.Sum(k =>
                                         {
-                                            int? point = null;
+                                            decimal? point = null;
                                             var twoIds = k.Split(',');
                                             var firstId = twoIds.ElementAtOrDefault(0);
                                             var secondId = twoIds.ElementAtOrDefault(1);
@@ -3254,7 +3218,8 @@ namespace OATS_Capstone.Models
                                                     var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
                                                     if (answerEnd != null)
                                                     {
-                                                        point = answerBegin.Score < 0 ? 0 : answerBegin.Score;
+                                                        var ansScore = answerBegin.RealScore();
+                                                        point = ansScore < 0 ? 0 : ansScore;
                                                     }
                                                 }
                                             }
@@ -3268,7 +3233,8 @@ namespace OATS_Capstone.Models
                                         var score = IDs.Sum(k =>
                                         {
                                             var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
-                                            return answer.Score < 0 ? 0 : answer.Score;
+                                            var ansScore = answer.RealScore();
+                                            return ansScore < 0 ? 0 : ansScore;
                                         });
                                         i.ChoiceScore = score;
                                     }
@@ -3286,7 +3252,7 @@ namespace OATS_Capstone.Models
 
                                                 if (questionAnswers.All(o => userAnswers.Contains(o)))
                                                 {
-                                                    i.NonChoiceScore = question.NoneChoiceScore;
+                                                    i.NonChoiceScore = question.RealNoneChoiceScore();
                                                 }
                                                 else
                                                 {
@@ -3402,33 +3368,6 @@ namespace OATS_Capstone.Models
             return pack;
         }
 
-        public void CheckMaxScoreAndTotalScore(int testid, ref TotalAndMaxScore carier)
-        {
-            success = false;
-            message = Constants.DefaultProblemMessage;
-            try
-            {
-                var db = SingletonDb.Instance();
-                var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null)
-                {
-                    carier = new TotalAndMaxScore();
-                    carier.TotalScore = test.Questions.TotalScore();
-                    var settingDetail = test.SettingConfig.SettingConfigDetails.FirstOrDefault(i => i.SettingType.SettingTypeKey == "MTP");
-                    if (settingDetail != null)
-                    {
-                        carier.MaxScoreSetting = settingDetail.NumberValue ?? 0;
-                        carier.IsRunning = test.IsRunning;
-                    }
-                    success = true;
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                message = Constants.DefaultExceptionMessage;
-            }
-        }
         public User DetailRegister(string key)
         {
             User user = null;
