@@ -53,12 +53,29 @@ function checkCompleteCurrent() {
     var completion = $("#message-completion");
     if (isComplete) {
         if (isComplete == "true") {
-            completion.hide("slide", { direction: "down" });
+            $(".ready", completion).show();
+            $(".notice", completion).hide();
+            completion.show("slide", { direction: "down" });
         }
         else {
+            //not complete
+            $(".ready", completion).hide();
+            $(".notice", completion).show();
             completion.show("slide", { direction: "down" });
         }
     }
+    $("#complete-ready").live("change", function () {
+        var isReady = $(this).attr("checked") ? true : false;
+        statusSaving();
+        $.post("/Tests/UpdateCompleteIsReady", { testid: testid, isReady: isReady }, function (res) {
+            if (res.success) {
+                statusSaved();
+            }
+            else {
+                showMessage("error", res.message);
+            }
+        });
+    });
 }
 function checkComplete() {
     $.post("/Tests/MarkAsComplete", { testid: testid }, function (res) {
@@ -66,10 +83,27 @@ function checkComplete() {
             var complete = res.isComplete;
             if (typeof (complete) != "undefined") {
                 var messageContainer = $("#message-completion");
+                var $cbReady = $("#complete-ready");
                 if (complete) {
-                    messageContainer.hide("slide", { direction: "down" });
+                    messageContainer.hide("slide", {
+                        direction: "down", complete: function () {
+                            $(".ready", messageContainer).show();
+                            $(".notice", messageContainer).hide();
+                            $cbReady.attr("checked", "checked");
+                            messageContainer.show("slide", { direction: "down" });
+                        }
+                    });
+
                 } else {
-                    messageContainer.show("slide", { direction: "down" });
+                    //not complete
+                    messageContainer.hide("slide", {
+                        direction: "down", complete: function () {
+                            $(".ready", messageContainer).hide();
+                            $(".notice", messageContainer).show();
+                            $cbReady.removeAttr("checked");
+                            messageContainer.show("slide", { direction: "down" });
+                        }
+                    });
                 }
             }
         } else {
@@ -397,7 +431,7 @@ function initTagsOnTest() {
         }
     });
     var testTagAdder = $("#test-tags");
-    if (testTagAdder.length>0) {
+    if (testTagAdder.length > 0) {
         testTagAdder.autocomplete({
             minLength: 0,
             select: function (e, ui) {
@@ -948,7 +982,7 @@ function updateStartEndDate(testid, start, end) {
                 statusSaved();
                 if (res.message) {
                     showCountDownMessage("info", "Reloading", res.message, function () {
-                        window.location.href = "/Tests/NewTest/"+testid;
+                        window.location.href = "/Tests/NewTest/" + testid;
                     });
                 }
             } else {

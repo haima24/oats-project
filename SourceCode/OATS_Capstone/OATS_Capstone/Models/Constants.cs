@@ -8,12 +8,12 @@ namespace OATS_Capstone.Models
     public class Constants
     {
         public const string DefaultProblemMessage = "Sorry, your operation failed, try again later.";
-        public const string DefaultSuccessMessage = "Success!";
+        public const string DefaultSuccessMessage = "Successful";
         public const string DefaultExceptionMessage = "There was a problem in server, please try gain later.";
-        public const string DefaultSignUpSuccessMessage = "Signup was success.";
-        public const string DefaultSubmitTestSuccessMessage = "Submit test was success.";
+        public const string DefaultSignUpSuccessMessage = "Signup was successful.";
+        public const string DefaultSubmitTestSuccessMessage = "Submit test was successful.";
         public const string DefaultDuplicateEmail = "This email already exist, please choose another.";
-        public const string DefaultTestInInvalidDateTime = "This test currently is not in range of start time and end time.";
+        public const string DefaultTestInInvalidDateTime = "This test currently is not in range of start time    and end time.";
         public const string DefaultTestNotRunningOrActive = "This test currently is not marked as actived running test or contents not completed.";
         public const string DefaultTestNotExist = "This test is not exist.";
         public const string DefaultNoPermission = "Test content is not available or you have no permission to access content of this test.";

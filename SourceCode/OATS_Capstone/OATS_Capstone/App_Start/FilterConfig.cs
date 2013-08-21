@@ -27,7 +27,7 @@ namespace OATS_Capstone
             {
                 var authen = AuthenticationSessionModel.Instance();
 
-                if (!authen.IsAuthentication)
+                if (!(authen.IsAuthentication&&authen.User!=null))
                 {
                     //send them off to the login page
                     var url = new UrlHelper(filterContext.RequestContext);

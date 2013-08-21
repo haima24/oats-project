@@ -1147,5 +1147,10 @@ namespace OATS_Capstone.Controllers
             var isComplete = common.MarkAsComplete(testid);
             return Json(new { isComplete, common.success, common.message });
         }
+        public JsonResult UpdateCompleteIsReady(int testid, bool isReady) {
+            var common = new CommonService();
+            common.UpdateCompleteIsReady(testid, isReady);
+            return Json(new { common.success, common.message });
+        }
     }
 }
