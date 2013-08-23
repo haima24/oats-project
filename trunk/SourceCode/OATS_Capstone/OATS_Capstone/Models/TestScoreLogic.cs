@@ -164,10 +164,13 @@ namespace OATS_Capstone.Models
                 var questions = tag.TagInQuestions.Where(i => i.Question.TestID == testid).Select(k => k.Question);
                 statistic = new ScoreStatistics();
                 var totalScore = questions.TotalRealScore();
-                var groupDetails = questions.SelectMany(i => i.UserInTestDetails);
+                var inTests = questions.SelectMany(i => i.UserInTestDetails.Select(k => k.UserInTest))
+                    .GroupBy(i=>i).Select(i=>i.Key);
+                var filteredInTest = inTests.FilterInTestsOnAttempSetting().Select(i=>i.UserInTestID);
+                var groupDetails = questions.SelectMany(i => i.UserInTestDetails).Where(i => filteredInTest.Contains(i.UserInTestID));
                 var groupCalculate = from g in groupDetails
                                      group g by g.UserInTestID into GroupDetails
-                                     select new { Score = GroupDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0) };
+                                     select new {Score = GroupDetails.Sum(k => k.RealNonChoiceScore() ?? 0 + k.RealScore() ?? 0) };
                 var userDetails = groupDetails.Where(i => checkIds.Contains(i.UserInTest.UserID));
                 var userCalculate = from g in userDetails
                                     group g by g.UserInTestID into UserDetails

@@ -842,7 +842,6 @@ $.fn.extend({
         var html = $(this).html();
         return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
     }
-   
 })
 
 function random(range) {
