@@ -641,9 +641,10 @@ namespace OATS_Capstone.Models
         {
             get { return testTakenDate; }
         }
+        public decimal? TotalScoreOfTest { get; set; }
         private OATSDBEntities db = null;
         public List<int> CheckedUserIds { get; set; }
-        public decimal? TotalScoreOfTest { get; set; }
+        public string UserScoreResult { get; set; }
         public List<AbsResponseQuestion> Questions { get; set; }
 
         public int ResponseUserListCount { get { return ResponseUserList.Count; } }
@@ -665,6 +666,8 @@ namespace OATS_Capstone.Models
             var inTestsValid = test.UserInTests.FilterInTestsOnAttempSetting();
             IsHaveData = inTestsValid.Count > 0;
             TestTitle = test.TestTitle;
+            TotalScoreOfTest = test.Questions.TotalRealScore();
+
             CheckedUserIds = checkIds;
             if (checkIds.Count == 1)
             {
@@ -673,10 +676,10 @@ namespace OATS_Capstone.Models
                 if (inTest != null)
                 {
                     testTakenDate = String.Format("{0:dd MMM yyyy HH:mm tt}", inTest.TestTakenDate);
+                    UserScoreResult = string.Format("{0:0.00}/{0:0.00}", inTest.Score ?? 0, TotalScoreOfTest ?? 0);
                 }
-
             }
-            TotalScoreOfTest = test.Questions.TotalRealScore();
+            
             var details = inTestsValid.ToList();
             ResponseUserList = new List<ResponseUserItem>();
             details.ForEach(i =>

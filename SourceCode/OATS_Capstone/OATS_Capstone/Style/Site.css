@@ -694,6 +694,9 @@ i, cite, em, var, address, dfn {
     #eventTab .nt-checklist-ctrl .nt-msg {
         float: left;
     }
+    #eventTab .nt-checklist-ctrl .nt-submit-msg {
+        float:right;
+    }
 
     #eventTab .nt-checklist-ctrl button {
         display: none;
@@ -703,7 +706,10 @@ i, cite, em, var, address, dfn {
         font-size: 11px;
         float: right;
     }
-
+.on-score {
+    float:left;
+    font-weight:bold;
+}
 #sidebar {
     width: 215px;
     margin-right: 18px;

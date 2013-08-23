@@ -85,25 +85,18 @@ function checkComplete() {
                 var messageContainer = $("#message-completion");
                 var $cbReady = $("#complete-ready");
                 if (complete) {
-                    messageContainer.hide("slide", {
-                        direction: "down", complete: function () {
-                            $(".ready", messageContainer).show();
-                            $(".notice", messageContainer).hide();
-                            $cbReady.attr("checked", "checked");
-                            messageContainer.show("slide", { direction: "down" });
-                        }
-                    });
+                    messageContainer.hide();
+                    $(".ready", messageContainer).show();
+                    $(".notice", messageContainer).hide();
+                    $cbReady.attr("checked", "checked");
+                    messageContainer.show();
 
                 } else {
                     //not complete
-                    messageContainer.hide("slide", {
-                        direction: "down", complete: function () {
-                            $(".ready", messageContainer).hide();
-                            $(".notice", messageContainer).show();
-                            $cbReady.removeAttr("checked");
-                            messageContainer.show("slide", { direction: "down" });
-                        }
-                    });
+                    $(".ready", messageContainer).hide();
+                    $(".notice", messageContainer).show();
+                    $cbReady.removeAttr("checked");
+                    messageContainer.show();
                 }
             }
         } else {
@@ -133,7 +126,7 @@ function initCommonValidation() {
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qtext", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qansdesc", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0" });
-    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^((-)*[0-9]{0,3})$/, def: "0" });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^((-)?([0-9]{0,3}))$/, def: "0" });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: ".nt-tag-adder input[type=text]", regex: /^.{0,50}$/ });
     //setting
@@ -1023,6 +1016,7 @@ function updateAnswer(lineElement, target) {
         });
     }
     var isMatching = parentContainer.hasAttr("data-matching");
+    
     var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
         var $obj = $(obj);
         var answer = new Object();
@@ -1054,11 +1048,13 @@ function updateAnswer(lineElement, target) {
             var tb = $(".nt-qansscore input[type=text]", $obj);
             var scoreString = tb.val();
             var score = parseInt(scoreString);
+
             if (scoreString == "" || score <= 0) {
                 if (answer.IsRight == true) { tb.val(1); }
             } else if (score > 0) {
                 if (answer.IsRight == false) { tb.val(0); }
             }
+
             scoreString = tb.val();
             var nScore = parseFloat(scoreString);
             answer.Score = isNaN(nScore) ? 0 : nScore;

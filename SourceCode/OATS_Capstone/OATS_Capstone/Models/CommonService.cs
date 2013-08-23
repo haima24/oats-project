@@ -1180,8 +1180,10 @@ namespace OATS_Capstone.Models
                     {
                         var ans1 = new Answer() { AnswerContent = string.Empty, SerialOrder = 0, Score = 0 };
                         var ans2 = new Answer() { AnswerContent = string.Empty, SerialOrder = 1, Score = 0 };
+                        var ans3 = new Answer() { AnswerContent = string.Empty, SerialOrder = 2, Score = 0 };
                         question.Answers.Add(ans1);
                         question.Answers.Add(ans2);
+                        question.Answers.Add(ans3);
                     }
                     if (dbType.Type == "Essay" || dbType.Type == "ShortAnswer")
                     {

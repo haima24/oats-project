@@ -3,7 +3,8 @@
     $(function () {
         $("#asmsList").accordion({
             header: ".accordion-heading",
-            heightStyle: "content"
+            heightStyle: "content",
+            active: $("#asmsList .accordion-group[defaultactive=true]").index()
         });
     });
 </script>
@@ -185,7 +186,7 @@
             </div>
         </div>
     </div>
-    <div class="accordion-group nt-acc-group">
+    <div class="accordion-group nt-acc-group" defaultactive="true">
         <div class="accordion-heading">
 
             <a class="accordion-toggle" href="#">
