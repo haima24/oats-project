@@ -1,0 +1,24 @@
+chua validate phone number 
+khi xoa user moi chua xuat hien lai trong reinvite
+SAu do invite bai test khac k dk
+country chua validate
+search trong reuse xuat hien 1 cau hoi nhieu lan,k search theo ten bai test????
+Review TEst tab k hoet dong
+Tab TO DO Test khi tao bai test va lam test xong k co co hien j ca????
+multiple question tinh diem sai(chi can chon cau dung la co diem)
+cau hoi matching bi sai:trong cai cho Student Review history no hien ra dap an cua matching test chu k phai la cua ho lam
+
+Erorr :point 0 of 0pt :sua dap an sau khi student lam bai tét xong
+
+Problem:neu nhu 1 bai tét student lam lai 2 lanthi co the review history cua tat ca k
+chua sua cai dong ho chay thoi giankhi lam test(lam mat tap trung)
+Lam bai test xong k biet diem ,k co total diem
+Test Static tab co y ngi j ??? overall > 100 co lam sao k.1 student la 1 bait test nhieu lan thi sao????
+
+
+
+
+
+
+--------------
+sao k luu duong dan hinh
