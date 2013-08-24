@@ -489,7 +489,7 @@ namespace OATS_Capstone.Models
                     scoreList.Add(item);
                 }
                 var totalOfAllTests = CheckedTestsSorted.Where(i => i.UserInTests.Select(t => t.UserID).Contains(u.UserID)).SelectMany(i => i.Questions).TotalRealScore();
-                var gainScore = CheckedTestsSorted.SelectMany(i => i.UserInTests).Where(i => i.UserID == u.UserID).Sum(i => i.Score);
+                var gainScore = CheckedTestsSorted.SelectMany(i => i.UserInTests).Where(i => i.UserID == u.UserID).FilterInTestsOnAttempSetting().Sum(i => i.Score);
                 var percentString = string.Empty;
                 if (totalOfAllTests == 0)
                 {

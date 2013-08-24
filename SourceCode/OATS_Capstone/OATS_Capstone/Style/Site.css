@@ -694,8 +694,9 @@ i, cite, em, var, address, dfn {
     #eventTab .nt-checklist-ctrl .nt-msg {
         float: left;
     }
+
     #eventTab .nt-checklist-ctrl .nt-submit-msg {
-        float:right;
+        float: right;
     }
 
     #eventTab .nt-checklist-ctrl button {
@@ -706,10 +707,12 @@ i, cite, em, var, address, dfn {
         font-size: 11px;
         float: right;
     }
+
 .on-score {
-    float:left;
-    font-weight:bold;
+    float: left;
+    font-weight: bold;
 }
+
 #sidebar {
     width: 215px;
     margin-right: 18px;
@@ -1594,7 +1597,7 @@ div.hoverscroll {
 
 
 #asmsList {
-    height: 500px;
+    height: 400px;
     overflow-y: visible;
     float: left;
     width: 95%;
@@ -1868,6 +1871,9 @@ Inherited from tr#c2049.nt-tr-score.nt-guide.nt-tr-sortable .nt-scores-cont .nt-
 
         .nt-clb-header .nt-clb-header-content > div.nt-clb-header-label {
             width: 50%;
+        }
+        #sidebar[overview=true] .nt-clb-header .nt-clb-header-content > div.nt-clb-header-label {
+            width: 60%;
         }
 
         .nt-clb-header .nt-clb-header-content > div {
@@ -3999,8 +4005,8 @@ article, time {
 }*/
 
 #message-completion {
-    min-width: 200px;
-    max-width: 300px;
+    min-width: 80px;
+    max-width: 150px;
     position: fixed;
     bottom: 0px;
     right: 20px;
