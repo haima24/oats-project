@@ -1714,6 +1714,10 @@ namespace OATS_Capstone.Models
                                 question.Answers.Add(ans1);
                                 question.Answers.Add(ans2);
                             }
+                            foreach (var item in question.Answers)
+                            {
+                                item.IsRight = false;   
+                            }
                         }
 
                         if (qType == "Matching")
