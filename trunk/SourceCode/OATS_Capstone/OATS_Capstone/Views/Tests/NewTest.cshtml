@@ -15,11 +15,13 @@
 @{
     var authen = AuthenticationSessionModel.Instance();
     var user = authen.User;
+    var isAuthor = Model.CreatedUserID == authen.UserId;
 }
 @if (Model != null)
 {
     <input id="test-id" type="hidden" value="@Model.TestID" />
     <input id="is-complete" type="hidden" value="@(Model.IsComplete ? "true" : "false")" />
+    <input id="is-author" type="hidden" value="@(isAuthor? "true" : "false")" />
 }
 <input id="user-id" type="hidden" value="@user.UserID" />
 <div class="navbar navbar-static-top">

@@ -7,6 +7,7 @@ var currentEditAnswer;
 var currentScoreDetailTab = "statistic";
 var currentFeedBackTab = "student";
 var reuseAddedTags = new Array();
+var isAuthor = true;
 
 function initInviteOutSide() {
     var inviteOutSide = function (ele) {
@@ -49,60 +50,66 @@ function initInviteOutSide() {
     });
 }
 function checkCompleteCurrent() {
-    var isComplete = $("#is-complete").val();
-    var completion = $("#message-completion");
-    if (isComplete) {
-        if (isComplete == "true") {
-            $(".ready", completion).show();
-            $(".notice", completion).hide();
-            completion.show("slide", { direction: "down" });
-        }
-        else {
-            //not complete
-            $(".ready", completion).hide();
-            $(".notice", completion).show();
-            completion.show("slide", { direction: "down" });
-        }
-    }
-    $("#complete-ready").live("change", function () {
-        var isReady = $(this).attr("checked") ? true : false;
-        statusSaving();
-        $.post("/Tests/UpdateCompleteIsReady", { testid: testid, isReady: isReady }, function (res) {
-            if (res.success) {
-                statusSaved();
+    if (isAuthor) {
+        var isComplete = $("#is-complete").val();
+        var completion = $("#message-completion");
+        if (isComplete) {
+            if (isComplete == "true") {
+                $(".ready", completion).show();
+                $(".notice", completion).hide();
+                completion.show("slide", { direction: "down" });
             }
             else {
+                //not complete
+                $(".ready", completion).hide();
+                $(".notice", completion).show();
+                completion.show("slide", { direction: "down" });
+            }
+        }
+        $("#complete-ready").live("change", function () {
+            var isReady = $(this).attr("checked") ? true : false;
+            statusSaving();
+            $.post("/Tests/UpdateCompleteIsReady", { testid: testid, isReady: isReady }, function (res) {
+                if (res.success) {
+                    statusSaved();
+                }
+                else {
+                    showMessage("error", res.message);
+                }
+            });
+        });
+    } else {
+        $("#message-completion").hide();
+    }
+}
+function checkComplete() {
+    if (isAuthor) {
+        $.post("/Tests/MarkAsComplete", { testid: testid }, function (res) {
+            if (res.success) {
+                var complete = res.isComplete;
+                if (typeof (complete) != "undefined") {
+                    var messageContainer = $("#message-completion");
+                    var $cbReady = $("#complete-ready");
+                    if (complete) {
+                        messageContainer.hide();
+                        $(".ready", messageContainer).show();
+                        $(".notice", messageContainer).hide();
+                        $cbReady.attr("checked", "checked");
+                        messageContainer.show();
+
+                    } else {
+                        //not complete
+                        $(".ready", messageContainer).hide();
+                        $(".notice", messageContainer).show();
+                        $cbReady.removeAttr("checked");
+                        messageContainer.show();
+                    }
+                }
+            } else {
                 showMessage("error", res.message);
             }
         });
-    });
-}
-function checkComplete() {
-    $.post("/Tests/MarkAsComplete", { testid: testid }, function (res) {
-        if (res.success) {
-            var complete = res.isComplete;
-            if (typeof (complete) != "undefined") {
-                var messageContainer = $("#message-completion");
-                var $cbReady = $("#complete-ready");
-                if (complete) {
-                    messageContainer.hide();
-                    $(".ready", messageContainer).show();
-                    $(".notice", messageContainer).hide();
-                    $cbReady.attr("checked", "checked");
-                    messageContainer.show();
-
-                } else {
-                    //not complete
-                    $(".ready", messageContainer).hide();
-                    $(".notice", messageContainer).show();
-                    $cbReady.removeAttr("checked");
-                    messageContainer.show();
-                }
-            }
-        } else {
-            showMessage("error", res.message);
-        }
-    });
+    }
 }
 function initResponseCommonValidation() {
     var handlers = new Array();
@@ -1016,7 +1023,7 @@ function updateAnswer(lineElement, target) {
         });
     }
     var isMatching = parentContainer.hasAttr("data-matching");
-    
+
     var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
         var $obj = $(obj);
         var answer = new Object();
@@ -1253,6 +1260,7 @@ function saveTextDescription(questionidString, text) {
 }
 $(function () {
     $.initTooltips();
+    isAuthor = $("#is-author").val() == "false" ? false : true;
     checkCompleteCurrent();
     initResponseCommonValidation();
     initCommonValidation();
@@ -1628,10 +1636,15 @@ $(function () {
     });
     $("button.nt-btn-rm").live("click", function (ev) {
         var row = $(this).closest("tr");
+        var container = row.closest(".nt-asm-inv-table-cont");
         var userid = parseInt(row.attr("user-id"));
         $.post("/Tests/RemoveUser", { testid: testid, userid: userid }, function (res) {
             if (res.success) {
-                row.fadeOut("slow", function () { $(this).remove(); });
+                row.fadeOut("slow", function () {
+                    $(this).remove();
+                    var count = $("tr[invitation-id]", container).length;
+                    $(".nt-cnt", container).html("(" + count + ")");
+                });
                 statusSaved();
             } else {
                 showMessage("error", res.message);

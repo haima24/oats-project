@@ -1180,10 +1180,13 @@ namespace OATS_Capstone.Models
                     {
                         var ans1 = new Answer() { AnswerContent = string.Empty, SerialOrder = 0, Score = 0 };
                         var ans2 = new Answer() { AnswerContent = string.Empty, SerialOrder = 1, Score = 0 };
-                        var ans3 = new Answer() { AnswerContent = string.Empty, SerialOrder = 2, Score = 0 };
                         question.Answers.Add(ans1);
                         question.Answers.Add(ans2);
-                        question.Answers.Add(ans3);
+                        if (dbType.Type == "Multiple")
+                        {
+                            var ans3 = new Answer() { AnswerContent = string.Empty, SerialOrder = 2, Score = 0 };
+                            question.Answers.Add(ans3);
+                        }
                     }
                     if (dbType.Type == "Essay" || dbType.Type == "ShortAnswer")
                     {
@@ -1860,25 +1863,8 @@ namespace OATS_Capstone.Models
                         }
                         else if (detail.SettingType.SettingTypeKey == "OSM")
                         {
-                            var isConflict = false;
-                            decimal? usersMaxAttemp = null;
-                            if (test.UserInTests.Count > 0)
-                            {
-                                usersMaxAttemp = test.UserInTests.Max(i => i.NumberOfAttend);
-                                isConflict = (number ?? 0) < usersMaxAttemp;
-                            }
-
-                            if (isConflict && usersMaxAttemp.HasValue)
-                            {
-                                message = "The number of times is conflict with max attemps that students have done (" + usersMaxAttemp + "), please choose a number greater than : " + usersMaxAttemp;
-                                success = false;
-                                return;
-                            }
-                            else
-                            {
                                 detail.NumberValue = number;
                                 detail.TextValue = text;
-                            }
                         }
                         else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
                         {
@@ -2027,6 +2013,7 @@ namespace OATS_Capstone.Models
                     newUser.UserMail = user.UserMail;
                     newUser.UserPhone = user.UserPhone;
                     newUser.UserCountry = user.UserCountry;
+                    newUser.IsRegistered = true;
                     db.Users.Add(newUser);
                     if (db.SaveChanges() > 0)
                     {
