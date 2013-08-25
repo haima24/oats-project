@@ -31,7 +31,7 @@ namespace OATS_Capstone.Models
             get
             {
                 decimal? score = 0;
-                if (ResponseAnswers != null) { score = ResponseAnswers.Sum(i => i.UserAnsScore); }
+                if (ResponseAnswers != null) { score = ResponseAnswers.Sum(i => (!i.UserAnsScore.HasValue||i.UserAnsScore<0)?0:i.UserAnsScore); }
                 //round
                 score = score.RoundTwo();
                 return score;
@@ -54,8 +54,14 @@ namespace OATS_Capstone.Models
             Type = question.QuestionType.Type;
             LabelOrder = question.LabelOrder;
             QuestionTitle = question.QuestionTitle;
-            NonChoiceScore = question.RealNoneChoiceScore();
-            var score = question.Answers.Sum(i => i.RealScore());
+            NonChoiceScore = question.RealNoneChoiceScore().RoundTwo();
+            var score = question.Answers.Sum(i => {
+                var point = i.RealScore();
+                if (!point.HasValue || point < 0) {
+                    point = 0;
+                }
+                return point;
+            });
             var calculateScore = (!score.HasValue || score < 0) ? 0 : score;
             ChoiceScore = calculateScore.RoundTwo();
             CheckedUserIds = checkIds;
