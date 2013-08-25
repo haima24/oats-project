@@ -1368,6 +1368,7 @@ namespace OATS_Capstone.Models
                         var ans = new Answer();
                         ans.AnswerContent = String.Empty;
                         ans.SerialOrder = serialOrder;
+                        ans.Score = 0;
                         question.Answers.Add(ans);
                     }
                     RecalculateUserInTestScore(question.Answers);

@@ -1019,8 +1019,14 @@ function updateAnswer(lineElement, target) {
     var type = $item.attr("question-type");
     if (target && target.type && target.type == "radio") {
         $(".nt-qans", parentContainer).each(function (index, obj) {
-            if (!$(".nt-qanselem input[type=radio],.nt-qanselem input[type=checkbox]", obj).attr("checked")) {
-                $(".nt-qansscore input[type=text]", obj).val(0);
+            var right=$(".nt-qanselem input[type=radio]",obj).attr("checked") ? true : false;
+            var $tb = $(".nt-qansscore input[type=text]", obj);
+            var scoreString = $tb.val();
+            var score = parseFloat(scoreString);
+            if (scoreString == "" || score <= 0) {
+                if (right == true) { $tb.val(1); }
+            } else {
+                if (right == false) { $tb.val(0); }
             }
         });
     }
@@ -1260,6 +1266,7 @@ function addAnswer(element, qid, onsuccess, noreload) {
                     onsuccess();
                 }
                 checkComplete();
+                sortByNumberOrLetters();
                 statusSaved();
             } else {
                 showMessage("error", res.message);
@@ -1946,7 +1953,7 @@ $(function () {
                 initDragAndDrop();
                 initEditable();
                 initImageUploadFacility();
-                //sortByNumberOrLetters();
+                sortByNumberOrLetters();
                 initPopover();
                 $("#sidebar[content-tab=true]").accordion({ heightStyle: "content" });
             } else {
