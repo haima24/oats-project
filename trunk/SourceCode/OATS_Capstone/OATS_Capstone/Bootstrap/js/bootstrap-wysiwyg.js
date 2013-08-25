@@ -181,7 +181,12 @@
             if (options.placeholder) {
                 var text = $cur.cleanHtml();
                 if (text == options.placeholder) {
-                    $cur.html("");
+                    $cur.empty();
+                    var range = document.createRange();
+                    range.selectNodeContents(this);
+                    var sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
                 }
             }
             if (options.onFocusIn && typeof (options.onFocusIn)==="function") {

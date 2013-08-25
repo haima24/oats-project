@@ -114,7 +114,7 @@ function checkComplete() {
 function initResponseCommonValidation() {
     var handlers = new Array();
     handlers.push({
-        selector: "#checklist[response-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0", min: "0", max: function (item) {
+        selector: "#checklist[response-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[+]?[0-9]{0,9}(?:\.[0-9]{0,2})?$/, def: "0", min: "0", max: function (item) {
             var max = 0;
             var value = parseFloat(item.attr("max-point"));
             if (!isNaN(value)) {
@@ -132,8 +132,8 @@ function initCommonValidation() {
     handlers.push({ selector: "#intro-detail", regex: /^(.|\n){0,1024}$/ })
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qtext", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qansdesc", regex: /^(.|\n){0,1024}$/ });
-    handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[0-9]{0,16}([.]{0,1})[0-9]{0,2}$/, def: "0" });
-    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^((-)?([0-9]{0,3}))$/, def: "0" });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qitem .nt-qoepts input[type=text]", regex: /^[+]?[0-9]{0,16}(?:\.[0-9]{0,2})?$/, def: "0" });
+    handlers.push({ selector: "#checklist[content-tab=true] .nt-qansscore .nt-on-score", regex: /^[+-]?[0-9]{0,16}(?:\.[0-9]{0,2})?$/, def: "0" });
     handlers.push({ selector: "#checklist[content-tab=true] .nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
     handlers.push({ selector: ".nt-tag-adder input[type=text]", regex: /^.{0,50}$/ });
     //setting
@@ -1015,15 +1015,46 @@ function ajaxUpdateAnwer(answers) {
 }
 function updateAnswer(lineElement, target) {
     var parentContainer = lineElement.closest(".nt-qanscont");
+    var $item = lineElement.closest(".nt-qitem");
+    var type = $item.attr("question-type");
     if (target && target.type && target.type == "radio") {
         $(".nt-qans", parentContainer).each(function (index, obj) {
-            if (!$(".nt-qanselem input[type=radio],[type=checkbox]", obj).attr("checked")) {
+            if (!$(".nt-qanselem input[type=radio],.nt-qanselem input[type=checkbox]", obj).attr("checked")) {
                 $(".nt-qansscore input[type=text]", obj).val(0);
             }
         });
     }
     var isMatching = parentContainer.hasAttr("data-matching");
-
+    if (type == "Multiple") {
+        var right = $(".nt-qanselem input[type=checkbox]", lineElement).attr("checked") ? true : false;
+        var $tb = $(".nt-qansscore input[type=text]", lineElement);
+        var scoreString = $tb.val();
+        var score = parseFloat(scoreString);
+        if (scoreString == "" || score <= 0) {
+            if (right == true) { $tb.val(1); }
+        } else if (score > 0) {
+            if (right == false) { $tb.val(0); }
+        }
+        var totalPoint = 0;
+        $(".nt-qans input[type=checkbox]:checked").each(function (i, e) {
+            var qans = $(e).closest(".nt-qans");
+            var $tb = $(".nt-qansscore input[type=text]", qans);
+            var score = parseFloat($tb.val());
+            if (!isNaN(score)) {
+                totalPoint += score;
+            }
+        });
+        var countFalse = $(".nt-qanselem input[type=checkbox]:not(:checked)", $item).length;
+        var dividePoint = 0;
+        if (countFalse != 0&&!isNaN(totalPoint)&&!isNaN(countFalse)) {
+            dividePoint = (totalPoint / countFalse)*(-1);
+        }
+        $(".nt-qans input[type=checkbox]:not(:checked)", parentContainer).each(function (i, o) {
+            var qans = $(o).closest(".nt-qans");
+            var $tb = $(".nt-qansscore input[type=text]", qans);
+            $tb.val(dividePoint);
+        });
+    }
     var answers = $(".nt-qans", parentContainer).map(function (index, obj) {
         var $obj = $(obj);
         var answer = new Object();
@@ -1036,33 +1067,23 @@ function updateAnswer(lineElement, target) {
                 var tb = $(".nt-qansscore input[type=text]", matchingContainer);
                 var scoreString = tb.val();
                 if (scoreString == "" || scoreString == "0") {
-                    if (answer.IsRight == true) { tb.val(1); }
-                } else if (scoreString == "1") {
-                    if (answer.IsRight == false) { tb.val(0); }
+                    tb.val(1);
                 }
                 scoreString = tb.val();
                 var nScore = parseFloat(scoreString);
                 answer.Score = isNaN(nScore) ? 0 : nScore;
                 answer.SerialOrder = matchingContainer.index();
                 answer.IsRight = true;
+
             }
             else {
                 answer.IsRight = false;
             }
         }
         else {
-            answer.IsRight = $(".nt-qanselem input[type=radio],[type=checkbox]", $obj).attr("checked") ? true : false;
+            answer.IsRight = $(".nt-qanselem input[type=radio],.nt-qanselem input[type=checkbox]", $obj).attr("checked") ? true : false;
             var tb = $(".nt-qansscore input[type=text]", $obj);
             var scoreString = tb.val();
-            var score = parseInt(scoreString);
-
-            if (scoreString == "" || score <= 0) {
-                if (answer.IsRight == true) { tb.val(1); }
-            } else if (score > 0) {
-                if (answer.IsRight == false) { tb.val(0); }
-            }
-
-            scoreString = tb.val();
             var nScore = parseFloat(scoreString);
             answer.Score = isNaN(nScore) ? 0 : nScore;
             answer.SerialOrder = index;
