@@ -119,7 +119,7 @@
           <Property Name="AnswerContent" Type="nvarchar" Nullable="false" MaxLength="1024" />
           <Property Name="QuestionID" Type="int" Nullable="false" />
           <Property Name="IsRight" Type="bit" Nullable="false" />
-          <Property Name="Score" Type="int" />
+          <Property Name="Score" Type="decimal" Scale="2" />
           <Property Name="SerialOrder" Type="int" />
           <Property Name="DependencyAnswerID" Type="int" />
         </EntityType>
@@ -663,7 +663,7 @@
           <Property Name="AnswerContent" Type="String" Nullable="false" MaxLength="1024" Unicode="true" FixedLength="false" />
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
           <Property Name="IsRight" Type="Boolean" Nullable="false" />
-          <Property Name="Score" Type="Int32" />
+          <Property Name="Score" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="SerialOrder" Type="Int32" />
           <NavigationProperty Name="Question" Relationship="OATSDBModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
           <Property Type="Int32" Name="DependencyAnswerID" />

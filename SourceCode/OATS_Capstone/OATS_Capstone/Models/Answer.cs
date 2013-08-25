@@ -23,7 +23,7 @@ namespace OATS_Capstone.Models
         public string AnswerContent { get; set; }
         public int QuestionID { get; set; }
         public bool IsRight { get; set; }
-        public Nullable<int> Score { get; set; }
+        public Nullable<decimal> Score { get; set; }
         public Nullable<int> SerialOrder { get; set; }
         public Nullable<int> DependencyAnswerID { get; set; }
     
