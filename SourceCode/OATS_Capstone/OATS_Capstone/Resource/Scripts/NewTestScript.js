@@ -138,7 +138,7 @@ function initCommonValidation() {
     handlers.push({ selector: ".nt-tag-adder input[type=text]", regex: /^.{0,50}$/ });
     //setting
     handlers.push({ selector: "#asm_max_point", regex: /^([0-9]{0,5})$/, def: "1", min: "1" });
-    handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10", min: "5" });
+    handlers.push({ selector: "#asm_duration", regex: /^([0-9]{0,3})$/, def: "10", min: "1" });
     handlers.push({ selector: "#asm_num_question", regex: /^([0-9]{0,3})$/, def: "5", min: "1" });
     handlers.push({ selector: "#asm_time_limit", regex: /^([0-9]{0,3})$/, def: "1", min: "1" });
     //feedback
@@ -2170,7 +2170,10 @@ $(function () {
                             return $("input[type=checkbox]:checked", this).length > 0;
                         });
                         if (checkedItems.length == 1) {
-                            $(".nt-clb-item-desc", checkedItems).html(res.data);
+                            if (res.data) {
+                                $(".nt-clb-item-desc", checkedItems).html(res.data.UserPercent);
+                                $("#response-container .on-score").html("Score: " + res.data.ScoreOnTotal);
+                            }
                         }
                     }
                 } else {

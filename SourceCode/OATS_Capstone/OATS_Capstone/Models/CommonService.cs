@@ -3386,7 +3386,7 @@ namespace OATS_Capstone.Models
                             var scoreItem = responseTest.ResponseUserList.FirstOrDefault(i => i.UserID == userid);
                             if (scoreItem != null)
                             {
-                                data = scoreItem.UserPercent;
+                                data = new {UserPercent= scoreItem.UserPercent,ScoreOnTotal=responseTest.UserScoreResult };
                             }
                         }
                     }
