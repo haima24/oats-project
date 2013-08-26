@@ -1,11 +1,11 @@
 ﻿@model OATS_Capstone.Models.Invitation
 @{
-    var isOwner = true;
-    if (ViewBag.isOwner != null)
+    var isAuthor = true;
+    if (ViewBag.isAuthor != null)
     {
-        isOwner = ViewBag.isOwner;
+        isAuthor = ViewBag.isAuthor;
     }
-    }
+}
 @if (Model.IsMailSent)
 {
     <tr user-id="@Model.UserID" invitation-id="@Model.InvitationID" class="sent">
@@ -14,15 +14,16 @@
         </td>
         <td class="nt-desc nt-email">@Model.User.UserMail</td>
         <td><span class="label label-info">Mail Sent</span></td>
-        @if(isOwner){
-        <td class="nt-ctrl">
-            <button class="nt-btn-icon nt-btn-ri">
-                <i class="icon-repeat"></i>
-            </button>
-            <button class="nt-btn-icon nt-btn-rm">
-                <i class="icon-remove"></i>
-            </button>
-        </td>
+        @if (isAuthor)
+        {
+            <td class="nt-ctrl">
+                <button class="nt-btn-icon nt-btn-ri">
+                    <i class="icon-repeat"></i>
+                </button>
+                <button class="nt-btn-icon nt-btn-rm">
+                    <i class="icon-remove"></i>
+                </button>
+            </td>
         }
     </tr>
 }
@@ -34,15 +35,16 @@ else
         </td>
         <td class="nt-desc nt-email">@Model.User.UserMail</td>
         <td><span class="label label-important">Mail Un-Sent</span></td>
-        @if(isOwner){
-        <td class="nt-ctrl">
-            <button class="nt-btn-icon nt-btn-ri">
-                <i class="icon-repeat"></i>
-            </button>
-            <button class="nt-btn-icon nt-btn-rm">
-                <i class="icon-remove"></i>
-            </button>
-        </td>
+        @if (isAuthor)
+        {
+            <td class="nt-ctrl">
+                <button class="nt-btn-icon nt-btn-ri">
+                    <i class="icon-repeat"></i>
+                </button>
+                <button class="nt-btn-icon nt-btn-rm">
+                    <i class="icon-remove"></i>
+                </button>
+            </td>
         }
     </tr>
 }
