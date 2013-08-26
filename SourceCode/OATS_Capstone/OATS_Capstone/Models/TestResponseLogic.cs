@@ -31,8 +31,9 @@ namespace OATS_Capstone.Models
             get
             {
                 decimal? score = 0;
-                if (ResponseAnswers != null) { score = ResponseAnswers.Sum(i => (!i.UserAnsScore.HasValue||i.UserAnsScore<0)?0:i.UserAnsScore); }
+                if (ResponseAnswers != null) { score = ResponseAnswers.Sum(i => i.UserAnsScore); }
                 //round
+                score = !score.HasValue || score < 0 ? 0 : score;
                 score = score.RoundTwo();
                 return score;
             }
@@ -55,13 +56,13 @@ namespace OATS_Capstone.Models
             LabelOrder = question.LabelOrder;
             QuestionTitle = question.QuestionTitle;
             NonChoiceScore = question.RealNoneChoiceScore().RoundTwo();
-            var score = question.Answers.Sum(i => {
-                var point = i.RealScore();
-                if (!point.HasValue || point < 0) {
-                    point = 0;
-                }
-                return point;
-            });
+            var score = question.Answers.Sum(k => {
+                        var point = k.RealScore();
+                        if (!point.HasValue || point < 0) {
+                            point = 0;
+                        }
+                        return point;
+                    });
             var calculateScore = (!score.HasValue || score < 0) ? 0 : score;
             ChoiceScore = calculateScore.RoundTwo();
             CheckedUserIds = checkIds;
@@ -606,7 +607,7 @@ namespace OATS_Capstone.Models
                         userChooseThisAnswer = ids.Contains(answer.AnswerID);
                         if (userChooseThisAnswer) {
                             var score = answer.RealScore();
-                            userAnsScore = (!score.HasValue || score < 0) ? 0 : score; 
+                            userAnsScore = !score.HasValue ? 0 : score; 
                         }
                     }
                 }
@@ -682,7 +683,7 @@ namespace OATS_Capstone.Models
                 if (inTest != null)
                 {
                     testTakenDate = String.Format("{0:dd MMM yyyy HH:mm tt}", inTest.TestTakenDate);
-                    UserScoreResult = string.Format("{0:0.00}/{0:0.00}", inTest.Score ?? 0, TotalScoreOfTest ?? 0);
+                    UserScoreResult = string.Format("{0:0.00}/{1:0.00}", inTest.Score ?? 0, TotalScoreOfTest ?? 0);
                 }
             }
             

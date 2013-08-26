@@ -1717,7 +1717,7 @@ namespace OATS_Capstone.Models
                             }
                             foreach (var item in question.Answers)
                             {
-                                item.IsRight = false;   
+                                item.IsRight = false;
                             }
                         }
 
@@ -1868,8 +1868,8 @@ namespace OATS_Capstone.Models
                         }
                         else if (detail.SettingType.SettingTypeKey == "OSM")
                         {
-                                detail.NumberValue = number;
-                                detail.TextValue = text;
+                            detail.NumberValue = number;
+                            detail.TextValue = text;
                         }
                         else if (detail.SettingType.SettingTypeKey == "RTC" && isactive)
                         {
@@ -1879,10 +1879,7 @@ namespace OATS_Capstone.Models
                         {
                             detail.NumberValue = number;
                             var questions = test.Questions.ToList();
-                            questions.ForEach(i =>
-                            {
-                                RecalculateUserInTestScore(i.Answers);
-                            });
+                            RecalculateUserInTestScore(questions);
                         }
                         if (db.SaveChanges() >= 0)
                         {
@@ -2109,9 +2106,9 @@ namespace OATS_Capstone.Models
                                 {
                                     var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
                                     var ansScore = answer.RealScore();
-                                    return ansScore < 0 ? 0 : ansScore;
+                                    return ansScore;
                                 });
-                                i.ChoiceScore = score ?? 0;
+                                i.ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
                             }
 
                         }
@@ -3170,6 +3167,95 @@ namespace OATS_Capstone.Models
                 message = Constants.DefaultExceptionMessage;
             }
         }
+        private void RecalculateUserInTestScore(IEnumerable<Question> questions)
+        {
+            foreach (var question in questions)
+            {
+                var inTestDetails = question.UserInTestDetails.ToList();
+                    var inTests = from d in inTestDetails
+                                  group d by d.UserInTest into InTestGroup
+                                  select new { Key = InTestGroup.Key };
+                    foreach (var intest in inTests)
+                    {
+                        var inTestObj = intest.Key;
+                        var details = inTestObj.UserInTestDetails.Where(k => k.QuestionID == question.QuestionID).ToList();
+                        details.ForEach(i =>
+                        {
+                            if (question != null)
+                            {
+                                var qType = question.QuestionType.Type;
+                                if (i.AnswerIDs != null)
+                                {
+                                    if (qType == "Matching")
+                                    {
+                                        var coupleIds = i.AnswerIDs.Split(';');
+                                        var scoreMatching = coupleIds.Sum(k =>
+                                        {
+                                            decimal? point = null;
+                                            var twoIds = k.Split(',');
+                                            var firstId = twoIds.ElementAtOrDefault(0);
+                                            var secondId = twoIds.ElementAtOrDefault(1);
+                                            if (!string.IsNullOrEmpty(firstId))
+                                            {
+                                                var answerBegin = question.Answers.FirstOrDefault(t => t.AnswerID.ToString() == firstId);
+                                                if (answerBegin != null && !string.IsNullOrEmpty(secondId))
+                                                {
+                                                    var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
+                                                    if (answerEnd != null)
+                                                    {
+                                                        var ansScore = answerBegin.RealScore();
+                                                        point = ansScore < 0 ? 0 : ansScore;
+                                                    }
+                                                }
+                                            }
+                                            return point;
+                                        });
+                                        i.ChoiceScore = scoreMatching ?? 0;
+                                    }
+                                    else
+                                    {
+                                        var IDs = i.AnswerIDs.Split(',');
+                                        var score = IDs.Sum(k =>
+                                        {
+                                            var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                            var ansScore = answer.RealScore();
+                                            return ansScore;
+                                        });
+                                        i.ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
+                                    }
+                                }
+                                else
+                                {
+                                    if (question.QuestionType.Type == "ShortAnswer")
+                                    {
+                                        if (!string.IsNullOrEmpty(i.AnswerContent))
+                                        {
+                                            var userAnswers = i.AnswerContent.Split(',');
+                                            if (!string.IsNullOrEmpty(question.TextDescription))
+                                            {
+                                                var questionAnswers = question.TextDescription.Split(',');
+
+                                                if (questionAnswers.All(o => userAnswers.Contains(o)))
+                                                {
+                                                    i.NonChoiceScore = question.RealNoneChoiceScore();
+                                                }
+                                                else
+                                                {
+                                                    i.NonChoiceScore = 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (question.QuestionType.Type == "Essay") {
+                                        i.NonChoiceScore = i.RealNonChoiceScore();
+                                    }
+                                }
+                            }
+                        });
+                        inTestObj.Score = inTestObj.UserInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
+                    }
+            }
+        }
         private void RecalculateUserInTestScore(IEnumerable<Answer> answers)
         {
             var groupAnswers = from ans in answers
@@ -3228,9 +3314,9 @@ namespace OATS_Capstone.Models
                                         {
                                             var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
                                             var ansScore = answer.RealScore();
-                                            return ansScore < 0 ? 0 : ansScore;
+                                            return ansScore;
                                         });
-                                        i.ChoiceScore = score;
+                                        i.ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
                                     }
                                 }
                                 else
@@ -3958,16 +4044,19 @@ namespace OATS_Capstone.Models
             }
             return isComplete;
         }
-        public void UpdateCompleteIsReady(int testid, bool isReady) {
+        public void UpdateCompleteIsReady(int testid, bool isReady)
+        {
             success = false;
             message = Constants.DefaultProblemMessage;
             try
             {
                 var db = SingletonDb.Instance();
                 var test = db.Tests.FirstOrDefault(i => i.TestID == testid);
-                if (test != null) {
+                if (test != null)
+                {
                     test.IsComplete = isReady;
-                    if (db.SaveChanges() >= 0) {
+                    if (db.SaveChanges() >= 0)
+                    {
                         success = true;
                         message = Constants.DefaultSuccessMessage;
                     }
