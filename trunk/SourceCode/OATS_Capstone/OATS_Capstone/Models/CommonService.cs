@@ -435,6 +435,7 @@ namespace OATS_Capstone.Models
                     var matchQuestions = questions.Where(delegate(Question question)
                     {
                         return question.QuestionTitle.ToLower().Contains(termLower)
+                            ||question.TextDescription.ToLower().Contains(termLower)
                             || question.Answers.Any(k => k.AnswerContent.ToLower().Contains(termLower));
                     });
                     matches = matchQuestions.ToList();
