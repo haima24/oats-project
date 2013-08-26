@@ -153,7 +153,9 @@ function initCountDown() {
     $(window).unload(function () {
         if (!isSubmited) {
             remainSecond = remainSecond < 0 ? 0 : remainSecond;
-            setLocalStorage("second", remainSecond);
+            if (remainSecond && typeof (remainSecond) != "undefined") {
+                setLocalStorage("second", remainSecond);
+            }
         }
     });
 }
