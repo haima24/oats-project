@@ -3173,88 +3173,89 @@ namespace OATS_Capstone.Models
             foreach (var question in questions)
             {
                 var inTestDetails = question.UserInTestDetails.ToList();
-                    var inTests = from d in inTestDetails
-                                  group d by d.UserInTest into InTestGroup
-                                  select new { Key = InTestGroup.Key };
-                    foreach (var intest in inTests)
+                var inTests = from d in inTestDetails
+                              group d by d.UserInTest into InTestGroup
+                              select new { Key = InTestGroup.Key };
+                foreach (var intest in inTests)
+                {
+                    var inTestObj = intest.Key;
+                    var details = inTestObj.UserInTestDetails.Where(k => k.QuestionID == question.QuestionID).ToList();
+                    details.ForEach(i =>
                     {
-                        var inTestObj = intest.Key;
-                        var details = inTestObj.UserInTestDetails.Where(k => k.QuestionID == question.QuestionID).ToList();
-                        details.ForEach(i =>
+                        if (question != null)
                         {
-                            if (question != null)
+                            var qType = question.QuestionType.Type;
+                            if (i.AnswerIDs != null)
                             {
-                                var qType = question.QuestionType.Type;
-                                if (i.AnswerIDs != null)
+                                if (qType == "Matching")
                                 {
-                                    if (qType == "Matching")
+                                    var coupleIds = i.AnswerIDs.Split(';');
+                                    var scoreMatching = coupleIds.Sum(k =>
                                     {
-                                        var coupleIds = i.AnswerIDs.Split(';');
-                                        var scoreMatching = coupleIds.Sum(k =>
+                                        decimal? point = null;
+                                        var twoIds = k.Split(',');
+                                        var firstId = twoIds.ElementAtOrDefault(0);
+                                        var secondId = twoIds.ElementAtOrDefault(1);
+                                        if (!string.IsNullOrEmpty(firstId))
                                         {
-                                            decimal? point = null;
-                                            var twoIds = k.Split(',');
-                                            var firstId = twoIds.ElementAtOrDefault(0);
-                                            var secondId = twoIds.ElementAtOrDefault(1);
-                                            if (!string.IsNullOrEmpty(firstId))
+                                            var answerBegin = question.Answers.FirstOrDefault(t => t.AnswerID.ToString() == firstId);
+                                            if (answerBegin != null && !string.IsNullOrEmpty(secondId))
                                             {
-                                                var answerBegin = question.Answers.FirstOrDefault(t => t.AnswerID.ToString() == firstId);
-                                                if (answerBegin != null && !string.IsNullOrEmpty(secondId))
+                                                var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
+                                                if (answerEnd != null)
                                                 {
-                                                    var answerEnd = answerBegin.AnswerChilds.FirstOrDefault(y => y.AnswerID.ToString() == secondId);
-                                                    if (answerEnd != null)
-                                                    {
-                                                        var ansScore = answerBegin.RealScore();
-                                                        point = ansScore < 0 ? 0 : ansScore;
-                                                    }
-                                                }
-                                            }
-                                            return point;
-                                        });
-                                        i.ChoiceScore = scoreMatching ?? 0;
-                                    }
-                                    else
-                                    {
-                                        var IDs = i.AnswerIDs.Split(',');
-                                        var score = IDs.Sum(k =>
-                                        {
-                                            var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
-                                            var ansScore = answer.RealScore();
-                                            return ansScore;
-                                        });
-                                        i.ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
-                                    }
-                                }
-                                else
-                                {
-                                    if (question.QuestionType.Type == "ShortAnswer")
-                                    {
-                                        if (!string.IsNullOrEmpty(i.AnswerContent))
-                                        {
-                                            var userAnswers = i.AnswerContent.Split(',');
-                                            if (!string.IsNullOrEmpty(question.TextDescription))
-                                            {
-                                                var questionAnswers = question.TextDescription.Split(',');
-
-                                                if (questionAnswers.All(o => userAnswers.Contains(o)))
-                                                {
-                                                    i.NonChoiceScore = question.RealNoneChoiceScore();
-                                                }
-                                                else
-                                                {
-                                                    i.NonChoiceScore = 0;
+                                                    var ansScore = answerBegin.RealScore();
+                                                    point = ansScore < 0 ? 0 : ansScore;
                                                 }
                                             }
                                         }
-                                    }
-                                    if (question.QuestionType.Type == "Essay") {
-                                        i.NonChoiceScore = i.RealNonChoiceScore();
-                                    }
+                                        return point;
+                                    });
+                                    i.ChoiceScore = scoreMatching ?? 0;
+                                }
+                                else
+                                {
+                                    var IDs = i.AnswerIDs.Split(',');
+                                    var score = IDs.Sum(k =>
+                                    {
+                                        var answer = question.Answers.FirstOrDefault(m => m.AnswerID.ToString() == k);
+                                        var ansScore = answer.RealScore();
+                                        return ansScore;
+                                    });
+                                    i.ChoiceScore = (!score.HasValue || score < 0) ? 0 : score;
                                 }
                             }
-                        });
-                        inTestObj.Score = inTestObj.UserInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
-                    }
+                            else
+                            {
+                                if (question.QuestionType.Type == "ShortAnswer")
+                                {
+                                    if (!string.IsNullOrEmpty(i.AnswerContent))
+                                    {
+                                        var userAnswers = i.AnswerContent.Split(',');
+                                        if (!string.IsNullOrEmpty(question.TextDescription))
+                                        {
+                                            var questionAnswers = question.TextDescription.Split(',');
+
+                                            if (questionAnswers.All(o => userAnswers.Contains(o)))
+                                            {
+                                                i.NonChoiceScore = question.RealNoneChoiceScore();
+                                            }
+                                            else
+                                            {
+                                                i.NonChoiceScore = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (question.QuestionType.Type == "Essay")
+                                {
+                                    i.NonChoiceScore = i.RealNonChoiceScore();
+                                }
+                            }
+                        }
+                    });
+                    inTestObj.Score = inTestObj.UserInTestDetails.Sum(i => i.NonChoiceScore ?? 0 + i.ChoiceScore ?? 0);
+                }
             }
         }
         private void RecalculateUserInTestScore(IEnumerable<Answer> answers)
@@ -3366,7 +3367,11 @@ namespace OATS_Capstone.Models
                 var question = db.Questions.FirstOrDefault(i => i.QuestionID == questionid);
                 if (question != null)
                 {
-                    var detail = question.UserInTestDetails.FirstOrDefault(i => i.UserInTest.UserID == userid);
+                    var availableInTests = question.UserInTestDetails.Select(o => o.UserInTest).FilterInTestsOnAttempSetting().Select(i=>i.UserInTestID);
+                    var detail = question.UserInTestDetails.Where(i =>
+                    {
+                        return availableInTests.Contains(i.UserInTest.UserInTestID);
+                    }).FirstOrDefault(i => i.UserInTest.UserID == userid);
                     var type = question.QuestionType.Type;
                     if (detail != null && (type == "Essay" || type == "ShortAnswer"))
                     {
