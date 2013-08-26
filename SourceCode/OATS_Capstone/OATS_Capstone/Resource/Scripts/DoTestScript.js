@@ -3,6 +3,7 @@ var pro;
 var oatsProgressBar;
 var progressBag = new Array();
 var secondKey = "second";
+var isSubmited = false;
 function initCommonValidation() {
     var handlers = new Array();
     handlers.push({ selector: "input.nt-qrespinput", regex: /^(.|\n){0,1024}$/ });
@@ -54,6 +55,7 @@ function submitTest() {
         success: function (res) {
             if (res.success) {
                 removeLocalStorage(secondKey);
+                isSubmited = true;
                 showCountDownMessage("info", res.message, "Redirect to Homepage", function () {
                     window.location.href = "/Tests";
                 });
@@ -149,8 +151,10 @@ function initCountDown() {
         }
     });
     $(window).unload(function () {
-        remainSecond = remainSecond < 0 ? 0 : remainSecond;
-        setLocalStorage("second", remainSecond);
+        if (!isSubmited) {
+            remainSecond = remainSecond < 0 ? 0 : remainSecond;
+            setLocalStorage("second", remainSecond);
+        }
     });
 }
 $.fn.extend({

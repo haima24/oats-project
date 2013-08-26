@@ -695,7 +695,7 @@ i, cite, em, var, address, dfn {
         float: left;
     }
 
-    #eventTab .nt-checklist-ctrl .nt-submit-msg {
+    .nt-checklist-ctrl .nt-submit-msg {
         float: right;
     }
 
