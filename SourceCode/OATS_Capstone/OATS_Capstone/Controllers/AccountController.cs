@@ -16,13 +16,13 @@ namespace OATS_Capstone.Controllers
         {
             return View();
         }
-        public ActionResult DetailRegister(string id,string forward="")
+        public ActionResult DetailRegister(string token,string forward="")
         {
             ActionResult action = RedirectToActionPermanent("Index", "Account");
             try
             {
                 var common = new CommonService();
-                var user = common.DetailRegister(id);
+                var user = common.DetailRegister(token);
                 if (user != null)
                 {
                     ViewBag.Forward = forward;

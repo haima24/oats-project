@@ -413,13 +413,13 @@ namespace OATS_Capstone.Controllers
 
             return action;
         }
-        public ActionResult AnonymousDoTest(string id)
+        public ActionResult AnonymousDoTest(string token)
         {
             ActionResult action = RedirectToActionPermanent("Index", "Account");
             try
             {
                 var common = new CommonService();
-                var invitation = common.AnonymousDoTest(id);
+                var invitation = common.AnonymousDoTest(token);
                 if (invitation != null)
                 {
                     if (common.isregistered)
@@ -428,7 +428,7 @@ namespace OATS_Capstone.Controllers
                     }
                     else
                     {
-                        action = RedirectToActionPermanent("DetailRegister", "Account", new { id = HttpContext.Server.UrlEncode(common.accessToken), forward = Url.Action("DoTest", new { id = invitation.TestID }) });
+                        action = RedirectToActionPermanent("DetailRegister", "Account", new { token = HttpContext.Server.UrlEncode(common.accessToken), forward = Url.Action("DoTest", new { id = invitation.TestID }) });
                     }
                 }
             }

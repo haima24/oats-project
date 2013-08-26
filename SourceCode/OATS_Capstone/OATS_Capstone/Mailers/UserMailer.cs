@@ -72,7 +72,7 @@ namespace OATS_Capstone.Mailers
 
                 if (!string.IsNullOrEmpty(invitation.User.AccessToken))
                 {
-                    linkReg = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.UrlEncode(invitation.User.AccessToken);
+                    linkReg = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister?token=" + CurrentHttpContext.Server.UrlEncode(invitation.User.AccessToken);
                 }
             }
             ViewBag.UserName = userName;
@@ -82,7 +82,7 @@ namespace OATS_Capstone.Mailers
             if (test != null)
             {
                 link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/DoTest/" + test.TestID;
-                anonymousLink = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/AnonymousDoTest/" + CurrentHttpContext.Server.UrlEncode(invitation.AccessToken);
+                anonymousLink = "http://" + CurrentHttpContext.Request.Url.Authority + "/Tests/AnonymousDoTest?token=" + CurrentHttpContext.Server.UrlEncode(invitation.AccessToken);
             }
             ViewBag.Link = link;
             ViewBag.AnonymousLink = anonymousLink;
@@ -186,7 +186,7 @@ namespace OATS_Capstone.Mailers
                 var link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/Index";
                 if (!string.IsNullOrEmpty(user.AccessToken))
                 {
-                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.UrlEncode(user.AccessToken);
+                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister?token=" + CurrentHttpContext.Server.UrlEncode(user.AccessToken);
                 }
                 ViewBag.Mail = mail;
                 ViewBag.Link = link;
@@ -234,7 +234,7 @@ namespace OATS_Capstone.Mailers
                 }
                 if (!string.IsNullOrEmpty(user.AccessToken))
                 {
-                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister/" + CurrentHttpContext.Server.UrlEncode(user.AccessToken);
+                    link = "http://" + CurrentHttpContext.Request.Url.Authority + "/Account/DetailRegister?token=" + CurrentHttpContext.Server.UrlEncode(user.AccessToken);
                 }
                 ViewBag.Invitor = invitorName;
                 ViewBag.Mail = mail;
